@@ -11,3 +11,5 @@ export * from "./contract_templates";
 export * from "./postings";
 export * from "./posting_positions";
 export * from "./globals";
+export * from "./matches";
+export * from "./applicant_matching_data";

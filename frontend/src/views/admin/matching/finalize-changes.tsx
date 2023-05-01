@@ -1,5 +1,5 @@
 import React from "react";
-import { matchesSelector, upsertMatch } from "./actions";
+import { matchesSelector, assignmentsSelector } from "../../../api/actions";
 import { useSelector } from "react-redux";
 import { Modal, Button, Alert } from "react-bootstrap";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
@@ -8,7 +8,7 @@ import { upsertAssignment } from "../../../api/actions";
 
 const DEFAULT_COLUMNS = [
     { Header: "Position Code", accessor: "position.position_code" },
-    { Header: "Hours", accessor: "hoursAssigned" },
+    { Header: "Hours", accessor: "hours_assigned" },
     { Header: "Last Name", accessor: "applicant.last_name" },
     { Header: "First Name", accessor: "applicant.first_name" },
     { Header: "UTORid", accessor: "applicant.utorid" },
@@ -22,10 +22,20 @@ export function FinalizeChangesButton() {
     const [dialogVisible, setDialogVisible] = React.useState(false);
 
     const matches = useSelector(matchesSelector);
+    const assignments = useSelector(assignmentsSelector);
     const dispatch = useThunkDispatch();
     const stagedAssignments = React.useMemo(() => {
-        return matches.filter((match) => match.status === "staged-assigned");
-    }, [matches]);
+        return matches.filter((match) => {
+            return (
+                match.assigned &&
+                !assignments.find(
+                    (assignment) =>
+                        assignment.applicant.id === match.applicant.id &&
+                        assignment.position.id === match.position.id
+                )
+            );
+        });
+    }, [matches, assignments]);
 
     async function finalizeAssignments() {
         const assignmentPromises = stagedAssignments.map((match) => {
@@ -33,7 +43,7 @@ export function FinalizeChangesButton() {
                 upsertAssignment({
                     position: match.position,
                     applicant: match.applicant,
-                    hours: match.hoursAssigned,
+                    hours: match.hours_assigned || 0,
                 })
             );
         });
@@ -47,20 +57,7 @@ export function FinalizeChangesButton() {
             return;
         }
 
-        finalizeAssignments();
-
-        // Remove these staged assignments from the matching data:
-        for (const match of stagedAssignments) {
-            dispatch(
-                upsertMatch({
-                    positionCode: match.position.position_code,
-                    utorid: match.applicant.utorid,
-                    stagedAssigned: false,
-                    stagedHoursAssigned: 0,
-                })
-            );
-        }
-        setDialogVisible(false);
+        finalizeAssignments().then((r) => setDialogVisible(false));
     }
 
     return (

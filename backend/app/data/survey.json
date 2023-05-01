@@ -58,16 +58,16 @@
                             "text": "PhD Student"
                         },
                         {
+                            "value": "MScAC",
+                            "text": "MScAC (Professional Masters)"
+                        },
+                        {
                             "value": "M",
-                            "text": "Masters Student"
+                            "text": "Masters Student (Research Masters)"
                         },
                         {
                             "value": "U",
                             "text": "Undergraduate Student"
-                        },
-                        {
-                            "value": "MScAC",
-                            "text": "MScAC"
                         },
                         {
                             "value": "PD",

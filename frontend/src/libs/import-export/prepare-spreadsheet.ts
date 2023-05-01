@@ -1,5 +1,6 @@
 import {
     Applicant,
+    ApplicantMatchingDatum,
     Application,
     Assignment,
     Ddah,
@@ -428,6 +429,33 @@ export const prepareSpreadsheet = {
                     assignment.active_offer_recent_activity_date,
                     null,
                     ...formatWageChunksToList(assignment.wage_chunks),
+                ])
+            )
+        );
+    },
+    appointment: function (applicantMatchingData: ApplicantMatchingDatum[]) {
+        return spreadsheetUndefinedToNull(
+            (
+                [
+                    [
+                        "Last Name",
+                        "First Name",
+                        "UTORid",
+                        "Student Number",
+                        "Min Hours Owed",
+                        "Max Hours Owed",
+                        "Previous Hours Fulfilled",
+                    ],
+                ] as CellType[][]
+            ).concat(
+                applicantMatchingData.map((applicantMatchingDatum) => [
+                    applicantMatchingDatum.applicant.last_name,
+                    applicantMatchingDatum.applicant.first_name,
+                    applicantMatchingDatum.applicant.utorid,
+                    applicantMatchingDatum.applicant.student_number,
+                    applicantMatchingDatum.min_hours_owed,
+                    applicantMatchingDatum.max_hours_owed,
+                    applicantMatchingDatum.prev_hours_fulfilled,
                 ])
             )
         );

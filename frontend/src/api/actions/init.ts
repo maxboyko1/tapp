@@ -29,6 +29,11 @@ import {
     fetchInstructorPreferencesSuccess,
 } from "./instructor_preferences";
 import { fetchPostingPositionsSuccess, fetchPostingsSuccess } from "./postings";
+import { fetchMatches, fetchMatchesSuccess } from "./matches";
+import {
+    fetchApplicantMatchingData,
+    fetchApplicantMatchingDataSuccess,
+} from "./applicant_matching_data";
 
 type InitStages =
     | "pageLoad"
@@ -250,6 +255,8 @@ export function initFromStage(
                 fetchAssignments,
                 fetchDdahs,
                 fetchInstructorPreferences,
+                fetchMatches,
+                fetchApplicantMatchingData,
             ];
 
             // The order of fetching here doesn't matter, so dispatch all at once
@@ -286,6 +293,8 @@ export function clearSessionDependentData(): ThunkAction<
             dispatch(fetchPositionsSuccess([])),
             dispatch(fetchPostingsSuccess([])),
             dispatch(fetchPostingPositionsSuccess([])),
+            dispatch(fetchMatchesSuccess([])),
+            dispatch(fetchApplicantMatchingDataSuccess([])),
         ]);
     };
 }

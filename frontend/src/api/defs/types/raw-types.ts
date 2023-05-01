@@ -199,3 +199,22 @@ export interface RawInstructorPreference {
     preference_level: number;
     comment: string;
 }
+
+export interface RawApplicantMatchingDatum {
+    applicant_id: number;
+    session_id: number;
+    max_hours_owed: number | null;
+    min_hours_owed: number | null;
+    prev_hours_fulfilled: number | null;
+    note: string | null;
+    hidden: boolean;
+}
+
+export interface RawMatch {
+    applicant_id: number;
+    position_id: number;
+    hours_assigned: number | null;
+    assigned: boolean;
+    starred: boolean;
+    hidden: boolean;
+}

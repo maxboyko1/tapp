@@ -1,7 +1,12 @@
 import React from "react";
-import { ApplicantSummary, MatchableAssignment } from "../../../types";
+import { ApplicantSummary } from "../../../types";
+import { Position } from "../../../../../../api/defs/types";
 import { sum, round } from "../../../../../../libs/utils";
-import { getPositionPrefForPosition } from "../../../utils";
+import {
+    getHoursAssigned,
+    getMatchStatus,
+    getPositionPrefForPosition,
+} from "../../../utils";
 import { ApplicantNote } from "./applicant-note";
 import { ApplicantStar } from "./applicant-star";
 import { departmentCodes, programCodes } from "../../../name-maps";
@@ -11,17 +16,17 @@ import { departmentCodes, programCodes } from "../../../name-maps";
  */
 export function ApplicantPillMiddle({
     applicantSummary,
-    match,
+    position,
 }: {
     applicantSummary: ApplicantSummary;
-    match: MatchableAssignment;
+    position: Position;
 }) {
     const positionPref = React.useMemo(() => {
         return getPositionPrefForPosition(
             applicantSummary.application,
-            match.position
+            position
         );
-    }, [match, applicantSummary]);
+    }, [applicantSummary, position]);
 
     const instructorRatings = React.useMemo(() => {
         if (!applicantSummary.application?.instructor_preferences) {
@@ -29,11 +34,11 @@ export function ApplicantPillMiddle({
         }
 
         return applicantSummary.application.instructor_preferences
-            .filter((pref) => pref.position.id === match.position.id)
+            .filter((pref) => pref.position.id === position.id)
             .map((rating) => {
                 return rating.preference_level;
             });
-    }, [applicantSummary, match]);
+    }, [applicantSummary, position]);
 
     const avgInstructorRating =
         instructorRatings.length > 0
@@ -52,7 +57,7 @@ export function ApplicantPillMiddle({
         <div className="applicant-pill-middle">
             <div className="grid-row">
                 <div className="applicant-name">
-                    {`${applicantSummary.applicant.first_name} ${applicantSummary.applicant.last_name}`}
+                    {`${applicantSummary.applicantMatchingDatum.applicant.first_name} ${applicantSummary.applicantMatchingDatum.applicant.last_name}`}
                 </div>
             </div>
             <div className="grid-row">
@@ -108,20 +113,21 @@ export function ApplicantPillMiddle({
 
 export function ApplicantPillRight({
     applicantSummary,
-    match,
+    position,
 }: {
     applicantSummary: ApplicantSummary;
-    match: MatchableAssignment;
+    position: Position;
 }) {
-    const isAssigned =
-        match.status === "assigned" || match.status === "staged-assigned";
+    const isAssigned = ["assigned", "staged-assigned"].includes(
+        getMatchStatus(applicantSummary, position)
+    );
 
     return (
         <div className="applicant-pill-right">
             <div className="grid-row">
                 {isAssigned ? (
                     <div className="applicant-hours">
-                        ({match.hoursAssigned})
+                        ({getHoursAssigned(applicantSummary, position)})
                     </div>
                 ) : (
                     <div
@@ -131,7 +137,10 @@ export function ApplicantPillRight({
                             e.stopPropagation();
                         }}
                     >
-                        <ApplicantStar match={match} />
+                        <ApplicantStar
+                            applicantSummary={applicantSummary}
+                            position={position}
+                        />
                     </div>
                 )}
             </div>

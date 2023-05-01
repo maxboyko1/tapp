@@ -204,6 +204,23 @@ function generatePropTypes(PropTypes: typeof OrigPropTypes) {
                 })
             ),
         }),
+        applicant_matching_datum: PropTypes.shape({
+            session_id: PropTypes.number,
+            applicant_id: PropTypes.number,
+            max_hours_owed: PropTypes.number,
+            min_hours_owed: PropTypes.number,
+            prev_hours_fulfilled: PropTypes.number,
+            note: PropTypes.string,
+            hidden: PropTypes.bool,
+        }),
+        match: PropTypes.shape({
+            applicant_id: PropTypes.number,
+            position_id: PropTypes.number,
+            hours_assigned: PropTypes.number,
+            assigned: PropTypes.bool,
+            starred: PropTypes.bool,
+            hidden: PropTypes.bool,
+        }),
     };
 }
 

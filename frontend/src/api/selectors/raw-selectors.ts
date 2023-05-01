@@ -10,6 +10,8 @@ import {
     positionsReducer,
     postingsReducer,
     sessionsReducer,
+    matchesReducer,
+    applicantMatchingDataReducer,
 } from "../reducers";
 
 /**
@@ -47,4 +49,8 @@ export const rawSelector = {
     positions: makeModelDataSelector(positionsReducer._localStoreSelector),
     postings: makeModelDataSelector(postingsReducer._localStoreSelector),
     session: makeModelDataSelector(sessionsReducer._localStoreSelector),
+    matches: makeModelDataSelector(matchesReducer._localStoreSelector),
+    applicantMatchingData: makeModelDataSelector(
+        applicantMatchingDataReducer._localStoreSelector
+    ),
 };

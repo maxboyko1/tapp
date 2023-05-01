@@ -18,7 +18,7 @@ export function PositionList({
 }) {
     const [filterString, setFilterString] = React.useState("");
     const filteredList = React.useMemo(() => {
-        const ret: PositionSummary[] = positionSummaries
+        return positionSummaries
             .filter(
                 (summary) =>
                     summary.position.position_code
@@ -31,7 +31,6 @@ export function PositionList({
                     ? -1
                     : 1;
             });
-        return ret;
     }, [filterString, positionSummaries]);
 
     return (

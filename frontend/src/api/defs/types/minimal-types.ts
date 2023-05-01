@@ -11,6 +11,8 @@ import type {
     Session,
     WageChunk,
     InstructorPreference,
+    ApplicantMatchingDatum,
+    Match,
 } from "./internal-types";
 // Minimal types contain the minimum amount of information needed to reconstruct
 // a particular object. They lack IDs and may be flat compared to what is actually used
@@ -80,4 +82,20 @@ export interface MinimalApplication
 export interface MinimalInstructorPreference
     extends Omit<InstructorPreference, "position" | "application"> {
     position_code: string;
+}
+
+export interface MinimalApplicantMatchingDatum
+    extends Omit<ApplicantMatchingDatum, "applicant" | "session"> {
+    min_hours_owed: number | null;
+    max_hours_owed: number | null;
+    prev_hours_fulfilled: number | null;
+    note: string | null;
+    hidden: boolean;
+}
+
+export interface MinimalMatch extends Omit<Match, "applicant" | "position"> {
+    hours_assigned: number | null;
+    assigned: boolean;
+    starred: boolean;
+    hidden: boolean;
 }

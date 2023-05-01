@@ -5,6 +5,9 @@
 class Applicant < ApplicationRecord
     has_many :assignments
     has_many :applications, dependent: :destroy
+    has_many :applicant_matching_data, dependent: :destroy
+    has_many :matches, dependent: :destroy
+
     accepts_nested_attributes_for :applications
 
     validates_presence_of :utorid

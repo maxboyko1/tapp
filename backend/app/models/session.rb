@@ -8,6 +8,7 @@ class Session < ApplicationRecord
     has_many :positions, dependent: :destroy
     has_many :postings, dependent: :destroy
     has_many :contract_templates, dependent: :destroy
+    has_many :applicant_matching_data, dependent: :destroy
 
     validates :rate1, numericality: { only_float: true }, allow_nil: true
     validates :rate2, numericality: { only_float: true }, allow_nil: true

@@ -10,6 +10,8 @@ export * from "./status";
 export * from "./offers";
 export * from "./users";
 export * from "./postings";
+export * from "./matches";
 export * from "./init";
 export * from "./globals";
 export * from "../selectors/application-smash";
+export * from "./applicant_matching_data";
