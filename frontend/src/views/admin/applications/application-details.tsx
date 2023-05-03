@@ -80,7 +80,7 @@ function removeHtmlQuestions(custom_questions: any) {
     const pages: SurveyJsPage[] = custom_questions.pages;
     const filteredPages = pages.map((page) => ({
         ...page,
-        elements: page.elements.filter((elm) => elm.type !== "html"),
+        elements: page.elements?.filter((elm) => elm.type !== "html") || [],
     }));
 
     return { ...custom_questions, pages: filteredPages };
