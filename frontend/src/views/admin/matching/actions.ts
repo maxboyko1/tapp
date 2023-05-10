@@ -130,6 +130,14 @@ export const combinedApplicationsSelector = createSelector(
                                 );
                             }
                         }
+                        for (const instrPref of newestApplication.instructor_preferences) {
+                            combinedApplication.instructor_preferences =
+                                combinedApplication.instructor_preferences ||
+                                [];
+                            combinedApplication.instructor_preferences.push(
+                                instrPref
+                            );
+                        }
                     }
                 }
 
