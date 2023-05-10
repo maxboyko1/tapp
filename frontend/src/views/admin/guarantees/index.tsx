@@ -1,5 +1,4 @@
 import React from "react";
-// import { ConnectedOfferTable } from "../offertable";
 // import { ConnectedAddAssignmentDialog } from "./add-assignment-dialog";
 // import { ConnectedViewAssignmentDetailsAction } from "./assignment-details";
 // import { ConnectedOfferActionButtons } from "./offer-actions";
@@ -24,9 +23,12 @@ import {
 import { Spinner } from "react-bootstrap";
 import { ApplicantSummary } from "../matching/types";
 import { ApplicantMatchingDatum } from "../../../api/defs/types";
-// import { offerTableSelector } from "../offertable/actions";
+import { guaranteeTableSelector } from "./actions";
+import { ConnectedGuaranteeTable } from "./guarantee-table";
 // import { Assignment } from "../../../api/defs/types";
 // import { ConnectedEditAssignmentDialog } from "./edit-assignment-dialog";
+
+import { ConnectedAddAppointmentDialog } from "./add-guarantee-dialog";
 
 export function AdminAppointmentsView() {
     const [addDialogVisible, setAddDialogVisible] = React.useState(false);
@@ -35,7 +37,9 @@ export function AdminAppointmentsView() {
     // While data is being imported, updating the react table takes a long time,
     // so we use this variable to hide the react table during import.
     const [inProgress, setInProgress] = React.useState(false);
-    // const { selectedAssignmentIds } = useSelector(offerTableSelector);
+    const { selectedApplicantMatchingDatumIds } = useSelector(
+        guaranteeTableSelector
+    );
 
     const applicantMatchingData = useSelector(applicantMatchingDataSelector);
     const applicantMatchingDataById = React.useMemo(() => {
@@ -48,28 +52,31 @@ export function AdminAppointmentsView() {
         return ret;
     }, [applicantMatchingData]);
 
-    // const selectedAssignments = React.useMemo(
-    //     () => selectedAssignmentIds.map((id) => assignmentsById[id]),
-    //     [selectedAssignmentIds, assignmentsById]
-    // );
+    const selectedApplicantMatchingData = React.useMemo(
+        () =>
+            selectedApplicantMatchingDatumIds.map(
+                (id) => applicantMatchingDataById[id]
+            ),
+        [selectedApplicantMatchingDatumIds, applicantMatchingDataById]
+    );
 
     return (
         <div className="page-body">
             <ActionsList>
-                {/*<ActionHeader>Available Actions</ActionHeader>*/}
-                {/*<ActionButton*/}
-                {/*    icon={<FaPlus />}*/}
-                {/*    onClick={() => {*/}
-                {/*        setAddDialogVisible(true);*/}
-                {/*    }}*/}
-                {/*    disabled={!activeSession}*/}
-                {/*>*/}
-                {/*    Add Assignment*/}
-                {/*</ActionButton>*/}
+                <ActionHeader>Available Actions</ActionHeader>
+                <ActionButton
+                    icon={<FaPlus />}
+                    onClick={() => {
+                        setAddDialogVisible(true);
+                    }}
+                    disabled={!activeSession}
+                >
+                    Add Appointment
+                </ActionButton>
 
                 {/*<DownloadOfferPdfs selectedAssignments={selectedAssignments} />*/}
 
-                {/*<ActionHeader>Import/Export</ActionHeader>*/}
+                <ActionHeader>Import/Export</ActionHeader>
 
                 {/*<ConnectedImportAssignmentsAction*/}
                 {/*    disabled={!activeSession}*/}
@@ -80,7 +87,7 @@ export function AdminAppointmentsView() {
                 {/*    setExportInProgress={setInProgress}*/}
                 {/*/>*/}
 
-                {/*<ActionHeader>Selected Appointment Actions</ActionHeader>*/}
+                <ActionHeader>Selected Appointment Actions</ActionHeader>
 
                 {/*<ConnectedViewAssignmentDetailsAction />*/}
                 {/*<ConnectedOfferActionButtons*/}
@@ -104,20 +111,20 @@ export function AdminAppointmentsView() {
                     <MissingActiveSessionWarning extraText="To view or modify subsequent appointment guarantees, you must select a session." />
                 )}
 
-                {/*{inProgress ? (*/}
-                {/*    <React.Fragment>*/}
-                {/*        <Spinner animation="border" className="mr-2" />*/}
-                {/*        In Progress*/}
-                {/*    </React.Fragment>*/}
-                {/*) : (*/}
-                {/*    // <ConnectedOfferTable />*/}
-                {/*)}*/}
-                {/*<ConnectedAddAssignmentDialog*/}
-                {/*    show={addDialogVisible}*/}
-                {/*    onHide={() => {*/}
-                {/*        setAddDialogVisible(false);*/}
-                {/*    }}*/}
-                {/*/>*/}
+                {inProgress ? (
+                    <React.Fragment>
+                        <Spinner animation="border" className="mr-2" />
+                        In Progress
+                    </React.Fragment>
+                ) : (
+                    <ConnectedGuaranteeTable />
+                )}
+                <ConnectedAddAppointmentDialog
+                    show={addDialogVisible}
+                    onHide={() => {
+                        setAddDialogVisible(false);
+                    }}
+                />
                 {/*<ConnectedEditAssignmentDialog*/}
                 {/*    show={editDialogVisible}*/}
                 {/*    onHide={() => {*/}

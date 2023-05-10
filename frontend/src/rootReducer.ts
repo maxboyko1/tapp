@@ -2,6 +2,7 @@ import { reducer as notificationReducer } from "react-notification-system-redux"
 import { combineReducers } from "./api/reducers/utils";
 import { globalReducer } from "./api/reducers/globals";
 import { offerTableReducer } from "./views/admin/offertable/reducers";
+import { guaranteeTableReducer } from "./views/admin/guarantees/reducers";
 import {
     statusReducer,
     sessionsReducer,
@@ -61,6 +62,7 @@ const reducer = combineReducers({
         globals: globalReducer,
         instructor: instructorUIReducer,
         matchingData: matchingDataReducer,
+        guaranteeTable: guaranteeTableReducer,
     }),
 });
 
