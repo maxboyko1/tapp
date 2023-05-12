@@ -17,21 +17,13 @@ import { apiGET, apiPOST } from "../../libs/api-utils";
 import type {
     ApplicantMatchingDatum,
     RawApplicantMatchingDatum,
-    Session,
 } from "../defs/types";
-import { activeSessionSelector, sessionsSelector } from "./sessions";
+import { activeSessionSelector } from "./sessions";
 import { activeRoleSelector } from "./users";
 import { applicantMatchingDataReducer } from "../reducers/applicant_matching_data";
 import { createSelector } from "reselect";
 import { applicantsSelector } from "./applicants";
-import { useSelector } from "react-redux";
 import { ExportFormat, PrepareDataFunc } from "../../libs/import-export";
-import { Assignment } from "../defs/types";
-import {
-    fetchWageChunksForAssignment,
-    wageChunksByAssignmentSelector,
-} from "./wage_chunks";
-import { assignmentsSelector, fetchAssignments } from "./assignments";
 
 // actions
 export const fetchApplicantMatchingDataSuccess = actionFactory<
@@ -99,7 +91,9 @@ export const fetchApplicantMatchingDatum = validatedApiDispatcher({
         const role = activeRoleSelector(getState());
         const activeSession = activeSessionSelector(getState());
         if (activeSession == null) {
-            throw new Error("Cannot fetch Matches without an active session");
+            throw new Error(
+                "Cannot fetch ApplicantMatchingData without an active session"
+            );
         }
         const { id: activeSessionId } = activeSession;
         const data = (await apiGET(

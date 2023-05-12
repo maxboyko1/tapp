@@ -16,7 +16,12 @@ class Api::V1::Admin::ApplicantMatchingDataController < ApplicationController
 
     # POST /applicant_matching_data
     def create
-        @applicant_matching_datum = ApplicantMatchingDatum.find_by(id: params[:id])
+        @applicant_matching_datum = ApplicantMatchingDatum.find_by(
+            'session_id = ? AND applicant_id = ?',
+            params[:session_id],
+            params[:applicant_id]
+        )
+
         puts @applicant_matching_datum.inspect
         update && return if @applicant_matching_datum.present?
 

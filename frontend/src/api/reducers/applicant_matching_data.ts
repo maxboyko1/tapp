@@ -35,7 +35,7 @@ function upsertItem(
     return newModelData;
 }
 
-// ApplicantMatchingDatum have no `id` field, but they are uniquely determined
+// ApplicantMatchingDatum has no `id` field, but they are uniquely determined
 // by their `session_id` and `applicant_id`. So, we need to create custom
 // reducer functions.
 export const applicantMatchingDataReducer = createReducer(initialState, {
