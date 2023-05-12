@@ -1,6 +1,6 @@
 import { reducer as notificationReducer } from "react-notification-system-redux";
 import { combineReducers } from "./api/reducers/utils";
-import { globalReducer } from "./api/reducers/globals";
+import { globalReducer } from "./api/reducers";
 import { offerTableReducer } from "./views/admin/offertable/reducers";
 import { guaranteeTableReducer } from "./views/admin/guarantees/reducers";
 import {
@@ -22,7 +22,7 @@ import { usersReducer } from "./api/reducers/users";
 import { ddahsTableReducer } from "./views/admin/ddah-table/reducers";
 import { positionsTableReducer } from "./views/admin/positions/reducers";
 import { instructorUIReducer } from "./views/instructor/store/reducers";
-import { instructorPreferencesReducer } from "./api/reducers/instructorPreferences";
+import { instructorPreferencesReducer } from "./api/reducers";
 import { matchingDataReducer } from "./views/admin/matching/reducers";
 
 // When `combineReducers` is used,

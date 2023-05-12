@@ -5,7 +5,7 @@ import {
     sessionsSelector,
     setActiveSession,
 } from "../../api/actions";
-import { positionsSelector } from "../../api/actions/positions";
+import { positionsSelector } from "../../api/actions";
 import { Header } from "../../components/header";
 import { useThunkDispatch } from "../../libs/thunk-dispatch";
 import { guessActiveSession } from "../../libs/utils";

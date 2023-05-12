@@ -195,7 +195,7 @@
                     "type": "matrix",
                     "name": "position_preferences",
                     "title": "Position Preferences",
-                    "description": "Please rank your preferences for the available positions. High is your indicates your most preferred positions (please mark *no more than 5 positions as High*); Medium indicates positions you are strongly interested in but are not your top choice; Low indicates positions you are willing to TA. Marking N/A is equivalent to not marking a position.",
+                    "description": "Please rank your preferences for the available positions. High indicates your most preferred positions (please mark *no more than 5 positions as High*); Medium indicates positions you are strongly interested in but are not your top choice; Low indicates positions you are willing to TA. Marking N/A is equivalent to not marking a position.",
                     "isRequired": true,
                     "columns": [
                         {

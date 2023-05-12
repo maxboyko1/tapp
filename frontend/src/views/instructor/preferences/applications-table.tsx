@@ -40,12 +40,13 @@ export function InstructorApplicationsTable() {
         if (!activePosition) {
             return [];
         }
-        const relevantApplications = allApplications.filter((application) =>
+        return allApplications.filter((application) =>
             application.position_preferences.some(
-                (preference) => preference.position.id === activePosition.id
+                (preference) =>
+                    preference.position.id === activePosition.id &&
+                    preference.preference_level !== 0
             )
         );
-        return relevantApplications;
     }, [activePosition, allApplications]);
 
     const ConnectedRating = ({
