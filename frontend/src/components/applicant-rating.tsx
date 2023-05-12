@@ -150,7 +150,10 @@ export function ApplicantRatingAndComment({
             if (setInstructorPreference) {
                 return setInstructorPreference({
                     ...(instructorPreference || {}),
-                    preference_level: rating,
+                    preference_level:
+                        rating === instructorPreference?.preference_level
+                            ? null
+                            : rating,
                 });
             }
         },
