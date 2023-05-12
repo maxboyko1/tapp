@@ -247,17 +247,25 @@ export function initFromStage(
 
             // `fetchActions` array contains all the fetch API calls that need to be
             // made in order to obtain all data that the app needs.
-            const fetchActions = [
-                fetchContractTemplates,
-                fetchApplicants,
-                fetchPositions,
-                fetchApplications,
-                fetchAssignments,
-                fetchDdahs,
-                fetchInstructorPreferences,
-                fetchMatches,
-                fetchApplicantMatchingData,
-            ];
+            let fetchActions: (() => (dispatch: any) => Promise<unknown>)[] =
+                [];
+
+            const activeRole = activeRoleSelector(getState());
+            if (activeRole === "admin" || activeRole === "instructor") {
+                fetchActions = [
+                    fetchContractTemplates,
+                    fetchApplicants,
+                    fetchPositions,
+                    fetchApplications,
+                    fetchAssignments,
+                    fetchDdahs,
+                    fetchInstructorPreferences,
+                ];
+            }
+            if (activeRole === "admin") {
+                fetchActions.push(fetchMatches);
+                fetchActions.push(fetchApplicantMatchingData);
+            }
 
             // The order of fetching here doesn't matter, so dispatch all at once
             await Promise.all(
