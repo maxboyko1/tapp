@@ -1,6 +1,5 @@
 import React from "react";
-// import { ConnectedAddAssignmentDialog } from "./add-assignment-dialog";
-// import { ConnectedViewAssignmentDetailsAction } from "./assignment-details";
+
 // import { ConnectedOfferActionButtons } from "./offer-actions";
 // import { DownloadOfferPdfs } from "./download-offers";
 // import {

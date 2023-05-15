@@ -202,33 +202,3 @@ export function preparePositionData(
         "positions"
     );
 }
-
-/**
- * Make a function that converts a list of applications into a `File` object.
- *
- * @export
- * @param {ApplicantMatchingDatum[]} applicantMatchingData
- * @param {"csv" | "json" | "xlsx"} dataFormat
- * @returns
- */
-export function prepareAppointmentDataFactory(
-    applicantMatchingData: ApplicantMatchingDatum[],
-    dataFormat: ExportFormat
-) {
-    return dataToFile(
-        {
-            toSpreadsheet: () =>
-                prepareSpreadsheet.appointment(applicantMatchingData),
-            toJson: () => ({
-                appointments: applicantMatchingData.map(
-                    (applicantMatchingDatum) =>
-                        prepareMinimal.applicantMatchingDatum(
-                            applicantMatchingDatum
-                        )
-                ),
-            }),
-        },
-        dataFormat,
-        "applications"
-    );
-}

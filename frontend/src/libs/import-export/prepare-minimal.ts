@@ -25,10 +25,6 @@ import {
     MinimalPostingPosition,
     MinimalPosting,
     Posting,
-    ApplicantMatchingDatum,
-    MinimalApplicantMatchingDatum,
-    Match,
-    MinimalMatch,
 } from "../../api/defs/types";
 
 /**
@@ -297,25 +293,6 @@ export const prepareMinimal = {
                 hours: duty.hours,
                 description: duty.description,
             })),
-        };
-    },
-    applicantMatchingDatum: function (
-        applicantMatchingDatum: ApplicantMatchingDatum
-    ): MinimalApplicantMatchingDatum {
-        return {
-            min_hours_owed: applicantMatchingDatum.min_hours_owed,
-            max_hours_owed: applicantMatchingDatum.max_hours_owed,
-            prev_hours_fulfilled: applicantMatchingDatum.prev_hours_fulfilled,
-            note: applicantMatchingDatum.note,
-            hidden: applicantMatchingDatum.hidden,
-        };
-    },
-    match: function (match: Match): MinimalMatch {
-        return {
-            hours_assigned: match.hours_assigned,
-            assigned: match.assigned,
-            starred: match.starred,
-            hidden: match.hidden,
         };
     },
 };

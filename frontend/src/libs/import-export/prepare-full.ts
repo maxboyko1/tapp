@@ -18,8 +18,6 @@ import {
     MinimalPosting,
     Posting,
     PostingPosition,
-    MinimalApplicantMatchingDatum,
-    MinimalMatch,
 } from "../../api/defs/types";
 import { round } from "../utils";
 
