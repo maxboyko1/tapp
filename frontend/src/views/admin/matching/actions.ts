@@ -202,9 +202,6 @@ const applicantSummariesSelector = createSelector(
 
         for (const applicant of applicants) {
             let hoursAssigned = 0;
-            for (const match of matchesByApplicantId[applicant.id] || []) {
-                if (match.assigned) hoursAssigned += match.hours_assigned || 0;
-            }
 
             for (const assignment of assignmentsByApplicantId[applicant.id] ||
                 []) {
@@ -214,6 +211,20 @@ const applicantSummariesSelector = createSelector(
                 ) {
                     hoursAssigned += assignment.hours;
                 }
+            }
+
+            for (const match of matchesByApplicantId[applicant.id] || []) {
+                // Do not double-count if the applicant already has an existing assignment
+                if (
+                    match.assigned &&
+                    !assignmentsByApplicantId[applicant.id]?.find(
+                        (assignment) =>
+                            assignment.position.id === match.position.id &&
+                            assignment.active_offer_status !== "rejected" &&
+                            assignment.active_offer_status !== "withdrawn"
+                    )
+                )
+                    hoursAssigned += match.hours_assigned || 0;
             }
 
             let filledStatus: FillStatus = "n/a";
