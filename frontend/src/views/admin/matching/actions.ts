@@ -219,7 +219,9 @@ const applicantSummariesSelector = createSelector(
         }
 
         for (const applicant of applicants) {
-            let hoursAssigned = 0;
+            let hoursAssigned =
+                applicantMatchingDataByApplicantId[applicant.id]
+                    ?.prev_hours_fulfilled || 0;
 
             for (const assignment of assignmentsByApplicantId[applicant.id] ||
                 []) {
