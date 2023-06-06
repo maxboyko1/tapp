@@ -91,9 +91,16 @@ export const combinedApplicationsSelector = createSelector(
 
                 // Sort each bucket:
                 let combinedApplication: Application | null = null;
-                for (const applications of Object.values(
-                    applicationsByPosting
-                )) {
+
+                // Start with application from newest posting and backfill data
+                const sortedPostingIds: number[] = [];
+                for (const postingId of Object.keys(applicationsByPosting)) {
+                    sortedPostingIds.push(+postingId);
+                }
+                sortedPostingIds.sort().reverse();
+
+                for (const postingId of sortedPostingIds) {
+                    const applications = applicationsByPosting[postingId];
                     applications.sort((a, b) => {
                         if (a.submission_date === b.submission_date) {
                             return 0;
@@ -138,9 +145,20 @@ export const combinedApplicationsSelector = createSelector(
                                 instrPref
                             );
                         }
+                        if (newestApplication.comments) {
+                            if (combinedApplication.comments) {
+                                combinedApplication.comments += `\n[${newestApplication.submission_date}: ${newestApplication.comments}]`;
+                            }
+                        }
+                        if (newestApplication.previous_experience_summary) {
+                            if (
+                                combinedApplication.previous_experience_summary
+                            ) {
+                                combinedApplication.previous_experience_summary += `\n[${newestApplication.submission_date}: ${newestApplication.previous_experience_summary}]`;
+                            }
+                        }
                     }
                 }
-
                 return combinedApplication;
             })
             .filter((application) => !!application);
