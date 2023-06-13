@@ -165,6 +165,7 @@ class PostingService
                 :comments,
                 :department,
                 :gpa,
+                :cv_link,
                 :previous_experience_summary,
                 :previous_department_ta,
                 :previous_university_ta,

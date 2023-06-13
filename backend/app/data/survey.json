@@ -156,6 +156,20 @@
             "name": "previous_experience_page",
             "elements": [
                 {
+                    "type": "text",
+                    "name": "cv_link",
+                    "title": "Please provide a link to your CV or LinkedIn profile. This is preferable to uploading a file of your CV.",
+                    "isRequired": false
+                },
+                {
+                    "type": "file",
+                    "name": "cv",
+                    "title": "Alternatively to providing a link of your CV/LinkedIn, feel free to upload your CV. We prefer a link, but you may upload a PDF file of your CV.",
+                    "isRequired": false,
+                    "allowMultiple": false,
+                    "maxSize": 5242880
+                },
+                {
                     "type": "boolean",
                     "name": "previous_university_ta",
                     "title": "Have you had previous appointment(s) as a TA at this university?",

@@ -33,6 +33,7 @@ class Api::V1::Admin::ApplicationsController < ApplicationController
             :yip,
             :annotation,
             :gpa,
+            :cv_link,
             :previous_department_ta,
             :previous_university_ta,
             :custom_question_answers

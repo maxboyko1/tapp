@@ -170,6 +170,7 @@ export const prepareSpreadsheet = {
                         "Program",
                         "YIP",
                         "GPA",
+                        "CV/LinkedIn",
                         "Posting",
                         "Position Preferences",
                         "Previous Experience Summary",
@@ -194,6 +195,7 @@ export const prepareSpreadsheet = {
                     application.program,
                     application.yip,
                     application.gpa,
+                    application.cv_link,
                     application.posting,
                     application.position_preferences
                         .map(

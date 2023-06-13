@@ -164,6 +164,10 @@ export function ApplicationDetails({
                         <td>{application.yip}</td>
                     </tr>
                     <tr>
+                        <th>CV/LinkedIn</th>
+                        <td>{application.cv_link}</td>
+                    </tr>
+                    <tr>
                         <th>Previous Experience</th>
                         <td>
                             {application.previous_department_ta != null

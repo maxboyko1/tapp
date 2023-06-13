@@ -4,6 +4,7 @@ import {
     activeSessionSelector,
     sessionsSelector,
     setActiveSession,
+    assignmentsSelector,
 } from "../../api/actions";
 import { positionsSelector } from "../../api/actions";
 import { Header } from "../../components/header";
@@ -24,6 +25,7 @@ export function InstructorHeader() {
     const positions = useSelector(positionsSelector);
     const sessions = useSelector(sessionsSelector);
     const activeSession = useSelector(activeSessionSelector);
+
     const dispatch = useThunkDispatch();
     React.useEffect(() => {
         function guessSessionIfNeeded() {

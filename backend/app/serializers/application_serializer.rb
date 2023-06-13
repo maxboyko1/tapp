@@ -12,6 +12,7 @@ class ApplicationSerializer < ActiveModel::Serializer
                :previous_university_ta,
                :yip,
                :gpa,
+               :cv_link,
                :custom_question_answers,
                :annotation,
                :documents,
