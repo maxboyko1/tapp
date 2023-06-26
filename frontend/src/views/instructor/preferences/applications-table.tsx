@@ -22,32 +22,32 @@ import { assignmentsSelector } from "../../../api/actions";
 export function InstructorApplicationsTable() {
     const activePosition = useSelector(activePositionSelector);
     const allApplications = useSelector(applicationsSelector);
-    const assignments = useSelector(assignmentsSelector);
+    // const assignments = useSelector(assignmentsSelector);
 
-    const assignmentStringsByApplicantId: Record<number, string> =
-        React.useMemo(() => {
-            console.log(assignments);
-
-            const ret: Record<number, string> = {};
-            for (const assignment of assignments) {
-                if (
-                    assignment.active_offer_status !== "rejected" &&
-                    assignment.active_offer_status !== "withdrawn"
-                ) {
-                    if (ret[assignment.applicant.id]) {
-                        ret[
-                            assignment.applicant.id
-                        ] += `, ${assignment.position.position_code} (${assignment.hours})`;
-                    } else {
-                        ret[
-                            assignment.applicant.id
-                        ] = `${assignment.position.position_code} (${assignment.hours})`;
-                    }
-                }
-            }
-
-            return ret;
-        }, [assignments]);
+    // const assignmentStringsByApplicantId: Record<number, string> =
+    //     React.useMemo(() => {
+    //         console.log(assignments);
+    //
+    //         const ret: Record<number, string> = {};
+    //         for (const assignment of assignments) {
+    //             if (
+    //                 assignment.active_offer_status !== "rejected" &&
+    //                 assignment.active_offer_status !== "withdrawn"
+    //             ) {
+    //                 if (ret[assignment.applicant.id]) {
+    //                     ret[
+    //                         assignment.applicant.id
+    //                     ] += `, ${assignment.position.position_code} (${assignment.hours})`;
+    //                 } else {
+    //                     ret[
+    //                         assignment.applicant.id
+    //                     ] = `${assignment.position.position_code} (${assignment.hours})`;
+    //                 }
+    //             }
+    //         }
+    //
+    //         return ret;
+    //     }, [assignments]);
 
     const [shownApplicationId, setShownApplicationId] = React.useState<
         number | null
@@ -192,21 +192,21 @@ export function InstructorApplicationsTable() {
             Header: generateHeaderCell("Experience"),
             accessor: "previous_experience_summary",
         },
-        {
-            Header: "Assignment(s)",
-            id: "assignments",
-            Cell: (props: CellProps<Application>) => {
-                return (
-                    <div>
-                        {
-                            assignmentStringsByApplicantId[
-                                props.row.original.applicant.id
-                            ]
-                        }
-                    </div>
-                );
-            },
-        },
+        // {
+        //     Header: "Assignment(s)",
+        //     id: "assignments",
+        //     Cell: (props: CellProps<Application>) => {
+        //         return (
+        //             <div>
+        //                 {
+        //                     assignmentStringsByApplicantId[
+        //                         props.row.original.applicant.id
+        //                     ]
+        //                 }
+        //             </div>
+        //         );
+        //     },
+        // },
     ];
 
     return (

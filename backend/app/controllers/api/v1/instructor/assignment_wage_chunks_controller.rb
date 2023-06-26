@@ -22,10 +22,9 @@ class Api::V1::Instructor::AssignmentWageChunksController < ApplicationControlle
     end
 
     def find_assignment
-        # @assignment =
-        #     Assignment.joins(position: :instructors).where(
-        #         position: { instructors: @active_instructor }
-        #     ).find(params[:assignment_id])
-        @assignment = Assignment.find(params[:assignment_id])
+        @assignment =
+            Assignment.joins(position: :instructors).where(
+                position: { instructors: @active_instructor }
+            ).find(params[:assignment_id])
     end
 end
