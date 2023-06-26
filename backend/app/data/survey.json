@@ -40,7 +40,7 @@
                     "title": "UTORid",
                     "isRequired": true,
                     "readOnly": true,
-                    "placeHolder": "XXX"
+                    "placeHolder": "xxxxxxxx"
                 }
             ]
         },
@@ -97,12 +97,12 @@
                     "isRequired": true,
                     "choices": [
                         {
-                            "value": "math",
-                            "text": "Mathematics/Applied Mathematics"
-                        },
-                        {
                             "value": "cs",
                             "text": "Computer Science"
+                        },
+                        {
+                            "value": "math",
+                            "text": "Mathematics/Applied Mathematics"
                         },
                         {
                             "value": "engr",
@@ -164,7 +164,7 @@
                 {
                     "type": "file",
                     "name": "cv",
-                    "title": "Alternatively to providing a link of your CV/LinkedIn, feel free to upload your CV. We prefer a link, but you may upload a PDF file of your CV.",
+                    "title": "Alternatively to providing a link to your CV/LinkedIn, feel free to upload your CV. We prefer a link, but you may upload a PDF file of your CV.",
                     "isRequired": false,
                     "allowMultiple": false,
                     "maxSize": 5242880
@@ -209,7 +209,7 @@
                     "type": "matrix",
                     "name": "position_preferences",
                     "title": "Position Preferences",
-                    "description": "Please rank your preferences for the available positions. High indicates your most preferred positions (please mark *no more than 5 positions as High*); Medium indicates positions you are strongly interested in but are not your top choice; Low indicates positions you are willing to TA. Marking N/A is equivalent to not marking a position.",
+                    "description": "Please rank your preferences for the available positions. High indicates your most preferred positions; Medium indicates positions you are strongly interested in but are not your top choice; Low indicates positions you are willing to TA. Marking N/A is equivalent to not marking a position.",
                     "isRequired": true,
                     "columns": [
                         {
