@@ -25,7 +25,7 @@ function ddahUrl(ddah: Ddah) {
  * @returns
  */
 function ddahToFilename(ddah: Ddah) {
-    return `${ddah.assignment.position.position_code}-DDAH-${ddah.assignment.applicant.last_name}.pdf`;
+    return `${ddah.assignment.position.position_code}-DDAH-${ddah.assignment.applicant.last_name}-${ddah.assignment.applicant.first_name}.pdf`;
 }
 
 export function DownloadDdahs({ selectedDdahs }: { selectedDdahs: Ddah[] }) {
