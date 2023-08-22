@@ -201,7 +201,7 @@ export interface RawInstructorPreference {
     comment: string;
 }
 
-export interface RawApplicantMatchingDatum {
+export interface RawApplicantMatchingDatum extends HasId {
     applicant_id: number;
     session_id: number;
     max_hours_owed: number | null;

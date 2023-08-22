@@ -121,6 +121,26 @@ export const upsertApplicantMatchingDatum = validatedApiDispatcher({
         },
 });
 
+export const upsertApplicantMatchingData = validatedApiDispatcher({
+    name: "upsertApplicantMatchingData",
+    description: "Upsert applicant matching data",
+    onErrorDispatch: (e) => fetchError(e.toString()),
+    dispatcher:
+        (applicantMatchingData: Partial<ApplicantMatchingDatum>[]) =>
+        async (dispatch) => {
+            if (applicantMatchingData.length === 0) return;
+            const dispatchers = applicantMatchingData.map(
+                (applicantMatchingDatum) =>
+                    dispatch(
+                        upsertApplicantMatchingDatum(applicantMatchingDatum)
+                    )
+            );
+            await Promise.all(dispatchers);
+            // Re-fetch all applicant matching data from the server in case things happened to be out of sync.
+            return await dispatch(fetchApplicantMatchingData());
+        },
+});
+
 export const deleteApplicantMatchingDatum = validatedApiDispatcher({
     name: "deleteApplicantMatchingDatum",
     description: "Delete applicant_matching_datum",
@@ -172,9 +192,9 @@ export const applicantMatchingDataSelector = createSelector(
     }
 );
 
-export const exportAppointments = validatedApiDispatcher({
-    name: "exportAppointments",
-    description: "Export subsequent appointment guarantees",
+export const exportApplicantMatchingData = validatedApiDispatcher({
+    name: "exportApplicantMatchingData",
+    description: "Export applicant matching data",
     onErrorDispatch: (e) => fetchError(e.toString()),
     dispatcher:
         (
@@ -192,20 +212,6 @@ export const exportAppointments = validatedApiDispatcher({
             const applicantMatchingData = applicantMatchingDataSelector(
                 getState()
             );
-
-            // // Normally, wage chunk information is not fetched with an assignment. This information
-            // // must be fetched separately.
-            // const wageChunkPromises = assignments.map((assignment) =>
-            //     dispatch(fetchWageChunksForAssignment(assignment))
-            // );
-            // await Promise.all(wageChunkPromises);
-            // // Attach the wage chunk information to each assignment
-            // for (const assignment of assignments) {
-            //     assignment.wage_chunks = wageChunksByAssignmentSelector(
-            //         getState()
-            //     )(assignment);
-            // }
-
             return formatter(applicantMatchingData, format);
         },
 });

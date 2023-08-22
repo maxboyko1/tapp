@@ -7,9 +7,6 @@ import {
 } from "../../../api/actions";
 import { EditableField } from "../../../components/edit-field-widgets";
 import { guaranteeTableSelector, setSelectedRows } from "./actions";
-import { Button } from "react-bootstrap";
-import { FaSearch } from "react-icons/fa";
-// import { formatDownloadUrl, capitalize, formatDate } from "../../../libs/utils";
 import { AdvancedFilterTable } from "../../../components/filter-table/advanced-filter-table";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
 import { CellProps } from "react-table";
@@ -31,6 +28,7 @@ export function GuaranteeCell(
     const title = `Edit ${"" + props.column.Header}`;
     const { upsertApplicantMatchingDatum, field, editable } = props;
     const applicantMatchingDatum = props.row.original;
+
     async function onChange(newVal: ApplicantMatchingDatum[typeof field]) {
         return await upsertApplicantMatchingDatum({
             applicant: applicantMatchingDatum.applicant,
@@ -38,6 +36,7 @@ export function GuaranteeCell(
             [field]: newVal,
         });
     }
+
     return (
         <EditableField
             title={title}
@@ -65,10 +64,12 @@ export function ApplicantCell(
     const title = `Edit ${"" + props.column.Header}`;
     const { upsertApplicant, field, editable } = props;
     const applicant = props.row.original;
+
     async function onChange(newVal: Applicant[typeof field]) {
         const applicantId = applicant.applicant.id;
         return await upsertApplicant({ id: applicantId, [field]: newVal });
     }
+
     return (
         <EditableField
             title={title}
@@ -80,42 +81,6 @@ export function ApplicantCell(
         </EditableField>
     );
 }
-
-// /**
-//  * Cell to show the status of a contract and offer a download button if a contract has been created.
-//  * I.e., a
-//  *
-//  * @param {*} { original }
-//  * @returns
-//  */
-// export function StatusCell({ row }: CellProps<Assignment>) {
-//     const original = row.original;
-//     const formattedStatus = capitalize(original.active_offer_status || "");
-//     const activeOfferUrlToken = original.active_offer_url_token;
-//
-//     let download = null;
-//     if (activeOfferUrlToken) {
-//         const url = `/public/contracts/${activeOfferUrlToken}.pdf`;
-//         download = (
-//             <Button
-//                 href={formatDownloadUrl(url)}
-//                 variant="light"
-//                 size="sm"
-//                 className="mr-2 py-0"
-//                 title="Download offer PDF"
-//             >
-//                 <FaSearch />
-//             </Button>
-//         );
-//     }
-//
-//     return (
-//         <>
-//             {download}
-//             {formattedStatus}
-//         </>
-//     );
-// }
 
 export function ConnectedGuaranteeTable({
     editable = true,
@@ -217,18 +182,6 @@ export function ConnectedGuaranteeTable({
                 maxWidth: 70,
                 Cell: generateGuaranteeCell("prev_hours_fulfilled"),
             },
-            // {
-            //     Header: "Status",
-            //     id: "status",
-            //     // We want items with no active offer to appear at the end of the list
-            //     // when sorted, so we set their accessor to null (the accessor is used by react table
-            //     // when sorting items).
-            //     accessor: (dat: typeof data[number]) =>
-            //         dat.active_offer_status === "No Contract"
-            //             ? null
-            //             : dat.active_offer_status,
-            //     Cell: StatusCell,
-            // },
         ];
     }, [dispatch, editable]);
 

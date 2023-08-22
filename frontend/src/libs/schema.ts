@@ -195,3 +195,23 @@ export const assignmentSchema: NormalizationSchema<
     primaryKey: ["utorid", "position_code"],
     baseName: "assignments",
 };
+
+export const applicantMatchingDatumSchema: NormalizationSchema<
+    ["utorid", "min_hours_owed", "max_hours_owed", "prev_hours_fulfilled"]
+> = {
+    keys: [
+        "utorid",
+        "min_hours_owed",
+        "max_hours_owed",
+        "prev_hours_fulfilled",
+    ],
+    keyMap: {
+        "Min Hours Owed": "min_hours_owed",
+        "Max Hours Owed": "max_hours_owed",
+        "Prev Hours Fulfilled": "prev_hours_fulfilled",
+    },
+    requiredKeys: ["utorid"],
+    primaryKey: ["utorid"],
+    dateColumns: [],
+    baseName: "applicantMatchingData",
+};

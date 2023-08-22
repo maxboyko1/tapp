@@ -25,6 +25,8 @@ import {
     MinimalPostingPosition,
     MinimalPosting,
     Posting,
+    ApplicantMatchingDatum,
+    MinimalApplicantMatchingDatum,
 } from "../../api/defs/types";
 
 /**
@@ -294,6 +296,16 @@ export const prepareMinimal = {
                 hours: duty.hours,
                 description: duty.description,
             })),
+        };
+    },
+    applicantMatchingDatum: function (
+        applicantMatchingDatum: ApplicantMatchingDatum
+    ): MinimalApplicantMatchingDatum {
+        return {
+            utorid: applicantMatchingDatum.applicant.utorid,
+            min_hours_owed: applicantMatchingDatum.min_hours_owed,
+            max_hours_owed: applicantMatchingDatum.max_hours_owed,
+            prev_hours_fulfilled: applicantMatchingDatum.prev_hours_fulfilled,
         };
     },
 };

@@ -1,18 +1,12 @@
 import React from "react";
 
-// import { ConnectedOfferActionButtons } from "./offer-actions";
-// import { DownloadOfferPdfs } from "./download-offers";
-// import {
-// ConnectedExportAssignmentsAction,
-// ConnectedImportAssignmentsAction,
-// } from "./import-export";
 import {
     ActionsList,
     ActionButton,
     ActionHeader,
 } from "../../../components/action-buttons";
 import { ContentArea } from "../../../components/layout";
-import { FaEdit, FaPlus } from "react-icons/fa";
+import { FaPlus } from "react-icons/fa";
 import { MissingActiveSessionWarning } from "../../../components/sessions";
 import { useSelector } from "react-redux";
 import {
@@ -20,14 +14,15 @@ import {
     applicantMatchingDataSelector,
 } from "../../../api/actions";
 import { Spinner } from "react-bootstrap";
-import { ApplicantSummary } from "../matching/types";
 import { ApplicantMatchingDatum } from "../../../api/defs/types";
 import { guaranteeTableSelector } from "./actions";
 import { ConnectedGuaranteeTable } from "./guarantee-table";
-// import { Assignment } from "../../../api/defs/types";
-// import { ConnectedEditAssignmentDialog } from "./edit-assignment-dialog";
 
 import { ConnectedAddAppointmentDialog } from "./add-guarantee-dialog";
+import {
+    ConnectedExportAppointmentsAction,
+    ConnectedImportAppointmentsAction,
+} from "./import-export";
 
 export function AdminAppointmentsView() {
     const [addDialogVisible, setAddDialogVisible] = React.useState(false);
@@ -72,38 +67,9 @@ export function AdminAppointmentsView() {
                 >
                     Add Appointment
                 </ActionButton>
-
-                {/*<DownloadOfferPdfs selectedAssignments={selectedAssignments} />*/}
-
                 <ActionHeader>Import/Export</ActionHeader>
-
-                {/*<ConnectedImportAssignmentsAction*/}
-                {/*    disabled={!activeSession}*/}
-                {/*    setImportInProgress={setInProgress}*/}
-                {/*/>*/}
-                {/*<ConnectedExportAssignmentsAction*/}
-                {/*    disabled={!activeSession}*/}
-                {/*    setExportInProgress={setInProgress}*/}
-                {/*/>*/}
-
-                <ActionHeader>Selected Appointment Actions</ActionHeader>
-
-                {/*<ConnectedViewAssignmentDetailsAction />*/}
-                {/*<ConnectedOfferActionButtons*/}
-                {/*    selectedAssignments={selectedAssignments}*/}
-                {/*/>*/}
-                {/*<ActionButton*/}
-                {/*    disabled={!(selectedAssignments.length === 1)}*/}
-                {/*    title={*/}
-                {/*        selectedAssignments.length === 1*/}
-                {/*            ? "Edit the selected applicant"*/}
-                {/*            : "Please select a single applicant to edit (you cannot edit multiple assignments at the same time)"*/}
-                {/*    }*/}
-                {/*    onClick={() => setEditDialogVisible(true)}*/}
-                {/*    icon={<FaEdit />}*/}
-                {/*>*/}
-                {/*    Edit Assignment*/}
-                {/*</ActionButton>*/}
+                <ConnectedImportAppointmentsAction />
+                <ConnectedExportAppointmentsAction />
             </ActionsList>
             <ContentArea>
                 {activeSession ? null : (
@@ -124,13 +90,6 @@ export function AdminAppointmentsView() {
                         setAddDialogVisible(false);
                     }}
                 />
-                {/*<ConnectedEditAssignmentDialog*/}
-                {/*    show={editDialogVisible}*/}
-                {/*    onHide={() => {*/}
-                {/*        setEditDialogVisible(false);*/}
-                {/*    }}*/}
-                {/*    assignment={selectedAssignments[0]}*/}
-                {/*/>*/}
             </ContentArea>
         </div>
     );
