@@ -26,10 +26,13 @@ export function PositionList({
                         .indexOf(filterString.toLowerCase()) !== -1
             )
             .sort((a, b) => {
-                return a.position.position_code.toLowerCase() <
-                    b.position.position_code.toLowerCase()
-                    ? -1
-                    : 1;
+                return a.position.position_code
+                    .toLowerCase()
+                    .localeCompare(
+                        b.position.position_code.toLowerCase(),
+                        "en",
+                        { numeric: true }
+                    );
             });
     }, [filterString, positionSummaries]);
 
