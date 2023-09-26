@@ -1,10 +1,6 @@
 import { ApplicantSummary } from "../types";
 import { Position } from "../../../../api/defs/types";
-import {
-    getPositionPrefForPosition,
-    getApplicantMatchForPosition,
-    getMatchStatus,
-} from "../utils";
+import { getPositionPrefForPosition, getMatchStatus } from "../utils";
 
 export type FilterType =
     | "program"

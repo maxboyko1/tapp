@@ -13,7 +13,6 @@ import type {
     Session,
 } from "../../api/defs/types";
 import type { ExportFormat } from "./data-to-file";
-import { exportApplicantMatchingData } from "../../api/actions";
 
 export type PrepareDataFunc<T> = (data: T[], dataFormat: ExportFormat) => File;
 type FilterFunc<T> = ((array: T[]) => T[]) | null;

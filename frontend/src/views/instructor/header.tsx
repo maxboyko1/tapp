@@ -4,7 +4,6 @@ import {
     activeSessionSelector,
     sessionsSelector,
     setActiveSession,
-    assignmentsSelector,
     activeUserSelector,
 } from "../../api/actions";
 import { positionsSelector } from "../../api/actions";

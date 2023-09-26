@@ -47,8 +47,6 @@ export function InstructorApplicationsTable() {
             return ret;
         }, [assignments]);
 
-    console.log(assignmentsByApplicantId);
-
     const [shownApplicationId, setShownApplicationId] = React.useState<
         number | null
     >(null);
