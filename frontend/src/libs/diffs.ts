@@ -17,6 +17,8 @@ import {
     MinimalDdah,
     Ddah,
     Duty,
+    MinimalApplicantMatchingDatum,
+    ApplicantMatchingDatum,
 } from "../api/defs/types";
 import {
     prepareMinimal,
@@ -390,6 +392,78 @@ export const diffImport = {
             });
         } else {
             ret.obj = prepareFull.ddah(ddah, { assignments });
+        }
+        return ret;
+    },
+    applicantMatchingData: function (
+        importedApplicantMatchingData: MinimalApplicantMatchingDatum[],
+        context: {
+            applicantMatchingData: ApplicantMatchingDatum[];
+            applicants: Applicant[];
+            session: Session;
+        }
+    ): DiffSpec<MinimalApplicantMatchingDatum, ApplicantMatchingDatum>[] {
+        return importedApplicantMatchingData.map((applicantMatchingDatum) =>
+            diffImport.applicantMatchingDatum(applicantMatchingDatum, context)
+        );
+    },
+    applicantMatchingDatum: function (
+        applicantMatchingDatum: MinimalApplicantMatchingDatum,
+        context: {
+            applicantMatchingData: ApplicantMatchingDatum[];
+            applicants: Applicant[];
+            session: Session;
+        }
+    ): DiffSpec<MinimalApplicantMatchingDatum, ApplicantMatchingDatum> {
+        const existingApplicantMatchingData = context.applicantMatchingData;
+        const applicants = context.applicants;
+        const session = context.session;
+
+        const ret: DiffSpec<
+            MinimalApplicantMatchingDatum,
+            ApplicantMatchingDatum
+        > = {
+            status: "new",
+            changes: {},
+            obj: null as any, // Set to any temporarily to keep typescript from complaining
+        };
+
+        // Check to see if there is a matching applicant matching datum in the existing list
+        const matchingApplicantMatchingDatum =
+            existingApplicantMatchingData.find(
+                (x) => x.applicant.utorid === applicantMatchingDatum.utorid
+            );
+
+        if (matchingApplicantMatchingDatum) {
+            ret.status = "duplicate";
+            const minimal = prepareMinimal.applicantMatchingDatum(
+                matchingApplicantMatchingDatum
+            );
+            for (const _prop in minimal) {
+                const prop = _prop as keyof MinimalApplicantMatchingDatum;
+                const oldVal = minimal[prop];
+                const newVal = applicantMatchingDatum[prop];
+                if (!isSame(oldVal, newVal)) {
+                    ret.status = "modified";
+                    ret.changes[prop] = `"${oldVal}" → "${newVal}"`;
+                }
+            }
+            ret.obj = prepareFull.applicantMatchingDatum(
+                applicantMatchingDatum,
+                {
+                    id: matchingApplicantMatchingDatum.id,
+                    session: session,
+                    applicants: applicants,
+                }
+            );
+        } else {
+            ret.obj = prepareFull.applicantMatchingDatum(
+                applicantMatchingDatum,
+                {
+                    session: session,
+                    applicants: applicants,
+                }
+            );
         }
 
         return ret;

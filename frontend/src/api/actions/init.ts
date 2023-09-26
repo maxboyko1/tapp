@@ -29,6 +29,11 @@ import {
     fetchInstructorPreferencesSuccess,
 } from "./instructor_preferences";
 import { fetchPostingPositionsSuccess, fetchPostingsSuccess } from "./postings";
+import { fetchMatches, fetchMatchesSuccess } from "./matches";
+import {
+    fetchApplicantMatchingData,
+    fetchApplicantMatchingDataSuccess,
+} from "./applicant_matching_data";
 
 type InitStages =
     | "pageLoad"
@@ -242,15 +247,25 @@ export function initFromStage(
 
             // `fetchActions` array contains all the fetch API calls that need to be
             // made in order to obtain all data that the app needs.
-            const fetchActions = [
-                fetchContractTemplates,
-                fetchApplicants,
-                fetchPositions,
-                fetchApplications,
-                fetchAssignments,
-                fetchDdahs,
-                fetchInstructorPreferences,
-            ];
+            let fetchActions: (() => (dispatch: any) => Promise<unknown>)[] =
+                [];
+
+            const activeRole = activeRoleSelector(getState());
+            if (activeRole === "admin" || activeRole === "instructor") {
+                fetchActions = [
+                    fetchContractTemplates,
+                    fetchApplicants,
+                    fetchPositions,
+                    fetchApplications,
+                    fetchAssignments,
+                    fetchDdahs,
+                    fetchInstructorPreferences,
+                ];
+            }
+            if (activeRole === "admin") {
+                fetchActions.push(fetchMatches);
+                fetchActions.push(fetchApplicantMatchingData);
+            }
 
             // The order of fetching here doesn't matter, so dispatch all at once
             await Promise.all(
@@ -286,6 +301,8 @@ export function clearSessionDependentData(): ThunkAction<
             dispatch(fetchPositionsSuccess([])),
             dispatch(fetchPostingsSuccess([])),
             dispatch(fetchPostingPositionsSuccess([])),
+            dispatch(fetchMatchesSuccess([])),
+            dispatch(fetchApplicantMatchingDataSuccess([])),
         ]);
     };
 }

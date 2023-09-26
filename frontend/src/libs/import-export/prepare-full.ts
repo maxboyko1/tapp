@@ -18,6 +18,8 @@ import {
     MinimalPosting,
     Posting,
     PostingPosition,
+    MinimalApplicantMatchingDatum,
+    ApplicantMatchingDatum,
 } from "../../api/defs/types";
 import { round } from "../utils";
 
@@ -95,6 +97,15 @@ export interface PrepareFull {
         {
             id: number;
             positions: Position[];
+        }
+    >;
+    applicantMatchingDatum: PrepareUpsertable<
+        MinimalApplicantMatchingDatum,
+        ApplicantMatchingDatum,
+        {
+            id: number;
+            session: Session;
+            applicants: Applicant[];
         }
     >;
 }
@@ -363,6 +374,54 @@ export const prepareFull: PrepareFull = {
             ret.id = id;
         }
         ret.posting_positions = postingPositions;
+        return ret;
+    },
+    applicantMatchingDatum: function (
+        minApplicantMatchingDatum: MinimalApplicantMatchingDatum,
+        context?: any
+    ): any {
+        const { id, applicants, session }: Partial<IdContext> = context || {};
+        if (!Array.isArray(applicants)) {
+            throw new Error(
+                "You must pass an array of applicants to reconstruct an appointment"
+            );
+        }
+        if (!session) {
+            throw new Error(
+                "You must pass a session to reconstruct an appointment"
+            );
+        }
+
+        const matchingApplicant = applicants.find(
+            (x) => x.utorid === minApplicantMatchingDatum.utorid
+        );
+
+        if (matchingApplicant == null) {
+            throw new Error(
+                `Couldn't find applicant with UTORid "${minApplicantMatchingDatum.utorid}"`
+            );
+        }
+
+        const ret: Partial<ApplicantMatchingDatum> = {
+            applicant: matchingApplicant,
+            session: session,
+        };
+
+        // Add in the id if we have it
+        if (id != null) {
+            ret.id = id;
+        }
+        if (minApplicantMatchingDatum.min_hours_owed != null) {
+            ret.min_hours_owed = minApplicantMatchingDatum.min_hours_owed;
+        }
+        if (minApplicantMatchingDatum.max_hours_owed != null) {
+            ret.max_hours_owed = minApplicantMatchingDatum.max_hours_owed;
+        }
+        if (minApplicantMatchingDatum.prev_hours_fulfilled != null) {
+            ret.prev_hours_fulfilled =
+                minApplicantMatchingDatum.prev_hours_fulfilled;
+        }
+
         return ret;
     },
 };

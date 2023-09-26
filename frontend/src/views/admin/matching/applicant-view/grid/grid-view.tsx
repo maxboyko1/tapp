@@ -1,7 +1,7 @@
 import React from "react";
 import { Position } from "../../../../../api/defs/types";
 import { ApplicantSummary, MatchStatus } from "../../types";
-import { getApplicantMatchForPosition } from "../../utils";
+import { getMatchStatus } from "../../utils";
 import { ConnectedApplicantPill } from "./grid-item";
 import { matchingStatusToString } from "../";
 import { FaLock } from "react-icons/fa";
@@ -28,20 +28,16 @@ export function GridView({
             assigned: [],
             unassignable: [],
             hidden: [],
+            "n/a": [],
         };
 
         for (const applicantSummary of applicantSummaries) {
-            const applicantMatch = getApplicantMatchForPosition(
+            const applicantMatchStatus = getMatchStatus(
                 applicantSummary,
                 position
             );
-
-            if (!applicantMatch || !applicantMatch.status) {
-                continue;
-            }
-
-            ret[applicantMatch.status] = ret[applicantMatch.status] || [];
-            ret[applicantMatch.status].push(applicantSummary);
+            ret[applicantMatchStatus] = ret[applicantMatchStatus] || [];
+            ret[applicantMatchStatus].push(applicantSummary);
         }
 
         return ret;
@@ -116,7 +112,10 @@ function GridSection({
                         <ConnectedApplicantPill
                             applicantSummary={applicantSummary}
                             position={position}
-                            key={applicantSummary.applicant.id}
+                            key={
+                                applicantSummary.applicantMatchingDatum
+                                    .applicant.id
+                            }
                         />
                     );
                 })}

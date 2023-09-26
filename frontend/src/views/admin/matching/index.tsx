@@ -9,9 +9,6 @@ import {
 import { PositionSummary } from "./types";
 import { PositionList } from "./position-list";
 import { ApplicantView } from "./applicant-view";
-import { ImportGuaranteesButton } from "./import-export/import-guarantees";
-import { ImportMatchingDataButton } from "./import-export/import-matching-data";
-import { ExportMatchingDataButton } from "./import-export/export-matching-data";
 import { FinalizeChangesButton } from "./finalize-changes";
 import "./styles.css";
 
@@ -32,8 +29,8 @@ export function AdminMatchingView() {
     }, [activeSession, dispatch]);
 
     // Get information about positions
-    const positionSummaries = useSelector(positionSummariesByIdSelector);
     const selectedPositionId = useSelector(selectedMatchingPositionSelector);
+    const positionSummaries = useSelector(positionSummariesByIdSelector);
     const selectedPositionSummary: PositionSummary | null =
         React.useMemo(() => {
             if (!selectedPositionId) {
@@ -55,9 +52,6 @@ export function AdminMatchingView() {
                 )}
             </div>
             <div className="matching-footer page-actions">
-                <ImportMatchingDataButton />
-                <ImportGuaranteesButton />
-                <ExportMatchingDataButton />
                 <div className="footer-button-separator" />
                 <FinalizeChangesButton />
             </div>

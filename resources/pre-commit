@@ -12,7 +12,7 @@ if [[ ! "$STAGED_JS_FILES" = "" ]]; then
 
     printf "\nValidating Javascript:\n"
 
-    ESLINT="$(git rev-parse --show-toplevel)/frontend/node_modules/eslint/bin/eslint.js"
+    ESLINT="$(git rev-parse --show-toplevel)/node_modules/eslint/bin/eslint.js"
 
     # Check for eslint
     if [[ ! -x "$ESLINT" ]]; then
@@ -45,8 +45,8 @@ fi
 if [[ ! "$STAGED_RUBY_FILES" = "" ]]; then
     printf "\nValidating Ruby:\n"
 
-    RUBOCOP="$(git rev-parse --show-toplevel)/api/resources/rubocop.rb"
-    EXCLUDED_FILE="$(git rev-parse --show-toplevel)/api/config/initializers/rake.rb"
+    RUBOCOP="$(git rev-parse --show-toplevel)/backend/resources/rubocop.rb"
+    EXCLUDED_FILE="$(git rev-parse --show-toplevel)/backend/config/initializers/rake.rb"
     ruby $RUBOCOP --staged -a --fail-level convention --force-exclusion $EXCLUDED_FILE
     RUBOCOP_EXIT=$?
 

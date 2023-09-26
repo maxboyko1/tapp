@@ -25,6 +25,8 @@ import {
     MinimalPostingPosition,
     MinimalPosting,
     Posting,
+    ApplicantMatchingDatum,
+    MinimalApplicantMatchingDatum,
 } from "../../api/defs/types";
 
 /**
@@ -259,6 +261,7 @@ export const prepareMinimal = {
             gpa: application.gpa,
             program: application.program,
             yip: application.yip,
+            cv_link: application.cv_link,
             previous_experience_summary:
                 application.previous_experience_summary,
             previous_department_ta: application.previous_department_ta,
@@ -293,6 +296,16 @@ export const prepareMinimal = {
                 hours: duty.hours,
                 description: duty.description,
             })),
+        };
+    },
+    applicantMatchingDatum: function (
+        applicantMatchingDatum: ApplicantMatchingDatum
+    ): MinimalApplicantMatchingDatum {
+        return {
+            utorid: applicantMatchingDatum.applicant.utorid,
+            min_hours_owed: applicantMatchingDatum.min_hours_owed,
+            max_hours_owed: applicantMatchingDatum.max_hours_owed,
+            prev_hours_fulfilled: applicantMatchingDatum.prev_hours_fulfilled,
         };
     },
 };

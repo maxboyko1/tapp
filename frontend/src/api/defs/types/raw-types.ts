@@ -43,6 +43,7 @@ export interface RawApplication extends HasId {
     program: string | null;
     department: string | null;
     previous_experience_summary: string | null;
+    cv_link: string | null;
     yip: number | null;
     gpa: number | null;
     previous_department_ta: boolean | null;
@@ -198,4 +199,23 @@ export interface RawInstructorPreference {
     position_id: number;
     preference_level: number;
     comment: string;
+}
+
+export interface RawApplicantMatchingDatum extends HasId {
+    applicant_id: number;
+    session_id: number;
+    max_hours_owed: number | null;
+    min_hours_owed: number | null;
+    prev_hours_fulfilled: number | null;
+    note: string | null;
+    hidden: boolean;
+}
+
+export interface RawMatch {
+    applicant_id: number;
+    position_id: number;
+    hours_assigned: number | null;
+    assigned: boolean;
+    starred: boolean;
+    hidden: boolean;
 }

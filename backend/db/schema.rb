@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_21_000001) do
+ActiveRecord::Schema.define(version: 2023_06_13_154747) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -43,6 +43,20 @@ ActiveRecord::Schema.define(version: 2021_11_21_000001) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "applicant_matching_data", force: :cascade do |t|
+    t.bigint "applicant_id", null: false
+    t.bigint "session_id", null: false
+    t.float "min_hours_owed"
+    t.float "max_hours_owed"
+    t.float "prev_hours_fulfilled"
+    t.text "note"
+    t.boolean "hidden", default: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["applicant_id"], name: "index_applicant_matching_data_on_applicant_id"
+    t.index ["session_id"], name: "index_applicant_matching_data_on_session_id"
+  end
+
   create_table "applicants", force: :cascade do |t|
     t.string "utorid", null: false
     t.string "student_number"
@@ -52,6 +66,9 @@ ActiveRecord::Schema.define(version: 2021_11_21_000001) do
     t.string "phone"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.float "min_hours_owed"
+    t.float "max_hours_owed"
+    t.float "previous_hours_fulfilled"
     t.index ["utorid"], name: "index_applicants_on_utorid", unique: true
   end
 
@@ -71,6 +88,7 @@ ActiveRecord::Schema.define(version: 2021_11_21_000001) do
     t.float "gpa"
     t.json "custom_question_answers"
     t.bigint "posting_id"
+    t.string "cv_link"
     t.index ["applicant_id"], name: "index_applications_on_applicant_id"
     t.index ["posting_id"], name: "index_applications_on_posting_id"
     t.index ["session_id"], name: "index_applications_on_session_id"
@@ -152,6 +170,19 @@ ActiveRecord::Schema.define(version: 2021_11_21_000001) do
     t.bigint "position_id"
     t.index ["instructor_id"], name: "index_instructors_positions_on_instructor_id"
     t.index ["position_id"], name: "index_instructors_positions_on_position_id"
+  end
+
+  create_table "matches", force: :cascade do |t|
+    t.bigint "applicant_id", null: false
+    t.bigint "position_id", null: false
+    t.float "hours_assigned"
+    t.boolean "assigned", default: false
+    t.boolean "starred", default: false
+    t.boolean "hidden", default: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["applicant_id"], name: "index_matches_on_applicant_id"
+    t.index ["position_id"], name: "index_matches_on_position_id"
   end
 
   create_table "offers", force: :cascade do |t|
@@ -299,6 +330,8 @@ ActiveRecord::Schema.define(version: 2021_11_21_000001) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "applicant_matching_data", "applicants"
+  add_foreign_key "applicant_matching_data", "sessions"
   add_foreign_key "applications", "applicants"
   add_foreign_key "applications", "postings"
   add_foreign_key "applications", "sessions"
@@ -310,6 +343,8 @@ ActiveRecord::Schema.define(version: 2021_11_21_000001) do
   add_foreign_key "duties", "ddahs"
   add_foreign_key "instructor_preferences", "applications"
   add_foreign_key "instructor_preferences", "positions"
+  add_foreign_key "matches", "applicants"
+  add_foreign_key "matches", "positions"
   add_foreign_key "offers", "assignments"
   add_foreign_key "position_preferences", "applications"
   add_foreign_key "position_preferences", "positions"

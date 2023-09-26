@@ -281,11 +281,12 @@ export const assignmentsSelector = createSelector(
                 })
                 // There could be a race condition where the assignments are loaded before applicants and positions.
                 // We filter out any assignments that don't have a corresponding applicant and position.
-                .filter(
-                    (assignment) =>
+                .filter((assignment) => {
+                    return (
                         assignment.position.id != null &&
                         assignment.applicant.id != null
-                )
+                    );
+                })
         );
     }
 );

@@ -40,7 +40,7 @@
                     "title": "UTORid",
                     "isRequired": true,
                     "readOnly": true,
-                    "placeHolder": "XXX"
+                    "placeHolder": "xxxxxxxx"
                 }
             ]
         },
@@ -58,16 +58,16 @@
                             "text": "PhD Student"
                         },
                         {
+                            "value": "MScAC",
+                            "text": "MScAC (Professional Masters)"
+                        },
+                        {
                             "value": "M",
-                            "text": "Masters Student"
+                            "text": "Masters Student (Research Masters)"
                         },
                         {
                             "value": "U",
                             "text": "Undergraduate Student"
-                        },
-                        {
-                            "value": "MScAC",
-                            "text": "MScAC"
                         },
                         {
                             "value": "PD",
@@ -97,12 +97,12 @@
                     "isRequired": true,
                     "choices": [
                         {
-                            "value": "math",
-                            "text": "Mathematics/Applied Mathematics"
-                        },
-                        {
                             "value": "cs",
                             "text": "Computer Science"
+                        },
+                        {
+                            "value": "math",
+                            "text": "Mathematics/Applied Mathematics"
                         },
                         {
                             "value": "engr",
@@ -156,6 +156,20 @@
             "name": "previous_experience_page",
             "elements": [
                 {
+                    "type": "text",
+                    "name": "cv_link",
+                    "title": "Please provide a link to your CV or LinkedIn profile. This is preferable to uploading a file of your CV.",
+                    "isRequired": false
+                },
+                {
+                    "type": "file",
+                    "name": "cv",
+                    "title": "If you’re unable to provide a link to your CV/LinkedIn, please upload your CV here.",
+                    "isRequired": false,
+                    "allowMultiple": false,
+                    "maxSize": 5242880
+                },
+                {
                     "type": "boolean",
                     "name": "previous_university_ta",
                     "title": "Have you had previous appointment(s) as a TA at this university?",
@@ -195,7 +209,7 @@
                     "type": "matrix",
                     "name": "position_preferences",
                     "title": "Position Preferences",
-                    "description": "Please rank your preferences for the available positions. High is your indicates your most preferred positions (please mark *no more than 5 positions as High*); Medium indicates positions you are strongly interested in but are not your top choice; Low indicates positions you are willing to TA. Marking N/A is equivalent to not marking a position.",
+                    "description": "Please rank your preferences for the available positions. High indicates your most preferred positions; Medium indicates positions you are strongly interested in but are not your top choice; Low indicates positions you are willing to TA. Marking N/A is equivalent to not marking a position.",
                     "isRequired": true,
                     "columns": [
                         {

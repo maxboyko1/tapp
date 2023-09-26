@@ -9,6 +9,7 @@
 .position-preferences-list {
     margin: unset;
     padding: unset;
+    overflow: auto;
 }
 .position-preferences-list li {
     margin-right: 4px;

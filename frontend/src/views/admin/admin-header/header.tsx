@@ -29,6 +29,7 @@ export const ROUTES = [
             },
         ],
     },
+
     {
         route: "/assignments_and_positions",
         name: "Assignments & Positions",
@@ -52,9 +53,9 @@ export const ROUTES = [
         ],
     },
     {
-        route: "/applicants_and_matching",
-        name: "Applicants & Matching",
-        description: "Manage applicants and match applicants to positions",
+        route: "/applicants_and_applications",
+        name: "Applicants & Applications",
+        description: "Manage applicants and applications",
         subroutes: [
             {
                 route: "/applicants",
@@ -66,6 +67,18 @@ export const ROUTES = [
                 name: "Applications",
                 description: "Manage Applications",
             },
+            {
+                route: "/appointments",
+                name: "Subsequent Appointments",
+                description: "Manage subsequent appointment guarantees",
+            },
+        ],
+    },
+    {
+        route: "/matching",
+        name: "Matching",
+        description: "Match applications to positions",
+        subroutes: [
             {
                 route: "/matching",
                 name: "Matching",

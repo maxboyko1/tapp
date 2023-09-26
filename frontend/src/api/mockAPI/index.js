@@ -15,6 +15,8 @@ import { ddahsRoutes } from "./ddahs";
 import { reportingTagRoutes } from "./reportingTags";
 import { postingRoutes } from "./postings";
 import { publicRoutes } from "./public-routes";
+import { applicantMatchingDataRoutes } from "./applicant_matching_data";
+import { matchesRoutes } from "./matches";
 
 /**
  * Mock API server that runs locally; useful for demo purposes.
@@ -41,6 +43,8 @@ export class MockAPI {
         activeUserRoutes.get,
         postingRoutes.get,
         publicRoutes.get,
+        applicantMatchingDataRoutes.get,
+        matchesRoutes.get,
         {
             "/all_data": documentCallback({
                 func: (data) => data,
@@ -63,7 +67,9 @@ export class MockAPI {
         debugRoutes.post,
         activeUserRoutes.post,
         postingRoutes.post,
-        publicRoutes.post
+        publicRoutes.post,
+        applicantMatchingDataRoutes.post,
+        matchesRoutes.post
     );
 
     constructor(seedData) {

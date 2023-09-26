@@ -165,6 +165,18 @@ Rails
                             resources :postings, only: %i[index create]
                             resources :posting_positions, only: %i[index]
                             resources :instructor_preferences, only: %i[index]
+                            resources :matches, only: %i[index create]
+                            resources :applicant_matching_data, only: %i[index create]
+                        end
+
+                        # Matches
+                        resources :matches, only: %i[show create] do
+                            collection { post :delete }
+                        end
+
+                        # Applicant Matching Data
+                        resources :applicant_matching_data, only: %i[show create] do
+                            collection { post :delete }
                         end
 
                         # DDAHs

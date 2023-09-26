@@ -13,6 +13,7 @@ import { PostingDetails } from "../postings/posting-details";
 import { PostingPreview } from "../postings/posting-preview";
 import { AdminApplicationsView } from "../applications";
 import { AdminMatchingView } from "../matching";
+import { AdminAppointmentsView } from "../guarantees";
 
 export function AdminRoutes() {
     return (
@@ -47,16 +48,22 @@ export function AdminRoutes() {
             <Route exact path="/assignments_and_positions/ddahs">
                 <AdminDdahsView />
             </Route>
-            <Route exact path="/applicants_and_matching">
-                <Redirect to="/applicants_and_matching/applicants" />
+            <Route exact path="/applicants_and_applications">
+                <Redirect to="/applicants_and_applications/applicants" />
             </Route>
-            <Route exact path="/applicants_and_matching/applicants">
+            <Route exact path="/applicants_and_applications/applicants">
                 <AdminApplicantsView />
             </Route>
-            <Route exact path="/applicants_and_matching/applications">
+            <Route exact path="/applicants_and_applications/applications">
                 <AdminApplicationsView />
             </Route>
-            <Route exact path="/applicants_and_matching/matching">
+            <Route exact path="/applicants_and_applications/appointments">
+                <AdminAppointmentsView />
+            </Route>
+            <Route exact path="/matching">
+                <Redirect to="/matching/matching" />
+            </Route>
+            <Route exact path="/matching/matching">
                 <AdminMatchingView />
             </Route>
             <Route exact path="/postings">

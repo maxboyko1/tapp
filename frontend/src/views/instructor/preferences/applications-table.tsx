@@ -13,14 +13,42 @@ import { ApplicantRatingAndComment } from "../../../components/applicant-rating"
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
 import { upsertInstructorPreference } from "../../../api/actions/instructor_preferences";
 import { CellProps } from "react-table";
-import { Alert, Button, Modal } from "react-bootstrap";
+import { Alert, Button, Modal, Badge } from "react-bootstrap";
 import { FaSearch } from "react-icons/fa";
 import { ApplicationDetails } from "../../admin/applications/application-details";
 import { PropsForElement } from "../../../api/defs/types/react";
+import { assignmentsSelector } from "../../../api/actions";
+
+const OFFER_STATUS_TO_VARIANT: Record<string, string> = {
+    accepted: "success",
+    rejected: "danger",
+    withdrawn: "danger",
+};
 
 export function InstructorApplicationsTable() {
     const activePosition = useSelector(activePositionSelector);
     const allApplications = useSelector(applicationsSelector);
+    const assignments = useSelector(assignmentsSelector);
+
+    const assignmentsByApplicantId: Record<number, Assignment[]> =
+        React.useMemo(() => {
+            const ret: Record<number, Assignment[]> = {};
+            for (const assignment of assignments) {
+                if (
+                    assignment.active_offer_status !== "rejected" &&
+                    assignment.active_offer_status !== "withdrawn"
+                ) {
+                    ret[assignment.applicant.id] =
+                        ret[assignment.applicant.id] || [];
+                    ret[assignment.applicant.id].push(assignment);
+                }
+            }
+
+            return ret;
+        }, [assignments]);
+
+    console.log(assignmentsByApplicantId);
+
     const [shownApplicationId, setShownApplicationId] = React.useState<
         number | null
     >(null);
@@ -40,12 +68,13 @@ export function InstructorApplicationsTable() {
         if (!activePosition) {
             return [];
         }
-        const relevantApplications = allApplications.filter((application) =>
+        return allApplications.filter((application) =>
             application.position_preferences.some(
-                (preference) => preference.position.id === activePosition.id
+                (preference) =>
+                    preference.position.id === activePosition.id &&
+                    preference.preference_level !== 0
             )
         );
-        return relevantApplications;
     }, [activePosition, allApplications]);
 
     const ConnectedRating = ({
@@ -162,6 +191,34 @@ export function InstructorApplicationsTable() {
         {
             Header: generateHeaderCell("Experience"),
             accessor: "previous_experience_summary",
+        },
+        {
+            Header: "Assignment(s)",
+            id: "assignments",
+            width: 300,
+            Cell: (props: CellProps<Application>) => {
+                const assignments: Assignment[] =
+                    assignmentsByApplicantId[props.row.original.applicant.id] ||
+                    [];
+                return (
+                    <ul className="position-preferences-list">
+                        {assignments.map((assignment) => (
+                            <Badge
+                                as="li"
+                                key={assignment.position.position_code}
+                                variant={
+                                    OFFER_STATUS_TO_VARIANT[
+                                        assignment.active_offer_status || ""
+                                    ] || "warning"
+                                }
+                            >
+                                {assignment.position.position_code} (
+                                {assignment.hours})
+                            </Badge>
+                        ))}
+                    </ul>
+                );
+            },
         },
     ];
 

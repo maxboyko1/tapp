@@ -6,52 +6,32 @@ import {
     assignmentsSelector,
     positionsSelector,
     applicantsSelector,
+    matchesSelector,
+    applicantMatchingDataSelector,
+    activeSessionSelector,
 } from "../../../api/actions";
-import { Assignment, Application, Position } from "../../../api/defs/types";
+
 import {
-    UPSERT_MATCH,
-    BATCH_UPSERT_MATCHES,
-    UPSERT_GUARANTEE,
-    BATCH_UPSERT_GUARANTEES,
-    UPSERT_NOTE,
-    BATCH_UPSERT_NOTES,
+    Assignment,
+    Application,
+    Match,
+    ApplicantMatchingDatum,
+} from "../../../api/defs/types";
+
+import {
     SET_SELECTED_MATCHING_POSITION,
     SET_APPLICANT_VIEW_MODE,
-    SET_UPDATED,
-    TOGGLE_STARRED,
-    TOGGLE_ASSIGNED,
-    TOGGLE_HIDDEN,
 } from "./constants";
+
 import {
-    RawMatch,
     PositionSummary,
     ApplicantSummary,
-    MatchableAssignment,
-    AppointmentGuaranteeStatus,
     ApplicantViewMode,
     FillStatus,
-    MatchStatus,
 } from "./types";
+
+import { getHoursAssigned } from "./utils";
 import { actionFactory } from "../../../api/actions/utils";
-
-// actions
-export const upsertMatch = actionFactory<RawMatch>(UPSERT_MATCH);
-
-export const batchUpsertMatches =
-    actionFactory<RawMatch[]>(BATCH_UPSERT_MATCHES);
-
-export const upsertGuarantee =
-    actionFactory<AppointmentGuaranteeStatus>(UPSERT_GUARANTEE);
-
-export const batchUpsertGuarantees = actionFactory<
-    AppointmentGuaranteeStatus[]
->(BATCH_UPSERT_GUARANTEES);
-
-export const upsertNote =
-    actionFactory<Record<string, string | null>>(UPSERT_NOTE);
-
-export const batchUpsertNotes =
-    actionFactory<Record<string, string | null>>(BATCH_UPSERT_NOTES);
 
 export const setSelectedMatchingPosition = actionFactory<number | null>(
     SET_SELECTED_MATCHING_POSITION
@@ -61,26 +41,11 @@ export const setApplicantViewMode = actionFactory<ApplicantViewMode>(
     SET_APPLICANT_VIEW_MODE
 );
 
-export const setUpdated = actionFactory<boolean>(SET_UPDATED);
-
-export const toggleStarred = actionFactory<RawMatch>(TOGGLE_STARRED);
-export const toggleAssigned = actionFactory<RawMatch>(TOGGLE_ASSIGNED);
-export const toggleHidden = actionFactory<RawMatch>(TOGGLE_HIDDEN);
-
 // selectors
-export const matchingDataSelector = (state: RootState) => state.ui.matchingData;
-export const guaranteesSelector = (state: RootState) =>
-    state.ui.matchingData.guarantees;
-export const notesSelector = (state: RootState) => state.ui.matchingData.notes;
 export const selectedMatchingPositionSelector = (state: RootState) =>
     state.ui.matchingData.selectedMatchingPositionId;
 export const applicantViewModeSelector = (state: RootState) =>
     state.ui.matchingData.applicantViewMode;
-export const updatedSelector = (state: RootState) =>
-    state.ui.matchingData.updated;
-
-export const rawMatchesSelector = (state: RootState) =>
-    state.ui.matchingData.matches;
 
 // Consolidates the most recent application for each posting for each applicant
 export const combinedApplicationsSelector = createSelector(
@@ -126,9 +91,16 @@ export const combinedApplicationsSelector = createSelector(
 
                 // Sort each bucket:
                 let combinedApplication: Application | null = null;
-                for (const applications of Object.values(
-                    applicationsByPosting
-                )) {
+
+                // Start with application from newest posting and backfill data
+                const sortedPostingIds: number[] = [];
+                for (const postingId of Object.keys(applicationsByPosting)) {
+                    sortedPostingIds.push(+postingId);
+                }
+                sortedPostingIds.sort().reverse();
+
+                for (const postingId of sortedPostingIds) {
+                    const applications = applicationsByPosting[postingId];
                     applications.sort((a, b) => {
                         if (a.submission_date === b.submission_date) {
                             return 0;
@@ -165,30 +137,56 @@ export const combinedApplicationsSelector = createSelector(
                                 );
                             }
                         }
+                        for (const instrPref of newestApplication.instructor_preferences) {
+                            combinedApplication.instructor_preferences =
+                                combinedApplication.instructor_preferences ||
+                                [];
+                            combinedApplication.instructor_preferences.push(
+                                instrPref
+                            );
+                        }
+                        if (newestApplication.comments) {
+                            if (combinedApplication.comments) {
+                                combinedApplication.comments += `\n[${newestApplication.submission_date}: ${newestApplication.comments}]`;
+                            }
+                        }
+                        if (newestApplication.previous_experience_summary) {
+                            if (
+                                combinedApplication.previous_experience_summary
+                            ) {
+                                combinedApplication.previous_experience_summary += `\n[${newestApplication.submission_date}: ${newestApplication.previous_experience_summary}]`;
+                            }
+                        }
                     }
                 }
-
                 return combinedApplication;
             })
             .filter((application) => !!application);
     }
 );
 
-/**
- * Create and returns MatchableAssignments from RawMatches.
- */
-export const matchesSelector = createSelector(
+const applicantSummariesSelector = createSelector(
     [
-        rawMatchesSelector,
-        positionsSelector,
         applicantsSelector,
         assignmentsSelector,
+        applicantMatchingDataSelector,
+        matchesSelector,
         combinedApplicationsSelector,
+        activeSessionSelector,
     ],
-    (rawMatches, positions, applicants, assignments, applications) => {
-        let ret: MatchableAssignment[] = [];
+    (
+        applicants,
+        assignments,
+        applicantMatchingData,
+        matches,
+        applications,
+        activeSession
+    ) => {
+        const ret: ApplicantSummary[] = [];
+        if (activeSession == null) return ret;
 
-        const applicationsByApplicantId: Record<number, Application> = {};
+        const applicationsByApplicantId: Record<number, Application | null> =
+            {};
         for (const application of applications) {
             if (application) {
                 applicationsByApplicantId[application.applicant.id] =
@@ -203,206 +201,144 @@ export const matchesSelector = createSelector(
             assignmentsByApplicantId[assignment.applicant.id].push(assignment);
         }
 
-        const rawMatchesByUtorid: Record<string, RawMatch[]> = {};
-        for (const rawMatch of rawMatches) {
-            rawMatchesByUtorid[rawMatch.utorid] =
-                rawMatchesByUtorid[rawMatch.utorid] || [];
-            rawMatchesByUtorid[rawMatch.utorid].push(rawMatch);
+        const applicantMatchingDataByApplicantId: Record<
+            number,
+            ApplicantMatchingDatum
+        > = {};
+        for (const applicantMatchingDatum of applicantMatchingData) {
+            applicantMatchingDataByApplicantId[
+                applicantMatchingDatum.applicant.id
+            ] = applicantMatchingDatum;
         }
 
-        const positionsByPositionCode: Record<string, Position> = {};
-        for (const position of positions) {
-            positionsByPositionCode[position.position_code] = position;
-        }
-
-        // Go over every applicant and determine their matches
-        for (const applicant of applicants) {
-            const matchesByPositionId: Record<number, MatchableAssignment> = {};
-
-            const combinedApplication = applicationsByApplicantId[applicant.id];
-            if (!combinedApplication) {
-                continue;
-            }
-
-            // Mark positions as being applied for
-            for (const positionPreference of combinedApplication.position_preferences) {
-                matchesByPositionId[positionPreference.position.id] = {
-                    applicant: applicant,
-                    position: positionPreference.position,
-                    hoursAssigned: 0,
-                    status: "applied",
-                };
-            }
-
-            // Override with RawMatch data if it exists
-            for (const rawMatch of rawMatchesByUtorid[applicant.utorid] || []) {
-                if (positionsByPositionCode[rawMatch.positionCode]) {
-                    matchesByPositionId[
-                        positionsByPositionCode[rawMatch.positionCode].id
-                    ] = {
-                        applicant: applicant,
-                        position:
-                            positionsByPositionCode[rawMatch.positionCode],
-                        hoursAssigned: rawMatch.stagedHoursAssigned || 0,
-                        status: getMatchStatusFromRawMatch(rawMatch),
-                    };
-                }
-            }
-
-            // Override with official assignments
-            for (const assignment of assignmentsByApplicantId[applicant.id] ||
-                []) {
-                matchesByPositionId[assignment.position.id] = {
-                    applicant: applicant,
-                    position: assignment.position,
-                    hoursAssigned:
-                        activeOfferStatusToStatus(
-                            assignment.active_offer_status
-                        ) === "unassignable"
-                            ? 0
-                            : assignment.hours,
-                    status: activeOfferStatusToStatus(
-                        assignment.active_offer_status
-                    ),
-                };
-            }
-
-            ret = [...ret, ...Object.values(matchesByPositionId)];
-        }
-
-        return ret;
-    }
-);
-
-/**
- * Return a MatchStatus ("assigned" or "unassignable") based on an active offer status type.
- */
-function activeOfferStatusToStatus(active_offer_status: string | null) {
-    switch (active_offer_status) {
-        case "rejected":
-        case "withdrawn":
-            return "unassignable";
-        default:
-            return "assigned";
-    }
-}
-
-export const applicantSummariesSelector = createSelector(
-    [
-        applicantsSelector,
-        matchesSelector,
-        guaranteesSelector,
-        notesSelector,
-        combinedApplicationsSelector,
-    ],
-    (applicants, matches, guarantees, notes, applications) => {
-        const ret: ApplicantSummary[] = [];
-        const applicationsByApplicantId: Record<number, Application | null> =
-            {};
-        for (const application of applications) {
-            if (application) {
-                applicationsByApplicantId[application.applicant.id] =
-                    application;
-            }
-        }
-
-        const matchesByApplicantId: Record<number, MatchableAssignment[]> = {};
+        const matchesByApplicantId: Record<number, Match[]> = {};
         for (const match of matches) {
             matchesByApplicantId[match.applicant.id] =
                 matchesByApplicantId[match.applicant.id] || [];
             matchesByApplicantId[match.applicant.id].push(match);
         }
 
-        const guaranteesByUtorid: Record<string, AppointmentGuaranteeStatus> =
-            {};
-        for (const guarantee of guarantees) {
-            guaranteesByUtorid[guarantee.utorid] = guarantee;
-        }
-
         for (const applicant of applicants) {
-            let hoursAssigned = 0;
-            for (const match of matchesByApplicantId[applicant.id] || []) {
+            let hoursAssigned =
+                applicantMatchingDataByApplicantId[applicant.id]
+                    ?.prev_hours_fulfilled || 0;
+
+            for (const assignment of assignmentsByApplicantId[applicant.id] ||
+                []) {
                 if (
-                    match.status === "assigned" ||
-                    match.status === "staged-assigned"
+                    assignment.active_offer_status !== "rejected" &&
+                    assignment.active_offer_status !== "withdrawn"
                 ) {
-                    hoursAssigned += match.hoursAssigned;
+                    hoursAssigned += assignment.hours;
                 }
+            }
+
+            for (const match of matchesByApplicantId[applicant.id] || []) {
+                // Do not double-count if the applicant already has an existing assignment
+                if (
+                    match.assigned &&
+                    !assignmentsByApplicantId[applicant.id]?.find(
+                        (assignment) =>
+                            assignment.position.id === match.position.id &&
+                            assignment.active_offer_status !== "rejected" &&
+                            assignment.active_offer_status !== "withdrawn"
+                    )
+                )
+                    hoursAssigned += match.hours_assigned || 0;
             }
 
             let filledStatus: FillStatus = "n/a";
-            if (hoursAssigned > 0) {
-                filledStatus = "over";
-            }
-
-            if (guaranteesByUtorid[applicant.utorid]) {
-                const targetHours =
-                    guaranteesByUtorid[applicant.utorid].minHoursOwed;
-                if (targetHours > 0 && hoursAssigned === 0) {
-                    filledStatus = "empty";
-                } else if (targetHours - hoursAssigned > 0) {
-                    filledStatus = "under";
-                } else if (targetHours - hoursAssigned === 0) {
-                    filledStatus = "matched";
-                } else if (targetHours - hoursAssigned < 0) {
-                    filledStatus = "over";
-                }
-            }
+            if (applicantMatchingDataByApplicantId[applicant.id] || [])
+                filledStatus = getFilledStatus(
+                    applicantMatchingDataByApplicantId[applicant.id]
+                        ?.min_hours_owed || 0,
+                    hoursAssigned
+                );
 
             ret.push({
-                applicant: applicant,
-                application: applicationsByApplicantId[applicant.id],
+                applicantMatchingDatum: applicantMatchingDataByApplicantId[
+                    applicant.id
+                ] || {
+                    applicant: applicant,
+                    session: activeSession,
+                },
+                application: applicationsByApplicantId[applicant.id] || null,
                 matches: matchesByApplicantId[applicant.id] || [],
-                guarantee: guaranteesByUtorid[applicant.utorid],
-                note: notes[applicant.utorid] || null,
-                hoursAssigned: hoursAssigned,
+                assignments: assignmentsByApplicantId[applicant.id] || [],
+                totalHoursAssigned: hoursAssigned,
                 filledStatus: filledStatus,
             });
         }
-
         return ret;
     }
 );
 
+function getFilledStatus(
+    targetHours: number,
+    hoursAssigned: number
+): FillStatus {
+    if (targetHours === 0 && hoursAssigned === 0) {
+        return "n/a";
+    } else if (targetHours > 0 && hoursAssigned === 0) {
+        return "empty";
+    } else if (targetHours - hoursAssigned > 0) {
+        return "under";
+    } else if (targetHours - hoursAssigned === 0) {
+        return "matched";
+    }
+    return "over";
+}
+
 export const positionSummariesByIdSelector = createSelector(
-    [positionsSelector, applicantSummariesSelector, matchesSelector],
-    (positions, applicantSummaries, matches) => {
+    [positionsSelector, applicantSummariesSelector],
+    (positions, applicantSummaries) => {
         const ret: Record<number, PositionSummary> = [];
-        const applicantSummariesByPositionId: Record<
-            number,
-            ApplicantSummary[]
-        > = {};
+        const applicantSummariesByPosition: Record<number, ApplicantSummary[]> =
+            {};
+
         for (const applicantSummary of applicantSummaries) {
+            // Add the applicant summary to any position where the applicant has an existing assignment
+            for (const assignment of applicantSummary.assignments) {
+                applicantSummariesByPosition[assignment.position.id] =
+                    applicantSummariesByPosition[assignment.position.id] || [];
+                applicantSummariesByPosition[assignment.position.id].push(
+                    applicantSummary
+                );
+            }
+
+            // Add for any existing matches, but only if at least one flag is set
             for (const match of applicantSummary.matches) {
-                if (match.position) {
-                    applicantSummariesByPositionId[match.position.id] =
-                        applicantSummariesByPositionId[match.position.id] || [];
-                    applicantSummariesByPositionId[match.position.id].push(
-                        applicantSummary
-                    );
+                if (match.assigned || match.starred || match.hidden) {
+                    applicantSummariesByPosition[match.position.id] =
+                        applicantSummariesByPosition[match.position.id] || [];
+                    if (
+                        applicantSummariesByPosition[match.position.id].indexOf(
+                            applicantSummary
+                        ) === -1
+                    )
+                        applicantSummariesByPosition[match.position.id].push(
+                            applicantSummary
+                        );
                 }
             }
-        }
 
-        const matchesByPositionAndStatus: Record<
-            number,
-            Record<MatchStatus, MatchableAssignment[]>
-        > = {};
-        for (const match of matches) {
-            if (!matchesByPositionAndStatus[match.position.id]) {
-                matchesByPositionAndStatus[match.position.id] = {
-                    applied: [],
-                    assigned: [],
-                    "staged-assigned": [],
-                    hidden: [],
-                    starred: [],
-                    unassignable: [],
-                };
+            // Add any positions that the applicant has applied to
+            for (const positionPref of applicantSummary.application?.position_preferences.filter(
+                (pref) => pref.preference_level !== 0
+            ) || []) {
+                applicantSummariesByPosition[positionPref.position.id] =
+                    applicantSummariesByPosition[positionPref.position.id] ||
+                    [];
+
+                if (
+                    applicantSummariesByPosition[
+                        positionPref.position.id
+                    ].indexOf(applicantSummary) === -1
+                )
+                    applicantSummariesByPosition[positionPref.position.id].push(
+                        applicantSummary
+                    );
             }
-
-            matchesByPositionAndStatus[match.position.id][match.status].push(
-                match
-            );
         }
 
         for (const position of positions) {
@@ -414,19 +350,11 @@ export const positionSummariesByIdSelector = createSelector(
 
             // Go over matches marked as assigned/staged-assigned and get the number of hours assigned
             let hoursAssigned = 0;
-            const assignedStatuses: MatchStatus[] = [
-                "assigned",
-                "staged-assigned",
-            ];
 
-            if (matchesByPositionAndStatus[position.id]) {
-                for (const status of assignedStatuses) {
-                    for (const match of matchesByPositionAndStatus[position.id][
-                        status
-                    ]) {
-                        hoursAssigned += match.hoursAssigned || 0;
-                    }
-                }
+            for (const applicantSummary of applicantSummariesByPosition[
+                position.id
+            ] || []) {
+                hoursAssigned += getHoursAssigned(applicantSummary, position);
             }
 
             let filledStatus: FillStatus = "empty";
@@ -445,27 +373,10 @@ export const positionSummariesByIdSelector = createSelector(
                 hoursAssigned: hoursAssigned,
                 filledStatus: filledStatus,
                 applicantSummaries:
-                    applicantSummariesByPositionId[position.id] || [],
+                    applicantSummariesByPosition[position.id] || [],
             };
         }
 
         return ret;
     }
 );
-
-/**
- * Returns a RawMatch's MatchStatus based on which flags are set.
- */
-function getMatchStatusFromRawMatch(rawMatch: RawMatch) {
-    if (rawMatch.stagedAssigned) {
-        return "staged-assigned";
-    } else if (rawMatch.starred) {
-        return "starred";
-    } else if (rawMatch.unassignable) {
-        return "unassignable";
-    } else if (rawMatch.hidden) {
-        return "hidden";
-    } else {
-        return "applied";
-    }
-}

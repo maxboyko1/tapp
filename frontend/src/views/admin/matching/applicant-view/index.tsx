@@ -15,6 +15,7 @@ export const matchingStatusToString: Record<MatchStatus, string> = {
     starred: "Starred",
     unassignable: "Unassignable",
     hidden: "Hidden",
+    "n/a": "N/A",
 };
 
 export function ApplicantView({
@@ -65,7 +66,7 @@ function applyFiltersAndSort(
     // Apply search value filter
     const filteredBySearch = positionSummary.applicantSummaries.filter(
         (applicantSummary) =>
-            `${applicantSummary.applicant.first_name} ${applicantSummary.applicant.last_name} ${applicantSummary.applicant.utorid}`
+            `${applicantSummary.applicantMatchingDatum?.applicant.first_name} ${applicantSummary.applicantMatchingDatum?.applicant.last_name} ${applicantSummary.applicantMatchingDatum?.applicant.utorid}`
                 .toLowerCase()
                 .includes(filterString.toLowerCase())
     );

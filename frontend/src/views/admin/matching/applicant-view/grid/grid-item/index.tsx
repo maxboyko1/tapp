@@ -1,7 +1,6 @@
 import React from "react";
 import { Position, Application } from "../../../../../../api/defs/types";
-import { ApplicantSummary, MatchableAssignment } from "../../../types";
-import { getApplicantMatchForPosition } from "../../../utils";
+import { ApplicantSummary } from "../../../types";
 import { GridItemDropdown } from "./dropdown";
 import { ApplicantPillLeft } from "./status-bar";
 import { ApplicantPillMiddle, ApplicantPillRight } from "./body";
@@ -27,32 +26,25 @@ type CustomToggleProps = {
 const ApplicantPill = React.forwardRef(function ApplicantPill(
     {
         applicantSummary,
-        match,
+        position,
         onClick,
     }: {
         applicantSummary: ApplicantSummary;
-        match: MatchableAssignment | null;
+        position: Position;
         onClick: React.MouseEventHandler<HTMLButtonElement>;
     },
     ref: React.Ref<HTMLButtonElement>
 ) {
-    if (!match) {
-        return (
-            <button ref={ref} className="applicant-pill" onClick={onClick}>
-                <ApplicantPillLeft applicantSummary={applicantSummary} />
-            </button>
-        );
-    }
     return (
         <button ref={ref} className="applicant-pill" onClick={onClick}>
             <ApplicantPillLeft applicantSummary={applicantSummary} />
             <ApplicantPillMiddle
                 applicantSummary={applicantSummary}
-                match={match}
+                position={position}
             />
             <ApplicantPillRight
                 applicantSummary={applicantSummary}
-                match={match}
+                position={position}
             />
         </button>
     );
@@ -72,8 +64,6 @@ export function ConnectedApplicantPill({
         React.useState<Application | null>(null);
     const [showChangeHours, setShowChangeHours] = React.useState(false);
     const [showApplicantNote, setShowApplicantNote] = React.useState(false);
-
-    const match = getApplicantMatchForPosition(applicantSummary, position);
     const boundApplicantButton = React.useMemo(
         () =>
             React.forwardRef(
@@ -90,16 +80,12 @@ export function ConnectedApplicantPill({
                             }
                         }}
                         applicantSummary={applicantSummary}
-                        match={match}
+                        position={position}
                     />
                 )
             ),
-        [applicantSummary, match]
+        [applicantSummary, position]
     );
-
-    if (!match) {
-        return null;
-    }
 
     return (
         <>
@@ -107,7 +93,7 @@ export function ConnectedApplicantPill({
                 <DropdownToggle as={boundApplicantButton} />
                 <DropdownMenu>
                     <GridItemDropdown
-                        match={match}
+                        position={position}
                         applicantSummary={applicantSummary}
                         setShownApplication={setShownApplication}
                         setShowChangeHours={setShowChangeHours}
@@ -120,7 +106,8 @@ export function ConnectedApplicantPill({
                 setShownApplication={setShownApplication}
             />
             <AdjustHourModal
-                match={match}
+                position={position}
+                applicantSummary={applicantSummary}
                 show={showChangeHours}
                 setShow={setShowChangeHours}
             />

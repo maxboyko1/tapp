@@ -19,11 +19,11 @@ export function ApplicantPillLeft({
             )}
         >
             <div className="applicant-status-value">
-                {applicantSummary.hoursAssigned}
+                {applicantSummary.totalHoursAssigned}
             </div>
             <div className="applicant-status-divider" />
             <div className="applicant-status-value">
-                {applicantSummary.guarantee?.minHoursOwed || 0}
+                {applicantSummary.applicantMatchingDatum?.min_hours_owed || 0}
             </div>
         </div>
     );

@@ -1,23 +1,31 @@
 import React from "react";
-import { MatchableAssignment } from "../types";
 import { Modal, Button } from "react-bootstrap";
-import { upsertMatch } from "../actions";
+import { upsertMatch } from "../../../../api/actions";
 import { useThunkDispatch } from "../../../../libs/thunk-dispatch";
+import { Position } from "../../../../api/defs/types";
+import { ApplicantSummary } from "../types";
+import { prepApplicantMatchForPosition } from "../utils";
 
 /**
  * A modal window allowing users to change the number of hours an applicant
  * is assigned to a course.
  */
 export function AdjustHourModal({
-    match,
+    applicantSummary,
+    position,
     show,
     setShow,
 }: {
-    match: MatchableAssignment;
+    applicantSummary: ApplicantSummary;
+    position: Position;
     show: boolean;
     setShow: (arg0: boolean) => void;
 }) {
     const [hoursAssigned, setHoursAssigned] = React.useState("");
+    const applicantMatch = React.useMemo(() => {
+        return prepApplicantMatchForPosition(applicantSummary, position);
+    }, [applicantSummary, position]);
+
     const dispatch = useThunkDispatch();
     return (
         <Modal show={show} onHide={() => setShow(false)} size="sm">
@@ -28,11 +36,7 @@ export function AdjustHourModal({
                 <input
                     className="form-control"
                     type="number"
-                    defaultValue={
-                        match && match.hoursAssigned > 0
-                            ? match.hoursAssigned
-                            : 0
-                    }
+                    defaultValue={applicantMatch.hours_assigned || 0}
                     onChange={(e) => setHoursAssigned(e.target.value)}
                 />
             </Modal.Body>
@@ -48,10 +52,8 @@ export function AdjustHourModal({
                     onClick={() => {
                         dispatch(
                             upsertMatch({
-                                positionCode: match.position.position_code,
-                                utorid: match.applicant.utorid,
-                                stagedAssigned: true,
-                                stagedHoursAssigned: Number(hoursAssigned),
+                                ...applicantMatch,
+                                hours_assigned: Number(hoursAssigned),
                             })
                         );
                         setShow(false);

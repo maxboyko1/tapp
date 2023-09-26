@@ -1,7 +1,7 @@
 import React from "react";
 import { ApplicantSummary } from "../types";
 import { Form, Modal, Button } from "react-bootstrap";
-import { upsertNote } from "../actions";
+import { upsertApplicantMatchingDatum } from "../../../../api/actions";
 import { useThunkDispatch } from "../../../../libs/thunk-dispatch";
 
 /**
@@ -17,14 +17,24 @@ export function ApplicantNoteModal({
     setShow: (show: boolean) => void;
 }) {
     const dispatch = useThunkDispatch();
-    const [noteTemp, setNoteTemp] = React.useState(applicantSummary.note || "");
+    const [noteTemp, setNoteTemp] = React.useState(
+        applicantSummary.applicantMatchingDatum?.note || ""
+    );
 
     return (
         <Modal show={show} onHide={() => setShow(false)}>
             <Modal.Header closeButton>
                 <Modal.Title>
-                    Notes ({applicantSummary.applicant.first_name}{" "}
-                    {applicantSummary.applicant.last_name})
+                    Notes (
+                    {
+                        applicantSummary.applicantMatchingDatum.applicant
+                            .first_name
+                    }{" "}
+                    {
+                        applicantSummary.applicantMatchingDatum.applicant
+                            .last_name
+                    }
+                    )
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
@@ -33,7 +43,10 @@ export function ApplicantNoteModal({
                         <Form.Control
                             as="textarea"
                             rows={3}
-                            defaultValue={applicantSummary.note || ""}
+                            defaultValue={
+                                applicantSummary.applicantMatchingDatum.note ||
+                                ""
+                            }
                             onChange={(e) => setNoteTemp(e.target.value)}
                         />
                     </Form.Group>
@@ -49,8 +62,8 @@ export function ApplicantNoteModal({
                 <Button
                     onClick={() => {
                         dispatch(
-                            upsertNote({
-                                utorid: applicantSummary.applicant.utorid,
+                            upsertApplicantMatchingDatum({
+                                ...applicantSummary.applicantMatchingDatum,
                                 note: noteTemp,
                             })
                         );

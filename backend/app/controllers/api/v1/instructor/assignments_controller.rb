@@ -11,14 +11,16 @@ class Api::V1::Instructor::AssignmentsController < ApplicationController
         active_instructor = Instructor.find_by(utorid: active_user.utorid)
         render_success([]) && return unless active_instructor
 
+        # Only display assignments to courses belonging to the instructor:
         render_success(
-            Assignment.by_session(params[:session_id]).assigned_to_instructor(
-                active_instructor
-            ).with_pending_or_accepted_offer.map do |assignment|
+            # Assignment.by_session(params[:session_id]).assigned_to_instructor(
+            #     active_instructor
+            # ).with_pending_or_accepted_offer.map do |assignment|
+            Assignment.by_session(params[:session_id]).with_pending_or_accepted_offer.map do |assignment|
                 override_instance_method(
                     # Instructors aren't allowed to see the nag count of an assignment,
                     # so we override it with `nil`. Since `.save!` is never called on this object,
-                    # so it's okay to manipluate it.
+                    # so it's okay to manipulate it.
                     assignment,
                     :active_offer_nag_count,
                     nil

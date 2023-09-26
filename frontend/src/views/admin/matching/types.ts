@@ -1,43 +1,18 @@
 import {
     Position,
-    Applicant,
-    Assignment,
     Application,
+    ApplicantMatchingDatum,
+    Match,
+    Assignment,
 } from "../../../api/defs/types";
 
-// stored in redux
-export type RawMatch = {
-    utorid: string;
-    positionCode: string;
-    stagedHoursAssigned?: number;
-    stagedAssigned?: boolean;
-    starred?: boolean;
-    unassignable?: boolean;
-    hidden?: boolean;
-};
-
-export type AppointmentGuaranteeStatus = {
-    utorid: string;
-    minHoursOwed: number;
-    maxHoursOwed: number;
-    previousHoursFulfilled: number;
-};
-
 export type ApplicantSummary = {
-    applicant: Applicant;
+    applicantMatchingDatum: ApplicantMatchingDatum;
     application: Application | null;
-    matches: MatchableAssignment[];
-    guarantee: AppointmentGuaranteeStatus | null;
-    note: string | null;
-    hoursAssigned: number;
+    matches: Match[];
+    assignments: Assignment[];
+    totalHoursAssigned: number;
     filledStatus: FillStatus;
-};
-
-export type MatchableAssignment = {
-    position: Position;
-    applicant: Applicant;
-    hoursAssigned: number;
-    status: MatchStatus;
 };
 
 export type PositionSummary = {
@@ -54,5 +29,6 @@ export type MatchStatus =
     | "staged-assigned"
     | "assigned"
     | "unassignable"
-    | "hidden";
+    | "hidden"
+    | "n/a";
 export type FillStatus = "empty" | "under" | "matched" | "over" | "n/a";

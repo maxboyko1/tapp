@@ -77,8 +77,8 @@ function flipIfDescending(val: number, asc: boolean) {
 // Sorting functions -- all of these do in-place sorting
 function sortByFirstName(applicantSummaries: ApplicantSummary[], asc = true) {
     applicantSummaries.sort((a, b) => {
-        return `${a.applicant.first_name}, ${a.applicant.last_name}`.toLowerCase() <=
-            `${b.applicant.first_name}, ${b.applicant.last_name}`.toLowerCase()
+        return `${a.applicantMatchingDatum.applicant.first_name}, ${a.applicantMatchingDatum.applicant.last_name}`.toLowerCase() <=
+            `${b.applicantMatchingDatum.applicant.first_name}, ${b.applicantMatchingDatum.applicant.last_name}`.toLowerCase()
             ? flipIfDescending(-1, asc)
             : flipIfDescending(1, asc);
     });
@@ -86,8 +86,8 @@ function sortByFirstName(applicantSummaries: ApplicantSummary[], asc = true) {
 
 function sortByLastName(applicantSummaries: ApplicantSummary[], asc = true) {
     applicantSummaries.sort((a, b) => {
-        return `${a.applicant.last_name}, ${a.applicant.first_name}`.toLowerCase() <=
-            `${b.applicant.last_name}, ${b.applicant.first_name}`.toLowerCase()
+        return `${a.applicantMatchingDatum.applicant.last_name}, ${a.applicantMatchingDatum.applicant.first_name}`.toLowerCase() <=
+            `${b.applicantMatchingDatum.applicant.last_name}, ${b.applicantMatchingDatum.applicant.first_name}`.toLowerCase()
             ? flipIfDescending(-1, asc)
             : flipIfDescending(1, asc);
     });
@@ -276,14 +276,11 @@ function sortByTotalHoursAssigned(
             return flipIfDescending(1, asc);
         }
 
-        const aHours = a.hoursAssigned;
-        const bHours = b.hoursAssigned;
-
-        if (aHours === bHours) {
+        if (a.totalHoursAssigned === b.totalHoursAssigned) {
             return 0;
         }
 
-        return aHours < bHours
+        return a.totalHoursAssigned < b.totalHoursAssigned
             ? flipIfDescending(-1, asc)
             : flipIfDescending(1, asc);
     });
@@ -294,8 +291,8 @@ function sortByTotalHoursOwed(
     asc = true
 ) {
     applicantSummaries.sort((a, b) => {
-        const aHours = a.guarantee?.minHoursOwed || 0;
-        const bHours = a.guarantee?.minHoursOwed || 0;
+        const aHours = a.applicantMatchingDatum.min_hours_owed || 0;
+        const bHours = b.applicantMatchingDatum.min_hours_owed || 0;
 
         if (aHours === bHours) {
             return 0;
@@ -312,8 +309,8 @@ function sortByRemainingHoursOwed(
     asc = true
 ) {
     applicantSummaries.sort((a, b) => {
-        const aHoursOwed = a.guarantee?.minHoursOwed || 0;
-        const bHoursOwed = a.guarantee?.minHoursOwed || 0;
+        const aHoursOwed = a.applicantMatchingDatum.min_hours_owed || 0;
+        const bHoursOwed = b.applicantMatchingDatum.min_hours_owed || 0;
 
         // Neither applicant has a guarantee to worry about
         if (aHoursOwed === bHoursOwed) {
@@ -322,12 +319,12 @@ function sortByRemainingHoursOwed(
 
         let aHoursRemaining =
             aHoursOwed -
-            (a.guarantee?.previousHoursFulfilled || 0) -
-            (a.hoursAssigned || 0);
+            (a.applicantMatchingDatum.prev_hours_fulfilled || 0) -
+            (a.totalHoursAssigned || 0);
         let bHoursRemaining =
             bHoursOwed -
-            (b.guarantee?.previousHoursFulfilled || 0) -
-            (b.hoursAssigned || 0);
+            (b.applicantMatchingDatum.prev_hours_fulfilled || 0) -
+            (b.totalHoursAssigned || 0);
 
         if (aHoursRemaining === bHoursRemaining) {
             return 0;

@@ -3,6 +3,7 @@ import { Position } from "../../../../api/defs/types";
 import {
     getPositionPrefForPosition,
     getApplicantMatchForPosition,
+    getMatchStatus,
 } from "../utils";
 
 export type FilterType =
@@ -245,13 +246,8 @@ function filterByPositionStatus(
     }
 
     return applicantSummaries.filter((applicantSummary) => {
-        const match = getApplicantMatchForPosition(applicantSummary, position);
-
-        if (!match || excludeValues.includes(match.status)) {
-            return false;
-        }
-
-        return true;
+        const matchStatus = getMatchStatus(applicantSummary, position);
+        return !(matchStatus !== "n/a" && excludeValues.includes(matchStatus));
     });
 }
 

@@ -82,6 +82,13 @@ export const sessionsRoutes = {
                 docApiPropTypes.instructor_preference
             ),
         }),
+        "/sessions/:session_id/matches": documentCallback({
+            func: () => {
+                throw new Error("not implemented");
+            },
+            summary: "Get all matches associated with the session",
+            returns: wrappedPropTypes.arrayOf(docApiPropTypes.match),
+        }),
     },
     post: {
         "/sessions": documentCallback({

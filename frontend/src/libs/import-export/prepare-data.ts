@@ -3,6 +3,7 @@ import { prepareSpreadsheet } from "./prepare-spreadsheet";
 import { prepareMinimal } from "./prepare-minimal";
 import type {
     Applicant,
+    ApplicantMatchingDatum,
     Application,
     Assignment,
     Ddah,
@@ -12,6 +13,7 @@ import type {
     Session,
 } from "../../api/defs/types";
 import type { ExportFormat } from "./data-to-file";
+import { exportApplicantMatchingData } from "../../api/actions";
 
 export type PrepareDataFunc<T> = (data: T[], dataFormat: ExportFormat) => File;
 type FilterFunc<T> = ((array: T[]) => T[]) | null;
@@ -199,5 +201,49 @@ export function preparePositionData(
         },
         dataFormat,
         "positions"
+    );
+}
+
+/**
+ * Make a function that converts a list of applicant matching datum into a
+ * `File` object.
+ *
+ * @export
+ * @param {ApplicantMatchingDatum[]} applicantMatchingData
+ * @param {"csv" | "json" | "xlsx"} dataFormat
+ * @returns
+ */
+export function prepareApplicantMatchingData(
+    applicantMatchingData: ApplicantMatchingDatum[],
+    dataFormat: ExportFormat
+) {
+    return dataToFile(
+        {
+            toSpreadsheet: () =>
+                prepareSpreadsheet.appointment(
+                    applicantMatchingData.filter(
+                        (x) =>
+                            x.min_hours_owed !== null ||
+                            x.max_hours_owed !== null ||
+                            x.prev_hours_fulfilled !== null
+                    )
+                ),
+            toJson: () => ({
+                applicantMatchingData: applicantMatchingData
+                    .filter(
+                        (x) =>
+                            x.min_hours_owed !== null ||
+                            x.max_hours_owed !== null ||
+                            x.prev_hours_fulfilled !== null
+                    )
+                    .map((applicantMatchingDatum) =>
+                        prepareMinimal.applicantMatchingDatum(
+                            applicantMatchingDatum
+                        )
+                    ),
+            }),
+        },
+        dataFormat,
+        "appointment_guarantees"
     );
 }

@@ -20,6 +20,8 @@ import type {
     RawUser,
     RawWageChunk,
     RawInstructorPreference,
+    RawApplicantMatchingDatum,
+    RawMatch,
 } from "./raw-types";
 
 export type Duty = RawDuty;
@@ -83,4 +85,15 @@ export interface InstructorPreference
     extends Omit<RawInstructorPreference, "position_id" | "application_id"> {
     position: Position;
     application: Application;
+}
+
+export interface ApplicantMatchingDatum
+    extends Omit<RawApplicantMatchingDatum, "applicant_id" | "session_id"> {
+    applicant: Applicant;
+    session: Session;
+}
+
+export interface Match extends Omit<RawMatch, "applicant_id" | "position_id"> {
+    applicant: Applicant;
+    position: Position;
 }

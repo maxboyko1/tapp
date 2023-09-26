@@ -10,8 +10,11 @@ class Api::V1::Instructor::PositionsController < ApplicationController
         active_instructor = Instructor.find_by(utorid: active_user.utorid)
         render_success([]) && return unless active_instructor
 
-        render_success Position.by_session(params[:session_id]).by_instructor(
-                           active_instructor
-                       ).order(:position_code)
+        render_success Position.by_session(params[:session_id]).order(:position_code)
+
+        # Return only positions for which an instructor is involved in:
+        # render_success Position.by_session(params[:session_id]).by_instructor(
+        #                    active_instructor
+        #                ).order(:position_code)
     end
 end

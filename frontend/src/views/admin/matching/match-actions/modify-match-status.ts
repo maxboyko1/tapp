@@ -1,89 +1,67 @@
-import React from "react";
-import { useThunkDispatch } from "../../../../libs/thunk-dispatch";
 import {
-    toggleStarred,
-    toggleAssigned,
+    upsertApplicantMatchingDatum,
     upsertMatch,
-    toggleHidden,
-} from "../actions";
+} from "../../../../api/actions";
 import { ApplicantSummary } from "../types";
+import { ApplicantMatchingDatum, Position } from "../../../../api/defs/types";
+import { prepApplicantMatchForPosition } from "../utils";
 
 /**
  * Toggle the "stagedAssigned" status of a match.
  */
-export function useToggleAssigned(
-    positionCode: string,
-    utorid: string,
+export function toggleAssigned(
+    applicantSummary: ApplicantSummary,
+    position: Position,
     hoursAssigned?: number
 ) {
-    const dispatch = useThunkDispatch();
-    return React.useCallback(() => {
-        dispatch(
-            toggleAssigned({
-                positionCode: positionCode,
-                utorid: utorid,
-                stagedHoursAssigned: hoursAssigned || 0,
-            })
-        );
-    }, [positionCode, utorid, hoursAssigned, dispatch]);
+    const applicantMatch = prepApplicantMatchForPosition(
+        applicantSummary,
+        position
+    );
+    applicantMatch.assigned = !applicantMatch.assigned;
+    applicantMatch.hours_assigned = hoursAssigned || 0;
+    return upsertMatch(applicantMatch);
 }
 
 /**
  * Toggle the "starred" status of a match.
  */
-export function useToggleStarred(positionCode: string, utorid: string) {
-    const dispatch = useThunkDispatch();
-    return React.useCallback(() => {
-        dispatch(
-            toggleStarred({
-                positionCode: positionCode,
-                utorid: utorid,
-            })
-        );
-    }, [dispatch, positionCode, utorid]);
+export function toggleStarred(
+    applicantSummary: ApplicantSummary,
+    position: Position
+) {
+    const applicantMatch = prepApplicantMatchForPosition(
+        applicantSummary,
+        position
+    );
+    applicantMatch.starred = !applicantMatch.starred;
+
+    return upsertMatch(applicantMatch);
 }
 
 /**
- * Set a match's "hidden" status for a given applicant and position.
+ * Toggle a match's "hidden" status for a given applicant and position.
  */
-export function useToggleHidden(positionCode: string, utorid: string) {
-    const dispatch = useThunkDispatch();
-    return React.useCallback(() => {
-        dispatch(
-            toggleHidden({
-                positionCode: positionCode,
-                utorid: utorid,
-            })
-        );
-    }, [positionCode, utorid, dispatch]);
+export function toggleHidden(
+    applicantSummary: ApplicantSummary,
+    position: Position
+) {
+    const applicantMatch = prepApplicantMatchForPosition(
+        applicantSummary,
+        position
+    );
+    applicantMatch.hidden = !applicantMatch.hidden;
+    return upsertMatch(applicantMatch);
 }
 
 /**
- * Set the "hidden" status for all matches of an applicant to the value of
- * `hide`, given their applicant summary.
+ * Toggles an applicant's global "hidden" match status
  */
-export function useHideFromAllPositions({
-    applicantSummary,
-    hide,
-}: {
-    applicantSummary: ApplicantSummary;
-    hide: boolean;
-}) {
-    const dispatch = useThunkDispatch();
-    return React.useCallback(() => {
-        for (const targetMatch of applicantSummary.matches) {
-            dispatch(
-                upsertMatch({
-                    utorid: applicantSummary.applicant.utorid,
-                    positionCode: targetMatch.position.position_code,
-                    hidden: hide,
-                })
-            );
-        }
-    }, [
-        dispatch,
-        applicantSummary.matches,
-        applicantSummary.applicant.utorid,
-        hide,
-    ]);
+export function toggleApplicantHidden(
+    applicantMatchingDatum: ApplicantMatchingDatum
+) {
+    return upsertApplicantMatchingDatum({
+        ...applicantMatchingDatum,
+        hidden: !applicantMatchingDatum.hidden,
+    });
 }

@@ -18,7 +18,7 @@ export function PositionList({
 }) {
     const [filterString, setFilterString] = React.useState("");
     const filteredList = React.useMemo(() => {
-        const ret: PositionSummary[] = positionSummaries
+        return positionSummaries
             .filter(
                 (summary) =>
                     summary.position.position_code
@@ -26,12 +26,14 @@ export function PositionList({
                         .indexOf(filterString.toLowerCase()) !== -1
             )
             .sort((a, b) => {
-                return a.position.position_code.toLowerCase() <
-                    b.position.position_code.toLowerCase()
-                    ? -1
-                    : 1;
+                return a.position.position_code
+                    .toLowerCase()
+                    .localeCompare(
+                        b.position.position_code.toLowerCase(),
+                        "en",
+                        { numeric: true }
+                    );
             });
-        return ret;
     }, [filterString, positionSummaries]);
 
     return (
