@@ -221,6 +221,11 @@ export function ApplicationDetails({
                                             position_preference.preference_level !==
                                             0
                                     )
+                                    .sort((a, b) =>
+                                        a.preference_level > b.preference_level
+                                            ? -1
+                                            : 1
+                                    )
                                     .map((position_preference) => (
                                         <Badge
                                             as="li"
