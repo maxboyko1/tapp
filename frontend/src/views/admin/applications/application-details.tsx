@@ -1,13 +1,17 @@
 import React from "react";
 import { Alert, Badge, Button, Modal } from "react-bootstrap";
 import { FaDownload } from "react-icons/fa";
-import { Application } from "../../../api/defs/types";
+import { Application, Assignment, Match } from "../../../api/defs/types";
 import * as Survey from "survey-react";
 import "./application-details.css";
 import { formatDateTime } from "../../../libs/utils";
 import { useSelector } from "react-redux";
 import { DisplayRating } from "../../../components/applicant-rating";
-import { activeSessionSelector } from "../../../api/actions";
+import {
+    activeSessionSelector,
+    assignmentsSelector,
+    matchesSelector,
+} from "../../../api/actions";
 
 interface SurveyJsPage {
     name: string;
@@ -93,6 +97,12 @@ const PREFERENCE_LEVEL_TO_VARIANT: Record<number | string, string> = {
     "-1": "secondary",
 };
 
+const OFFER_STATUS_TO_VARIANT: Record<string, string> = {
+    accepted: "success",
+    rejected: "danger",
+    withdrawn: "danger",
+};
+
 export function ApplicationDetails({
     application,
 }: {
@@ -122,6 +132,22 @@ export function ApplicationDetails({
     }, [application]);
 
     const instructorPreferences = application.instructor_preferences;
+    const assignments = useSelector(assignmentsSelector) as Assignment[];
+    const applicantAssignments = React.useMemo(() => {
+        return assignments.filter(
+            (assignment) =>
+                !!assignment.active_offer_status &&
+                assignment.applicant === application.applicant
+        );
+    }, [assignments, application]);
+
+    const matches = useSelector(matchesSelector) as Match[];
+    const applicantMatches = React.useMemo(() => {
+        return matches.filter(
+            (match) =>
+                match.applicant === application.applicant && match.assigned
+        );
+    }, [matches, application]);
 
     return (
         <React.Fragment>
@@ -220,6 +246,38 @@ export function ApplicationDetails({
                                             )
                                         </Badge>
                                     ))}
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Assignments</th>
+                        <td>
+                            <ul className="position-preferences-list">
+                                {applicantMatches.map((match) => (
+                                    <Badge
+                                        as="li"
+                                        key={match.position.position_code}
+                                        variant={"info"}
+                                    >
+                                        {match.position.position_code} (
+                                        {match.hours_assigned})
+                                    </Badge>
+                                ))}
+                                {applicantAssignments.map((assignment) => (
+                                    <Badge
+                                        as="li"
+                                        key={assignment.position.position_code}
+                                        variant={
+                                            OFFER_STATUS_TO_VARIANT[
+                                                assignment.active_offer_status ||
+                                                    ""
+                                            ] || "warning"
+                                        }
+                                    >
+                                        {assignment.position.position_code} (
+                                        {assignment.hours})
+                                    </Badge>
+                                ))}
                             </ul>
                         </td>
                     </tr>
