@@ -6,6 +6,7 @@ import { formatDate } from "../../../libs/utils";
 import { Accordion, Card, ListGroup, ListGroupItem } from "react-bootstrap";
 import {
     activeSessionSelector,
+    activeUserSelector,
     positionsSelector,
     sessionsSelector,
     setActiveSession,
@@ -16,8 +17,20 @@ import { NavLink } from "react-router-dom";
 export function InstructorSessionsView() {
     const activeSession = useSelector(activeSessionSelector);
     const sessions = useSelector(sessionsSelector);
-    const positions = useSelector(positionsSelector);
     const dispatch = useThunkDispatch();
+
+    const allPositions = useSelector(positionsSelector);
+    const activeUser = useSelector(activeUserSelector);
+
+    const positions = React.useMemo(() => {
+        return allPositions.filter((position) =>
+            position.instructors.find(
+                (instructor) =>
+                    "utorid" in activeUser &&
+                    instructor.utorid === activeUser.utorid
+            )
+        );
+    }, [allPositions, activeUser]);
 
     let heading = (
         <div>

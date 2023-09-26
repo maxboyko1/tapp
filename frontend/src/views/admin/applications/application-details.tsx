@@ -255,7 +255,7 @@ export function ApplicationDetails({
                         </td>
                     </tr>
                     <tr>
-                        <th>Assignments</th>
+                        <th>Positions Assigned To</th>
                         <td>
                             <ul className="position-preferences-list">
                                 {applicantMatches.map((match) => (

@@ -4,7 +4,10 @@ import { ContentArea } from "../../../components/layout";
 import { InstructorApplicationsTable } from "./applications-table";
 import { useSelector } from "react-redux";
 import { activePositionSelector } from "../store/actions";
-import { activeSessionSelector } from "../../../api/actions";
+import {
+    activeSessionSelector,
+    activeUserSelector,
+} from "../../../api/actions";
 import { formatDate } from "../../../libs/utils";
 import { DisplayRating } from "../../../components/applicant-rating";
 import { FaRegComment } from "react-icons/fa";
@@ -13,8 +16,20 @@ import { ConnectedExportApplicationsAction } from "./import-export";
 export function InstructorPreferencesView() {
     const activeSession = useSelector(activeSessionSelector);
     const activePosition = useSelector(activePositionSelector);
+    const activeUser = useSelector(activeUserSelector);
 
-    if (!activeSession || !activePosition) {
+    // Display nothing if the instructor is not valid for this course
+
+    if (
+        !activeSession ||
+        !activePosition ||
+        !(
+            "utorid" in activeUser &&
+            !!activePosition.instructors.find(
+                (instructor) => instructor.utorid === activeUser.utorid
+            )
+        )
+    ) {
         return (
             <h4>Please select a Session and Position to see TA information</h4>
         );

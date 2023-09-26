@@ -5,6 +5,7 @@ import {
     sessionsSelector,
     setActiveSession,
     assignmentsSelector,
+    activeUserSelector,
 } from "../../api/actions";
 import { positionsSelector } from "../../api/actions";
 import { Header } from "../../components/header";
@@ -22,7 +23,18 @@ import {
  * @returns
  */
 export function InstructorHeader() {
-    const positions = useSelector(positionsSelector);
+    const allPositions = useSelector(positionsSelector);
+    const activeUser = useSelector(activeUserSelector);
+
+    const positions = React.useMemo(() => {
+        return allPositions.filter((position) =>
+            position.instructors.find(
+                (instructor) =>
+                    "utorid" in activeUser &&
+                    instructor.utorid === activeUser.utorid
+            )
+        );
+    }, [allPositions, activeUser]);
     const sessions = useSelector(sessionsSelector);
     const activeSession = useSelector(activeSessionSelector);
 
