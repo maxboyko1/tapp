@@ -539,3 +539,20 @@ will lose a URL hash (if there is one), since the hash is never sent to the serv
 this, a Rails proxy route `/hash` has been set up which reroutes to a URL hash. For example `tapp.com/hash/foo/bar`
 will reroute to `tapp.com/#/foo/bar` after successful authentication. Thus, the Rails hash-route proxy
 can be used for URLs that you expect pre-authenticated users to try and access.
+
+## RubyMine IDE Setup
+
+In order to get the TAPP backend build working in RubyMine, you may need to install on your system the particular version of Ruby
+specified in the project Gemfile (version 2.6.6 as of this writing) before you can install the dependencies properly. To accomplish 
+this, first install `rbenv` following the instructions [here](https://github.com/rbenv/rbenv#installation), then in your terminal 
+execute the following:
+
+```
+export CFLAGS="-DUSE_FFI_CLOSURE_ALLOC"
+export PKG_CONFIG_PATH="$(brew --prefix openssl@1.1)/lib/pkgconfig"
+rbenv install 2.6.6 -- --with-openssl-dir=$(brew --prefix openssl@1.1)
+```
+
+Then, in RubyMine set your project SDK in `Settings -> Languages & Frameworks -> Ruby SDK and Gems` to the one just installed by `rbenv`
+and try your dependency installation again. Any remaining errors will likely be a result of some missing required package/library, which
+can be resolved with a straightforward installation of the required package using your system's package manager (e.g. Homebrew on OSX, `apt` on Ubuntu, etc).
