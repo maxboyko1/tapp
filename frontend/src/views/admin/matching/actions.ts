@@ -357,16 +357,7 @@ export const positionSummariesByIdSelector = createSelector(
                 hoursAssigned += getHoursAssigned(applicantSummary, position);
             }
 
-            let filledStatus: FillStatus = "empty";
-            if (targetHours > 0 && hoursAssigned === 0) {
-                filledStatus = "empty";
-            } else if (targetHours - hoursAssigned > 0) {
-                filledStatus = "under";
-            } else if (targetHours - hoursAssigned === 0) {
-                filledStatus = "matched";
-            } else if (targetHours - hoursAssigned < 0) {
-                filledStatus = "over";
-            }
+            let filledStatus: FillStatus = getFilledStatus(targetHours, hoursAssigned);
 
             ret[position.id] = {
                 position: position,
