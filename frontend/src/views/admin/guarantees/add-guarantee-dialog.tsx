@@ -8,10 +8,7 @@ import {
     letterTemplatesSelector,
 } from "../../../api/actions";
 import { Modal, Button, Alert } from "react-bootstrap";
-import { 
-    AppointmentEditor,
-    NullableAppointment
-} from "../../../components/forms/appointment-editor";
+import { AppointmentEditor } from "../../../components/forms/appointment-editor";
 import {
     Applicant,
     ApplicantMatchingDatum,
@@ -20,7 +17,7 @@ import {
 } from "../../../api/defs/types";
 
 function getConflicts(
-    applicantMatchingDatum: Partial<NullableAppointment>,
+    applicantMatchingDatum: ApplicantMatchingDatum,
     applicantMatchingData: ApplicantMatchingDatum[] = []
 ) {
     const ret: { delayShow: string; immediateShow: React.ReactNode } = {
@@ -55,11 +52,11 @@ function getConflicts(
     return ret;
 }
 
-const BLANK_APPOINTMENT = {
+const BLANK_APPOINTMENT: Partial<ApplicantMatchingDatum> = {
     min_hours_owed: 0,
     max_hours_owed: null,
     prev_hours_fulfilled: null,
-} as unknown as NullableAppointment;
+};
 
 export function AddAppointmentDialog(props: {
     show: boolean;
@@ -80,16 +77,14 @@ export function AddAppointmentDialog(props: {
         upsertApplicantMatchingDatum,
     } = props;
     const [newApplicantMatchingDatum, setNewApplicantMatchingDatum] =
-        React.useState<NullableAppointment>(
-            BLANK_APPOINTMENT as NullableAppointment
-        );
+        React.useState(BLANK_APPOINTMENT);        
 
     React.useEffect(() => {
         if (!show) {
             // If the dialog is hidden, reset the state
             setNewApplicantMatchingDatum({
                 ...BLANK_APPOINTMENT,
-                session_id: activeSession?.id || -1,
+                session: activeSession || undefined,
             });
         }
     }, [show, activeSession]);
