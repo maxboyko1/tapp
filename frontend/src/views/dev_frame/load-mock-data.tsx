@@ -8,6 +8,7 @@ import {
     upsertSession,
     upsertInstructor,
     upsertContractTemplate,
+    upsertLetterTemplate,
     setActiveSession,
     positionsSelector,
     activeSessionSelector,
@@ -43,7 +44,7 @@ type PromiseOrVoidFunction = (...args: any[]) => Promise<any> | void;
 const ident = () => {};
 
 /**
- * A button to automatically set up a mock session with contract_template and
+ * A button to automatically set up a mock session with contract/letter templates and
  * instructors, and upsert positions, applicants, and assignments from mock data
  * JSON files in order.
  */
@@ -88,6 +89,10 @@ export function SeedDataMenu({
         contractTemplate: {
             name: "Contract Templates (2)",
             action: seedContractTemplate,
+        },
+        letterTemplate: {
+            name: "Letter Template (1)",
+            action: seedLetterTemplate,
         },
         instructors10: {
             name: "Instructors (10)",
@@ -180,6 +185,15 @@ export function SeedDataMenu({
         setStage("Contract Template");
         for (const template of seedData.contractTemplates) {
             await dispatch(upsertContractTemplate(template));
+        }
+        setProgress(100);
+    }
+
+    async function seedLetterTemplate() {
+        setProgress(0);
+        setStage("Letter Template");
+        for (const template of seedData.letterTemplates) {
+            await dispatch(upsertLetterTemplate(template));
         }
         setProgress(100);
     }
@@ -413,6 +427,7 @@ export function SeedDataMenu({
 
             await seedSession();
             await seedContractTemplate();
+            await seedLetterTemplate();
             await seedInstructors();
             await seedPositions();
             await seedApplicants();
@@ -446,6 +461,7 @@ export function SeedDataMenu({
             await dispatch(setActiveSession(session));
 
             await seedContractTemplate();
+            await seedLetterTemplate();
             await seedUsers();
             await seedInstructors();
             await seedPositions();

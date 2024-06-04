@@ -9,6 +9,7 @@ import {
     activeSessionSelector,
     applicantMatchingDataSelector,
     applicantsSelector,
+    letterTemplatesSelector,
     exportApplicantMatchingData,
     upsertApplicantMatchingData,
 } from "../../../api/actions";
@@ -28,11 +29,18 @@ import { Alert } from "react-bootstrap";
 import { createDiffColumnsFromColumns } from "../../../components/diff-table";
 import { AdvancedFilterTable } from "../../../components/filter-table/advanced-filter-table";
 
-export function ConnectedImportAppointmentsAction() {
+export function ConnectedImportAppointmentsAction({
+    disabled, 
+    setImportInProgress = null
+}: {
+    disabled: boolean;
+    setImportInProgress: Function | null;
+}) {
     const dispatch = useThunkDispatch();
     const applicantMatchingData = useSelector(applicantMatchingDataSelector);
     const applicants = useSelector(applicantsSelector);
     const session = useSelector(activeSessionSelector);
+    const letterTemplates = useSelector(letterTemplatesSelector);
 
     const [fileContent, setFileContent] = React.useState<DataFormat | null>(
         null
@@ -41,7 +49,14 @@ export function ConnectedImportAppointmentsAction() {
         DiffSpec<MinimalApplicantMatchingDatum, ApplicantMatchingDatum>[] | null
     >(null);
     const [processingError, setProcessingError] = React.useState(null);
-    const [inProgress, setInProgress] = React.useState(false);
+    const [inProgress, _setInProgress] = React.useState(false);
+
+    function setInProgress(state: any) {
+        _setInProgress(state);
+        if (typeof setImportInProgress === "function") {
+            setImportInProgress(state);
+        }
+    }
 
     // Make sure we aren't showing any diff if there's no file loaded.
     React.useEffect(() => {
@@ -73,13 +88,14 @@ export function ConnectedImportAppointmentsAction() {
                 applicantMatchingData,
                 applicants,
                 session,
+                letterTemplates,
             });
             setDiffed(newDiff);
         } catch (e: any) {
             console.warn(e);
             setProcessingError(e);
         }
-    }, [fileContent, applicantMatchingData, inProgress, session, applicants]);
+    }, [fileContent, applicantMatchingData, inProgress, session, applicants, letterTemplates]);
 
     async function onConfirm() {
         if (!diffed) {
@@ -147,14 +163,30 @@ export function ConnectedImportAppointmentsAction() {
             onFileChange={setFileContent}
             dialogContent={dialogContent}
             setInProgress={setInProgress}
+            disabled={disabled}
         />
     );
 }
 
-export function ConnectedExportAppointmentsAction() {
+export function ConnectedExportAppointmentsAction({
+    disabled,
+    setExportInProgress = null
+}: {
+    disabled: boolean;
+    setExportInProgress: Function | null;
+}) {
     const dispatch = useThunkDispatch();
     const [exportType, setExportType] = React.useState<ExportFormat | null>(
         null
+    );
+
+    const setInProgress = React.useCallback(
+        function setInProgress(val) {
+            if (typeof setExportInProgress === "function") {
+                setExportInProgress(val);
+            }
+        },
+        [setExportInProgress]
     );
 
     React.useEffect(() => {
@@ -167,23 +199,23 @@ export function ConnectedExportAppointmentsAction() {
             if (exportType == null) {
                 throw new Error(`Unknown export type ${exportType}`);
             }
-
+            setInProgress(true);
             const file = await dispatch(
                 exportApplicantMatchingData(
                     prepareApplicantMatchingData,
                     exportType
                 )
             );
-
+            setInProgress(false);
             FileSaver.saveAs(file as any);
         }
         doExport().catch(console.error);
-    }, [exportType, dispatch]);
+    }, [exportType, dispatch, setInProgress]);
 
     function onClick(option: ExportFormat) {
         setExportType(option);
     }
-    return <ExportActionButton onClick={onClick} />;
+    return <ExportActionButton onClick={onClick} disabled={disabled} />;
 }
 
 /**

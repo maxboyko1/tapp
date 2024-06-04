@@ -1,7 +1,8 @@
 import Route from "route-parser";
 import { mockData } from "./data";
 import { sessionsRoutes } from "./sessions";
-import { templatesRoutes } from "./contract_templates";
+import { contractTemplatesRoutes } from "./contract_templates";
+import { letterTemplatesRoutes } from "./letter_templates";
 import { positionsRoutes } from "./positions";
 import { instructorsRoutes } from "./instructors";
 import { documentCallback } from "../defs/doc-generation";
@@ -30,7 +31,8 @@ export class MockAPI {
     getRoutes = Object.assign(
         {},
         sessionsRoutes.get,
-        templatesRoutes.get,
+        contractTemplatesRoutes.get,
+        letterTemplatesRoutes.get,
         positionsRoutes.get,
         instructorsRoutes.get,
         assignmentsRoutes.get,
@@ -55,7 +57,8 @@ export class MockAPI {
     postRoutes = Object.assign(
         {},
         sessionsRoutes.post,
-        templatesRoutes.post,
+        contractTemplatesRoutes.post,
+        letterTemplatesRoutes.post,
         positionsRoutes.post,
         instructorsRoutes.post,
         assignmentsRoutes.post,

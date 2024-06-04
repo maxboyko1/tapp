@@ -9,6 +9,7 @@ import {
     Instructor,
     Assignment,
     ContractTemplate,
+    LetterTemplate,
     Applicant,
     MinimalWageChunk,
     MinimalSession,
@@ -16,6 +17,7 @@ import {
     MinimalInstructor,
     MinimalAssignment,
     MinimalContractTemplate,
+    MinimalLetterTemplate,
     MinimalApplicant,
     MinimalDdah,
     Ddah,
@@ -134,6 +136,14 @@ export const prepareMinimal = {
         return {
             template_name: contractTemplate.template_name,
             template_file: contractTemplate.template_file,
+        };
+    },
+    letterTemplate: function (
+        letterTemplate: LetterTemplate
+    ): MinimalLetterTemplate {
+        return {
+            template_name: letterTemplate.template_name,
+            template_file: letterTemplate.template_file,
         };
     },
     instructor: function (instructor: Instructor): MinimalInstructor {
@@ -306,6 +316,7 @@ export const prepareMinimal = {
             min_hours_owed: applicantMatchingDatum.min_hours_owed,
             max_hours_owed: applicantMatchingDatum.max_hours_owed,
             prev_hours_fulfilled: applicantMatchingDatum.prev_hours_fulfilled,
-        };
+            letter_template: applicantMatchingDatum.letter_template.template_name,
+        } as MinimalApplicantMatchingDatum;
     },
 };

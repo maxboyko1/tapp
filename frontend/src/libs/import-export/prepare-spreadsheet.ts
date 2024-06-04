@@ -447,6 +447,9 @@ export const prepareSpreadsheet = {
                         "Min Hours Owed",
                         "Max Hours Owed",
                         "Previous Hours Fulfilled",
+                        "Letter Template",
+                        "Appointment Confirmation Status",
+                        "Recent Activity Date",
                     ],
                 ] as CellType[][]
             ).concat(
@@ -458,6 +461,9 @@ export const prepareSpreadsheet = {
                     applicantMatchingDatum.min_hours_owed,
                     applicantMatchingDatum.max_hours_owed,
                     applicantMatchingDatum.prev_hours_fulfilled,
+                    applicantMatchingDatum.letter_template.template_name,
+                    applicantMatchingDatum.active_confirmation_status,
+                    applicantMatchingDatum.active_confirmation_recent_activity_date,
                 ])
             )
         );

@@ -91,7 +91,7 @@ export class ContractTemplate extends MockAPIController {
     }
 }
 
-export const templatesRoutes = {
+export const contractTemplatesRoutes = {
     get: {
         "/available_contract_templates": documentCallback({
             func: (data) => [...data.available_contract_templates],
@@ -111,7 +111,7 @@ export const templatesRoutes = {
             func: (data, params) =>
                 new ContractTemplate(data).getTemplateHtml(params.template_id),
             summary:
-                "Get a preview of the contact template (i.e., the actual HTML).",
+                "Get a preview of the contract template (i.e., the actual HTML).",
             returns: wrappedPropTypes.string,
         }),
         "/contract_templates/:template_id/download": documentCallback({

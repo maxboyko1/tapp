@@ -38,6 +38,9 @@ module Tapp
         config.contract_template_dir =
             ENV.fetch('CONTRACT_TEMPLATE_DIR', '/storage/contract_templates')
                 .presence || '/storage/contract_templates'
+        config.letter_template_dir =
+            ENV.fetch('LETTER_TEMPLATE_DIR', '/storage/letter_templates')
+                .presence || '/storage/letter_templates'
 
         # The required dependencies for ActiveStorage::Analyzer::ImageAnalyzer is not installed,
         # so we force all analyzers to be disabled

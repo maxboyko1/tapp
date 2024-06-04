@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <style></style>
+    </head>
+    <body>
+        <p>Dear {{ first_name }} {{ last_name }},</p>
+        {% if status_message %}
+        <p style="color: blue">
+            This is an email regarding an upcoming Fall/Winter term appointment confirmation that was {{ status_message }}.
+        </p>
+        {% endif %}
+        <p>
+            This is a notice to inform you of your option to take up any TA appointment hours in the upcoming Fall/Winter term,
+            and to confirm whether or not you intend to do so.
+        </p>
+        {% if changes_summary && changes_summary.length %}
+        <p>
+            This notice replaces a previous notice, and differs from the previous
+            notice in the following way:
+        </p>
+        <ul>
+            {% for change in changes_summary %}
+            <li>{{ change }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        <p>
+            Please click the link below to view the notice. If you do not intend to apply for any TA 
+            positions in either the Fall and/or Winter term, it would be helpful to notify us now 
+            as directed in the link:<br />
+            <a href="https://{{ url }}">https://{{ url }}</a>
+        </p>
+
+        <p>Best wishes!</p>
+    </body>
+</html>

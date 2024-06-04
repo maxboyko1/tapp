@@ -21,7 +21,7 @@ export function AdminSessionsView() {
     let activeSessionInfo = (
         <>
             There is currently <b className="text-primary">no active session</b>{" "}
-            selected. In order to setup contract templates or create positions
+            selected. In order to setup contract/letter templates or create positions
             and offers, you must select an active session.
         </>
     );
@@ -30,7 +30,7 @@ export function AdminSessionsView() {
             <>
                 The current active session is{" "}
                 <b className="text-primary">{activeSession.name}</b>. When
-                setting up contract templates or creating positions and offers,
+                setting up contract/letter templates or creating positions and offers,
                 they will be attached to the <i>{activeSession.name}</i>{" "}
                 session.
             </>

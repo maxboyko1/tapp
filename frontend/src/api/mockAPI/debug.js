@@ -22,11 +22,13 @@ export class Debug {
     clearData() {
         this.makeSnapshot("beforeclear");
         Object.keys(this.data).forEach((key) => {
-            // Contract templates are supposed to be stored on "disk"
+            // Contract/letter templates are supposed to be stored on "disk"
             // and so they shouldn't be cleared when we clear the database
             if (
                 key === "available_contract_templates" ||
-                key === "contract_templates_by_filename"
+                key === "contract_templates_by_filename" ||
+                key === "available_letter_templates" ||
+                key === "letter_templates_by_filename"
             ) {
                 return;
             }

@@ -34,6 +34,10 @@ import {
     fetchApplicantMatchingData,
     fetchApplicantMatchingDataSuccess,
 } from "./applicant_matching_data";
+import {
+    fetchLetterTemplates,
+    fetchLetterTemplatesSuccess,
+} from "./letter_templates";
 
 type InitStages =
     | "pageLoad"
@@ -265,6 +269,7 @@ export function initFromStage(
             if (activeRole === "admin") {
                 fetchActions.push(fetchMatches);
                 fetchActions.push(fetchApplicantMatchingData);
+                fetchActions.push(fetchLetterTemplates);
             }
 
             // The order of fetching here doesn't matter, so dispatch all at once
@@ -279,8 +284,8 @@ export function initFromStage(
 }
 
 /**
- * Clear all session-specific store data: applicants, assignments,
- * contract templates, applications, and positions.
+ * Clear all session-specific store data: applicants, appointment letter templates,
+ * assignments, contract templates, applications, and positions.
  *
  * @export
  * @returns an async function that handles all the API calls.
@@ -303,6 +308,7 @@ export function clearSessionDependentData(): ThunkAction<
             dispatch(fetchPostingPositionsSuccess([])),
             dispatch(fetchMatchesSuccess([])),
             dispatch(fetchApplicantMatchingDataSuccess([])),
+            dispatch(fetchLetterTemplatesSuccess([])),
         ]);
     };
 }

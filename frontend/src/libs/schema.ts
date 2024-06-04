@@ -197,20 +197,22 @@ export const assignmentSchema: NormalizationSchema<
 };
 
 export const applicantMatchingDatumSchema: NormalizationSchema<
-    ["utorid", "min_hours_owed", "max_hours_owed", "prev_hours_fulfilled"]
+    ["utorid", "min_hours_owed", "max_hours_owed", "prev_hours_fulfilled", "letter_template"]
 > = {
     keys: [
         "utorid",
         "min_hours_owed",
         "max_hours_owed",
         "prev_hours_fulfilled",
+        "letter_template"
     ],
     keyMap: {
         "Min Hours Owed": "min_hours_owed",
         "Max Hours Owed": "max_hours_owed",
         "Prev Hours Fulfilled": "prev_hours_fulfilled",
+        "Letter Template": "letter_template"
     },
-    requiredKeys: ["utorid"],
+    requiredKeys: ["utorid", "letter_template"],
     primaryKey: ["utorid"],
     dateColumns: [],
     baseName: "applicantMatchingData",
