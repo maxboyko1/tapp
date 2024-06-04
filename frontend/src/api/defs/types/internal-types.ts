@@ -7,12 +7,14 @@ import type { UserRole } from "./common";
 import type {
     RawApplicant,
     RawApplication,
+    RawLetterTemplate,
     RawAssignment,
     RawContractTemplate,
     RawDdah,
     RawDuty,
     RawInstructor,
     RawOffer,
+    RawConfirmation,
     RawPosition,
     RawPosting,
     RawPostingPosition,
@@ -26,7 +28,9 @@ import type {
 
 export type Duty = RawDuty;
 export type Offer = RawOffer;
+export type Confirmation = RawConfirmation;
 export type WageChunk = Omit<RawWageChunk, "assignment_id">;
+export type LetterTemplate = RawLetterTemplate;
 export type ContractTemplate = RawContractTemplate;
 export type Instructor = RawInstructor;
 export type Applicant = RawApplicant;
@@ -88,9 +92,11 @@ export interface InstructorPreference
 }
 
 export interface ApplicantMatchingDatum
-    extends Omit<RawApplicantMatchingDatum, "applicant_id" | "session_id"> {
+    extends Omit<RawApplicantMatchingDatum, "applicant_id" | "session_id" | "letter_template_id"> {
     applicant: Applicant;
     session: Session;
+    letter_template: LetterTemplate;
+    confirmations?: Confirmation[];
 }
 
 export interface Match extends Omit<RawMatch, "applicant_id" | "position_id"> {

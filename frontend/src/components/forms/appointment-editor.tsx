@@ -9,7 +9,7 @@ import { fieldEditorFactory, DialogRow } from "./common-controls";
 import {
     Applicant,
     ApplicantMatchingDatum,
-    RequireSome,
+    LetterTemplate,
 } from "../../api/defs/types";
 
 const DEFAULT_APPOINTMENT = {
@@ -18,27 +18,40 @@ const DEFAULT_APPOINTMENT = {
     min_hours_owed: 0,
     max_hours_owed: null,
     prev_hours_fulfilled: null,
+    letter_template: {},
 };
+
+export interface NullableAppointment 
+    extends Omit<ApplicantMatchingDatum, "id"> {
+    id?: ApplicantMatchingDatum["id"] | null;
+    session_id?: number | null;
+    applicant_id?: number | null;
+    letter_template_id?: number | null;
+}
 
 /**
  * Edit information about an appointment
  */
 export function AppointmentEditor(props: {
-    applicantMatchingDatum: Partial<ApplicantMatchingDatum>;
-    setApplicantMatchingDatum: (
-        applicantMatchingDatum: Partial<ApplicantMatchingDatum>
-    ) => any;
+    applicantMatchingDatum: NullableAppointment;
+    setApplicantMatchingDatum: (applicantMatchingDatum: NullableAppointment) => any;
     applicants: Applicant[];
+    letterTemplates: LetterTemplate[];
+    defaultLetterTemplate?: LetterTemplate;
+    lockApplicant?: boolean;
 }) {
     const {
         applicantMatchingDatum: applicantMatchingDatumProp,
         setApplicantMatchingDatum,
-        applicants = [],
+        applicants,
+        letterTemplates,
+        defaultLetterTemplate,
+        lockApplicant,
     } = props;
-    const applicantMatchingDatum = {
-        ...DEFAULT_APPOINTMENT,
-        ...applicantMatchingDatumProp,
-    } as RequireSome<ApplicantMatchingDatum, keyof typeof DEFAULT_APPOINTMENT>;
+    const applicantMatchingDatum = React.useMemo(
+        () => ({ ...DEFAULT_APPOINTMENT, ...applicantMatchingDatumProp }),
+        [applicantMatchingDatumProp]
+    )
 
     function setApplicant(applicants: Applicant[]) {
         const applicant = applicants[applicants.length - 1] || { id: null };
@@ -52,6 +65,22 @@ export function AppointmentEditor(props: {
         applicantMatchingDatum as ApplicantMatchingDatum,
         setApplicantMatchingDatum
     );
+
+    /**
+     * Set `applicantMatchingDatum.letter_template` to the most recently selected item
+     */
+    function setLetterTemplate(
+        selectedLetterTemplates: LetterTemplate[]
+    ) {
+        const letter_template =
+            selectedLetterTemplates[selectedLetterTemplates.length - 1] ||
+            defaultLetterTemplate;
+        setApplicantMatchingDatum({ ...applicantMatchingDatum, letter_template });
+    }
+
+    const selectedLetterTemplate = applicantMatchingDatum.letter_template
+        ? [applicantMatchingDatum.letter_template]
+        : [];
 
     return (
         <Form>
@@ -72,6 +101,7 @@ export function AppointmentEditor(props: {
                     }
                     options={applicants}
                     onChange={setApplicant}
+                    disabled={lockApplicant}
                 />
             </Form.Group>
             <DialogRow>
@@ -91,6 +121,21 @@ export function AppointmentEditor(props: {
                     "number"
                 )}
             </DialogRow>
+            <Form.Group>
+                <Form.Label>
+                    Letter Template (which letter template will be used)
+                </Form.Label>
+                <Typeahead
+                    id="instructors-input"
+                    ignoreDiacritics={true}
+                    multiple
+                    placeholder="Letter template..."
+                    labelKey={(option) => `${option.template_name}`}
+                    selected={selectedLetterTemplate}
+                    options={letterTemplates}
+                    onChange={setLetterTemplate}
+                />
+            </Form.Group>
         </Form>
     );
 }
@@ -98,4 +143,6 @@ AppointmentEditor.propTypes = {
     applicantMatchingDatum: docApiPropTypes.applicant_matching_datum.isRequired,
     setApplicantMatchingDatum: PropTypes.func.isRequired,
     applicants: PropTypes.arrayOf(docApiPropTypes.applicant),
+    defaultLetterTemplate: docApiPropTypes.letterTemplate,
+    letterTemplates: PropTypes.arrayOf(docApiPropTypes.letterTemplate),
 };

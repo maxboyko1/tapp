@@ -3,15 +3,19 @@ import {
     FETCH_ONE_APPLICANT_MATCHING_DATUM_SUCCESS,
     UPSERT_ONE_APPLICANT_MATCHING_DATUM_SUCCESS,
     DELETE_ONE_APPLICANT_MATCHING_DATUM_SUCCESS,
+    FETCH_CONFIRMATIONS_FOR_APPLICANT_MATCHING_DATUM_SUCCESS,
+    UPSERT_CONFIRMATIONS_FOR_APPLICANT_MATCHING_DATUM_SUCCESS,
 } from "../constants";
-import { RawApplicantMatchingDatum } from "../defs/types";
+import { RawApplicantMatchingDatum, RawConfirmation } from "../defs/types";
 import { createReducer, HasPayload } from "./utils";
 
 interface ApplicantMatchingDataState {
     _modelData: RawApplicantMatchingDatum[];
+    _confirmationsByApplicantMatchingDatumId: Record<number, RawConfirmation[]>;
 }
 const initialState: ApplicantMatchingDataState = {
     _modelData: [],
+    _confirmationsByApplicantMatchingDatumId: {},
 };
 
 function upsertItem(
@@ -33,6 +37,31 @@ function upsertItem(
         newModelData.push(newItem);
     }
     return newModelData;
+}
+
+/**
+ * Given a list of all confirmations for a particular applicant matching datum,
+ * sets the _confirmationsByApplicantMatchingDatumId hash appropriately.
+ *
+ * @param {*} state
+ * @param {{payload: object}} action
+ * @returns
+ */
+function setConfirmations(
+    state: ApplicantMatchingDataState,
+    action: HasPayload<{ applicant_matching_datum_id: number; confirmations: RawConfirmation[] }>
+): ApplicantMatchingDataState {
+    const applicantMatchingDatumId = action.payload.applicant_matching_datum_id;
+    if (!applicantMatchingDatumId) {
+        return state;
+    }
+    return {
+        ...state,
+        _confirmationsByApplicantMatchingDatumId: {
+            ...state._confirmationsByApplicantMatchingDatumId,
+            [applicantMatchingDatumId]: action.payload.confirmations,
+        },
+    };
 }
 
 // ApplicantMatchingDatum has no `id` field, but they are uniquely determined
@@ -76,4 +105,6 @@ export const applicantMatchingDataReducer = createReducer(initialState, {
             ),
         };
     },
+    [FETCH_CONFIRMATIONS_FOR_APPLICANT_MATCHING_DATUM_SUCCESS]: setConfirmations,
+    [UPSERT_CONFIRMATIONS_FOR_APPLICANT_MATCHING_DATUM_SUCCESS]: setConfirmations,
 });

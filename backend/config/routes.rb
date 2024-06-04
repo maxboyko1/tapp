@@ -10,6 +10,7 @@ module Constraint
         def matches?(request)
             active_user = ActiveUserService.active_user request
             return true if active_user.is_admin?
+
             Rails.logger.warn "Permission Denied: User '#{
                                   active_user.utorid
                               }' attempted to access a /admin route without permission."
@@ -21,6 +22,7 @@ module Constraint
         def matches?(request)
             active_user = ActiveUserService.active_user request
             return true if active_user.is_instructor?
+
             Rails.logger.warn "Permission Denied: User '#{
                                   active_user.utorid
                               }' attempted to access a /instructor route without permission."
@@ -32,6 +34,7 @@ module Constraint
         def matches?(request)
             active_user = ActiveUserService.active_user request
             return true if active_user.is_ta?
+
             Rails.logger.warn "Permission Denied: User '#{
                                   active_user.utorid
                               }' attempted to access a /ta route without permission."
@@ -121,6 +124,19 @@ Rails
                             collection { post :delete }
                         end
 
+                        # Letter Templates
+                        get :available_letter_templates,
+                            to: 'letter_templates#available'
+
+                        # Letter Templates
+                        resources :letter_templates, only: %i[create] do
+                            collection { post :delete, :upload }
+                            member do
+                                get :view
+                                get :download
+                            end
+                        end
+
                         # Positions
                         resources :positions, only: %i[create] do
                             collection { post :delete }
@@ -146,6 +162,7 @@ Rails
                             end
                             resources :contract_templates,
                                       only: %i[index create]
+                            resources :letter_templates, only: %i[index create]
                             resources :positions,
                                       controller: :session_positions,
                                       only: %i[index create] do
@@ -166,7 +183,7 @@ Rails
                             resources :posting_positions, only: %i[index]
                             resources :instructor_preferences, only: %i[index]
                             resources :matches, only: %i[index create]
-                            resources :applicant_matching_data, only: %i[index create]
+                            resources :applicant_matching_data, only: %i[index create show]
                         end
 
                         # Matches
@@ -177,6 +194,20 @@ Rails
                         # Applicant Matching Data
                         resources :applicant_matching_data, only: %i[show create] do
                             collection { post :delete }
+                            resources :confirmations,
+                                      path: :active_confirmation,
+                                      controller: :active_confirmations,
+                                      only: :index do
+                                collection do
+                                    post 'create'
+                                    post :accept
+                                    post :reject
+                                    post :withdraw
+                                    post :email
+                                    post :nag
+                                    get :history
+                                end
+                            end
                         end
 
                         # DDAHs
@@ -278,6 +309,12 @@ Rails
                 post :accept, format: false, to: 'contracts#accept'
                 post :reject, format: false, to: 'contracts#reject'
             end
+            resources :letters, only: %i[show], format: nil do
+                get :view, format: false, to: 'letters#view'
+                get :details, format: false, to: 'letters#details'
+                post :accept, format: false, to: 'letters#accept'
+                post :reject, format: false, to: 'letters#reject'
+            end
             resources :ddahs, format: nil, only: %i[show] do
                 get :view, format: false, to: 'ddahs#view'
                 get :details, format: false, to: 'ddahs#details'
@@ -295,7 +332,7 @@ Rails
         # with the `#/my/route` being lost. Instead, authenticate `tapp.com/hash/my/route`,
         # which will redirect to `tapp.com/#/my/route` after authentication is complete.
         namespace :hash, format: false do
-            get '/*path', to: "hash#index"
+            get '/*path', to: 'hash#index'
         end
 
         # Catch all other route requests and deliver a standard error payload.

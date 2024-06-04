@@ -10,6 +10,7 @@ import {
     MinimalContractTemplate,
     MinimalApplicant,
     MinimalDdah,
+    MinimalLetterTemplate,
     Session,
     Instructor,
     ContractTemplate,
@@ -20,6 +21,7 @@ import {
     PostingPosition,
     MinimalApplicantMatchingDatum,
     ApplicantMatchingDatum,
+    LetterTemplate
 } from "../../api/defs/types";
 import { round } from "../utils";
 
@@ -44,6 +46,7 @@ interface Context {
     contractTemplates: ContractTemplate[];
     positions: Position[];
     applicants: Applicant[];
+    letterTemplates: LetterTemplate[];
 }
 
 export interface IdContext extends Context {
@@ -55,6 +58,11 @@ export interface PrepareFull {
     contractTemplate: PrepareUpsertable<
         MinimalContractTemplate,
         ContractTemplate,
+        { id: number }
+    >;
+    letterTemplate: PrepareUpsertable<
+        MinimalLetterTemplate,
+        LetterTemplate,
         { id: number }
     >;
     instructor: PrepareUpsertable<
@@ -106,6 +114,7 @@ export interface PrepareFull {
             id: number;
             session: Session;
             applicants: Applicant[];
+            letterTemplates: LetterTemplate[];
         }
     >;
 }
@@ -127,6 +136,16 @@ export const prepareFull: PrepareFull = {
             return { id, ...minContractTemplate };
         }
         return minContractTemplate;
+    },
+    letterTemplate: function (
+        minLetterTemplate: MinimalLetterTemplate,
+        context?: any
+    ): any {
+        const { id } = context || {};
+        if (id != null) {
+            return { id, ...minLetterTemplate };
+        }
+        return minLetterTemplate;
     },
     instructor: function (
         minInstructor: MinimalInstructor,
@@ -380,7 +399,7 @@ export const prepareFull: PrepareFull = {
         minApplicantMatchingDatum: MinimalApplicantMatchingDatum,
         context?: any
     ): any {
-        const { id, applicants, session }: Partial<IdContext> = context || {};
+        const { id, applicants, session, letterTemplates }: Partial<IdContext> = context || {};
         if (!Array.isArray(applicants)) {
             throw new Error(
                 "You must pass an array of applicants to reconstruct an appointment"
@@ -389,6 +408,11 @@ export const prepareFull: PrepareFull = {
         if (!session) {
             throw new Error(
                 "You must pass a session to reconstruct an appointment"
+            );
+        }
+        if (!Array.isArray(letterTemplates)) {
+            throw new Error(
+                "You must pass an array of letter templates to reconstruct an appointment"
             );
         }
 
@@ -406,6 +430,18 @@ export const prepareFull: PrepareFull = {
             applicant: matchingApplicant,
             session: session,
         };
+
+        // Search for and add the letter template
+        const letter_template = letterTemplates.find(
+            (template) =>
+                template.template_name === minApplicantMatchingDatum.letter_template
+        );
+        if (letter_template == null) {
+            throw new Error(
+                `Couldn't find letter template with name "${minApplicantMatchingDatum.letter_template}"`
+            );
+        }
+        ret.letter_template = letter_template;
 
         // Add in the id if we have it
         if (id != null) {

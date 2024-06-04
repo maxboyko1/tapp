@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_06_13_154747) do
+ActiveRecord::Schema.define(version: 2024_04_25_153020) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -53,7 +53,11 @@ ActiveRecord::Schema.define(version: 2023_06_13_154747) do
     t.boolean "hidden", default: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "active_confirmation_id"
+    t.bigint "letter_template_id", null: false
+    t.index ["active_confirmation_id"], name: "index_applicant_matching_data_on_active_confirmation_id"
     t.index ["applicant_id"], name: "index_applicant_matching_data_on_applicant_id"
+    t.index ["letter_template_id"], name: "index_applicant_matching_data_on_letter_template_id"
     t.index ["session_id"], name: "index_applicant_matching_data_on_session_id"
   end
 
@@ -108,6 +112,31 @@ ActiveRecord::Schema.define(version: 2023_06_13_154747) do
     t.index ["applicant_id"], name: "index_assignments_on_applicant_id"
     t.index ["position_id", "applicant_id"], name: "index_assignments_on_position_id_and_applicant_id", unique: true
     t.index ["position_id"], name: "index_assignments_on_position_id"
+  end
+
+  create_table "confirmations", force: :cascade do |t|
+    t.bigint "applicant_matching_datum_id", null: false
+    t.string "letter_template"
+    t.string "first_name"
+    t.string "last_name"
+    t.string "email"
+    t.float "min_hours_owed"
+    t.float "max_hours_owed"
+    t.float "prev_hours_fulfilled"
+    t.string "ta_coordinator_name"
+    t.string "ta_coordinator_email"
+    t.datetime "emailed_date"
+    t.string "signature"
+    t.datetime "accepted_date"
+    t.datetime "rejected_date"
+    t.datetime "withdrawn_date"
+    t.integer "status", default: 0, null: false
+    t.integer "nag_count", default: 0
+    t.string "url_token"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["applicant_matching_datum_id"], name: "index_confirmations_on_applicant_matching_datum_id"
+    t.index ["url_token"], name: "index_confirmations_on_url_token"
   end
 
   create_table "contract_templates", force: :cascade do |t|
@@ -170,6 +199,15 @@ ActiveRecord::Schema.define(version: 2023_06_13_154747) do
     t.bigint "position_id"
     t.index ["instructor_id"], name: "index_instructors_positions_on_instructor_id"
     t.index ["position_id"], name: "index_instructors_positions_on_position_id"
+  end
+
+  create_table "letter_templates", force: :cascade do |t|
+    t.bigint "session_id", null: false
+    t.string "template_name"
+    t.string "template_file"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["session_id"], name: "index_letter_templates_on_session_id"
   end
 
   create_table "matches", force: :cascade do |t|
@@ -331,6 +369,8 @@ ActiveRecord::Schema.define(version: 2023_06_13_154747) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "applicant_matching_data", "applicants"
+  add_foreign_key "applicant_matching_data", "confirmations", column: "active_confirmation_id"
+  add_foreign_key "applicant_matching_data", "letter_templates"
   add_foreign_key "applicant_matching_data", "sessions"
   add_foreign_key "applications", "applicants"
   add_foreign_key "applications", "postings"
@@ -338,11 +378,13 @@ ActiveRecord::Schema.define(version: 2023_06_13_154747) do
   add_foreign_key "assignments", "applicants"
   add_foreign_key "assignments", "offers", column: "active_offer_id"
   add_foreign_key "assignments", "positions"
+  add_foreign_key "confirmations", "applicant_matching_data"
   add_foreign_key "contract_templates", "sessions"
   add_foreign_key "ddahs", "assignments"
   add_foreign_key "duties", "ddahs"
   add_foreign_key "instructor_preferences", "applications"
   add_foreign_key "instructor_preferences", "positions"
+  add_foreign_key "letter_templates", "sessions"
   add_foreign_key "matches", "applicants"
   add_foreign_key "matches", "positions"
   add_foreign_key "offers", "assignments"

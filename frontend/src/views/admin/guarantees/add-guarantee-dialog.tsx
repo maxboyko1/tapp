@@ -5,17 +5,22 @@ import {
     applicantsSelector,
     applicantMatchingDataSelector,
     activeSessionSelector,
+    letterTemplatesSelector,
 } from "../../../api/actions";
 import { Modal, Button, Alert } from "react-bootstrap";
-import { AppointmentEditor } from "../../../components/forms/appointment-editor";
+import { 
+    AppointmentEditor,
+    NullableAppointment
+} from "../../../components/forms/appointment-editor";
 import {
     Applicant,
     ApplicantMatchingDatum,
+    LetterTemplate,
     Session,
 } from "../../../api/defs/types";
 
 function getConflicts(
-    applicantMatchingDatum: ApplicantMatchingDatum,
+    applicantMatchingDatum: Partial<NullableAppointment>,
     applicantMatchingData: ApplicantMatchingDatum[] = []
 ) {
     const ret: { delayShow: string; immediateShow: React.ReactNode } = {
@@ -50,11 +55,11 @@ function getConflicts(
     return ret;
 }
 
-const BLANK_APPOINTMENT: Partial<ApplicantMatchingDatum> = {
+const BLANK_APPOINTMENT = {
     min_hours_owed: 0,
     max_hours_owed: null,
     prev_hours_fulfilled: null,
-};
+} as unknown as NullableAppointment;
 
 export function AddAppointmentDialog(props: {
     show: boolean;
@@ -62,6 +67,7 @@ export function AddAppointmentDialog(props: {
     applicantMatchingData: ApplicantMatchingDatum[];
     applicants: Applicant[];
     activeSession: Session | null;
+    letterTemplates: LetterTemplate[];
     upsertApplicantMatchingDatum: Function;
 }) {
     const {
@@ -70,20 +76,47 @@ export function AddAppointmentDialog(props: {
         applicantMatchingData,
         applicants,
         activeSession,
+        letterTemplates,
         upsertApplicantMatchingDatum,
     } = props;
     const [newApplicantMatchingDatum, setNewApplicantMatchingDatum] =
-        React.useState(BLANK_APPOINTMENT);
+        React.useState<NullableAppointment>(
+            BLANK_APPOINTMENT as NullableAppointment
+        );
 
     React.useEffect(() => {
         if (!show) {
             // If the dialog is hidden, reset the state
             setNewApplicantMatchingDatum({
                 ...BLANK_APPOINTMENT,
-                session: activeSession || undefined,
+                session_id: activeSession?.id || -1,
             });
         }
     }, [show, activeSession]);
+
+    // select a suitable default for the letter template
+    React.useEffect(() => {
+        // Look for a letter template whose name is "standard" or "default";
+        // If that fails, find one whose name contains "standard" or "default";
+        // If all else fails, pick the first template in the list
+        const defaultTemplate =
+            letterTemplates.find(
+                (x) => x.template_name.toLowerCase() === "standard"
+            ) ||
+            letterTemplates.find(
+                (x) => x.template_name.toLowerCase() === "default"
+            ) ||
+            letterTemplates.find((x) =>
+                x.template_name.toLowerCase().includes("standard")
+            ) ||
+            letterTemplates.find((x) =>
+                x.template_name.toLowerCase().includes("default")
+            ) ||
+            letterTemplates[0];
+        if (defaultTemplate) {
+            newApplicantMatchingDatum.letter_template = defaultTemplate;
+        }
+    }, [letterTemplates, newApplicantMatchingDatum]);
 
     function createAppointment() {
         if (newApplicantMatchingDatum) {
@@ -106,6 +139,7 @@ export function AddAppointmentDialog(props: {
                     max_hours_owed: newApplicantMatchingDatum.max_hours_owed,
                     prev_hours_fulfilled:
                         newApplicantMatchingDatum.prev_hours_fulfilled,
+                    letter_template: newApplicantMatchingDatum.letter_template,
                 });
         }
         onHide();
@@ -126,6 +160,8 @@ export function AddAppointmentDialog(props: {
                     applicantMatchingDatum={newApplicantMatchingDatum}
                     setApplicantMatchingDatum={setNewApplicantMatchingDatum}
                     applicants={applicants}
+                    letterTemplates={letterTemplates}
+                    defaultLetterTemplate={newApplicantMatchingDatum.letter_template}
                 />
                 {conflicts.immediateShow ? (
                     <Alert variant="danger">{conflicts.immediateShow}</Alert>
@@ -156,6 +192,7 @@ export const ConnectedAddAppointmentDialog = connect(
         applicantMatchingData: applicantMatchingDataSelector(state),
         applicants: applicantsSelector(state),
         activeSession: activeSessionSelector(state),
+        letterTemplates: letterTemplatesSelector(state),
     }),
     { upsertApplicantMatchingDatum }
 )(AddAppointmentDialog);

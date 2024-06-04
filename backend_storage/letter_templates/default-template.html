@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Appointment Confirmation Letter</title>
+        <style>
+            * {
+                box-sizing: border-box;
+            }
+            html {
+                margin: 0;
+                padding: 0;
+            }
+            body {
+                width: 8.5in;
+                margin: 0;
+                padding-left: 0.75in;
+                padding-right: 0.75in;
+                hyphens: auto;
+                text-align: justify;
+                box-sizing: border-box;
+                font-family: Helvetica, sans-serif;
+                font-size: 12pt;
+            }
+            .i {
+                font-style: italic;
+            }
+            .emphcolor {
+                color: red;
+            }
+            table.appointment-summary {
+                margin-left: 1in;
+                font-size: 0.9em;
+            }
+            .appointment-summary th {
+                padding-right: 0.5em;
+                text-align: right;
+                font-weight: normal;
+            }
+            .letter-head p {
+                margin-bottom: 0.5in;
+            }
+            .letter-foot {
+                margin-top: 1in;
+            }
+            .signature {
+                font-family: alex_brushregular, cursive;
+                font-size: 30pt;
+                margin-left: 0.5in;
+                margin-bottom: 0.1in;
+            }
+            .applicant .signature {
+                border-bottom: 1px solid black;
+                min-width: 2.5in;
+                display: inline-block;
+                margin-left: 0;
+            }
+            .checkbox {
+                font-size: 18pt;
+            }
+
+            @media only screen and (max-width: 9in) {
+                /* when printed, these styles won't show
+				because the "screen" is 8.5in */
+                body {
+                    width: unset;
+                    padding-bottom: 0.5in;
+                    padding-left: 2em;
+                    padding-right: 2em;
+                }
+            }
+        </style>
+        <link rel="stylesheet" href="font.css" />
+        <link rel="stylesheet" href="header.css" />
+        <!-- for rendering with wkhtmltopdf styles need to be inlined; when rendered directly in a browser,
+	this will just be invalid CSS -->
+        <style>
+            {{ style_font }}
+        </style>
+        <style>
+            {{ style_header }}
+        </style>
+    </head>
+    <body>
+        <div class="letter-head">
+            <div class="uoftlogo"></div>
+            <p>{{ date }}</p>
+            <p>
+                {{ first_name }} {{ last_name }}<br />
+                c/o Some Department<br />
+                University of Toronto
+            </p>
+            <p>Dear {{ first_name }},</p>
+        </div>
+        <div class="letter-body">
+            <p>
+                I am writing this letter to inform you that you are still owed TA hours. Please sign and 
+                indicate below whether or not you intend to take up any of those hours in the 
+                upcoming Fall/Winter term.
+            </p>
+            <p>
+                If you have any questions, please contact me via email at
+                <a href="mailto:{{ ta_coordinator_email }}">{{ ta_coordinator_email }}</a>.
+            </p>
+        </div>
+        <div class="letter-foot tacoordinator">
+            <p>Yours sincerely,</p>
+            <div class="signature">{{ ta_coordinator_name }}</div>
+            <div class="details">
+                {{ ta_coordinator_name }}<br />TA Coordinator<br />Some Department
+            </div>
+        </div>
+        <div>
+            <p>
+                <span class="checkbox"
+                    >{% if signature == blank %}☐{% else %}☑{% endif %}</span
+                >
+                I confirm that I will be registered as a University of Toronto
+                student or PDF on the date that this appointment begins. I
+                understand that if I should cease to be registered as a
+                University of Toronto student or PDF during the period of this
+                appointment, for any reason other than convocation, I must
+                immediately notify my supervisor, and my appointment may be
+                terminated.
+            </p>
+        </div>
+        <div class="letter-foot applicant">
+            <p>Please sign below to confirm your participation.</p>
+            <div class="signature">{{ signature }}</div>
+            <div class="details">
+                Applicant Signature
+            </div>
+        </div>
+    </body>
+</html>

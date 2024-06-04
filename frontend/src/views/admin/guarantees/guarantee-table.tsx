@@ -7,6 +7,10 @@ import {
 } from "../../../api/actions";
 import { EditableField } from "../../../components/edit-field-widgets";
 import { guaranteeTableSelector, setSelectedRows } from "./actions";
+import { EditLetterTemplateCell } from "./letter-template-cell";
+import { Button } from "react-bootstrap";
+import { FaSearch } from "react-icons/fa";
+import { formatDownloadUrl, capitalize, formatDate } from "../../../libs/utils";
 import { AdvancedFilterTable } from "../../../components/filter-table/advanced-filter-table";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
 import { CellProps } from "react-table";
@@ -82,6 +86,42 @@ export function ApplicantCell(
     );
 }
 
+/**
+ * Cell to show the status of a letter and offer a download button if a letter has been created.
+ * I.e., a
+ *
+ * @param {*} { original }
+ * @returns
+ */
+export function StatusCell({ row }: CellProps<ApplicantMatchingDatum>) {
+    const original = row.original;
+    const formattedStatus = capitalize(original.active_confirmation_status || "");
+    const activeConfirmationUrlToken = original.active_confirmation_url_token;
+
+    let download = null;
+    if (activeConfirmationUrlToken) {
+        const url = `/public/letters/${activeConfirmationUrlToken}.pdf`;
+        download = (
+            <Button
+                href={formatDownloadUrl(url)}
+                variant="light"
+                size="sm"
+                className="mr-2 py-0"
+                title="Download letter PDF"
+            >
+                <FaSearch />
+            </Button>
+        );
+    }
+
+    return (
+        <>
+            {download}
+            {formattedStatus}
+        </>
+    );
+}
+
 export function ConnectedGuaranteeTable({
     editable = true,
     ...rest
@@ -97,13 +137,16 @@ export function ConnectedGuaranteeTable({
         guaranteeTableSelector
     ).selectedApplicantMatchingDatumIds;
     const applicantMatchingData = useSelector(applicantMatchingDataSelector);
-    const data = React.useMemo(() => {
-        return (
-            applicantMatchingData.filter((applicantMatchingDatum) => {
-                return applicantMatchingDatum.min_hours_owed !== null;
-            }) || []
-        );
-    }, [applicantMatchingData]);
+    const data = React.useMemo(
+        () =>
+            applicantMatchingData.map((applicantMatchingDatum) => {
+                const { active_confirmation_status, ...rest } = applicantMatchingDatum;
+                return !active_confirmation_status
+                    ? { active_confirmation_status: "No Letter Sent", ...rest }
+                    : applicantMatchingDatum;
+            }),
+        [applicantMatchingData]
+    );
 
     // We want to minimize the re-render of the table. Since some bindings for columns
     // are generated on-the-fly, memoize the result so we don't trigger unneeded re-renders.
@@ -181,6 +224,39 @@ export function ConnectedGuaranteeTable({
                 className: "number-cell",
                 maxWidth: 70,
                 Cell: generateGuaranteeCell("prev_hours_fulfilled"),
+            },
+            {
+                Header: "Letter Template",
+                accessor: "letter_template.template_name",
+                Cell: EditLetterTemplateCell,
+            },
+            {
+                Header: "Status",
+                id: "status",
+                // We want items with no active confirmation to appear at the end of the list
+                // when sorted, so we set their accessor to null (the accessor is used by react table
+                // when sorting items).
+                accessor: (dat: typeof data[number]) =>
+                    dat.active_confirmation_status === "No Letter Sent"
+                        ? null
+                        : dat.active_confirmation_status,
+                Cell: StatusCell,
+            },
+            {
+                Header: "Date",
+                accessor: "active_confirmation_recent_activity_date",
+                Cell: ({ value }: CellProps<typeof data>) =>
+                    value ? formatDate(value) : null,
+                maxWidth: 120,
+            },
+            {
+                Header: "Nag Count",
+                accessor: "active_confirmation_nag_count",
+                // If the nag-count is 0, we don't want to show it,
+                // so we return null in that case, which displays nothing.
+                Cell: ({ value }: CellProps<typeof data>) =>
+                    value ? value : null,
+                maxWidth: 30,
             },
         ];
     }, [dispatch, editable]);

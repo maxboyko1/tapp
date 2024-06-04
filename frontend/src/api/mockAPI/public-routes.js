@@ -44,6 +44,27 @@ export const publicRoutes = {
             summary: "Get a JSON object with all the details about the offer",
             returns: wrappedPropTypes.any,
         }),
+        "/public/letters/:token": documentCallback({
+            func: () => {
+                throw new Error("Not implemented in Mock API");
+            },
+            summary: "Get an appointment confirmation as `html` or `pdf`",
+            returns: wrappedPropTypes.any,
+        }),
+        "/public/letters/:token/view": documentCallback({
+            func: () => {
+                throw new Error("Not implemented in Mock API");
+            },
+            summary: "View an appointment confirmation with an accept dialog",
+            returns: wrappedPropTypes.any,
+        }),
+        "/public/letters/:token/details": documentCallback({
+            func: () => {
+                throw new Error("Not implemented in Mock API");
+            },
+            summary: "Get a JSON object with all the details about the appointment confirmation",
+            returns: wrappedPropTypes.any,
+        }),
         "/public/postings/:token": documentCallback({
             func: () => {
                 throw new Error("Not implemented in Mock API");
@@ -80,6 +101,20 @@ export const publicRoutes = {
                 throw new Error("Not implemented in Mock API");
             },
             summary: "Reject an offer",
+            returns: wrappedPropTypes.any,
+        }),
+        "/public/letters/:token/accept": documentCallback({
+            func: () => {
+                throw new Error("Not implemented in Mock API");
+            },
+            summary: "Accept an appointment confirmation",
+            returns: wrappedPropTypes.any,
+        }),
+        "/public/letters/:token/reject": documentCallback({
+            func: () => {
+                throw new Error("Not implemented in Mock API");
+            },
+            summary: "Reject an appointment confirmation",
             returns: wrappedPropTypes.any,
         }),
         "/public/postings/:token/submit": documentCallback({

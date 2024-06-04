@@ -2,2017 +2,2420 @@
     {
         "utorid": "fardoea",
         "minHoursOwed": 354,
-        "previousHoursFulfilled": 81
+        "previousHoursFulfilled": 81,
+        "letter_template": "Regular"
     },
     {
         "utorid": "paternostera",
         "minHoursOwed": 357,
-        "previousHoursFulfilled": 219
+        "previousHoursFulfilled": 219,
+        "letter_template": "Regular"
     },
     {
         "utorid": "vannozziih",
         "minHoursOwed": 86,
-        "previousHoursFulfilled": 27
+        "previousHoursFulfilled": 27,
+        "letter_template": "Regular"
     },
     {
         "utorid": "bottena",
         "minHoursOwed": 57,
-        "previousHoursFulfilled": 56
+        "previousHoursFulfilled": 56,
+        "letter_template": "Regular"
     },
     {
         "utorid": "omaraw",
         "minHoursOwed": 154,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "retallicka",
         "minHoursOwed": 357,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "piriso",
         "minHoursOwed": 230,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "vigneronl",
         "minHoursOwed": 329,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "halmv",
         "minHoursOwed": 392,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "cassellsb",
         "minHoursOwed": 163,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "cureea",
         "minHoursOwed": 142,
-        "previousHoursFulfilled": 81
+        "previousHoursFulfilled": 81,
+        "letter_template": "Regular"
     },
     {
         "utorid": "eastburyj",
         "minHoursOwed": 120,
-        "previousHoursFulfilled": 90
+        "previousHoursFulfilled": 90,
+        "letter_template": "Regular"
     },
     {
         "utorid": "carnegief",
         "minHoursOwed": 82,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "towllc",
         "minHoursOwed": 43,
-        "previousHoursFulfilled": 29
+        "previousHoursFulfilled": 29,
+        "letter_template": "Regular"
     },
     {
         "utorid": "lockittf",
         "minHoursOwed": 329,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "rankcomr",
         "minHoursOwed": 363,
-        "previousHoursFulfilled": 112
+        "previousHoursFulfilled": 112,
+        "letter_template": "Regular"
     },
     {
         "utorid": "lomasnyf",
         "minHoursOwed": 364,
-        "previousHoursFulfilled": 340
+        "previousHoursFulfilled": 340,
+        "letter_template": "Regular"
     },
     {
         "utorid": "greaterexh",
         "minHoursOwed": 128,
-        "previousHoursFulfilled": 128
+        "previousHoursFulfilled": 128,
+        "letter_template": "Regular"
     },
     {
         "utorid": "paszekr",
         "minHoursOwed": 396,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "probeyk",
         "minHoursOwed": 85,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "rihanekc",
         "minHoursOwed": 39,
-        "previousHoursFulfilled": 27
+        "previousHoursFulfilled": 27,
+        "letter_template": "Regular"
     },
     {
         "utorid": "bernardtb",
         "minHoursOwed": 262,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "jevonl",
         "minHoursOwed": 334,
-        "previousHoursFulfilled": 164
+        "previousHoursFulfilled": 164,
+        "letter_template": "Regular"
     },
     {
         "utorid": "uccellia",
         "minHoursOwed": 55,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "kittert",
         "minHoursOwed": 315,
-        "previousHoursFulfilled": 4
+        "previousHoursFulfilled": 4,
+        "letter_template": "Regular"
     },
     {
         "utorid": "barabischj",
         "minHoursOwed": 323,
-        "previousHoursFulfilled": 129
+        "previousHoursFulfilled": 129,
+        "letter_template": "Regular"
     },
     {
         "utorid": "castanol",
         "minHoursOwed": 37,
-        "previousHoursFulfilled": 6
+        "previousHoursFulfilled": 6,
+        "letter_template": "Regular"
     },
     {
         "utorid": "vannonia",
         "minHoursOwed": 239,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "pumfrettt",
         "minHoursOwed": 296,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "littefairk",
         "minHoursOwed": 352,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "pidgeonc",
         "minHoursOwed": 358,
-        "previousHoursFulfilled": 17
+        "previousHoursFulfilled": 17,
+        "letter_template": "Regular"
     },
     {
         "utorid": "cantosl",
         "minHoursOwed": 152,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "tremathacks",
         "minHoursOwed": 298,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "tottmank",
         "minHoursOwed": 66,
-        "previousHoursFulfilled": 13
+        "previousHoursFulfilled": 13,
+        "letter_template": "Regular"
     },
     {
         "utorid": "clemowk",
         "minHoursOwed": 311,
-        "previousHoursFulfilled": 193
+        "previousHoursFulfilled": 193,
+        "letter_template": "Regular"
     },
     {
         "utorid": "rigbyb",
         "minHoursOwed": 41,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "matthiesonr",
         "minHoursOwed": 278,
-        "previousHoursFulfilled": 62
+        "previousHoursFulfilled": 62,
+        "letter_template": "Regular"
     },
     {
         "utorid": "raithbyk",
         "minHoursOwed": 327,
-        "previousHoursFulfilled": 78
+        "previousHoursFulfilled": 78,
+        "letter_template": "Regular"
     },
     {
         "utorid": "sebertd",
         "minHoursOwed": 181,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "gibbing",
         "minHoursOwed": 306,
-        "previousHoursFulfilled": 140
+        "previousHoursFulfilled": 140,
+        "letter_template": "Regular"
     },
     {
         "utorid": "fearfullr",
         "minHoursOwed": 169,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "dewittl",
         "minHoursOwed": 278,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "papet",
         "minHoursOwed": 358,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "settera",
         "minHoursOwed": 59,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "seidf",
         "minHoursOwed": 36,
-        "previousHoursFulfilled": 34
+        "previousHoursFulfilled": 34,
+        "letter_template": "Regular"
     },
     {
         "utorid": "hanej",
         "minHoursOwed": 104,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "heildr",
         "minHoursOwed": 204,
-        "previousHoursFulfilled": 39
+        "previousHoursFulfilled": 39,
+        "letter_template": "Regular"
     },
     {
         "utorid": "querrardb",
         "minHoursOwed": 136,
-        "previousHoursFulfilled": 22
+        "previousHoursFulfilled": 22,
+        "letter_template": "Regular"
     },
     {
         "utorid": "claesensh",
         "minHoursOwed": 336,
-        "previousHoursFulfilled": 265
+        "previousHoursFulfilled": 265,
+        "letter_template": "Regular"
     },
     {
         "utorid": "tuffieldj",
         "minHoursOwed": 193,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "baggalleyd",
         "minHoursOwed": 305,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "coonihanj",
         "minHoursOwed": 143,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "mutterj",
         "minHoursOwed": 303,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "fathers",
         "minHoursOwed": 328,
-        "previousHoursFulfilled": 37
+        "previousHoursFulfilled": 37,
+        "letter_template": "Regular"
     },
     {
         "utorid": "spraggsr",
         "minHoursOwed": 211,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "barrym",
         "minHoursOwed": 387,
-        "previousHoursFulfilled": 66
+        "previousHoursFulfilled": 66,
+        "letter_template": "Regular"
     },
     {
         "utorid": "adamovichc",
         "minHoursOwed": 203,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "domans",
         "minHoursOwed": 298,
-        "previousHoursFulfilled": 60
+        "previousHoursFulfilled": 60,
+        "letter_template": "Regular"
     },
     {
         "utorid": "brownceyg",
         "minHoursOwed": 331,
-        "previousHoursFulfilled": 120
+        "previousHoursFulfilled": 120,
+        "letter_template": "Regular"
     },
     {
         "utorid": "seatterw",
         "minHoursOwed": 137,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "fraynev",
         "minHoursOwed": 374,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "sharplessg",
         "minHoursOwed": 194,
-        "previousHoursFulfilled": 92
+        "previousHoursFulfilled": 92,
+        "letter_template": "Regular"
     },
     {
         "utorid": "philcottr",
         "minHoursOwed": 330,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "mccurdys",
         "minHoursOwed": 96,
-        "previousHoursFulfilled": 72
+        "previousHoursFulfilled": 72,
+        "letter_template": "Regular"
     },
     {
         "utorid": "iacobuccii",
         "minHoursOwed": 357,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "gorettij",
         "minHoursOwed": 361,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "benazetc",
         "minHoursOwed": 266,
-        "previousHoursFulfilled": 216
+        "previousHoursFulfilled": 216,
+        "letter_template": "Regular"
     },
     {
         "utorid": "franciottit",
         "minHoursOwed": 306,
-        "previousHoursFulfilled": 91
+        "previousHoursFulfilled": 91,
+        "letter_template": "Regular"
     },
     {
         "utorid": "chesleyb",
         "minHoursOwed": 255,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "spacieb",
         "minHoursOwed": 306,
-        "previousHoursFulfilled": 241
+        "previousHoursFulfilled": 241,
+        "letter_template": "Regular"
     },
     {
         "utorid": "domked",
         "minHoursOwed": 72,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "beaudryb",
         "minHoursOwed": 378,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "apdellg",
         "minHoursOwed": 221,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "gaskenm",
         "minHoursOwed": 333,
-        "previousHoursFulfilled": 38
+        "previousHoursFulfilled": 38,
+        "letter_template": "Regular"
     },
     {
         "utorid": "de gowem",
         "minHoursOwed": 158,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "christallg",
         "minHoursOwed": 229,
-        "previousHoursFulfilled": 51
+        "previousHoursFulfilled": 51,
+        "letter_template": "Regular"
     },
     {
         "utorid": "tizardg",
         "minHoursOwed": 194,
-        "previousHoursFulfilled": 165
+        "previousHoursFulfilled": 165,
+        "letter_template": "Regular"
     },
     {
         "utorid": "versonc",
         "minHoursOwed": 139,
-        "previousHoursFulfilled": 114
+        "previousHoursFulfilled": 114,
+        "letter_template": "Regular"
     },
     {
         "utorid": "jakubowiczt",
         "minHoursOwed": 357,
-        "previousHoursFulfilled": 280
+        "previousHoursFulfilled": 280,
+        "letter_template": "Regular"
     },
     {
         "utorid": "luckcockv",
         "minHoursOwed": 269,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "winspearb",
         "minHoursOwed": 194,
-        "previousHoursFulfilled": 99
+        "previousHoursFulfilled": 99,
+        "letter_template": "Regular"
     },
     {
         "utorid": "cozensw",
         "minHoursOwed": 119,
-        "previousHoursFulfilled": 113
+        "previousHoursFulfilled": 113,
+        "letter_template": "Regular"
     },
     {
         "utorid": "mckaguem",
         "minHoursOwed": 287,
-        "previousHoursFulfilled": 156
+        "previousHoursFulfilled": 156,
+        "letter_template": "Regular"
     },
     {
         "utorid": "leithera",
         "minHoursOwed": 395,
-        "previousHoursFulfilled": 59
+        "previousHoursFulfilled": 59,
+        "letter_template": "Regular"
     },
     {
         "utorid": "stabbinsg",
         "minHoursOwed": 391,
-        "previousHoursFulfilled": 299
+        "previousHoursFulfilled": 299,
+        "letter_template": "Regular"
     },
     {
         "utorid": "mitrovicl",
         "minHoursOwed": 398,
-        "previousHoursFulfilled": 23
+        "previousHoursFulfilled": 23,
+        "letter_template": "Regular"
     },
     {
         "utorid": "grammerg",
         "minHoursOwed": 396,
-        "previousHoursFulfilled": 174
+        "previousHoursFulfilled": 174,
+        "letter_template": "Regular"
     },
     {
         "utorid": "trownsonn",
         "minHoursOwed": 119,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "wainera",
         "minHoursOwed": 64,
-        "previousHoursFulfilled": 15
+        "previousHoursFulfilled": 15,
+        "letter_template": "Regular"
     },
     {
         "utorid": "jizhakic",
         "minHoursOwed": 335,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "wetherillj",
         "minHoursOwed": 164,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "gennerichc",
         "minHoursOwed": 164,
-        "previousHoursFulfilled": 146
+        "previousHoursFulfilled": 146,
+        "letter_template": "Regular"
     },
     {
         "utorid": "yellepd",
         "minHoursOwed": 206,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "fendd",
         "minHoursOwed": 357,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "whitingtonf",
         "minHoursOwed": 118,
-        "previousHoursFulfilled": 53
+        "previousHoursFulfilled": 53,
+        "letter_template": "Regular"
     },
     {
         "utorid": "watsamd",
         "minHoursOwed": 86,
-        "previousHoursFulfilled": 24
+        "previousHoursFulfilled": 24,
+        "letter_template": "Regular"
     },
     {
         "utorid": "chinge de halsj",
         "minHoursOwed": 291,
-        "previousHoursFulfilled": 114
+        "previousHoursFulfilled": 114,
+        "letter_template": "Regular"
     },
     {
         "utorid": "gobelf",
         "minHoursOwed": 127,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "munsoni",
         "minHoursOwed": 298,
-        "previousHoursFulfilled": 71
+        "previousHoursFulfilled": 71,
+        "letter_template": "Regular"
     },
     {
         "utorid": "lorantp",
         "minHoursOwed": 325,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "shureyf",
         "minHoursOwed": 339,
-        "previousHoursFulfilled": 27
+        "previousHoursFulfilled": 27,
+        "letter_template": "Regular"
     },
     {
         "utorid": "duiguidg",
         "minHoursOwed": 189,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "renee",
         "minHoursOwed": 327,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "hacardc",
         "minHoursOwed": 245,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "bedenhamd",
         "minHoursOwed": 303,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "fotherbya",
         "minHoursOwed": 118,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "pyecroftp",
         "minHoursOwed": 318,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "disleyg",
         "minHoursOwed": 297,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "crannah",
         "minHoursOwed": 141,
-        "previousHoursFulfilled": 119
+        "previousHoursFulfilled": 119,
+        "letter_template": "Regular"
     },
     {
         "utorid": "idlec",
         "minHoursOwed": 169,
-        "previousHoursFulfilled": 36
+        "previousHoursFulfilled": 36,
+        "letter_template": "Regular"
     },
     {
         "utorid": "windrams",
         "minHoursOwed": 263,
-        "previousHoursFulfilled": 38
+        "previousHoursFulfilled": 38,
+        "letter_template": "Regular"
     },
     {
         "utorid": "spurretd",
         "minHoursOwed": 147,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "van eedenv",
         "minHoursOwed": 366,
-        "previousHoursFulfilled": 94
+        "previousHoursFulfilled": 94,
+        "letter_template": "Regular"
     },
     {
         "utorid": "de la felda",
         "minHoursOwed": 98,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "colgraver",
         "minHoursOwed": 155,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "bravec",
         "minHoursOwed": 269,
-        "previousHoursFulfilled": 266
+        "previousHoursFulfilled": 266,
+        "letter_template": "Regular"
     },
     {
         "utorid": "seggess",
         "minHoursOwed": 236,
-        "previousHoursFulfilled": 71
+        "previousHoursFulfilled": 71,
+        "letter_template": "Regular"
     },
     {
         "utorid": "musprattm",
         "minHoursOwed": 254,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "agiusp",
         "minHoursOwed": 201,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "stebbind",
         "minHoursOwed": 58,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "parsanda",
         "minHoursOwed": 184,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "nieldc",
         "minHoursOwed": 325,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "merwec",
         "minHoursOwed": 246,
-        "previousHoursFulfilled": 125
+        "previousHoursFulfilled": 125,
+        "letter_template": "Regular"
     },
     {
         "utorid": "nockellsd",
         "minHoursOwed": 153,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "wratesd",
         "minHoursOwed": 351,
-        "previousHoursFulfilled": 162
+        "previousHoursFulfilled": 162,
+        "letter_template": "Regular"
     },
     {
         "utorid": "serleb",
         "minHoursOwed": 44,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "andreyn",
         "minHoursOwed": 329,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "brunnings",
         "minHoursOwed": 270,
-        "previousHoursFulfilled": 206
+        "previousHoursFulfilled": 206,
+        "letter_template": "Regular"
     },
     {
         "utorid": "compsonb",
         "minHoursOwed": 400,
-        "previousHoursFulfilled": 215
+        "previousHoursFulfilled": 215,
+        "letter_template": "Regular"
     },
     {
         "utorid": "robardetk",
         "minHoursOwed": 332,
-        "previousHoursFulfilled": 9
+        "previousHoursFulfilled": 9,
+        "letter_template": "Regular"
     },
     {
         "utorid": "czajkab",
         "minHoursOwed": 90,
-        "previousHoursFulfilled": 61
+        "previousHoursFulfilled": 61,
+        "letter_template": "Regular"
     },
     {
         "utorid": "silleya",
         "minHoursOwed": 68,
-        "previousHoursFulfilled": 67
+        "previousHoursFulfilled": 67,
+        "letter_template": "Regular"
     },
     {
         "utorid": "conryk",
         "minHoursOwed": 344,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "blants",
         "minHoursOwed": 262,
-        "previousHoursFulfilled": 32
+        "previousHoursFulfilled": 32,
+        "letter_template": "Regular"
     },
     {
         "utorid": "dopsons",
         "minHoursOwed": 353,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "ondrasekz",
         "minHoursOwed": 178,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "ebbenm",
         "minHoursOwed": 226,
-        "previousHoursFulfilled": 77
+        "previousHoursFulfilled": 77,
+        "letter_template": "Regular"
     },
     {
         "utorid": "judda",
         "minHoursOwed": 37,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "snoadd",
         "minHoursOwed": 128,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "canterr",
         "minHoursOwed": 68,
-        "previousHoursFulfilled": 35
+        "previousHoursFulfilled": 35,
+        "letter_template": "Regular"
     },
     {
         "utorid": "mcfetridges",
         "minHoursOwed": 45,
-        "previousHoursFulfilled": 16
+        "previousHoursFulfilled": 16,
+        "letter_template": "Regular"
     },
     {
         "utorid": "coskerryb",
         "minHoursOwed": 218,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "leheudeu",
         "minHoursOwed": 265,
-        "previousHoursFulfilled": 73
+        "previousHoursFulfilled": 73,
+        "letter_template": "Regular"
     },
     {
         "utorid": "whitrodn",
         "minHoursOwed": 99,
-        "previousHoursFulfilled": 30
+        "previousHoursFulfilled": 30,
+        "letter_template": "Regular"
     },
     {
         "utorid": "giabuzzis",
         "minHoursOwed": 284,
-        "previousHoursFulfilled": 261
+        "previousHoursFulfilled": 261,
+        "letter_template": "Regular"
     },
     {
         "utorid": "gobertd",
         "minHoursOwed": 139,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "rosierk",
         "minHoursOwed": 350,
-        "previousHoursFulfilled": 283
+        "previousHoursFulfilled": 283,
+        "letter_template": "Regular"
     },
     {
         "utorid": "leeminga",
         "minHoursOwed": 85,
-        "previousHoursFulfilled": 35
+        "previousHoursFulfilled": 35,
+        "letter_template": "Regular"
     },
     {
         "utorid": "duckerv",
         "minHoursOwed": 241,
-        "previousHoursFulfilled": 238
+        "previousHoursFulfilled": 238,
+        "letter_template": "Regular"
     },
     {
         "utorid": "dowe",
         "minHoursOwed": 166,
-        "previousHoursFulfilled": 17
+        "previousHoursFulfilled": 17,
+        "letter_template": "Regular"
     },
     {
         "utorid": "norsisterl",
         "minHoursOwed": 207,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "voasa",
         "minHoursOwed": 287,
-        "previousHoursFulfilled": 19
+        "previousHoursFulfilled": 19,
+        "letter_template": "Regular"
     },
     {
         "utorid": "spittlesi",
         "minHoursOwed": 96,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "fiorentinoe",
         "minHoursOwed": 200,
-        "previousHoursFulfilled": 52
+        "previousHoursFulfilled": 52,
+        "letter_template": "Regular"
     },
     {
         "utorid": "naishr",
         "minHoursOwed": 300,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "caldesb",
         "minHoursOwed": 378,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "trudgionb",
         "minHoursOwed": 203,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "cowndleym",
         "minHoursOwed": 143,
-        "previousHoursFulfilled": 106
+        "previousHoursFulfilled": 106,
+        "letter_template": "Regular"
     },
     {
         "utorid": "reucastler",
         "minHoursOwed": 364,
-        "previousHoursFulfilled": 151
+        "previousHoursFulfilled": 151,
+        "letter_template": "Regular"
     },
     {
         "utorid": "linfootm",
         "minHoursOwed": 100,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "shealsn",
         "minHoursOwed": 150,
-        "previousHoursFulfilled": 21
+        "previousHoursFulfilled": 21,
+        "letter_template": "Regular"
     },
     {
         "utorid": "wurstf",
         "minHoursOwed": 180,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "wherrettk",
         "minHoursOwed": 317,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "ellinsb",
         "minHoursOwed": 217,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "ferranj",
         "minHoursOwed": 37,
-        "previousHoursFulfilled": 35
+        "previousHoursFulfilled": 35,
+        "letter_template": "Regular"
     },
     {
         "utorid": "damanth",
         "minHoursOwed": 345,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "spottiswoodf",
         "minHoursOwed": 247,
-        "previousHoursFulfilled": 122
+        "previousHoursFulfilled": 122,
+        "letter_template": "Regular"
     },
     {
         "utorid": "prandyj",
         "minHoursOwed": 163,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "kinderb",
         "minHoursOwed": 355,
-        "previousHoursFulfilled": 249
+        "previousHoursFulfilled": 249,
+        "letter_template": "Regular"
     },
     {
         "utorid": "delguah",
         "minHoursOwed": 318,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "gorringa",
         "minHoursOwed": 390,
-        "previousHoursFulfilled": 33
+        "previousHoursFulfilled": 33,
+        "letter_template": "Regular"
     },
     {
         "utorid": "gladdenw",
         "minHoursOwed": 261,
-        "previousHoursFulfilled": 208
+        "previousHoursFulfilled": 208,
+        "letter_template": "Regular"
     },
     {
         "utorid": "maccaughenc",
         "minHoursOwed": 31,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "rubrowc",
         "minHoursOwed": 113,
-        "previousHoursFulfilled": 99
+        "previousHoursFulfilled": 99,
+        "letter_template": "Regular"
     },
     {
         "utorid": "beaulyl",
         "minHoursOwed": 205,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "scrammagef",
         "minHoursOwed": 127,
-        "previousHoursFulfilled": 40
+        "previousHoursFulfilled": 40,
+        "letter_template": "Regular"
     },
     {
         "utorid": "warykt",
         "minHoursOwed": 237,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "peplerl",
         "minHoursOwed": 261,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "seedhousee",
         "minHoursOwed": 191,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "ewinsx",
         "minHoursOwed": 149,
-        "previousHoursFulfilled": 18
+        "previousHoursFulfilled": 18,
+        "letter_template": "Regular"
     },
     {
         "utorid": "ixort",
         "minHoursOwed": 175,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "mosenm",
         "minHoursOwed": 355,
-        "previousHoursFulfilled": 122
+        "previousHoursFulfilled": 122,
+        "letter_template": "Regular"
     },
     {
         "utorid": "arnizf",
         "minHoursOwed": 281,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "fowlep",
         "minHoursOwed": 283,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "cicchilloc",
         "minHoursOwed": 336,
-        "previousHoursFulfilled": 219
+        "previousHoursFulfilled": 219,
+        "letter_template": "Regular"
     },
     {
         "utorid": "klambtr",
         "minHoursOwed": 111,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "crammys",
         "minHoursOwed": 251,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "newsomen",
         "minHoursOwed": 332,
-        "previousHoursFulfilled": 244
+        "previousHoursFulfilled": 244,
+        "letter_template": "Regular"
     },
     {
         "utorid": "benediktg",
         "minHoursOwed": 216,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "fossettn",
         "minHoursOwed": 62,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "blakemani",
         "minHoursOwed": 195,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "vannarb",
         "minHoursOwed": 205,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "ivanishcheva",
         "minHoursOwed": 264,
-        "previousHoursFulfilled": 216
+        "previousHoursFulfilled": 216,
+        "letter_template": "Regular"
     },
     {
         "utorid": "wansburyb",
         "minHoursOwed": 250,
-        "previousHoursFulfilled": 118
+        "previousHoursFulfilled": 118,
+        "letter_template": "Regular"
     },
     {
         "utorid": "frisele",
         "minHoursOwed": 129,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "timberlakew",
         "minHoursOwed": 165,
-        "previousHoursFulfilled": 41
+        "previousHoursFulfilled": 41,
+        "letter_template": "Regular"
     },
     {
         "utorid": "shinnm",
         "minHoursOwed": 261,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "alennikovg",
         "minHoursOwed": 374,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "wernherl",
         "minHoursOwed": 291,
-        "previousHoursFulfilled": 23
+        "previousHoursFulfilled": 23,
+        "letter_template": "Regular"
     },
     {
         "utorid": "spearettg",
         "minHoursOwed": 298,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "duchama",
         "minHoursOwed": 346,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "golling",
         "minHoursOwed": 325,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "jochenf",
         "minHoursOwed": 216,
-        "previousHoursFulfilled": 77
+        "previousHoursFulfilled": 77,
+        "letter_template": "Regular"
     },
     {
         "utorid": "iacomoo",
         "minHoursOwed": 58,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "matchest",
         "minHoursOwed": 385,
-        "previousHoursFulfilled": 226
+        "previousHoursFulfilled": 226,
+        "letter_template": "Regular"
     },
     {
         "utorid": "fressonm",
         "minHoursOwed": 357,
-        "previousHoursFulfilled": 128
+        "previousHoursFulfilled": 128,
+        "letter_template": "Regular"
     },
     {
         "utorid": "heakerd",
         "minHoursOwed": 71,
-        "previousHoursFulfilled": 5
+        "previousHoursFulfilled": 5,
+        "letter_template": "Regular"
     },
     {
         "utorid": "le febref",
         "minHoursOwed": 293,
-        "previousHoursFulfilled": 187
+        "previousHoursFulfilled": 187,
+        "letter_template": "Regular"
     },
     {
         "utorid": "cushs",
         "minHoursOwed": 113,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "kendellc",
         "minHoursOwed": 274,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "mussonk",
         "minHoursOwed": 316,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "salernos",
         "minHoursOwed": 334,
-        "previousHoursFulfilled": 309
+        "previousHoursFulfilled": 309,
+        "letter_template": "Regular"
     },
     {
         "utorid": "longhurstb",
         "minHoursOwed": 101,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "duchesneb",
         "minHoursOwed": 114,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "chappelh",
         "minHoursOwed": 32,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "loudianes",
         "minHoursOwed": 54,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "coshn",
         "minHoursOwed": 292,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "lauxd",
         "minHoursOwed": 338,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "bradbornee",
         "minHoursOwed": 72,
-        "previousHoursFulfilled": 18
+        "previousHoursFulfilled": 18,
+        "letter_template": "Regular"
     },
     {
         "utorid": "saphs",
         "minHoursOwed": 383,
-        "previousHoursFulfilled": 197
+        "previousHoursFulfilled": 197,
+        "letter_template": "Regular"
     },
     {
         "utorid": "rylek",
         "minHoursOwed": 251,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "giannoniz",
         "minHoursOwed": 268,
-        "previousHoursFulfilled": 47
+        "previousHoursFulfilled": 47,
+        "letter_template": "Regular"
     },
     {
         "utorid": "restoricke",
         "minHoursOwed": 170,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "bellwoodb",
         "minHoursOwed": 141,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "cooled",
         "minHoursOwed": 242,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "rotherforthh",
         "minHoursOwed": 157,
-        "previousHoursFulfilled": 48
+        "previousHoursFulfilled": 48,
+        "letter_template": "Regular"
     },
     {
         "utorid": "whittleseaa",
         "minHoursOwed": 67,
-        "previousHoursFulfilled": 6
+        "previousHoursFulfilled": 6,
+        "letter_template": "Regular"
     },
     {
         "utorid": "soigouxc",
         "minHoursOwed": 114,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "azemarc",
         "minHoursOwed": 304,
-        "previousHoursFulfilled": 112
+        "previousHoursFulfilled": 112,
+        "letter_template": "Regular"
     },
     {
         "utorid": "gligorijevici",
         "minHoursOwed": 85,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "effauntl",
         "minHoursOwed": 226,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "tunmorec",
         "minHoursOwed": 109,
-        "previousHoursFulfilled": 8
+        "previousHoursFulfilled": 8,
+        "letter_template": "Regular"
     },
     {
         "utorid": "tampiong",
         "minHoursOwed": 219,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "cawdellm",
         "minHoursOwed": 185,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "lorrainem",
         "minHoursOwed": 331,
-        "previousHoursFulfilled": 292
+        "previousHoursFulfilled": 292,
+        "letter_template": "Regular"
     },
     {
         "utorid": "soggeer",
         "minHoursOwed": 167,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "houltonp",
         "minHoursOwed": 151,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "rosenblumj",
         "minHoursOwed": 224,
-        "previousHoursFulfilled": 40
+        "previousHoursFulfilled": 40,
+        "letter_template": "Regular"
     },
     {
         "utorid": "moxsteadr",
         "minHoursOwed": 205,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "lukianovl",
         "minHoursOwed": 265,
-        "previousHoursFulfilled": 79
+        "previousHoursFulfilled": 79,
+        "letter_template": "Regular"
     },
     {
         "utorid": "donisthorpem",
         "minHoursOwed": 311,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "stansbya",
         "minHoursOwed": 399,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "standevenb",
         "minHoursOwed": 244,
-        "previousHoursFulfilled": 196
+        "previousHoursFulfilled": 196,
+        "letter_template": "Regular"
     },
     {
         "utorid": "ashbornet",
         "minHoursOwed": 271,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "treadgert",
         "minHoursOwed": 292,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "sutcliffp",
         "minHoursOwed": 232,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "oldalll",
         "minHoursOwed": 366,
-        "previousHoursFulfilled": 100
+        "previousHoursFulfilled": 100,
+        "letter_template": "Regular"
     },
     {
         "utorid": "speeksg",
         "minHoursOwed": 232,
-        "previousHoursFulfilled": 141
+        "previousHoursFulfilled": 141,
+        "letter_template": "Regular"
     },
     {
         "utorid": "angellp",
         "minHoursOwed": 139,
-        "previousHoursFulfilled": 60
+        "previousHoursFulfilled": 60,
+        "letter_template": "Regular"
     },
     {
         "utorid": "wherryp",
         "minHoursOwed": 391,
-        "previousHoursFulfilled": 325
+        "previousHoursFulfilled": 325,
+        "letter_template": "Regular"
     },
     {
         "utorid": "ogelsbym",
         "minHoursOwed": 35,
-        "previousHoursFulfilled": 25
+        "previousHoursFulfilled": 25,
+        "letter_template": "Regular"
     },
     {
         "utorid": "biggenn",
         "minHoursOwed": 208,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "crumptonl",
         "minHoursOwed": 349,
-        "previousHoursFulfilled": 272
+        "previousHoursFulfilled": 272,
+        "letter_template": "Regular"
     },
     {
         "utorid": "privettr",
         "minHoursOwed": 127,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "ilyushkinl",
         "minHoursOwed": 164,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "mccormickc",
         "minHoursOwed": 220,
-        "previousHoursFulfilled": 70
+        "previousHoursFulfilled": 70,
+        "letter_template": "Regular"
     },
     {
         "utorid": "crosid",
         "minHoursOwed": 187,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "jentgensj",
         "minHoursOwed": 253,
-        "previousHoursFulfilled": 207
+        "previousHoursFulfilled": 207,
+        "letter_template": "Regular"
     },
     {
         "utorid": "ilchukz",
         "minHoursOwed": 106,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "idam",
         "minHoursOwed": 82,
-        "previousHoursFulfilled": 5
+        "previousHoursFulfilled": 5,
+        "letter_template": "Regular"
     },
     {
         "utorid": "libbyw",
         "minHoursOwed": 33,
-        "previousHoursFulfilled": 4
+        "previousHoursFulfilled": 4,
+        "letter_template": "Regular"
     },
     {
         "utorid": "drayej",
         "minHoursOwed": 37,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "locheadk",
         "minHoursOwed": 387,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "mathevetb",
         "minHoursOwed": 110,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "mclenaghand",
         "minHoursOwed": 376,
-        "previousHoursFulfilled": 144
+        "previousHoursFulfilled": 144,
+        "letter_template": "Regular"
     },
     {
         "utorid": "inderh",
         "minHoursOwed": 286,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "adriane",
         "minHoursOwed": 60,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "gobeauxr",
         "minHoursOwed": 278,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "worgt",
         "minHoursOwed": 394,
         "maxHoursOwed": 500,
-        "previousHoursFulfilled": 252
+        "previousHoursFulfilled": 252,
+        "letter_template": "Regular"
     },
     {
         "utorid": "dellitb",
         "minHoursOwed": 378,
-        "previousHoursFulfilled": 332
+        "previousHoursFulfilled": 332,
+        "letter_template": "Regular"
     },
     {
         "utorid": "woolhousek",
         "minHoursOwed": 76,
-        "previousHoursFulfilled": 54
+        "previousHoursFulfilled": 54,
+        "letter_template": "Regular"
     },
     {
         "utorid": "whatsonc",
         "minHoursOwed": 105,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "aggetth",
         "minHoursOwed": 268,
-        "previousHoursFulfilled": 109
+        "previousHoursFulfilled": 109,
+        "letter_template": "Regular"
     },
     {
         "utorid": "jeevest",
         "minHoursOwed": 293,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "fokerk",
         "minHoursOwed": 88,
-        "previousHoursFulfilled": 1
+        "previousHoursFulfilled": 1,
+        "letter_template": "Regular"
     },
     {
         "utorid": "birniea",
         "minHoursOwed": 323,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "kinnied",
         "minHoursOwed": 205,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "benniond",
         "minHoursOwed": 67,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "dyhousem",
         "minHoursOwed": 281,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "bennisonb",
         "minHoursOwed": 364,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "naired",
         "minHoursOwed": 96,
-        "previousHoursFulfilled": 87
+        "previousHoursFulfilled": 87,
+        "letter_template": "Regular"
     },
     {
         "utorid": "girviny",
         "minHoursOwed": 83,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "skippd",
         "minHoursOwed": 169,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "mowerc",
         "minHoursOwed": 69,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "alowayf",
         "minHoursOwed": 280,
-        "previousHoursFulfilled": 201
+        "previousHoursFulfilled": 201,
+        "letter_template": "Regular"
     },
     {
         "utorid": "sillitow",
         "minHoursOwed": 90,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "pollockc",
         "minHoursOwed": 149,
-        "previousHoursFulfilled": 113
+        "previousHoursFulfilled": 113,
+        "letter_template": "Regular"
     },
     {
         "utorid": "wakefieldl",
         "minHoursOwed": 54,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "juarat",
         "minHoursOwed": 396,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "ridelh",
         "minHoursOwed": 35,
-        "previousHoursFulfilled": 21
+        "previousHoursFulfilled": 21,
+        "letter_template": "Regular"
     },
     {
         "utorid": "flannigank",
         "minHoursOwed": 236,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "cowndenl",
         "minHoursOwed": 351,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "phillimorea",
         "minHoursOwed": 151,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "gressv",
         "minHoursOwed": 83,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "torrieu",
         "minHoursOwed": 187,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "bensent",
         "minHoursOwed": 151,
-        "previousHoursFulfilled": 127
+        "previousHoursFulfilled": 127,
+        "letter_template": "Regular"
     },
     {
         "utorid": "sallowsl",
         "minHoursOwed": 135,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "smeuinf",
         "minHoursOwed": 394,
-        "previousHoursFulfilled": 228
+        "previousHoursFulfilled": 228,
+        "letter_template": "Regular"
     },
     {
         "utorid": "jaffad",
         "minHoursOwed": 396,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "chestlep",
         "minHoursOwed": 219,
-        "previousHoursFulfilled": 115
+        "previousHoursFulfilled": 115,
+        "letter_template": "Regular"
     },
     {
         "utorid": "aldera",
         "minHoursOwed": 303,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "kensalls",
         "minHoursOwed": 226,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "goulbornek",
         "minHoursOwed": 70,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "olivic",
         "minHoursOwed": 132,
-        "previousHoursFulfilled": 130
+        "previousHoursFulfilled": 130,
+        "letter_template": "Regular"
     },
     {
         "utorid": "blazaf",
         "minHoursOwed": 118,
-        "previousHoursFulfilled": 92
+        "previousHoursFulfilled": 92,
+        "letter_template": "Regular"
     },
     {
         "utorid": "kryzhovm",
         "minHoursOwed": 122,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "dyserta",
         "minHoursOwed": 374,
-        "previousHoursFulfilled": 129
+        "previousHoursFulfilled": 129,
+        "letter_template": "Regular"
     },
     {
         "utorid": "iglesiasd",
         "minHoursOwed": 356,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "chislettj",
         "minHoursOwed": 342,
-        "previousHoursFulfilled": 214
+        "previousHoursFulfilled": 214,
+        "letter_template": "Regular"
     },
     {
         "utorid": "gabitesr",
         "minHoursOwed": 258,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "dambrogior",
         "minHoursOwed": 252,
-        "previousHoursFulfilled": 224
+        "previousHoursFulfilled": 224,
+        "letter_template": "Regular"
     },
     {
         "utorid": "bremleys",
         "minHoursOwed": 73,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "muldownien",
         "minHoursOwed": 46,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "brunelc",
         "minHoursOwed": 50,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "kernellr",
         "minHoursOwed": 219,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "elizabethv",
         "minHoursOwed": 213,
-        "previousHoursFulfilled": 66
+        "previousHoursFulfilled": 66,
+        "letter_template": "Regular"
     },
     {
         "utorid": "mottinelliw",
         "minHoursOwed": 399,
-        "previousHoursFulfilled": 220
+        "previousHoursFulfilled": 220,
+        "letter_template": "Regular"
     },
     {
         "utorid": "dowd",
         "minHoursOwed": 217,
-        "previousHoursFulfilled": 72
+        "previousHoursFulfilled": 72,
+        "letter_template": "Regular"
     },
     {
         "utorid": "shovellerz",
         "minHoursOwed": 383,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "serginsonm",
         "minHoursOwed": 87,
-        "previousHoursFulfilled": 4
+        "previousHoursFulfilled": 4,
+        "letter_template": "Regular"
     },
     {
         "utorid": "brambillo",
         "minHoursOwed": 143,
-        "previousHoursFulfilled": 91
+        "previousHoursFulfilled": 91,
+        "letter_template": "Regular"
     },
     {
         "utorid": "beardshalln",
         "minHoursOwed": 285,
-        "previousHoursFulfilled": 28
+        "previousHoursFulfilled": 28,
+        "letter_template": "Regular"
     },
     {
         "utorid": "priestnallu",
         "minHoursOwed": 328,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "fransesl",
         "minHoursOwed": 372,
-        "previousHoursFulfilled": 221
+        "previousHoursFulfilled": 221,
+        "letter_template": "Regular"
     },
     {
         "utorid": "darlastonb",
         "minHoursOwed": 377,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "rackamh",
         "minHoursOwed": 59,
-        "previousHoursFulfilled": 14
+        "previousHoursFulfilled": 14,
+        "letter_template": "Regular"
     },
     {
         "utorid": "robertza",
         "minHoursOwed": 340,
-        "previousHoursFulfilled": 166
+        "previousHoursFulfilled": 166,
+        "letter_template": "Regular"
     },
     {
         "utorid": "dowryb",
         "minHoursOwed": 269,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "lamartinet",
         "minHoursOwed": 235,
-        "previousHoursFulfilled": 59
+        "previousHoursFulfilled": 59,
+        "letter_template": "Regular"
     },
     {
         "utorid": "mumbersond",
         "minHoursOwed": 265,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "cottilll",
         "minHoursOwed": 214,
-        "previousHoursFulfilled": 58
+        "previousHoursFulfilled": 58,
+        "letter_template": "Regular"
     },
     {
         "utorid": "cramptong",
         "minHoursOwed": 202,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "lamblotl",
         "minHoursOwed": 392,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "edmeadsl",
         "minHoursOwed": 352,
-        "previousHoursFulfilled": 84
+        "previousHoursFulfilled": 84,
+        "letter_template": "Regular"
     },
     {
         "utorid": "roadt",
         "minHoursOwed": 232,
-        "previousHoursFulfilled": 81
+        "previousHoursFulfilled": 81,
+        "letter_template": "Regular"
     },
     {
         "utorid": "auting",
         "minHoursOwed": 256,
-        "previousHoursFulfilled": 4
+        "previousHoursFulfilled": 4,
+        "letter_template": "Regular"
     },
     {
         "utorid": "maccaghana",
         "minHoursOwed": 366,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "de hoogez",
         "minHoursOwed": 34,
-        "previousHoursFulfilled": 32
+        "previousHoursFulfilled": 32,
+        "letter_template": "Regular"
     },
     {
         "utorid": "buffink",
         "minHoursOwed": 397,
-        "previousHoursFulfilled": 95
+        "previousHoursFulfilled": 95,
+        "letter_template": "Regular"
     },
     {
         "utorid": "blakeya",
         "minHoursOwed": 346,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "falconerb",
         "minHoursOwed": 115,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "windrossm",
         "minHoursOwed": 222,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "fuleph",
         "minHoursOwed": 330,
-        "previousHoursFulfilled": 237
+        "previousHoursFulfilled": 237,
+        "letter_template": "Regular"
     },
     {
         "utorid": "readshawr",
         "minHoursOwed": 55,
-        "previousHoursFulfilled": 21
+        "previousHoursFulfilled": 21,
+        "letter_template": "Regular"
     },
     {
         "utorid": "cuerdallr",
         "minHoursOwed": 266,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "cardern",
         "minHoursOwed": 164,
-        "previousHoursFulfilled": 141
+        "previousHoursFulfilled": 141,
+        "letter_template": "Regular"
     },
     {
         "utorid": "kempg",
         "minHoursOwed": 369,
-        "previousHoursFulfilled": 218
+        "previousHoursFulfilled": 218,
+        "letter_template": "Regular"
     },
     {
         "utorid": "rayntona",
         "minHoursOwed": 137,
-        "previousHoursFulfilled": 126
+        "previousHoursFulfilled": 126,
+        "letter_template": "Regular"
     },
     {
         "utorid": "mayella",
         "minHoursOwed": 317,
-        "previousHoursFulfilled": 29
+        "previousHoursFulfilled": 29,
+        "letter_template": "Regular"
     },
     {
         "utorid": "basketfieldd",
         "minHoursOwed": 353,
-        "previousHoursFulfilled": 256
+        "previousHoursFulfilled": 256,
+        "letter_template": "Regular"
     },
     {
         "utorid": "rozenbaumd",
         "minHoursOwed": 272,
-        "previousHoursFulfilled": 218
+        "previousHoursFulfilled": 218,
+        "letter_template": "Regular"
     },
     {
         "utorid": "follinga",
         "minHoursOwed": 184,
-        "previousHoursFulfilled": 168
+        "previousHoursFulfilled": 168,
+        "letter_template": "Regular"
     },
     {
         "utorid": "gettyl",
         "minHoursOwed": 385,
-        "previousHoursFulfilled": 342
+        "previousHoursFulfilled": 342,
+        "letter_template": "Regular"
     },
     {
         "utorid": "neaveb",
         "minHoursOwed": 30,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "leiskw",
         "minHoursOwed": 301,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "anteckia",
         "minHoursOwed": 375,
-        "previousHoursFulfilled": 37
+        "previousHoursFulfilled": 37,
+        "letter_template": "Regular"
     },
     {
         "utorid": "prandym",
         "minHoursOwed": 342,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "schubbertc",
         "minHoursOwed": 119,
-        "previousHoursFulfilled": 42
+        "previousHoursFulfilled": 42,
+        "letter_template": "Regular"
     },
     {
         "utorid": "matsond",
         "minHoursOwed": 145,
-        "previousHoursFulfilled": 21
+        "previousHoursFulfilled": 21,
+        "letter_template": "Regular"
     },
     {
         "utorid": "jeannardb",
         "minHoursOwed": 181,
-        "previousHoursFulfilled": 91
+        "previousHoursFulfilled": 91,
+        "letter_template": "Regular"
     },
     {
         "utorid": "pritchitta",
         "minHoursOwed": 76,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "ricec",
         "minHoursOwed": 313,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "elfesg",
         "minHoursOwed": 291,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "decourtl",
         "minHoursOwed": 398,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "verneya",
         "minHoursOwed": 83,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "crumpem",
         "minHoursOwed": 97,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "grinovr",
         "minHoursOwed": 354,
-        "previousHoursFulfilled": 297
+        "previousHoursFulfilled": 297,
+        "letter_template": "Regular"
     },
     {
         "utorid": "heinricie",
         "minHoursOwed": 400,
-        "previousHoursFulfilled": 356
+        "previousHoursFulfilled": 356,
+        "letter_template": "Regular"
     },
     {
         "utorid": "mulkerrinso",
         "minHoursOwed": 361,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "braggg",
         "minHoursOwed": 283,
-        "previousHoursFulfilled": 2
+        "previousHoursFulfilled": 2,
+        "letter_template": "Regular"
     },
     {
         "utorid": "woodworths",
         "minHoursOwed": 318,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "whelbandl",
         "minHoursOwed": 112,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "hovela",
         "minHoursOwed": 349,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "mobberleym",
         "minHoursOwed": 263,
-        "previousHoursFulfilled": 50
+        "previousHoursFulfilled": 50,
+        "letter_template": "Regular"
     },
     {
         "utorid": "justune",
         "minHoursOwed": 371,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "liverk",
         "minHoursOwed": 236,
-        "previousHoursFulfilled": 232
+        "previousHoursFulfilled": 232,
+        "letter_template": "Regular"
     },
     {
         "utorid": "riderg",
         "minHoursOwed": 109,
-        "previousHoursFulfilled": 26
+        "previousHoursFulfilled": 26,
+        "letter_template": "Regular"
     },
     {
         "utorid": "ghelerdinid",
         "minHoursOwed": 191,
-        "previousHoursFulfilled": 166
+        "previousHoursFulfilled": 166,
+        "letter_template": "Regular"
     },
     {
         "utorid": "markeys",
         "minHoursOwed": 160,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "scaddono",
         "minHoursOwed": 55,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "oddyk",
         "minHoursOwed": 37,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "callfj",
         "minHoursOwed": 71,
-        "previousHoursFulfilled": 5
+        "previousHoursFulfilled": 5,
+        "letter_template": "Regular"
     },
     {
         "utorid": "booelns",
         "minHoursOwed": 376,
-        "previousHoursFulfilled": 290
+        "previousHoursFulfilled": 290,
+        "letter_template": "Regular"
     },
     {
         "utorid": "mathiassend",
         "minHoursOwed": 79,
-        "previousHoursFulfilled": 4
+        "previousHoursFulfilled": 4,
+        "letter_template": "Regular"
     },
     {
         "utorid": "medlicotth",
         "minHoursOwed": 60,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "matiebep",
         "minHoursOwed": 255,
-        "previousHoursFulfilled": 69
+        "previousHoursFulfilled": 69,
+        "letter_template": "Regular"
     },
     {
         "utorid": "sainthillg",
         "minHoursOwed": 332,
-        "previousHoursFulfilled": 232
+        "previousHoursFulfilled": 232,
+        "letter_template": "Regular"
     },
     {
         "utorid": "hatliffel",
         "minHoursOwed": 101,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "hinrichss",
         "minHoursOwed": 52,
-        "previousHoursFulfilled": 27
+        "previousHoursFulfilled": 27,
+        "letter_template": "Regular"
     },
     {
         "utorid": "cuschieril",
         "minHoursOwed": 64,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "cashamh",
         "minHoursOwed": 167,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "estcotm",
         "minHoursOwed": 209,
-        "previousHoursFulfilled": 79
+        "previousHoursFulfilled": 79,
+        "letter_template": "Regular"
     },
     {
         "utorid": "jagelsp",
         "minHoursOwed": 292,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "elldreda",
         "minHoursOwed": 300,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "canwellc",
         "minHoursOwed": 235,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "ashtonhurstb",
         "minHoursOwed": 362,
-        "previousHoursFulfilled": 157
+        "previousHoursFulfilled": 157,
+        "letter_template": "Regular"
     },
     {
         "utorid": "marshfielda",
         "minHoursOwed": 144,
-        "previousHoursFulfilled": 89
+        "previousHoursFulfilled": 89,
+        "letter_template": "Regular"
     },
     {
         "utorid": "parisok",
         "minHoursOwed": 222,
-        "previousHoursFulfilled": 160
+        "previousHoursFulfilled": 160,
+        "letter_template": "Regular"
     },
     {
         "utorid": "mclugishs",
         "minHoursOwed": 88,
-        "previousHoursFulfilled": 42
+        "previousHoursFulfilled": 42,
+        "letter_template": "Regular"
     },
     {
         "utorid": "sweetenhama",
         "minHoursOwed": 186,
-        "previousHoursFulfilled": 25
+        "previousHoursFulfilled": 25,
+        "letter_template": "Regular"
     },
     {
         "utorid": "gloye",
         "minHoursOwed": 161,
-        "previousHoursFulfilled": 150
+        "previousHoursFulfilled": 150,
+        "letter_template": "Regular"
     },
     {
         "utorid": "skeechs",
         "minHoursOwed": 375,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     },
     {
         "utorid": "giovannacc@is",
         "minHoursOwed": 298,
-        "previousHoursFulfilled": 0
+        "previousHoursFulfilled": 0,
+        "letter_template": "Regular"
     }
 ]

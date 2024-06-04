@@ -12,6 +12,7 @@ import type {
     WageChunk,
     InstructorPreference,
     ApplicantMatchingDatum,
+    LetterTemplate,
 } from "./internal-types";
 // Minimal types contain the minimum amount of information needed to reconstruct
 // a particular object. They lack IDs and may be flat compared to what is actually used
@@ -24,6 +25,7 @@ export type MinimalSession = Omit<
     "applications_visible_to_instructors"
 >;
 export type MinimalContractTemplate = NoId<ContractTemplate>;
+export type MinimalLetterTemplate = NoId<LetterTemplate>;
 export type MinimalInstructor = NoId<Instructor>;
 export type MinimalWageChunk = NoId<WageChunk>;
 export type MinimalApplicant = NoId<Applicant>;
@@ -88,6 +90,7 @@ export interface MinimalApplicantMatchingDatum
         NoId<ApplicantMatchingDatum>,
         | "applicant"
         | "session"
+        | "letter_template"
         | "note"
         | "hidden"
         | "max_hours_owed"
@@ -95,6 +98,7 @@ export interface MinimalApplicantMatchingDatum
         | "prev_hours_fulfilled"
     > {
     utorid: Utorid;
+    letter_template: string;
     max_hours_owed: number | null;
     min_hours_owed: number | null;
     prev_hours_fulfilled: number | null;

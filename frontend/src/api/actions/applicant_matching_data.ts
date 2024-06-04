@@ -21,9 +21,12 @@ import type {
 import { activeSessionSelector } from "./sessions";
 import { activeRoleSelector } from "./users";
 import { applicantMatchingDataReducer } from "../reducers/applicant_matching_data";
+import { sessionsReducer } from "../reducers/sessions";
 import { createSelector } from "reselect";
 import { applicantsSelector } from "./applicants";
 import { ExportFormat, PrepareDataFunc } from "../../libs/import-export";
+import { letterTemplatesSelector } from "./letter_templates";
+import type { Session } from "../defs/types";
 
 // actions
 export const fetchApplicantMatchingDataSuccess = actionFactory<
@@ -50,11 +53,16 @@ const sessionToSessionId = flattenIdFactory<"session", "session_id">(
     "session",
     "session_id"
 );
+const letterTemplateToLetterTemplateId = flattenIdFactory<
+    "letter_template",
+    "letter_template_id"
+>("letter_template", "letter_template_id");
 
 function prepForApi(data: Partial<ApplicantMatchingDatum>) {
-    return sessionToSessionId(
-        applicantToApplicantId(data)
-    ) as Partial<RawApplicantMatchingDatum>;
+    return letterTemplateToLetterTemplateId(
+        sessionToSessionId(
+            applicantToApplicantId(data)
+    )) as Partial<RawApplicantMatchingDatum>;
 }
 
 // dispatchers
@@ -168,27 +176,62 @@ const _applicantMatchingDataSelector = createSelector(
     localStoreSelector,
     (state) => state._modelData
 );
+const _confirmationsByApplicantMatchingDatumIdSelector = createSelector(
+    localStoreSelector,
+    (state) => state._confirmationsByApplicantMatchingDatumId
+);
+
+// Declaring session selector variable here instead of importing, bug workaround
+const localSessionStoreSelector = sessionsReducer._localStoreSelector;
+const sessionsSelector = createSelector(
+    localSessionStoreSelector,
+    (state) => state._modelData as Session[]
+);
 
 export const applicantMatchingDataSelector = createSelector(
-    [_applicantMatchingDataSelector, applicantsSelector],
-    (applicantMatchingData, applicants) => {
+    [ 
+        _applicantMatchingDataSelector,
+        applicantsSelector,
+        sessionsSelector,
+        letterTemplatesSelector,
+        _confirmationsByApplicantMatchingDatumIdSelector,
+    ],
+    (
+        applicantMatchingData,
+        applicants,
+        sessions,
+        letterTemplates,
+        confirmationsByApplicantMatchingDatumIdHash
+    ) => {
+        if (applicantMatchingData.length === 0) {
+            return [];
+        }
         const applicantsById = arrayToHash(applicants);
-        return applicantMatchingData
-            .map((applicantMatchingDatum) => {
-                const { applicant_id, session_id, ...rest } =
-                    applicantMatchingDatum;
+        const letterTemplatesById = arrayToHash(letterTemplates);
+        const sessionsById = arrayToHash(sessions);
+        return (
+            applicantMatchingData
+                .map((applicantMatchingDatum) => {
+                    const { applicant_id, session_id, letter_template_id, ...rest } =
+                        applicantMatchingDatum;
+                    const confirmations =
+                        confirmationsByApplicantMatchingDatumIdHash[applicantMatchingDatum.id];
 
-                return {
-                    ...rest,
-                    applicant: applicantsById[applicant_id] || {},
-                    session: { id: session_id },
-                } as ApplicantMatchingDatum;
-            })
-            .filter(
-                (applicantMatchingDatum) =>
-                    applicantMatchingDatum.applicant.id != null &&
-                    applicantMatchingDatum.session.id != null
-            );
+                    return {
+                        ...rest,
+                        applicant: applicantsById[applicant_id] || {},
+                        session: sessionsById[session_id] || {},
+                        letter_template: letterTemplatesById[letter_template_id],
+                        confirmations
+                    } as ApplicantMatchingDatum;
+                })
+                .filter((applicantMatchingDatum) => {
+                    return  (
+                        applicantMatchingDatum.applicant.id != null &&
+                        applicantMatchingDatum.session.id != null
+                    );
+                })
+        ); 
     }
 );
 

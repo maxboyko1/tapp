@@ -19,6 +19,7 @@ import {
     Duty,
     MinimalApplicantMatchingDatum,
     ApplicantMatchingDatum,
+    LetterTemplate,
 } from "../api/defs/types";
 import {
     prepareMinimal,
@@ -401,6 +402,7 @@ export const diffImport = {
             applicantMatchingData: ApplicantMatchingDatum[];
             applicants: Applicant[];
             session: Session;
+            letterTemplates: LetterTemplate[];
         }
     ): DiffSpec<MinimalApplicantMatchingDatum, ApplicantMatchingDatum>[] {
         return importedApplicantMatchingData.map((applicantMatchingDatum) =>
@@ -413,11 +415,13 @@ export const diffImport = {
             applicantMatchingData: ApplicantMatchingDatum[];
             applicants: Applicant[];
             session: Session;
+            letterTemplates: LetterTemplate[];
         }
     ): DiffSpec<MinimalApplicantMatchingDatum, ApplicantMatchingDatum> {
         const existingApplicantMatchingData = context.applicantMatchingData;
         const applicants = context.applicants;
         const session = context.session;
+        const letterTemplates = context.letterTemplates;
 
         const ret: DiffSpec<
             MinimalApplicantMatchingDatum,
@@ -454,6 +458,7 @@ export const diffImport = {
                     id: matchingApplicantMatchingDatum.id,
                     session: session,
                     applicants: applicants,
+                    letterTemplates: letterTemplates,
                 }
             );
         } else {
@@ -462,6 +467,7 @@ export const diffImport = {
                 {
                     session: session,
                     applicants: applicants,
+                    letterTemplates: letterTemplates,
                 }
             );
         }

@@ -145,6 +145,11 @@ export interface RawContractTemplate extends HasId {
     template_name: string;
 }
 
+export interface RawLetterTemplate extends HasId {
+    template_file: string;
+    template_name: string;
+}
+
 export interface RawWageChunk extends HasId {
     assignment_id: number;
     start_date: string;
@@ -157,6 +162,26 @@ export interface RawAttachment {
     file_name: string;
     mime_type: string;
     content: string;
+}
+
+export interface RawConfirmation extends HasId {
+    applicant_matching_datum_id: number;
+    first_name: string;
+    last_name: string;
+    email: string;
+    ta_coordinator_name: string;
+    ta_coordinator_email: string;
+    signature: string | null;
+    emailed_date: string | null;
+    accepted_date: string | null;
+    rejected_date: string | null;
+    withdrawn_date: string | null;
+    url_token: string;
+    nag_count: number;
+    status: "provisional" | "pending" | "accepted" | "rejected" | "withdrawn";
+    min_hours_owed: number;
+    max_hours_owed: number;
+    prev_hours_fulfilled: number;
 }
 
 export interface RawOffer extends HasId {
@@ -204,9 +229,21 @@ export interface RawInstructorPreference {
 export interface RawApplicantMatchingDatum extends HasId {
     applicant_id: number;
     session_id: number;
+    letter_template_id: number;
     max_hours_owed: number | null;
     min_hours_owed: number | null;
     prev_hours_fulfilled: number | null;
+    active_confirmation_status:
+        | "accepted"
+        | "rejected"
+        | "withdrawn"
+        | "provisional"
+        | "pending"
+        | "no_letter"
+        | null;
+    active_confirmation_url_token: string | null;
+    active_confirmation_recent_activity_date: string | null;
+    active_confirmation_nag_count: number | null;
     note: string | null;
     hidden: boolean;
 }

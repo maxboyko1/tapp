@@ -51,15 +51,36 @@ class Api::V1::Admin::ApplicantMatchingDataController < ApplicationController
             :min_hours_owed,
             :max_hours_owed,
             :prev_hours_fulfilled,
+            :letter_template_id,
             :note,
             :hidden
         )
     end
 
     def update
-        start_transaction_and_rollback_on_exception do
-            @applicant_matching_datum.update!(applicant_matching_datum_params)
-            render_success @applicant_matching_datum
-        end
+        render_on_condition(
+            object: @applicant_matching_datum,
+            condition:
+                proc do
+                    # if the appointment has an active confirmation and it is not provisional or withdrawn,
+                    # we cannot update the appointment
+                    if @applicant_matching_datum.active_confirmation &&
+                           !%w[provisional withdrawn].include?(
+                               @applicant_matching_datum.active_confirmation.status
+                           )
+                        raise StandardError,
+                              "Cannot modify an appointment that has an active confirmation with status '#{
+                                  @applicant_matching_datum.active_confirmation.status
+                              }'"
+                    end
+                    @applicant_matching_datum.update(applicant_matching_datum_params)
+                    # If we ever get to the point where we are updating an appointment, it
+                    # cannot have an active appointment confirmation associated with it (because it
+                    # just changed, so it will be out of sync with the active confirmation).
+                    # Therefore, we remove the active confirmation on any update.
+                    @applicant_matching_datum.active_confirmation = nil
+                    @applicant_matching_datum.save!
+                end
+        )
     end
 end
