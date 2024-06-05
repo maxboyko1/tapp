@@ -10,6 +10,7 @@ import {
     Applicant,
     ApplicantMatchingDatum,
     LetterTemplate,
+    RequireSome
 } from "../../api/defs/types";
 
 const DEFAULT_APPOINTMENT = {
@@ -21,20 +22,14 @@ const DEFAULT_APPOINTMENT = {
     letter_template: {},
 };
 
-export interface NullableAppointment 
-    extends Omit<ApplicantMatchingDatum, "id"> {
-    id?: ApplicantMatchingDatum["id"] | null;
-    session_id?: number | null;
-    applicant_id?: number | null;
-    letter_template_id?: number | null;
-}
-
 /**
  * Edit information about an appointment
  */
 export function AppointmentEditor(props: {
-    applicantMatchingDatum: NullableAppointment;
-    setApplicantMatchingDatum: (applicantMatchingDatum: NullableAppointment) => any;
+    applicantMatchingDatum: Partial<ApplicantMatchingDatum>;
+    setApplicantMatchingDatum: (
+        applicantMatchingDatum: Partial<ApplicantMatchingDatum>
+    ) => any;
     applicants: Applicant[];
     letterTemplates: LetterTemplate[];
     defaultLetterTemplate?: LetterTemplate;
@@ -43,15 +38,15 @@ export function AppointmentEditor(props: {
     const {
         applicantMatchingDatum: applicantMatchingDatumProp,
         setApplicantMatchingDatum,
-        applicants,
+        applicants = [],
         letterTemplates,
         defaultLetterTemplate,
         lockApplicant,
     } = props;
-    const applicantMatchingDatum = React.useMemo(
-        () => ({ ...DEFAULT_APPOINTMENT, ...applicantMatchingDatumProp }),
-        [applicantMatchingDatumProp]
-    )
+    const applicantMatchingDatum = {
+        ...DEFAULT_APPOINTMENT,
+        ...applicantMatchingDatumProp,
+    } as RequireSome<ApplicantMatchingDatum, keyof typeof DEFAULT_APPOINTMENT>;
 
     function setApplicant(applicants: Applicant[]) {
         const applicant = applicants[applicants.length - 1] || { id: null };

@@ -1,23 +1,9 @@
 import React from "react";
 import { Modal, Button, Spinner, Alert } from "react-bootstrap";
-import { 
-    AppointmentEditor,
-    NullableAppointment,
-} from "../../../components/forms/appointment-editor";
+import { AppointmentEditor } from "../../../components/forms/appointment-editor";
 import { ApplicantMatchingDatum, LetterTemplate } from "../../../api/defs/types";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
 import { upsertApplicantMatchingDatum } from "../../../api/actions";
-
-function generateNullableAppointment(
-    applicantMatchingDatum: ApplicantMatchingDatum
-): NullableAppointment {
-    return {
-        ...applicantMatchingDatum,
-        session_id: applicantMatchingDatum.session.id,
-        applicant_id: applicantMatchingDatum.applicant.id,
-        letter_template_id: applicantMatchingDatum.letter_template.id,
-    }
-}
 
 export function EditAppointmentDialog({
     show,
@@ -33,15 +19,13 @@ export function EditAppointmentDialog({
     letterTemplates: LetterTemplate[];
 }) {
     const [newApplicantMatchingDatum, setNewApplicantMatchingDatum] =
-        React.useState<NullableAppointment>(() =>
-            generateNullableAppointment(applicantMatchingDatum)
-        );
+        React.useState<Partial<ApplicantMatchingDatum>>(() => applicantMatchingDatum);
     const [inProgress, setInProgress] = React.useState(false);
 
     React.useEffect(() => {
         if (!show) {
             // If the dialog is hidden, reset the state
-            setNewApplicantMatchingDatum(generateNullableAppointment(applicantMatchingDatum));
+            setNewApplicantMatchingDatum(() => applicantMatchingDatum);
         }
     }, [show, applicantMatchingDatum]);
 
