@@ -133,7 +133,7 @@
 <text text-anchor="start" x="425.5" y="-210.5" font-family="Arial" font-size="10.00">hidden </text>
 <text text-anchor="start" x="457.5" y="-210.5" font-family="Arial Italic" font-size="10.00" fill="#999999">boolean</text>
 <text text-anchor="start" x="425.5" y="-197.5" font-family="Arial" font-size="10.00">letter_template_id </text>
-<text text-anchor="start" x="506.5" y="-197.5" font-family="Arial Italic" font-size="10.00" fill="#999999">integer (8) ∗ FK</text>
+<text text-anchor="start" x="506.5" y="-197.5" font-family="Arial Italic" font-size="10.00" fill="#999999">integer (8) FK</text>
 <text text-anchor="start" x="425.5" y="-184.5" font-family="Arial" font-size="10.00">max_hours_owed </text>
 <text text-anchor="start" x="505.5" y="-184.5" font-family="Arial Italic" font-size="10.00" fill="#999999">float</text>
 <text text-anchor="start" x="425.5" y="-171.5" font-family="Arial" font-size="10.00">min_hours_owed </text>

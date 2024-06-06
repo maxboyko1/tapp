@@ -54,7 +54,7 @@ ActiveRecord::Schema.define(version: 2024_04_25_153020) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "active_confirmation_id"
-    t.bigint "letter_template_id", null: false
+    t.bigint "letter_template_id"
     t.index ["active_confirmation_id"], name: "index_applicant_matching_data_on_active_confirmation_id"
     t.index ["applicant_id"], name: "index_applicant_matching_data_on_applicant_id"
     t.index ["letter_template_id"], name: "index_applicant_matching_data_on_letter_template_id"

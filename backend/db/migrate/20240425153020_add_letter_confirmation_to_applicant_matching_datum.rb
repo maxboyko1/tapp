@@ -5,6 +5,6 @@ class AddLetterConfirmationToApplicantMatchingDatum < ActiveRecord::Migration[6.
                       foreign_key: { to_table: :confirmations }
         add_reference :applicant_matching_data,
                       :letter_template,
-                      null: false, foreign_key: true
+                      foreign_key: true
     end
 end
