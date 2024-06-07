@@ -82,7 +82,7 @@ function PositionRow({
     );
 
     const progress = React.useMemo(() => {
-        if (["over", "matched"].includes(positionSummary.filledStatus)) {
+        if (["matched", "n/a", "over"].includes(positionSummary.filledStatus)) {
             return 100;
         } else if (positionSummary.filledStatus === "under") {
             return round(
