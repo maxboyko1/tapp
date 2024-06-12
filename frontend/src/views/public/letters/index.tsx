@@ -123,20 +123,6 @@ export function LetterView() {
                                 <div>
                                     <label htmlFor="signature_name">
                                         <p>
-                                            I confirm that I will be registered
-                                            as a University of Toronto student
-                                            or PDF on the date that this
-                                            appointment begins. I understand
-                                            that if I should cease to be
-                                            registered as a University of
-                                            Toronto student or PDF during the
-                                            period of this appointment, for any
-                                            reason other than convocation, I
-                                            must immediately notify my
-                                            supervisor, and my appointment may
-                                            be terminated.
-                                        </p>
-                                        <p>
                                             To confirm your participation, type your
                                             initials:
                                         </p>
