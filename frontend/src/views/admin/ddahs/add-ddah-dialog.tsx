@@ -12,9 +12,12 @@ interface PartialDdah {
     duties: Duty[];
 }
 
-const BLANK_DDAH: PartialDdah = {
+const INITIAL_DDAH: PartialDdah = {
     assignment: null,
-    duties: [],
+    duties: [
+        {order: 1, hours: 1, description: "meeting:Meetings with instructor including initial DDAH review"},
+        {order: 2, hours: 0.5, description: "meeting:Meetings with instructor including mid-term DDAH review"}
+    ],
 };
 
 /**
@@ -60,7 +63,7 @@ export function ConnectedAddDdahDialog(props: {
     onHide?: (...args: any) => any;
 }) {
     const { show, onHide = () => {} } = props;
-    const [newDdah, setNewDdah] = React.useState<PartialDdah>(BLANK_DDAH);
+    const [newDdah, setNewDdah] = React.useState<PartialDdah>(INITIAL_DDAH);
     const [inProgress, setInProgress] = React.useState(false);
 
     const ddahs = useSelector(ddahsSelector) as Ddah[];
@@ -97,7 +100,7 @@ export function ConnectedAddDdahDialog(props: {
     React.useEffect(() => {
         if (!show) {
             // If the dialog is hidden, reset the state
-            setNewDdah(BLANK_DDAH);
+            setNewDdah(INITIAL_DDAH);
         }
     }, [show]);
 

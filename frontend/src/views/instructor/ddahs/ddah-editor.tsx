@@ -56,7 +56,7 @@ const categoryInformation: Record<
     meeting: {
         title: "Meetings",
         helpText:
-            "Meetings must include a minimum of 0.5 hours for a mid-semester check-in where you discuss with the TA whether their workload is appropriately balanced and whether the DDAH needs to be modified.",
+            "Meetings must include a minimum of 1.0 hour at the start of the term that includes: the DDAH review and any other items you wish to cover. An additional 0.5 hours is required for a mid-semester check-in that includes where you discuss with the TA whether their workload is appropriately balanced, whether the DDAH needs to be modified and any other items you wish to cover.",
     },
     contact: {
         title: "Contact Time",
