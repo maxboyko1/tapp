@@ -8,6 +8,8 @@ import {
 } from "../../../libs/import-export";
 import { useSelector } from "react-redux";
 import { activePositionSelector } from "../store/actions";
+import { instructorApplicationsComparator } from "./applications-table";
+import { Application } from "../../../api/defs/types";
 
 /**
  * Allows for the download of a file blob containing the exported instructors.
@@ -27,11 +29,17 @@ export function ConnectedExportApplicationsAction() {
             activePosition
                 ? allApplications.filter((app) =>
                       app.position_preferences.some(
-                          (pref) => pref.position.id === activePosition.id
+                          (pref) => pref.position.id === activePosition.id &&
+                                    pref.preference_level !== 0 &&
+                                    pref.preference_level !== -1
                       )
                   )
                 : [],
         [activePosition, allApplications]
+    );
+
+    applications.sort((a: Application, b: Application) =>
+        instructorApplicationsComparator(activePosition, a, b)
     );
 
     React.useEffect(() => {

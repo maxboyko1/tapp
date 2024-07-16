@@ -7,6 +7,7 @@ import {
     Application,
     Assignment,
     InstructorPreference,
+    Position
 } from "../../../api/defs/types";
 import { generateHeaderCell } from "../../../components/table-utils";
 import { ApplicantRatingAndComment } from "../../../components/applicant-rating";
@@ -70,10 +71,15 @@ export function InstructorApplicationsTable() {
             application.position_preferences.some(
                 (preference) =>
                     preference.position.id === activePosition.id &&
-                    preference.preference_level !== 0
+                    preference.preference_level !== 0 &&
+                    preference.preference_level !== -1
             )
         );
     }, [activePosition, allApplications]);
+
+    flatApplications.sort((a: Application, b: Application) => 
+        instructorApplicationsComparator(activePosition, a, b)
+    );
 
     const ConnectedRating = ({
         application,
@@ -265,4 +271,85 @@ export function InstructorApplicationsTable() {
             </Modal>
         </React.Fragment>
     );
+}
+
+/**
+ * Sort comparator enforcing default ordering scheme for the tables of applications
+ * in this view, which is determined by the two applicant's programs, department and
+ * specified levels of preference for the position. This order is to be used for both 
+ * the table rendered on the page in this view as well as the associated export.
+ *
+ * Returns < 0 if A comes before B, returns > 0 if A comes after B, and 0 otherwise.
+ */
+export function instructorApplicationsComparator(
+    position: Position | null,
+    A: Application,
+    B: Application 
+): number {
+    if (!position) {
+        return 0;
+    }
+
+    const aPref = A.position_preferences.find(pref => pref.position.id === position.id);
+    const bPref = B.position_preferences.find(pref => pref.position.id === position.id);
+    if (!aPref || !bPref) {
+        return 0;
+    }
+
+    const aPriority = getApplicantPriority(A);
+    const bPriority = getApplicantPriority(B);
+    if (aPriority !== bPriority) {
+        return aPriority - bPriority;
+    }
+    return bPref.preference_level - aPref.preference_level;
+}
+
+/**
+ * Helper function for instructorApplicationsComparator(). Returns a number representing
+ * a priority level for the given application based on the applicant's program and department,
+ * with lower numbers signifying higher priority.
+ */
+function getApplicantPriority(
+    application: Application
+) {
+    if (!application.program || !application.department) {
+        return 11;
+    }
+    const dept = application.department.toLowerCase();
+    const prog = application.program.toLowerCase();
+
+    if (["p", "m", "mscac"].includes(prog)) {
+        if (dept === "cs") {
+            switch (prog) {
+                case "p":
+                    return 1;
+                case "m":
+                    return 2;
+                default: // "mscac"
+                    return 3;
+            }
+        } else {
+            switch (prog) {
+                case "p":
+                    return 4;
+                case "m":
+                    return 5;
+                default: // "mscac"
+                    return 6;
+            }
+        }
+    }
+
+    if (prog === "pd") {
+        return 7;
+    }
+    if (prog === "u") {
+        if (dept === "cs") {
+            return 8;
+        } else {
+            return 9;
+        }
+    }
+
+    return 10;
 }

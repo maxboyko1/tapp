@@ -5,7 +5,7 @@ import { FilterType, filterMap } from "./filters";
 export const defaultFilterList: Record<FilterType, any[]> = {
     program: [],
     department: [],
-    taPositionPref: [],
+    taPositionPref: [0, -1, "other"],
     status: ["unassignable", "hidden"],
     hourFulfillment: [],
 };
@@ -77,6 +77,33 @@ export function FilterModal({
                                         setFilterList={setFilterList}
                                     />
                                 )}
+                                <Button
+                                    onClick={() => {
+                                        setFilterList({
+                                            ...filterList,
+                                            [filterKey]: []
+                                        });
+                                    }}
+                                >
+                                    Select All
+                                </Button>
+                                <Button
+                                    variant="light"
+                                    onClick={() => {
+                                        const filterKeyAllOptions = filterMap[filterKey].values.map(
+                                            filterOption => filterOption.value
+                                        );
+                                        if (filterMap[filterKey].hasOther) {
+                                            filterKeyAllOptions.push("other");
+                                        }
+                                        setFilterList({
+                                            ...filterList,
+                                            [filterKey]: filterKeyAllOptions
+                                        });
+                                    }}
+                                >
+                                    Deselect All
+                                </Button>
                             </Form.Group>
                         );
                     })}
@@ -114,7 +141,7 @@ function FilterCheckbox({
         <Form.Check
             type="checkbox"
             label={filterItem.label}
-            defaultChecked={filterListIndex === -1}
+            checked={filterListIndex === -1}
             onChange={() => {
                 const newFilterList = { ...filterList };
                 if (filterListIndex === -1) {
