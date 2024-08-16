@@ -66,7 +66,10 @@ const categoryInformation: Record<
     marking: {
         title: "Marking/Grading",
         helpText:
-            'A breakdown of when assignments are expected to be available for marking, how long it will take to mark them, and the expected turnaround time must be included on a per-assignment basis. For example, you might write "20 hours marking Midterm 1; 120 tests; 10 minutes per test; available on Oct 4; expected turnaround time 5 days."',
+            'Teaching Assistants shall be granted a reasonable period of time of no less than 4 business days (minimum of 96 hours) to grade student coursework. TAs are not expected to grade on the weekends, holidays, or any of the University closure days. Any organization of marking parties outside of business hours can only be done on a voluntary basis and TAs must be polled their preferences to work in the evenings and weekends. If no turnaround time for an assignment is listed in the DDAH form, a Teaching Assistant will be required to complete the assignment no less than two (2) weeks from the time the supervisor informs the Teaching Assistant.'
+            + '<p/><p>In the \'Description Field\' add details of when the assignments are expected to be available, how long it will mark them, turnaround time, and include any due dates.</p>'
+            + '<p>Sample Descriptions:<br/>"Midterm 1; 120 tests; 10 minutes per test; available on Oct 4; expected turnaround time 5 days."<br/>“Term Test 3 marking - available Oct 4, due Oct 11”<br/>“A3 Marking (Apr 8-15 grading period)”</p>'
+
     },
     other: { title: "Other duties", helpText: "" },
 };
@@ -387,7 +390,8 @@ export function DdahPreviewModal({
                         {editing && categoryInformation[category].helpText && (
                             <Alert variant="secondary">
                                 <FaInfoCircle className="mr-2" />
-                                {categoryInformation[category].helpText}
+                                {/* HTML helpText string set here is statically defined above and never edited so this should be safe */}
+                                <span dangerouslySetInnerHTML={{ __html: categoryInformation[category].helpText }}></span>
                             </Alert>
                         )}
                         <ul>

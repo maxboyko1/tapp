@@ -14,15 +14,14 @@ import type { Ddah } from "../../../api/defs/types";
 import { ddahsSelector, upsertDdah } from "../../../api/actions/ddahs";
 import { DdahPreviewModal } from "./ddah-editor";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
-import { activePositionSelector, setDdahForEmailIds } from "../store/actions";
+import { activePositionSelector } from "../store/actions";
 import {
     ConnectedExportDdahsAction,
     createDdahSpreadsheets,
 } from "../../admin/ddahs/import-export";
 import { setSelectedRows as setSelectedDdahs } from "../../admin/ddah-table/actions";
 import { formatDate } from "../../../libs/utils";
-import { DdahEmailModal } from "./ddah-emailer";
-import { FaDownload, FaMailBulk } from "react-icons/fa";
+import { FaDownload } from "react-icons/fa";
 import { InstructorImportDdahsAction } from "./import";
 
 export function ConnectedDownloadPositionDdahTemplatesAction({
@@ -98,7 +97,6 @@ export function InstructorDdahsView() {
     const [previewDdahId, setPreviewDdahId] = React.useState<number | null>(
         null
     );
-    const [emailDialogVisible, setEmailDialogVisible] = React.useState(false);
 
     const setPreviewDdah = React.useCallback(
         (ddah: Omit<Ddah, "id">) => {
@@ -147,16 +145,6 @@ export function InstructorDdahsView() {
         <div className="page-body">
             <ActionsList>
                 <ActionHeader>Actions</ActionHeader>
-                <ActionButton
-                    icon={FaMailBulk}
-                    onClick={() => {
-                        // Deselect all selected DDAHs when we click this button to prevent accidental emails.
-                        dispatch(setDdahForEmailIds([]));
-                        setEmailDialogVisible(true);
-                    }}
-                >
-                    Email DDAHs
-                </ActionButton>
                 <ConnectedDownloadPositionDdahTemplatesAction />
                 <ActionHeader>Import/Export</ActionHeader>
                 <InstructorImportDdahsAction disabled={!activeSession} />
@@ -174,14 +162,16 @@ export function InstructorDdahsView() {
                     for the{" "}
                     <span className="text-primary">{formattedSessionName}</span>{" "}
                     session. You can view, create, and edit DDAH forms for your
-                    TAs. After you create/edit a DDAH form, don't forget to
-                    email the form to your TAs.
+                    TAs. After you create/edit a DDAH form, please save and close the
+                    file. The TA coordinator will review and send these files to the
+                    students in the coming days.
                 </p>
                 <p>
                     The <i>Approved</i> column indicates whether the TA
                     coordinator has reviewed and approved the DDAH. If you have
                     any questions about DDAHs and their requirements, please
-                    contact the TA coordinator.
+                    contact the TA coordinator at{" "}
+                    <a href="mailto:tacoord@cs.toronto.edu">tacoord@cs.toronto.edu</a>.
                 </p>
                 <ConnectedDdahsTable
                     position_id={activePosition?.id || -1}
@@ -204,7 +194,10 @@ export function InstructorDdahsView() {
                             return;
                         }
                         const newDdah: Omit<Ddah, "id"> = {
-                            duties: [],
+                            duties: [
+                                {order: 1, hours: 1, description: "meeting:Meetings with instructor including initial DDAH review"},
+                                {order: 2, hours: 0.5, description: "meeting:Meetings with instructor including mid-term DDAH review"}
+                            ],
                             approved_date: null,
                             accepted_date: null,
                             revised_date: null,
@@ -218,7 +211,6 @@ export function InstructorDdahsView() {
                         setPreviewDdah(newDdah);
                         setNewDialogVisible(true);
                     }}
-                    onEmail={() => setEmailDialogVisible(true)}
                 />
                 <DdahPreviewModal
                     ddah={previewDdah}
@@ -241,10 +233,6 @@ export function InstructorDdahsView() {
                         setNewDialogVisible(false);
                         setPreviewVisible(true);
                     }}
-                />
-                <DdahEmailModal
-                    show={emailDialogVisible}
-                    onHide={() => setEmailDialogVisible(false)}
                 />
             </ContentArea>
         </div>
