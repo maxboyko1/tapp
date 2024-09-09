@@ -15,7 +15,7 @@ import { prepareMinimal } from "./prepare-minimal";
 /**
  * Type of a spreadsheet cell
  */
-type CellType = number | string | null | undefined;
+export type CellType = number | string | null | undefined;
 
 /**
  * Return an array of [hours, duty, hours duty, ...] for the specified `ddah`
