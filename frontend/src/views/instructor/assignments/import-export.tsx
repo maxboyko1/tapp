@@ -130,29 +130,27 @@ function spreadsheetOutputForInstructorAssignments(position: Position, applicati
                 const assignmentsWithAnswersObj = assignmentsWithApplication.map((assignment) => ({
                     ...assignment,
                     answers: (() => {
-                        const answersStr = assignment.application?.custom_question_answers;
-                        if (typeof answersStr !== 'string') {
-                            return null;
-                        }
-                        let answersParsed = null;
-                        
-                        try {
-                            answersParsed = JSON.parse(answersStr);
-                        } catch (e) {
-                            throw new Error(
-                                `Could not parse JSON data for custom questions (${e})`
-                            );
-                        }
+                        const answers = assignment.application?.custom_question_answers;
+                        if (answers && typeof answers === 'object' && !Array.isArray(answers)) {
+                            const formattedAnswers: { [key: string]: CellType } = {};
 
-                        // Add all (non-redundant) fields from the custom question object to the overall set
-                        if (typeof answersParsed === 'object') {
-                            Object.keys(answersParsed).forEach((field) => {
+                            Object.keys(answers).forEach((field) => {
+                                // Add any new custom question fields to the overall set
                                 if (field !== "utorid") {
                                     customQuestionFieldsSet.add(field);
                                 }
+                                // Stringify any array or boolean values in the answers
+                                const value = (answers as { [key: string]: any })[field];
+                                if (Array.isArray(value) || typeof value == 'boolean') {
+                                    formattedAnswers[field] = value.toString();
+                                } else {
+                                    formattedAnswers[field] = value;
+                                }
                             });
+
+                            return formattedAnswers;
                         }
-                        return answersParsed;
+                        return {};
                     })(),
                 }));
                 
@@ -171,12 +169,12 @@ function spreadsheetOutputForInstructorAssignments(position: Position, applicati
                                                .find((pref) => pref.position.id === position.id)
                                               ?.preference_level,
                     past_ta_for_course: (() => {
-                        const match = position.position_code.match(/\b[a-zA-Z]{3}\d{3,4}\b/);
-                        const posCodeAbbr = match ? match[0] : null;
+                        const matches = position.position_code.match(/\b[a-zA-Z]{3}\d{3,4}/);
+                        const posCodeAbbr = matches ? matches[0] : null;
                         const summary = assignment.application?.previous_experience_summary; 
                         return (posCodeAbbr && summary && summary.includes(posCodeAbbr)) ? "Yes" : "";
                     })(),
-                    ...customQuestionFields.reduce((acc: { [key: string]: any }, field) => {
+                    ...customQuestionFields.reduce((acc: { [key: string]: CellType }, field) => {
                         acc[field] = assignment.answers[field];
                         return acc;
                     }, {}),
@@ -210,7 +208,7 @@ function spreadsheetOutputForInstructorAssignments(position: Position, applicati
                             assignment.preference_level,
                             assignment.past_ta_for_course,
                             ...customQuestionFields.map((field) =>
-                                (assignment as { [key: string]: CellType })[field]
+                                (assignment as unknown as { [key: string]: CellType })[field]
                             ),
                         ])
                     )
