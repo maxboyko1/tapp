@@ -78,6 +78,7 @@ export function AdvancedFilterTable({
                     .filter((col) => col.show === false)
                     .map((col) => col.id),
             },
+            isMultiSortEvent: () => true,
         },
         useBlockLayout,
         useResizeColumns,
