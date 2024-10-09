@@ -9,6 +9,7 @@ import {
     matchesSelector,
     applicantMatchingDataSelector,
     activeSessionSelector,
+    letterTemplatesSelector,
 } from "../../../api/actions";
 
 import {
@@ -173,6 +174,7 @@ const applicantSummariesSelector = createSelector(
         matchesSelector,
         combinedApplicationsSelector,
         activeSessionSelector,
+        letterTemplatesSelector,
     ],
     (
         applicants,
@@ -180,7 +182,8 @@ const applicantSummariesSelector = createSelector(
         applicantMatchingData,
         matches,
         applications,
-        activeSession
+        activeSession,
+        letterTemplates,
     ) => {
         const ret: ApplicantSummary[] = [];
         if (activeSession == null) return ret;
@@ -217,6 +220,22 @@ const applicantSummariesSelector = createSelector(
                 matchesByApplicantId[match.applicant.id] || [];
             matchesByApplicantId[match.applicant.id].push(match);
         }
+
+        // Select a suitable default letter template for applicants who don't have matching data set yet
+        const defaultLetterTemplate =
+            letterTemplates.find((x) =>
+                x.template_name.toLowerCase() === "standard"
+            ) ||
+            letterTemplates.find((x) =>
+                x.template_name.toLowerCase() === "default"
+            ) ||
+            letterTemplates.find((x) =>
+                x.template_name.toLowerCase().includes("standard")
+            ) ||
+            letterTemplates.find((x) =>
+                x.template_name.toLowerCase().includes("default")
+            ) ||
+            letterTemplates[0];
 
         for (const applicant of applicants) {
             let hoursAssigned =
@@ -261,6 +280,7 @@ const applicantSummariesSelector = createSelector(
                 ] || {
                     applicant: applicant,
                     session: activeSession,
+                    letter_template: defaultLetterTemplate,
                 },
                 application: applicationsByApplicantId[applicant.id] || null,
                 matches: matchesByApplicantId[applicant.id] || [],
