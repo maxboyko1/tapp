@@ -1,11 +1,14 @@
 import React from "react";
-import { Alert } from "react-bootstrap";
-import * as Survey from "survey-react";
+import { Alert, Paper } from "@mui/material";
+import { Model } from "survey-core";
+import { DoubleBorderLightPanelless } from "survey-core/themes";
+import { Survey } from "survey-react-ui";
+
 import { fetchSurvey } from "../../../../api/actions";
-// For some reason, including these styles makes the survey look worse...
-//import "survey-react/survey.css";
 import { Posting } from "../../../../api/defs/types";
 import { useThunkDispatch } from "../../../../libs/thunk-dispatch";
+
+import "survey-core/survey-core.css";
 
 export function ConnectedPostingPreviewView({ posting }: { posting: Posting }) {
     const dispatch = useThunkDispatch();
@@ -23,9 +26,8 @@ export function ConnectedPostingPreviewView({ posting }: { posting: Posting }) {
         fetchResources();
     }, [posting, dispatch]);
 
-    Survey.StylesManager.applyTheme("bootstrap");
-    Survey.defaultBootstrapCss.navigationButton = "btn btn-primary";
-    const survey = new Survey.Model(jsonSurvey);
+    const survey = new Model(jsonSurvey);
+    survey.applyTheme(DoubleBorderLightPanelless);
     // When we preview the survey, we want to see all the questions rather than a per-page view.
     survey.questionsOnPageMode = "singlePage";
     survey.onComplete.add((result) =>
@@ -38,12 +40,22 @@ export function ConnectedPostingPreviewView({ posting }: { posting: Posting }) {
     };
 
     return (
-        <React.Fragment>
-            <Alert variant="info">
-                <i className="fa fa-info-circle mr-1" />
-                All pages of this survey are shown together.
+        <Paper
+            elevation={2}
+            sx={{
+                p: 2,
+                maxHeight: "100vh",
+                overflow: "auto",
+                display: "flex",
+                flexDirection: "column",
+            }}
+        >
+            <Alert severity="info">
+                All pages of this survey are shown together. There will also be some dynamically
+                generated content near the end of the survey not shown here, this preview
+                shows only the fixed content.
             </Alert>
-            <Survey.Survey model={survey} />
-        </React.Fragment>
+            <Survey model={survey} />
+        </Paper>
     );
 }

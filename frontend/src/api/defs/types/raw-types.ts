@@ -1,7 +1,7 @@
 /**
  * This file contains types that are returned by the backend as responses to API calls.
  */
-import type { HasId, UserRole, Utorid } from "./common";
+import type { CustomQuestions, HasId, UserRole, Utorid } from "./common";
 
 export interface RawSession extends HasId {
     start_date: string;
@@ -21,10 +21,12 @@ export interface RawPosition extends HasId {
     contract_template_id: number;
     qualifications: string | null;
     duties: string | null;
+    custom_questions: CustomQuestions;
     desired_num_assignments: number | null;
     current_enrollment: number | null;
     current_waitlisted: number | null;
     instructor_ids: number[];
+    session_id: number;
 }
 
 export interface RawApplicant extends HasId {
@@ -56,7 +58,11 @@ export interface RawApplication extends HasId {
         size: number;
         url_token: string;
     }[];
-    position_preferences: { position_id: number; preference_level: number }[];
+    position_preferences: { 
+        position_id: number;
+        preference_level: number;
+        custom_question_answers: unknown | null; 
+    }[];
     submission_date: string;
 }
 
@@ -127,7 +133,7 @@ export interface RawPosting extends HasId {
     open_date: string | null;
     close_date: string | null;
     availability: "auto" | "open" | "closed";
-    custom_questions: { pages: { name: string; [key: string]: any }[] } | null;
+    custom_questions: CustomQuestions;
     application_ids: number[];
     url_token: string;
     open_status: boolean;

@@ -88,7 +88,7 @@ function hasSubField<T, M extends string>(
     obj: T,
     key: M
 ): obj is T & HasSubField<M> {
-    return typeof obj === "object" && key in obj;
+    return obj !== null && typeof obj === "object" && key in obj;
 }
 
 /**
@@ -209,7 +209,8 @@ export function validatedApiDispatcher<RetType, ArgType extends unknown[]>({
     name,
     description,
     onErrorDispatch,
-}: DispatcherParams<RetType, ArgType>) {
+}: DispatcherParams<RetType, ArgType>
+): (...args: ArgType) => ThunkAction<Promise<RetType>, RootState, void, Action> {
     return (...args: ArgType) => {
         // we return a new dispatcher that performs some validation
         // and then dispatches as usual

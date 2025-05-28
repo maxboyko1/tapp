@@ -1,8 +1,16 @@
-import React from "react";
+import {
+    FormControl,
+    IconButton,
+    InputLabel,
+    MenuItem,
+    Select,
+    Stack,
+} from "@mui/material";
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
+import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
+import CloseIcon from "@mui/icons-material/Close";
+
 import { sortMap, SortType, SortListItem } from "./sorts";
-import { Dropdown, DropdownButton } from "react-bootstrap";
-import { TiArrowSortedUp, TiArrowSortedDown } from "react-icons/ti";
-import { GrFormClose } from "react-icons/gr";
 
 export const defaultSortList: SortListItem[] = [
     {
@@ -72,38 +80,36 @@ function SortDropdown({
     let items: SortListItem[];
 
     return (
-        <>
-            <DropdownButton
-                title={selected ? selected : "Sort by... "}
-                size="sm"
-                variant="info"
-                className="sort-dropdown"
-            >
-                {Object.keys(sortMap).map((item) => {
-                    return (
-                        <Dropdown.Item
-                            key={item}
-                            onSelect={() => {
-                                items = [...sortList];
-                                const newSortItem: SortListItem = {
-                                    asc: true,
-                                    name: item as SortType,
-                                };
-
-                                items[index] = newSortItem;
-                                setSortList(items);
-                            }}
-                        >
+        <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 1 }}>
+            <FormControl size="small" sx={{ minWidth: 140 }}>
+                <InputLabel id={`sort-select-label-${index}`}>Sort by...</InputLabel>
+                <Select
+                    labelId={`sort-select-label-${index}`}
+                    value={selected || ""}
+                    label="Sort by..."
+                    onChange={(e) => {
+                        items = [...sortList];
+                        const newSortItem: SortListItem = {
+                            asc: true,
+                            name: e.target.value as SortType,
+                        };
+                        items[index] = newSortItem;
+                        setSortList(items);
+                    }}
+                    size="small"
+                >
+                    {Object.keys(sortMap).map((item) => (
+                        <MenuItem key={item} value={item}>
                             {item}
-                        </Dropdown.Item>
-                    );
-                })}
-            </DropdownButton>
+                        </MenuItem>
+                    ))}
+                </Select>
+            </FormControl>
             {selected && (
-                <div
+                <IconButton
                     className="sort-icon"
+                    size="small"
                     onClick={() => {
-                        // Button for specifying ascending/descending order
                         items = [...sortList];
                         items[index] = {
                             ...items[index],
@@ -112,27 +118,26 @@ function SortDropdown({
                         setSortList(items);
                     }}
                 >
-                    {" "}
                     {sortList[index]["asc"] ? (
-                        <TiArrowSortedUp />
+                        <ArrowUpwardIcon fontSize="small" />
                     ) : (
-                        <TiArrowSortedDown />
-                    )}{" "}
-                </div>
+                        <ArrowDownwardIcon fontSize="small" />
+                    )}
+                </IconButton>
             )}
             {selected && (
-                <div
+                <IconButton
                     className="sort-icon"
+                    size="small"
                     onClick={() => {
-                        // Button for removing this sort
                         items = [...sortList];
                         items.splice(index, 1);
                         setSortList(items);
                     }}
                 >
-                    <GrFormClose />
-                </div>
+                    <CloseIcon fontSize="small" />
+                </IconButton>
             )}
-        </>
+        </Stack>
     );
 }

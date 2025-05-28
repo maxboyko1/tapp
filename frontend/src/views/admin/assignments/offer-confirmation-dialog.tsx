@@ -1,39 +1,50 @@
 import React from "react";
-import { AdvancedFilterTable } from "../../../components/filter-table/advanced-filter-table";
-import { Button, Modal, Spinner } from "react-bootstrap";
+import {
+    Alert,
+    Box,
+    Button,
+    CircularProgress,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    IconButton,
+} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+
+import { AdvancedFilterTable, AdvancedColumnDef } from "../../../components/advanced-filter-table";
 import { Assignment } from "../../../api/defs/types";
 import { compareString } from "../../../libs/utils";
 
-const assignmentModalColumn = [
+const assignmentModalColumn: AdvancedColumnDef<Assignment>[] = [
     {
-        Header: "Last Name",
-        accessor: "applicant.last_name",
-        maxWidth: 120,
+        header: "Last Name",
+        accessorKey: "applicant.last_name",
+        maxSize: 120,
     },
     {
-        Header: "First Name",
-        accessor: "applicant.first_name",
-        maxWidth: 120,
+        header: "First Name",
+        accessorKey: "applicant.first_name",
+        maxSize: 120,
     },
     {
-        Header: "Position",
-        accessor: "position.position_code",
-        width: 200,
+        header: "Position",
+        accessorKey: "position.position_code",
+        size: 200,
     },
     {
-        Header: "Hours",
-        accessor: "hours",
-        className: "number-cell",
-        maxWidth: 70,
+        header: "Hours",
+        accessorKey: "hours",
+        maxSize: 70,
     },
     {
-        Header: "Status",
-        maxWidth: 100,
+        header: "Status",
+        maxSize: 100,
         id: "status",
         // We want items with no active offer to appear at the end of the list
         // when sorted, so we set their accessor to null (the accessor is used by react table
         // when sorting items).
-        accessor: (data: { active_offer_status: string }) =>
+        accessorFn: (data: any) =>
             data.active_offer_status === "No Contract"
                 ? null
                 : data.active_offer_status,
@@ -75,7 +86,7 @@ export function OfferConfirmationDialog(props: {
     // When a confirm operation is in progress, a spinner is displayed; otherwise
     // it's hidden
     const spinner = inProgress ? (
-        <Spinner animation="border" size="sm" className="mr-1" />
+        <CircularProgress size={20} sx={{ mr: 1 }} />
     ) : null;
 
     // We want to minimize the re-render of the table. Since some bindings for columns
@@ -84,42 +95,53 @@ export function OfferConfirmationDialog(props: {
     data.sort(compareAssignment);
 
     return (
-        <Modal
-            show={visible}
-            onHide={() => {
-                setVisible(false);
-            }}
-            size="lg"
-        >
-            <Modal.Header closeButton>
-                <Modal.Title>{title}</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                <div className="mb-3 alert alert-info" role="alert">
-                    {body}
-                </div>
-                <div className="mb-3">
+        <Dialog open={visible} onClose={() => setVisible(false)} maxWidth="lg" fullWidth>
+            <DialogTitle sx={{ m: 0, p: 2 }}>
+                {title}
+                <IconButton
+                    aria-label="close"
+                    onClick={() => setVisible(false)}
+                    sx={{
+                        position: "absolute",
+                        right: 8,
+                        top: 8,
+                        color: (theme) => theme.palette.grey[500],
+                    }}
+                    size="large"
+                >
+                    <CloseIcon />
+                </IconButton>
+            </DialogTitle>
+            <DialogContent dividers>
+                <Box mb={3}>
+                    <Alert severity="info">{body}</Alert>
+                </Box>
+                <Box mb={3}>
                     <AdvancedFilterTable
                         filterable={false}
                         columns={assignmentModalColumn}
                         data={data}
                     />
-                </div>
-            </Modal.Body>
-            <Modal.Footer>
+                </Box>
+            </DialogContent>
+            <DialogActions>
                 <Button
-                    onClick={() => {
-                        setVisible(false);
-                    }}
-                    variant="light"
+                    onClick={() => setVisible(false)}
+                    variant="contained"
+                    color="secondary"
                 >
                     Cancel
                 </Button>
-                <Button onClick={executeCallback}>
+                <Button
+                    onClick={executeCallback}
+                    variant="contained"
+                    color="primary"
+                    disabled={inProgress}
+                >
                     {spinner}
                     {confirmation}
                 </Button>
-            </Modal.Footer>
-        </Modal>
+            </DialogActions>
+        </Dialog>
     );
 }

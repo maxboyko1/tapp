@@ -1,164 +1,92 @@
 import React from "react";
 import { useSelector } from "react-redux";
+import {
+    Autocomplete,
+    Chip,
+    CircularProgress,
+    IconButton,
+    Stack,
+    TextField,
+} from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
+import CheckIcon from "@mui/icons-material/Check";
+import CloseIcon from "@mui/icons-material/Close";
+
 import { upsertPosition, instructorsSelector } from "../../../api/actions";
-import { Badge, Modal, Button, Spinner } from "react-bootstrap";
-import { EditFieldIcon } from "../../../components/edit-field-widgets";
-import { Typeahead } from "react-bootstrap-typeahead";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
 import { Instructor, Position } from "../../../api/defs/types";
 
-/**
- * Turn a list of instructor objects into a hash string for comparison as to whether
- * an instructor list has changed.
- *
- * @param {*} instructors
- * @returns
- */
-export function hashInstructorList(instructors: Instructor[]) {
-    return instructors
-        .map((i) => `${i.last_name}, ${i.first_name}`)
-        .sort()
-        .join(";");
-}
-
-/**
- * A dialog allowing one to edit instructors. `onChange` is called
- * when "save" is clicked while editing this value.
- *
- * @param {*} props
- * @returns
- */
-function EditInstructorsDialog({
-    position,
-    show,
-    onHide,
-    onChange,
-}: {
-    position: Position;
-    show: boolean;
-    onHide: Function;
-    onChange: Function;
-}) {
-    const value = position.instructors;
-    const allInstructors = useSelector(instructorsSelector);
-    const [fieldVal, setFieldVal] = React.useState(value);
-    const [inProgress, setInProgress] = React.useState(false);
-
-    function cancelClick() {
-        setFieldVal(value);
-        onHide();
-    }
-
-    function saveClick() {
-        async function doSave() {
-            if (hashInstructorList(fieldVal) !== hashInstructorList(value)) {
-                setInProgress(true);
-                // Only call `onChange` if the value has changed
-                await onChange(fieldVal, value);
-            }
-        }
-        doSave().finally(() => {
-            //onHide();
-            setInProgress(false);
-        });
-    }
-    // When a confirm operation is in progress, a spinner is displayed; otherwise
-    // it's hidden
-    const spinner = inProgress ? (
-        <Spinner animation="border" size="sm" className="mr-1" />
-    ) : null;
-
-    const changeIndicator =
-        // eslint-disable-next-line
-        hashInstructorList(fieldVal) == hashInstructorList(value) ? null : (
-            <span>
-                Change from{" "}
-                <span className="field-dialog-formatted-name">
-                    {value
-                        .map(
-                            (instructor) =>
-                                `${instructor.first_name} ${instructor.last_name}`
-                        )
-                        .join(", ")}
-                </span>{" "}
-                to{" "}
-                <span className="field-dialog-formatted-name">
-                    {fieldVal
-                        .map(
-                            (instructor) =>
-                                `${instructor.first_name} ${instructor.last_name}`
-                        )
-                        .join(", ")}
-                </span>
-            </span>
-        );
-
-    return (
-        <Modal show={show} onHide={cancelClick}>
-            <Modal.Header closeButton>
-                <Modal.Title>
-                    Edit Instructors for {position.position_code}
-                </Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                <Typeahead
-                    id="instructors-input"
-                    ignoreDiacritics={true}
-                    multiple
-                    placeholder="Instructors..."
-                    labelKey={(option) =>
-                        `${option.first_name} ${option.last_name}`
-                    }
-                    selected={fieldVal}
-                    options={allInstructors}
-                    onChange={setFieldVal}
-                />{" "}
-                {changeIndicator}
-            </Modal.Body>
-            <Modal.Footer>
-                <Button onClick={cancelClick} variant="outline-secondary">
-                    Cancel
-                </Button>
-                <Button onClick={saveClick}>{spinner}Save</Button>
-            </Modal.Footer>
-        </Modal>
-    );
-}
-
 export function EditInstructorsCell({ row }: { row: { original: Position } }) {
     const position = row.original;
-    const [dialogShow, setDialogShow] = React.useState(false);
     const dispatch = useThunkDispatch();
+    const allInstructors = useSelector(instructorsSelector);
+
+    const [editing, setEditing] = React.useState(false);
+    const [value, setValue] = React.useState<Instructor[]>(position.instructors);
+    const [inProgress, setInProgress] = React.useState(false);
+
+    const handleSave = async () => {
+        setInProgress(true);
+        await dispatch(
+            upsertPosition({
+                id: position.id,
+                instructors: value,
+            })
+        );
+        setInProgress(false);
+        setEditing(false);
+    };
+
+    const handleCancel = () => {
+        setValue(position.instructors);
+        setEditing(false);
+    };
 
     return (
         <div className="show-on-hover-wrapper">
-            {position.instructors.map((instructor = {} as any) => {
-                const name = `${instructor.first_name} ${instructor.last_name}`;
-                return (
-                    <Badge variant="secondary" className="mr-1" key={name}>
-                        {name}
-                    </Badge>
-                );
-            })}
-            <EditFieldIcon
-                title="Edit the instructors for this position"
-                hidden={false}
-                onClick={() => setDialogShow(true)}
-            />
-            <EditInstructorsDialog
-                position={position}
-                show={dialogShow}
-                onHide={() => setDialogShow(false)}
-                onChange={async (newInstructors: Instructor[]) => {
-                    await dispatch(
-                        upsertPosition({
-                            id: position.id,
-                            instructors: newInstructors,
-                        })
-                    );
-                    setDialogShow(false);
-                }}
-            />
+            {editing ? (
+                <>
+                    <Autocomplete
+                        multiple
+                        options={allInstructors}
+                        getOptionLabel={(option) => `${option.first_name} ${option.last_name}`}
+                        value={value}
+                        onChange={(_, newValue) => setValue(newValue)}
+                        renderInput={(params) => (
+                            <TextField {...params} variant="standard" placeholder="Select instructors" />
+                        )}
+                        size="small"
+                        sx={{ minWidth: 250 }}
+                    />
+                    <IconButton onClick={handleSave} disabled={inProgress} size="small">
+                        {inProgress ? (
+                            <CircularProgress size={16} />
+                        ) : (
+                            <CheckIcon />
+                        )}
+                    </IconButton>
+                    <IconButton onClick={handleCancel} size="small">
+                        <CloseIcon />
+                    </IconButton>
+                </>
+            ) : (
+                <Stack direction="row" spacing={1} flexWrap="wrap">
+                    {position.instructors.map((instructor) => (
+                        <Chip
+                            key={instructor.id}
+                            label={`${instructor.first_name} ${instructor.last_name}`}
+                            size="small"
+                        />
+                    ))}
+                    <IconButton
+                        onClick={() => setEditing(true)}
+                        size="small"
+                        title="Edit instructors"
+                    >
+                        <EditIcon fontSize="small" />
+                    </IconButton>
+                </Stack>
+            )}
         </div>
     );
 }

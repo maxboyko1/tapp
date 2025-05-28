@@ -1,7 +1,10 @@
 import React from "react";
+import { Typography } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
+import DeleteIcon from "@mui/icons-material/Delete";
+
 import { ConnectedApplicantsList } from "./editable-applicants-list";
 import { ConnectedAddApplicantDialog } from "./add-applicant-dialog";
-import { FaTrash, FaPlus } from "react-icons/fa";
 import {
     ConnectedImportInstructorAction,
     ConnectedExportApplicantsAction,
@@ -21,7 +24,7 @@ export function AdminApplicantsView() {
             <ActionsList>
                 <ActionHeader>Available Actions</ActionHeader>
                 <ActionButton
-                    icon={<FaPlus />}
+                    icon={<AddIcon />}
                     onClick={() => {
                         setAddDialogVisible(true);
                     }}
@@ -29,7 +32,7 @@ export function AdminApplicantsView() {
                     Add Applicant
                 </ActionButton>
                 <ActionButton
-                    icon={<FaTrash />}
+                    icon={<DeleteIcon />}
                     onClick={() => setInDeleteMode(!inDeleteMode)}
                     active={inDeleteMode}
                 >
@@ -47,6 +50,9 @@ export function AdminApplicantsView() {
                         setAddDialogVisible(false);
                     }}
                 />
+                <Typography variant="h3" sx={{ mb: 2 }}>
+                    Applicants
+                </Typography>
                 <ConnectedApplicantsList inDeleteMode={inDeleteMode} />
             </ContentArea>
         </div>

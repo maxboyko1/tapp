@@ -1,9 +1,18 @@
 import React from "react";
-import { strip } from "../../../libs/utils";
 import { connect } from "react-redux";
+import { 
+    Alert,
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    Typography,
+} from "@mui/material";
+
+import { strip } from "../../../libs/utils";
 import { SessionEditor } from "../../../components/forms/session-editor";
 import { upsertSession, sessionsSelector } from "../../../api/actions";
-import { Modal, Button, Alert } from "react-bootstrap";
 
 function getConflicts(session, sessions = []) {
     const ret = { delayShow: "", immediateShow: "" };
@@ -52,21 +61,23 @@ export function AddSessionDialog(props) {
     const conflicts = getConflicts(newSession, sessions);
 
     return (
-        <Modal show={show} onHide={onHide}>
-            <Modal.Header closeButton>
-                <Modal.Title>Add Session</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
+        <Dialog open={show} onClose={onHide} maxWidth="sm" fullWidth>
+            <DialogTitle>
+                <Typography variant="h6">
+                    Add Session
+                </Typography>
+            </DialogTitle>
+            <DialogContent dividers>
                 <SessionEditor
                     session={newSession}
                     setSession={setNewSession}
                 />
                 {conflicts.immediateShow ? (
-                    <Alert variant="danger">{conflicts.immediateShow}</Alert>
+                    <Alert severity="error">{conflicts.immediateShow}</Alert>
                 ) : null}
-            </Modal.Body>
-            <Modal.Footer>
-                <Button onClick={onHide} variant="light">
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={onHide} variant="contained" color="secondary">
                     Cancel
                 </Button>
                 <Button
@@ -75,11 +86,13 @@ export function AddSessionDialog(props) {
                     disabled={
                         !!conflicts.delayShow || !!conflicts.immediateShow
                     }
+                    variant="contained"
+                    color="primary"
                 >
                     Create Session
                 </Button>
-            </Modal.Footer>
-        </Modal>
+            </DialogActions>
+        </Dialog>
     );
 }
 

@@ -1,7 +1,18 @@
 import React from "react";
 import { connect } from "react-redux";
+import {
+    Alert,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogActions,
+    Button,
+    IconButton,
+    Typography
+} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+
 import { InstructorEditor } from "../../../components/instructors";
-import { Modal, Button, Alert } from "react-bootstrap";
 import { upsertInstructor, instructorsSelector } from "../../../api/actions";
 import { strip } from "../../../libs/utils";
 import { Instructor } from "../../../api/defs/types";
@@ -40,13 +51,12 @@ function getConflicts(
     );
     if (matchingInstructor) {
         ret.immediateShow = (
-            <p>
+            <Typography variant="body1">
                 Another instructor exists with utorid={instructor.utorid}:{" "}
-                <b>
-                    {matchingInstructor.first_name}{" "}
-                    {matchingInstructor.last_name}
-                </b>
-            </p>
+                <Typography component="span" fontWeight="bold">
+                    {matchingInstructor.first_name} {matchingInstructor.last_name}
+                </Typography>
+            </Typography>
         );
     }
     return ret;
@@ -77,21 +87,36 @@ function AddInstructorDialog(props: {
     const conflicts = getConflicts(newInstructor, instructors);
 
     return (
-        <Modal show={show} onHide={onHide}>
-            <Modal.Header closeButton>
-                <Modal.Title>Add Instructor</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
+        <Dialog open={show} onClose={onHide} maxWidth="sm" fullWidth>
+            <DialogTitle sx={{ m: 0, p: 2 }}>
+                Add Instructor
+                <IconButton
+                    aria-label="close"
+                    onClick={onHide}
+                    sx={{
+                        position: "absolute",
+                        right: 8,
+                        top: 8,
+                        color: (theme) => theme.palette.grey[500],
+                    }}
+                    size="large"
+                >
+                    <CloseIcon />
+                </IconButton>
+            </DialogTitle>
+            <DialogContent dividers>
                 <InstructorEditor
                     instructor={newInstructor}
                     setInstructor={setNewInstructor}
                 />
                 {conflicts.immediateShow ? (
-                    <Alert variant="danger">{conflicts.immediateShow}</Alert>
+                    <Alert severity="error" sx={{ mt: 2 }}>
+                        {conflicts.immediateShow}
+                    </Alert>
                 ) : null}
-            </Modal.Body>
-            <Modal.Footer>
-                <Button onClick={onHide} variant="light">
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={onHide} variant="contained" color="secondary">
                     Cancel
                 </Button>
                 <Button
@@ -100,11 +125,13 @@ function AddInstructorDialog(props: {
                     disabled={
                         !!conflicts.delayShow || !!conflicts.immediateShow
                     }
+                    variant="contained"
+                    color="primary"
                 >
                     Create Instructor
                 </Button>
-            </Modal.Footer>
-        </Modal>
+            </DialogActions>
+        </Dialog>
     );
 }
 /**

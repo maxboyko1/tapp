@@ -186,6 +186,7 @@ export const prepareFull: PrepareFull = {
             end_date: minPosition.end_date,
             duties: minPosition.duties,
             qualifications: minPosition.qualifications,
+            custom_questions: minPosition.custom_questions,
             desired_num_assignments: minPosition.desired_num_assignments,
             current_enrollment: minPosition.current_enrollment,
             current_waitlisted: minPosition.current_waitlisted,

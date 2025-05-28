@@ -1,6 +1,6 @@
 import React from "react";
-import classNames from "classnames";
-import { Dropdown } from "react-bootstrap";
+import { Button, Box, ListSubheader, Menu, MenuItem, Typography } from "@mui/material";
+import { alpha } from "@mui/material/styles";
 
 import "./action-buttons.css";
 
@@ -9,32 +9,15 @@ interface PropsWithChildren {
     children: React.ReactNode;
 }
 interface ActionButtonProps extends PropsWithChildren {
-    icon?: React.ReactNode | Function;
-    onClick?: () => any;
+    icon?: React.ReactNode;
+    endIcon?: React.ReactNode;
     active?: boolean;
     disabled?: any;
+    onClick?: (event: React.MouseEvent<HTMLElement>) => void;
 }
 
 interface ActionMenuButtonProps extends ActionButtonProps {
-    menu: React.ReactNode;
-}
-
-/**
- * Wrap `icon` in a span (if it is non-null). `icon` may be a function,
- * in which case it is rendered as a react element.
- *
- * @param {(React.ReactNode | Function)} icon
- * @returns {React.ReactNode}
- */
-function wrapIcon(icon: React.ReactNode | Function): React.ReactNode {
-    if (!icon) {
-        return icon;
-    }
-    if (typeof icon === "function") {
-        const Icon = icon;
-        icon = <Icon />;
-    }
-    return <span className="mr-2">{icon}</span>;
+    menu: React.ReactNode[];
 }
 
 /**
@@ -46,9 +29,18 @@ function wrapIcon(icon: React.ReactNode | Function): React.ReactNode {
  */
 export function ActionsList({ children }: PropsWithChildren) {
     return (
-        <div className="page-actions">
-            <Dropdown>{children}</Dropdown>
-        </div>
+        <Box
+            className="page-actions"
+            sx={{
+                bgcolor: theme => alpha(theme.palette.info.light, 0.25),
+                minHeight: "100vh",
+                display: "flex",
+                flexDirection: "column",
+                width: "max-content",
+            }}
+        >
+            {children}
+        </Box>
     );
 }
 
@@ -60,7 +52,16 @@ export function ActionsList({ children }: PropsWithChildren) {
  * @returns
  */
 export function ActionHeader({ children }: PropsWithChildren) {
-    return <Dropdown.Header>{children}</Dropdown.Header>;
+    return (
+        <ListSubheader
+            sx={{
+                bgcolor: "inherit",
+                whiteSpace: "nowrap",
+            }}
+        >
+            {children}
+        </ListSubheader>
+    );
 }
 
 /**
@@ -79,24 +80,33 @@ export function ActionHeader({ children }: PropsWithChildren) {
  */
 export function ActionButton({
     icon = null,
+    endIcon = null,
     children,
     active,
     disabled,
+    onClick,
     ...rest
 }: ActionButtonProps) {
-    const iconNode = wrapIcon(icon);
-    if (disabled) {
-        rest = { ...rest, onClick: () => {} };
-    }
+    const iconNode = icon ? (
+        <Box sx={{ mr: 1, display: "flex", alignItems: "center" }}>
+            {icon}
+        </Box>
+    ) : null;
+    const endIconNode = endIcon;
     return (
-        <Dropdown.Item
-            as="button"
-            className={classNames({ active, disabled })}
+        <MenuItem
+            selected={!!active}
+            disabled={!!disabled}
+            onClick={onClick}
+            sx={{ bgColor: "inherit" }}
             {...rest}
         >
             {iconNode}
-            {children}
-        </Dropdown.Item>
+            <Typography variant="body2">
+                {children}
+            </Typography>
+            {endIconNode}
+        </MenuItem>
     );
 }
 
@@ -119,56 +129,51 @@ export function ActionButton({
 export function ActionMenuButton({
     icon = null,
     children,
-    menu = null,
+    menu = [],
     active,
     disabled = false,
     ...rest
 }: ActionMenuButtonProps) {
-    const [menuOpen, setMenuOpen] = React.useState(false);
-    const [menuHeight, setMenuHeight] = React.useState(0);
-    const menuSizerRef = React.useRef<HTMLDivElement>(null);
+    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
-    React.useEffect(() => {
-        if (menuSizerRef == null || menuSizerRef.current == null) {
-            return;
-        }
-        setMenuHeight(menuSizerRef.current.clientHeight);
-    }, [children]);
+    const iconNode = icon;
 
-    const iconNode = wrapIcon(icon);
+    const handleButtonClick = (event: React.MouseEvent<HTMLElement>) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
 
     return (
         <>
-            <div
-                className={classNames("action-accordion", {
-                    dropright: !menuOpen,
-                })}
+            <Button
+                startIcon={iconNode}
+                onClick={handleButtonClick}
+                disabled={disabled}
+                variant={active ? "contained" : "outlined"}
+                sx={{ bgcolor: "inherit" }}
+                {...rest}
             >
-                <button
-                    className={classNames("dropdown-item", {
-                        active,
-                        disabled,
-                    })}
-                    {...rest}
-                >
-                    {iconNode}
-                    {children}
-                </button>
-                {!disabled && (
-                    <button
-                        className="dropdown-item dropdown-toggle"
-                        onClick={() => setMenuOpen(!menuOpen)}
-                    ></button>
-                )}
-            </div>
-            <div
-                className={classNames("action-accordion-item-container", {
-                    closed: !menuOpen,
-                })}
-                style={{ height: menuHeight }}
+                {children}
+            </Button> 
+            <Menu
+                anchorEl={anchorEl}
+                open={Boolean(anchorEl)}
+                onClose={handleClose}
+                anchorOrigin={{
+                    vertical: "bottom",
+                    horizontal: "left",
+                }}
+                transformOrigin={{
+                    vertical: "top",
+                    horizontal: "left",
+                }}
+                sx={{ bgcolor: "inherit" }}
             >
-                <div ref={menuSizerRef}>{menu}</div>
-            </div>
+                {menu}
+            </Menu>
         </>
     );
 }

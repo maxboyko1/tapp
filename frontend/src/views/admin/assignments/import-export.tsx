@@ -1,5 +1,8 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import FileSaver from "file-saver";
+import { Alert } from "@mui/material";
+
 import {
     assignmentsSelector,
     exportAssignments,
@@ -8,10 +11,8 @@ import {
     positionsSelector,
     upsertAssignments,
 } from "../../../api/actions";
-import { useSelector } from "react-redux";
 import { ExportActionButton } from "../../../components/export-button";
 import { ImportActionButton } from "../../../components/import-button";
-import { Alert } from "react-bootstrap";
 import {
     DataFormat,
     ExportFormat,
@@ -50,7 +51,7 @@ export function ConnectedExportAssignmentsAction({
     const { selectedAssignmentIds } = useSelector(offerTableSelector);
 
     const setInProgress = React.useCallback(
-        function setInProgress(val) {
+        function setInProgress(val: boolean) {
             if (typeof setExportInProgress === "function") {
                 setExportInProgress(val);
             }
@@ -223,7 +224,7 @@ const DialogContent = React.memo(function DialogContent({
 }) {
     let dialogContent = <p>No data loaded...</p>;
     if (processingError) {
-        dialogContent = <Alert variant="danger">{"" + processingError}</Alert>;
+        dialogContent = <Alert severity="error">{"" + processingError}</Alert>;
     } else if (diffed) {
         const newItems = diffed
             .filter((item) => item.status === "new")
@@ -234,7 +235,7 @@ const DialogContent = React.memo(function DialogContent({
 
         if (newItems.length === 0 && modifiedDiffSpec.length === 0) {
             dialogContent = (
-                <Alert variant="warning">
+                <Alert severity="warning">
                     No difference between imported assignments and those already
                     on the system.
                 </Alert>
@@ -243,20 +244,16 @@ const DialogContent = React.memo(function DialogContent({
             dialogContent = (
                 <>
                     {newItems.length > 0 && (
-                        <Alert variant="primary">
-                            <span className="mb-1">
-                                The following assignments will be{" "}
-                                <strong>added</strong>
-                            </span>
+                        <Alert severity="success">
+                            The following assignments will be{" "}
+                            <strong>added</strong>
                             <AssignmentsList assignments={newItems} />
                         </Alert>
                     )}
                     {modifiedDiffSpec.length > 0 && (
-                        <Alert variant="info">
-                            <span className="mb-1">
-                                The following assignments will be{" "}
-                                <strong>modified</strong>
-                            </span>
+                        <Alert severity="info">
+                            The following assignments will be{" "}
+                            <strong>modified</strong>
                             <AssignmentsDiffList
                                 modifiedAssignments={modifiedDiffSpec}
                             />

@@ -1,6 +1,18 @@
 import React from "react";
+import {
+    Alert,
+    Button,
+    CircularProgress,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    IconButton,
+    Typography,
+} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+
 import { useSelector } from "react-redux";
-import { Modal, Button, Alert, Spinner } from "react-bootstrap";
 import { Duty, Assignment, Ddah } from "../../../api/defs/types";
 import { upsertDdah, ddahsSelector } from "../../../api/actions/ddahs";
 import { DdahEditor } from "../../../components/ddahs";
@@ -45,14 +57,14 @@ function getConflicts(ddah: PartialDdah, ddahs: Ddah[]) {
     );
     if (matchingDdah) {
         ret.immediateShow = (
-            <p>
+            <Typography variant="body2" color="error">
                 Another DDAH exists for assignment=
                 {ddah.assignment.position.position_code}:{" "}
                 <b>
                     {matchingDdah.assignment.applicant.first_name}{" "}
                     {matchingDdah.assignment.applicant.last_name}
                 </b>
-            </p>
+            </Typography>
         );
     }
     return ret;
@@ -111,43 +123,61 @@ export function ConnectedAddDdahDialog(props: {
         onHide();
     }
 
+    const conflicts = getConflicts(newDdah, ddahs);
+
     // When a confirm operation is in progress, a spinner is displayed; otherwise
     // it's hidden
     const spinner = inProgress ? (
-        <Spinner animation="border" size="sm" className="mr-1" />
+        <CircularProgress size={18} sx={{ mr: 1 }} />
     ) : null;
 
-    const conflicts = getConflicts(newDdah, ddahs);
-
     return (
-        <Modal show={show} onHide={onHide} size="xl">
-            <Modal.Header closeButton>
-                <Modal.Title>Add DDAH</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
+        <Dialog open={show} onClose={onHide} maxWidth="xl" fullWidth>
+            <DialogTitle sx={{ m: 0, p: 2 }}>
+                Add DDAH
+                <IconButton
+                    aria-label="close"
+                    onClick={onHide}
+                    sx={{
+                        position: "absolute",
+                        right: 8,
+                        top: 8,
+                        color: (theme) => theme.palette.grey[500],
+                    }}
+                    size="large"
+                >
+                    <CloseIcon />
+                </IconButton>
+            </DialogTitle>
+            <DialogContent dividers>
                 <DdahEditor
                     ddah={newDdah}
                     setDdah={setNewDdah}
                     assignments={assignmentsWithoutDdah}
                 />
                 {!inProgress && conflicts.immediateShow ? (
-                    <Alert variant="danger">{conflicts.immediateShow}</Alert>
+                    <Alert severity="error" sx={{ mt: 2 }}>
+                        <Typography variant="body2" color="error">
+                            {conflicts.immediateShow}
+                        </Typography>
+                    </Alert>
                 ) : null}
-            </Modal.Body>
-            <Modal.Footer>
-                <Button onClick={onHide} variant="light">
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={onHide} variant="contained" color="secondary">
                     Cancel
                 </Button>
                 <Button
                     onClick={createDdah}
                     title={conflicts.delayShow || "Create DDAH"}
-                    disabled={
-                        !!conflicts.delayShow || !!conflicts.immediateShow
-                    }
+                    disabled={!!conflicts.delayShow || !!conflicts.immediateShow}
+                    variant="contained"
+                    color="primary"
+                    startIcon={spinner}
                 >
-                    {spinner}Create DDAH
+                    Create DDAH
                 </Button>
-            </Modal.Footer>
-        </Modal>
+            </DialogActions>
+        </Dialog>
     );
 }

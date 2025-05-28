@@ -1,9 +1,10 @@
 import React from "react";
-import { FaDownload } from "react-icons/fa";
-import { ApplicantMatchingDatum } from "../../../api/defs/types";
-import { ActionButton } from "../../../components/action-buttons";
 import JSZip from "jszip";
 import FileSaver from "file-saver";
+import DownloadIcon from "@mui/icons-material/Download";
+
+import { ApplicantMatchingDatum } from "../../../api/defs/types";
+import { ActionButton } from "../../../components/action-buttons";
 import { GuaranteeConfirmDialog } from "./guarantee-confirm-dialog";
 
 /**
@@ -71,7 +72,7 @@ export function DownloadConfirmationPdfs({
     return (
         <React.Fragment>
             <ActionButton
-                icon={FaDownload}
+                icon={<DownloadIcon />}
                 disabled={!!disabledString}
                 onClick={() => setShowConfirm(true)}
                 title={

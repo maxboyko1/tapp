@@ -50,10 +50,12 @@ class Api::V1::Admin::PostingPositionsController < ApplicationController
                 position_id: params[:position_id],
                 posting_id: params[:posting_id]
             )
-        render_on_condition(
-            object: @posting_position,
-            condition: proc { @posting_position.destroy! }
-        )
+        if @posting_position
+            @posting_position.destroy!
+            render_success @posting_position
+        else
+            render json: { success: false, error: 'PostingPosition not found' }, status: not_found
+        end
     end
 
     private

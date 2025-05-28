@@ -27,7 +27,10 @@ class PositionService
         @all_position_attrs =
             ({})
                 .merge(@position.as_json)
-                .merge(instructor_ids: @position.instructor_ids)
+                .merge(
+                    instructor_ids: @position.instructor_ids,
+                    session_id: @position.session_id
+                )
                 .symbolize_keys
     end
 
@@ -44,6 +47,7 @@ class PositionService
             :session_id,
             :duties,
             :qualifications,
+            :custom_questions,
             :contract_template_id,
             :desired_num_assignments,
             :current_enrollment,

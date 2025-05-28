@@ -1,30 +1,51 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Nav, Navbar, NavLinkProps } from "react-bootstrap";
-import { NavLink, useLocation, useRouteMatch } from "react-router-dom";
+import { NavLink, NavLinkProps, useLocation, useParams } from "react-router-dom";
+import {
+    Box,
+    Button,
+} from "@mui/material";
 
 import "./components.css";
 
 /**
- * Wrap `"react-router-dom"`'s `NavLink` in Bootstrap
+ * Wrap `"react-router-dom"`'s `NavLink` in Material UI
  * styling.
  */
-function BootstrapNavItem(
+function MaterialNavItem(
     props: React.PropsWithChildren<
-        { to: string } & NavLinkProps & React.HTMLProps<HTMLAnchorElement>
+        { to: string; className?: string; title?: string } & NavLinkProps
     >
 ) {
     return (
-        <Nav.Item>
-            <Nav.Link as={NavLink} {...props}>
-                {props.children}
-            </Nav.Link>
-        </Nav.Item>
+        <Button
+            component={NavLink}
+            to={props.to}
+            color="inherit"
+            size="small"
+            sx={{
+                textTransform: "none",
+                minHeight: 0,
+                minWidth: 0,
+                px: 1,
+                py: 0.5,
+                mx: 0.5,
+                "&.primary": { fontWeight: "bold", fontSize: "1rem" },
+                "&.secondary": { fontWeight: "normal", fontSize: "0.9rem" },
+            }}
+            title={props.title}
+            className={props.className}
+        >
+            {props.children}
+        </Button>
     );
 }
-BootstrapNavItem.propTypes = {
+MaterialNavItem.propTypes = {
     to: PropTypes.string,
+    className: PropTypes.string,
+    title: PropTypes.string,
 };
+
 
 /**
  * Render a header that dynamically adjusts depending on the route
@@ -58,12 +79,7 @@ export function Header(props: {
     infoComponents: React.ReactNode[];
 }) {
     const { routes = [], infoComponents = [] } = props;
-    let match = useRouteMatch<{ mainRoute: string; subRoute?: string }>(
-        "/:mainRoute/:subRoute?"
-    ) || {
-        params: { mainRoute: "tapp" },
-    };
-    const { mainRoute } = match.params;
+    const { mainRoute = "tapp" } = useParams<{ mainRoute?: string }>();
     const fullRoute = useLocation().pathname;
 
     if (routes.length === 0) {
@@ -71,15 +87,14 @@ export function Header(props: {
     }
 
     const activeMainRoutes = routes.map((route) => (
-        <BootstrapNavItem
+        <MaterialNavItem
             title={route.description}
-            eventKey={route.route}
             to={route.route}
             key={route.route}
             className="primary"
         >
             {route.name}
-        </BootstrapNavItem>
+        </MaterialNavItem>
     ));
 
     // filters the routes to include only the current route, then maps all of that route's subroutes to BootstrapNavItems
@@ -93,33 +108,33 @@ export function Header(props: {
             (route.subroutes || []).map((subroute) => {
                 const fullroute = `${route.route}${subroute.route}`;
                 return (
-                    <BootstrapNavItem
+                    <MaterialNavItem
                         to={fullroute}
                         title={subroute.description}
                         key={fullroute}
                         className="secondary"
                     >
                         {subroute.name}
-                    </BootstrapNavItem>
+                    </MaterialNavItem>
                 );
             })
         );
 
     return (
-        <div className="header-container">
-            <div className="header-nav">
-                <Navbar>
-                    <Nav
-                        activeKey={mainRoute}
-                        defaultActiveKey={"tapp"}
-                        className="primary-nav-links"
-                    >
-                        {activeMainRoutes}
-                    </Nav>
-                </Navbar>
-                <Nav className="secondary-nav-links">{availableSubroutes}</Nav>
-            </div>
-            <div className="header-widgets">{infoComponents}</div>
-        </div>
+        <Box className="header-container" sx={{ bgcolor: "primary.main", color: "primary.contrastText", px: 1, py: 0.5 }}>
+            <Box className="header-nav" sx={{ display: "flex", flexDirection: "column", gap: 0.5 }}>
+                <Box className="primary-nav-links" sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
+                    {activeMainRoutes}
+                </Box>
+                {availableSubroutes.length > 0 && (
+                    <Box className="secondary-nav-links" sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
+                        {availableSubroutes}
+                    </Box>
+                )}
+            </Box>
+            <Box className="header-widgets" sx={{ ml: "auto", display: "flex", alignItems: "center", gap: 1 }}>
+                {infoComponents}
+            </Box>
+        </Box>
     );
 }

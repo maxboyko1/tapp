@@ -1,6 +1,18 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { Modal, Button, Alert } from "react-bootstrap";
+import {
+    Alert,
+    Box,
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    IconButton,
+    Typography,
+} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+
 import {
     contractTemplatesSelector,
     allContractTemplatesSelector,
@@ -44,14 +56,16 @@ function getConflicts(
     );
     if (matchingTemplate) {
         ret.immediateShow = (
-            <p>
-                Another contract template exists with name=
-                {contractTemplate.template_name}:{" "}
-                <b>
-                    {matchingTemplate.template_name}{" "}
-                    {matchingTemplate.template_file}
-                </b>
-            </p>
+            <Typography variant="body2" color="error">
+                <p>
+                    Another contract template exists with name=
+                    {contractTemplate.template_name}:{" "}
+                    <b>
+                        {matchingTemplate.template_name}{" "}
+                        {matchingTemplate.template_file}
+                    </b>
+                </p>
+            </Typography>
         );
     }
     return ret;
@@ -95,38 +109,53 @@ function AddContractTemplateDialog(props: {
     const conflicts = getConflicts(newContractTemplate, contractTemplates);
 
     return (
-        <Modal show={show} onHide={onHide}>
-            <Modal.Header closeButton>
-                <Modal.Title>Add Contract Template</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
+        <Dialog open={show} onClose={onHide} maxWidth="sm" fullWidth>
+            <DialogTitle sx={{ m: 0, p: 2 }}>
+                Add Contract Template
+                <IconButton
+                    aria-label="close"
+                    onClick={onHide}
+                    sx={{
+                        position: "absolute",
+                        right: 8,
+                        top: 8,
+                        color: (theme) => theme.palette.grey[500],
+                    }}
+                    size="large"
+                >
+                    <CloseIcon />
+                </IconButton>
+            </DialogTitle>
+            <DialogContent dividers>
                 <ContractTemplateEditor
                     contractTemplate={newContractTemplate}
                     setContractTemplate={setNewContractTemplate}
                     availableTemplates={availableTemplates}
                 />
-
                 {conflicts.immediateShow ? (
-                    <Alert variant="danger">{conflicts.immediateShow}</Alert>
+                    <Box mt={2}>
+                        <Alert severity="error">{conflicts.immediateShow}</Alert>
+                    </Box>
                 ) : null}
-            </Modal.Body>
-            <Modal.Footer>
-                <Button onClick={onHide} variant="light">
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={onHide} variant="contained" color="secondary">
                     Cancel
                 </Button>
                 <Button
                     onClick={createContractTemplate}
                     title={conflicts.delayShow || "Create Contract Template"}
-                    disabled={
-                        !!conflicts.delayShow || !!conflicts.immediateShow
-                    }
+                    disabled={!!conflicts.delayShow || !!conflicts.immediateShow}
+                    variant="contained"
+                    color="primary"
                 >
                     Create Contract Template
                 </Button>
-            </Modal.Footer>
-        </Modal>
+            </DialogActions>
+        </Dialog>
     );
 }
+
 /**
  * AddContractTemplateDialog that has been connected to the redux store
  */
@@ -140,7 +169,7 @@ export function ConnectedAddContractTemplateDialog(
     const availableTemplates = useSelector(allContractTemplatesSelector);
     const dispatch = useThunkDispatch();
     const _upsertContractTemplate = React.useCallback(
-        (template) => dispatch(upsertContractTemplate(template)),
+        (template: Partial<ContractTemplate>) => dispatch(upsertContractTemplate(template)),
         [dispatch]
     );
     const _fetchAllContractTemplates = React.useCallback(

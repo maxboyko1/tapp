@@ -8,35 +8,72 @@ import {
     getPositionPrefForPosition,
 } from "../../utils";
 import { matchingStatusToString } from "../";
-import { AdvancedFilterTable } from "../../../../../components/filter-table/advanced-filter-table";
+import { AdvancedColumnDef, AdvancedFilterTable } from "../../../../../components/advanced-filter-table";
 import { departmentCodes, programCodes } from "../../name-maps";
 
-const DEFAULT_COLUMNS = [
-    { Header: "Status", accessor: "status" },
-    { Header: "First Name", accessor: "first_name" },
-    { Header: "Last Name", accessor: "last_name" },
-    { Header: "UTORid", accessor: "utorid" },
-    { Header: "Department", accessor: "department" },
-    { Header: "Program", accessor: "program" },
-    { Header: "YIP", accessor: "yip", width: 64 },
-    { Header: "GPA", accessor: "gpa", width: 64 },
-    { Header: "TA Rating", accessor: "taPreference", width: 64 },
-    {
-        Header: "Instructor Rating",
-        accessor: "instructorPreference",
-        width: 64,
+const DEFAULT_COLUMNS: AdvancedColumnDef<ApplicantSummary>[] = [
+    {   
+        header: "Status",
+        accessorKey: "status"
     },
-    { Header: "Assignments", accessor: "assignments" },
-    { Header: "Assigned Hours", accessor: "totalHoursAssigned", width: 64 },
-    {
-        Header: "Previously Assigned Hours",
-        accessor: "previousHoursFulfilled",
-        width: 64,
+    {   
+        header: "First Name",
+        accessorKey: "first_name"
+    },
+    { 
+        header: "Last Name",
+        accessorKey: "last_name"
+    },
+    {   
+        header: "UTORid",
+        accessorKey: "utorid"
+    },
+    { 
+        header: "Department",
+        accessorKey: "department"
+    },
+    {   
+        header: "Program",
+        accessorKey: "program"
+    },
+    {   
+        header: "YIP",
+        accessorKey: "yip",
+        size: 64
+    },
+    {   
+        header: "GPA",
+        accessorKey: "gpa",
+        size: 64
+    },
+    {   
+        header: "TA Rating",
+        accessorKey: "taPreference",
+        size: 64
     },
     {
-        Header: "Total Guaranteed Hours",
-        accessor: "guaranteedHours",
-        width: 64,
+        header: "Instructor Rating",
+        accessorKey: "instructorPreference",
+        size: 64,
+    },
+    {
+        header: "Assignments",
+        accessorKey: "assignments"
+    },
+    {
+        header: "Assigned Hours",
+        accessorKey: "totalHoursAssigned",
+        size: 64
+    },
+    {
+        header: "Previously Assigned Hours",
+        accessorKey: "previousHoursFulfilled",
+        size: 64,
+    },
+    {
+        header: "Total Guaranteed Hours",
+        accessorKey: "guaranteedHours",
+        size: 64,
     },
 ];
 

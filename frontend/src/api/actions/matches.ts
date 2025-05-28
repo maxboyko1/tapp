@@ -46,7 +46,7 @@ function prepForApi(data: Partial<Match>) {
 }
 
 // dispatchers
-export const fetchMatches = validatedApiDispatcher({
+export const fetchMatches = validatedApiDispatcher<RawMatch[], []>({
     name: "fetchMatches",
     description: "Fetch matches",
     onErrorDispatch: (e) => fetchError(e.toString()),
@@ -69,7 +69,7 @@ export const fetchMatches = validatedApiDispatcher({
     },
 });
 
-export const fetchMatch = validatedApiDispatcher({
+export const fetchMatch = validatedApiDispatcher<RawMatch, [HasId]>({
     name: "fetchMatch",
     description: "Fetch match",
     onErrorDispatch: (e) => fetchError(e.toString()),
@@ -88,7 +88,10 @@ export const fetchMatch = validatedApiDispatcher({
     },
 });
 
-export const upsertMatch = validatedApiDispatcher({
+export const upsertMatch = validatedApiDispatcher<
+    RawMatch,
+    [Partial<Match>]
+>({
     name: "upsertMatch",
     description: "Add/insert match",
     onErrorDispatch: (e) => upsertError(e.toString()),
@@ -103,7 +106,7 @@ export const upsertMatch = validatedApiDispatcher({
     },
 });
 
-export const deleteMatch = validatedApiDispatcher({
+export const deleteMatch = validatedApiDispatcher<void, [Pick<Match, "applicant" | "position">]>({
     name: "deleteMatch",
     description: "Delete match",
     onErrorDispatch: (e) => deleteError(e.toString()),

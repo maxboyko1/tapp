@@ -1,90 +1,89 @@
 import React from "react";
 import { useSelector } from "react-redux";
+import SearchIcon from "@mui/icons-material/Search";
+import { IconButton, Typography } from "@mui/material";
+
 import { postingsSelector, upsertPosting } from "../../../api/actions";
 import type { Posting } from "../../../api/defs/types";
-import type { EditableType } from "../../../components/editable-cell";
-import type { Cell, Column } from "react-table";
-import { EditableCell } from "../../../components/editable-cell";
-import { AdvancedFilterTable } from "../../../components/filter-table/advanced-filter-table";
-import { generateHeaderCell } from "../../../components/table-utils";
+import { AdvancedFilterTable, AdvancedColumnDef } from "../../../components/advanced-filter-table";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
-import { FaSearch } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { EditCustomQuestionsCell } from "./custom-questions-cell";
+import { generateDateColumnProps } from "../../../components/table-utils";
 
 export function ConnectedPostingsList({ editable = true }) {
     const postings: Posting[] = useSelector(postingsSelector);
     const dispatch = useThunkDispatch();
-    const _upsertPosting = (val: Partial<Posting>) =>
-        dispatch(upsertPosting(val));
 
-    function generateCell(field: keyof Posting, type: EditableType) {
-        return (props: Cell<Posting>) => (
-            <EditableCell
-                field={field}
-                upsert={_upsertPosting}
-                type={type}
-                editable={editable}
-                {...props}
-            />
-        );
+    function handleEditRow(original: Posting, values: Partial<Posting>) {
+        dispatch(upsertPosting({ ...original, ...values }));
     }
 
-    // props.original contains the row data for this particular posting
-    function CellDetailsButton({ row }: Cell<Posting>) {
-        const posting = row?.original || {};
-        return (
-            <div className="details-button-container">
-                <Link to={`/postings/${posting.id}/details`}>
-                    <FaSearch
-                        className="details-row-button"
-                        title={`View details of ${posting.name}`}
-                    />
-                </Link>
-            </div>
-        );
-    }
-    function CellAvailability({ row }: Cell<Posting>) {
-        const posting = row?.original || {};
-        const status = posting.open_status ? "Open" : "Closed";
-        return `${status} (${posting.availability})`;
-    }
-    const DEFAULT_COLUMNS: (Column<Posting> & {
-        className?: string;
-        resizable?: boolean;
-    })[] = [
+    const DEFAULT_COLUMNS: AdvancedColumnDef<Posting>[] = [
         {
-            Header: generateHeaderCell("Details"),
+            header: "Details",
             id: "details-col",
-            className: "details-col",
-            maxWidth: 32,
-            resizable: false,
-            Cell: CellDetailsButton,
+            size: 80,
+            enableResizing: false,
+            Cell: ({ row }) => {
+                const posting = row.original;
+                return (
+                    <IconButton
+                        component={Link}
+                        to={`/postings/${posting.id}/details`}
+                        title={`View details of ${posting.name}`}
+                    >
+                        <SearchIcon />
+                    </IconButton>
+                );
+            },
         },
         {
-            Header: generateHeaderCell("Name"),
-            accessor: "name",
-            Cell: generateCell("name", "text"),
+            header: "Name",
+            accessorKey: "name",
+            meta: { editable: true },
         },
         {
-            Header: generateHeaderCell("Open Date"),
-            accessor: "open_date",
-            Cell: generateCell("open_date", "date"),
+            header: "Open Date",
+            accessorKey: "open_date",
+            meta: { editable: true },
+            ...generateDateColumnProps(),
         },
         {
-            Header: generateHeaderCell("Close Date"),
-            accessor: "close_date",
-            Cell: generateCell("close_date", "date"),
+            header: "Close Date",
+            accessorKey: "close_date",
+            meta: { editable: true },
+            ...generateDateColumnProps(),
         },
         {
-            Header: generateHeaderCell("Availability"),
+            header: "Availability",
             id: "availability",
-            Cell: CellAvailability,
+            Cell: ({ row }) => {
+                const posting = row.original;
+                const status = posting.open_status ? "Open" : "Closed";
+                return (
+                    <Typography variant="body2">
+                        {status} ({posting.availability})
+                    </Typography>
+                );
+            },
+        },
+        {
+            header: "Custom Questions",
+            accessorKey: "custom_questions",
+            Cell: (props) => <EditCustomQuestionsCell {...props} showQuestions={true} />,
         },
     ];
 
     return (
         <React.Fragment>
-            <AdvancedFilterTable columns={DEFAULT_COLUMNS} data={postings} />
+            <AdvancedFilterTable
+                columns={DEFAULT_COLUMNS}
+                filterable={true}
+                data={postings}
+                editable={editable}
+                onEditRow={handleEditRow}
+            />
         </React.Fragment>
     );
 }

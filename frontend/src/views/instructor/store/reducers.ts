@@ -1,6 +1,5 @@
 import { SET_INSTRUCTOR_ACTIVE_POSITION } from "./constants";
 import { createReducer } from "redux-create-reducer";
-export { instructorUIReducer };
 
 interface InstructorUIState {
     activePositionId: number | null;
@@ -16,3 +15,5 @@ const instructorUIReducer = createReducer(initialState, {
         return { ...state, activePositionId: action.payload };
     },
 });
+
+export { instructorUIReducer };

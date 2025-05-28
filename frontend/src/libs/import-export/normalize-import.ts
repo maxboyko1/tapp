@@ -1,4 +1,4 @@
-import * as chrono from "chrono-node";
+import { parse, format, isValid } from "date-fns";
 import { NormalizationSchema } from "../schema";
 import { SpreadsheetRowMapper } from "./spreadsheet-row-mapper";
 import { validate } from "./validate";
@@ -10,22 +10,38 @@ import { validate } from "./validate";
  * @returns date in YYYY-MM-DD:T00:00:00.000 format
  */
 function parseDate(str: string | number) {
-    // Dates parsed from excel will come in as a number. Convert those to an appropriate string first.
+    let date: Date | undefined;
+    
     if (typeof str === "number") {
-        // Convert to seconds since epoch
-        const sec = Math.round((str - 25569) * 86400 * 1000);
-        // Excel ignores timezone information, so we need to parse this and
-        // remove the timezone tag.
-        str = new Date(sec).toJSON().replace("Z", "");
+        // Excel date to JS date
+        const ms = Math.round((str - 25569) * 86400 * 1000);
+        date = new Date(ms);
+    } else {
+        // Try parsing with a few common formats
+        const formats = [
+            "yyyy-MM-dd",
+            "MM/dd/yyyy",
+            "dd/MM/yyyy",
+            "MMMM d, yyyy",
+            "MMM d, yyyy",
+            "yyyy/MM/dd",
+            "d MMM yyyy",
+        ];
+
+        for (const fmt of formats) {
+            const parsed = parse(str, fmt, new Date());
+            if (isValid(parsed)) {
+                date = parsed;
+                break;
+            }
+        }
+
+        if (!date || !isValid(date)) {
+            throw new Error(`Cannot parse "${str}" as date`);
+        }
     }
-    // Parse the date accepting many different formats
-    let date = chrono.parseDate(str);
-    // We need to jump through some hoops to remove all the timezone information.
-    try {
-        return date.toJSON().replace(/T.*/, "T00:00:00.000Z");
-    } catch (e) {
-        throw new Error(`Cannot parse "${str}" as date`);
-    }
+
+    return format(date, "yyyy-MM-dd'T00:00:00.000'X").replace("+0000", "Z");
 }
 
 export type DataFormat =

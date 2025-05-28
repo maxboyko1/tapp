@@ -1,16 +1,20 @@
 import React, { useState } from "react";
-import XLSX from "xlsx";
+import * as XLSX from "xlsx";
 import {
+    Alert,
+    Box,
     Button,
-    Modal,
-    Form,
-    Spinner,
-    Container,
-    Row,
-    Col,
-} from "react-bootstrap";
+    CircularProgress,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    IconButton,
+} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import UploadIcon from "@mui/icons-material/Upload";
+
 import { ActionButton } from "./action-buttons";
-import { FaUpload } from "react-icons/fa";
 import { DataFormat } from "../libs/import-export";
 
 interface ImportButtonProps {
@@ -176,52 +180,79 @@ export function ImportDialog({
     // When a confirm operation is in progress, a spinner is displayed; otherwise
     // it's hidden
     const spinner = inProgress ? (
-        <Spinner animation="border" size="sm" className="mr-1" />
+        <CircularProgress size={18} sx={{ mr: 1 }} />
     ) : null;
 
     return (
-        <Modal
-            show={dialogOpen}
-            onHide={onClose}
-            size="lg"
-            dialogClassName="wide-modal"
+        <Dialog
+            open={dialogOpen}
+            onClose={onClose}
+            maxWidth="lg"
+            fullWidth
+            slotProps={{ paper: { className: "wide-modal" }}}
         >
-            <Modal.Header closeButton>
-                <Modal.Title>Import From File</Modal.Title>
-            </Modal.Header>
-
-            <Modal.Body>
-                <Container>
-                    <Row className="mb-3">
-                        <Col>
-                            <Form>
-                                <Form.File
-                                    label={fileInputLabel}
-                                    onChange={_onFileChange}
-                                    custom
-                                ></Form.File>
-                            </Form>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col>{dialogContent}</Col>
-                    </Row>
-                </Container>
-            </Modal.Body>
-
-            <Modal.Footer>
+            <DialogTitle sx={{ m: 0, p: 2 }}>
+                Import From File
+                <IconButton
+                    aria-label="close"
+                    onClick={onClose}
+                    sx={{
+                        position: "absolute",
+                        right: 8,
+                        top: 8,
+                        color: (theme) => theme.palette.grey[500],
+                    }}
+                    size="large"
+                >
+                    <CloseIcon />
+                </IconButton>
+            </DialogTitle>
+            <DialogContent dividers>
+                <Box sx={{ mb: 3 }}>
+                    <Alert severity="info" sx={{ mb: 1 }}>
+                        <strong>Note:</strong> For spreadsheet imports, ensure that all rows in your spreadsheet
+                        {" "}<i>after</i>{" "} the ones with data you are trying to import are cleared, because
+                        the validator may interpret these as malformed/incomplete data rows and give you an error.
+                        This may even be a result of rows in your file that visually appear to be empty,
+                        but in fact are not. To be safe, select all cells in your spreadsheet and hit Delete
+                        (or similar) to clear them and save, then you should be able to proceed with your import.
+                    </Alert>
+                    <Button
+                        variant="outlined"
+                        component="label"
+                        startIcon={<UploadIcon />}
+                        fullWidth
+                    >
+                        {fileInputLabel}
+                        <input
+                            type="file"
+                            hidden
+                            onChange={_onFileChange}
+                        />
+                    </Button>
+                </Box>
+                <Box sx={{ mb: 2 }}>
+                    {dialogContent}
+                </Box>
+            </DialogContent>
+            <DialogActions>
                 <Button
-                    variant="secondary"
+                    variant="contained"
+                    color="secondary"
                     onClick={withLabelReset(withFileContentsReset(onCancel))}
                 >
                     Cancel
                 </Button>
-                <Button variant="primary" onClick={_onConfirm}>
-                    {spinner}
+                <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={_onConfirm}
+                    startIcon={spinner}
+                >
                     Confirm
                 </Button>
-            </Modal.Footer>
-        </Modal>
+            </DialogActions>
+        </Dialog>
     );
 }
 
@@ -260,7 +291,13 @@ export function ImportButton({
 
     return (
         <>
-            <Button onClick={() => setDialogOpen(true)}>Import</Button>
+            <Button
+                variant="contained"
+                color="primary"
+                onClick={() => setDialogOpen(true)}
+            >
+                Import
+            </Button>
             <ImportDialog
                 dialogOpen={dialogOpen}
                 onCancel={onCancel}
@@ -311,7 +348,7 @@ export function ImportActionButton({
     return (
         <>
             <ActionButton
-                icon={FaUpload}
+                icon={<UploadIcon />}
                 onClick={() => setDialogOpen(true)}
                 disabled={disabled}
             >

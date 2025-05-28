@@ -1,15 +1,14 @@
 import React from "react";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import BlockIcon from "@mui/icons-material/Block";
+import CheckIcon from "@mui/icons-material/Check";
+import EmailIcon from "@mui/icons-material/Email";
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
+
 import { ActionButton } from "../../../components/action-buttons";
 import { GuaranteeConfirmDialog } from "./guarantee-confirm-dialog";
 import { ApplicantMatchingDatum } from "../../../api/defs/types";
-import {
-    FaCheck,
-    FaUserPlus,
-    FaUserTimes,
-    FaEnvelope,
-    FaUserClock,
-    FaBan,
-} from "react-icons/fa";
 
 type ButtonWithDialogProps = {
     disabled?: boolean;
@@ -35,11 +34,11 @@ export function CreateConfirmationButtonWithDialog({
     return (
         <React.Fragment>
             <ActionButton
-                icon={<FaUserPlus />}
+                icon={<PersonAddIcon />}
                 onClick={confirmAppointmentConfirmationCreate}
                 disabled={disabled}
             >
-                Create Appointment Confirmation
+                Create Confirmation
             </ActionButton>
             <GuaranteeConfirmDialog
                 data={selectedApplicantMatchingData}
@@ -72,11 +71,11 @@ export function WithdrawConfirmationButtonWithDialog({
     return (
         <React.Fragment>
             <ActionButton
-                icon={<FaUserTimes />}
+                icon={<PersonRemoveIcon />}
                 onClick={confirmAppointmentConfirmationWithdraw}
                 disabled={disabled}
             >
-                Withdraw Appointment Confirmation
+                Withdraw Confirmation
             </ActionButton>
             <GuaranteeConfirmDialog
                 data={selectedApplicantMatchingData}
@@ -109,11 +108,11 @@ export function EmailConfirmationButtonWithDialog({
     return (
         <React.Fragment>
             <ActionButton
-                icon={<FaEnvelope />}
+                icon={<EmailIcon />}
                 onClick={confirmAppointmentConfirmationEmail}
                 disabled={disabled}
             >
-                Email Appointment Confirmation
+                Email Confirmation
             </ActionButton>
             <GuaranteeConfirmDialog
                 data={selectedApplicantMatchingData}
@@ -146,11 +145,11 @@ export function NagConfirmationButtonWithDialog({
     return (
         <React.Fragment>
             <ActionButton
-                icon={<FaUserClock />}
+                icon={<AccessTimeIcon />}
                 onClick={confirmAppointmentConfirmationNag}
                 disabled={disabled}
             >
-                Nag Appointment Confirmation
+                Nag Confirmation
             </ActionButton>
             <GuaranteeConfirmDialog
                 data={selectedApplicantMatchingData}
@@ -183,7 +182,7 @@ export function AcceptConfirmationButtonWithDialog({
     return (
         <React.Fragment>
             <ActionButton
-                icon={<FaCheck />}
+                icon={<CheckIcon />}
                 onClick={confirmAppointmentConfirmationAccept}
                 disabled={disabled}
             >
@@ -220,7 +219,7 @@ export function RejectConfirmationButtonWithDialog({
     return (
         <React.Fragment>
             <ActionButton
-                icon={<FaBan />}
+                icon={<BlockIcon />}
                 onClick={confirmAppointmentConfirmationReject}
                 disabled={disabled}
             >

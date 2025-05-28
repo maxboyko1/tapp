@@ -1,13 +1,24 @@
 import React from "react";
 import { connect } from "react-redux";
 import {
+    Alert,
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    IconButton,
+    Typography,
+} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+
+import {
     upsertApplicantMatchingDatum,
     applicantsSelector,
     applicantMatchingDataSelector,
     activeSessionSelector,
     letterTemplatesSelector,
 } from "../../../api/actions";
-import { Modal, Button, Alert } from "react-bootstrap";
 import { AppointmentEditor } from "../../../components/forms/appointment-editor";
 import {
     Applicant,
@@ -39,14 +50,13 @@ function getConflicts(
         matchingApplicantMatchingDatum.min_hours_owed
     ) {
         ret.immediateShow = (
-            <span>
+            <Typography variant="body2" color="error">
                 Appointment guarantee already exists for{" "}
                 <b>
                     {matchingApplicantMatchingDatum.applicant.first_name}{" "}
-                    {matchingApplicantMatchingDatum.applicant.last_name} (min.
-                    hours owed: {matchingApplicantMatchingDatum.min_hours_owed})
+                    {matchingApplicantMatchingDatum.applicant.last_name} (min. hours owed: {matchingApplicantMatchingDatum.min_hours_owed})
                 </b>
-            </span>
+            </Typography>
         );
     }
     return ret;
@@ -89,11 +99,8 @@ export function AddAppointmentDialog(props: {
         }
     }, [show, activeSession]);
 
-    // select a suitable default for the letter template
     React.useEffect(() => {
-        // Look for a letter template whose name is "standard" or "default";
-        // If that fails, find one whose name contains "standard" or "default";
-        // If all else fails, pick the first template in the list
+        if (!show) return;
         const defaultTemplate =
             letterTemplates.find(
                 (x) => x.template_name.toLowerCase() === "standard"
@@ -109,9 +116,12 @@ export function AddAppointmentDialog(props: {
             ) ||
             letterTemplates[0];
         if (defaultTemplate) {
-            newApplicantMatchingDatum.letter_template = defaultTemplate;
+            setNewApplicantMatchingDatum((prev) => ({
+                ...prev,
+                letter_template: prev.letter_template || defaultTemplate,
+            }));
         }
-    }, [letterTemplates, newApplicantMatchingDatum]);
+    }, [letterTemplates, show]);
 
     function createAppointment() {
         if (newApplicantMatchingDatum) {
@@ -146,11 +156,24 @@ export function AddAppointmentDialog(props: {
     );
 
     return (
-        <Modal show={show} onHide={onHide}>
-            <Modal.Header closeButton>
-                <Modal.Title>Add Appointment Guarantee</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
+        <Dialog open={show} onClose={onHide} maxWidth="sm" fullWidth>
+            <DialogTitle sx={{ m: 0, p: 2 }}>
+                Add Appointment Guarantee
+                <IconButton
+                    aria-label="close"
+                    onClick={onHide}
+                    sx={{
+                        position: "absolute",
+                        right: 8,
+                        top: 8,
+                        color: (theme) => theme.palette.grey[500],
+                    }}
+                    size="large"
+                >
+                    <CloseIcon />
+                </IconButton>
+            </DialogTitle>
+            <DialogContent dividers>
                 <AppointmentEditor
                     applicantMatchingDatum={newApplicantMatchingDatum}
                     setApplicantMatchingDatum={setNewApplicantMatchingDatum}
@@ -159,26 +182,28 @@ export function AddAppointmentDialog(props: {
                     defaultLetterTemplate={newApplicantMatchingDatum.letter_template}
                 />
                 {conflicts.immediateShow ? (
-                    <Alert variant="danger">{conflicts.immediateShow}</Alert>
+                    <Alert severity="error" sx={{ mt: 2 }}>
+                        <Typography variant="body2" color="error">
+                            {conflicts.immediateShow}
+                        </Typography>
+                    </Alert>
                 ) : null}
-            </Modal.Body>
-            <Modal.Footer>
-                <Button onClick={onHide} variant="light">
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={onHide} variant="contained" color="secondary">
                     Cancel
                 </Button>
                 <Button
                     onClick={createAppointment}
-                    title={
-                        conflicts.delayShow || "Create Appointment Guarantee"
-                    }
-                    disabled={
-                        !!conflicts.delayShow || !!conflicts.immediateShow
-                    }
+                    title={conflicts.delayShow || "Create Appointment Guarantee"}
+                    disabled={!!conflicts.delayShow || !!conflicts.immediateShow}
+                    variant="contained"
+                    color="primary"
                 >
                     Create Appointment Guarantee
                 </Button>
-            </Modal.Footer>
-        </Modal>
+            </DialogActions>
+        </Dialog>
     );
 }
 

@@ -140,6 +140,9 @@ Rails
                         # Positions
                         resources :positions, only: %i[create] do
                             collection { post :delete }
+                            collection do
+                                get :all
+                            end
                             resource :reporting_tags,
                                      controller: :position_reporting_tags,
                                      only: %i[show create] do

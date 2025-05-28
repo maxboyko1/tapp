@@ -71,7 +71,10 @@ class Api::V1::Admin::PostingsController < ApplicationController
                 :custom_questions,
                 :availability
             ).permit!
-        if filtered_params[:custom_questions]
+        if filtered_params[:custom_questions].is_a?(Array)
+            filtered_params[:custom_questions] =
+                make_questions_json_from_array(filtered_params[:custom_questions])
+        elsif filtered_params[:custom_questions].is_a?(Hash)
             filtered_params[:custom_questions] =
                 filtered_params[:custom_questions].to_hash.deep_stringify_keys
         end
@@ -89,10 +92,21 @@ class Api::V1::Admin::PostingsController < ApplicationController
                 :custom_questions,
                 :availability
             ).permit!
-        if filtered_params[:custom_questions]
+        if filtered_params[:custom_questions].is_a?(Array)
+            filtered_params[:custom_questions] =
+                make_questions_json_from_array(filtered_params[:custom_questions])
+        elsif filtered_params[:custom_questions].is_a?(Hash)
             filtered_params[:custom_questions] =
                 filtered_params[:custom_questions].to_hash.deep_stringify_keys
         end
         filtered_params
+    end
+
+    def make_questions_json_from_array(questions)
+        {
+            elements: questions.map do |question|
+                { type: 'comment', name: question }
+            end
+        }
     end
 end

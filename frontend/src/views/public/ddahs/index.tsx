@@ -1,5 +1,14 @@
 import React from "react";
-import { Button, Modal, Spinner } from "react-bootstrap";
+import {
+    Button,
+    CircularProgress,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    IconButton,
+} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 import { useParams } from "react-router-dom";
 import { RawDdahDetails } from "../../../api/defs/types";
 import { apiGET, apiPOST } from "../../../libs/api-utils";
@@ -14,7 +23,7 @@ function capitalize(text: string) {
 }
 
 export function DdahView() {
-    const params = useParams<{ url_token?: string } | null>();
+    const params = useParams<{ url_token?: string }>();
     const url_token = params?.url_token;
     const [ddah, setDdah] = React.useState<RawDdahDetails | null>(null);
     const [decision, setDecision] = React.useState<"accept" | null>(null);
@@ -80,8 +89,11 @@ export function DdahView() {
                 <div className="decision">
                     <h3>
                         <Button
+                            component="a"
                             href={`/public/ddahs/${url_token}.pdf`}
-                            role="button"
+                            target="_blank"
+                            rel="noopener"
+                            variant="contained"
                         >
                             Download PDF
                         </Button>
@@ -134,6 +146,7 @@ export function DdahView() {
                                 </div>
                             </div>
                             <Button
+                                variant="contained"
                                 disabled={
                                     decision == null ||
                                     (decision === "accept" && signature === "")
@@ -163,33 +176,48 @@ export function DdahView() {
                     ></iframe>
                 </div>
             </div>
-            <Modal
-                show={confirmationDialogVisible}
-                onHide={() => setConfirmationDialogVisible(false)}
+            <Dialog
+                open={confirmationDialogVisible}
+                onClose={() => setConfirmationDialogVisible(false)}
+                maxWidth="xs"
+                fullWidth
             >
-                <Modal.Header closeButton>
-                    <Modal.Title>Acknowledge DDAH</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
+                <DialogTitle sx={{ m: 0, p: 2 }}>
+                    Acknowledge DDAH
+                    <IconButton
+                        aria-label="close"
+                        onClick={() => setConfirmationDialogVisible(false)}
+                        sx={{
+                            position: 'absolute',
+                            right: 8,
+                            top: 8,
+                            color: (theme) => theme.palette.grey[500],
+                        }}
+                        size="large"
+                    >
+                        <CloseIcon />
+                    </IconButton>
+                </DialogTitle>
+                <DialogContent dividers>
                     Are you sure you want to <b>acknowledge</b> the DDAH?
-                </Modal.Body>
-                <Modal.Footer>
+                </DialogContent>
+                <DialogActions>
                     <Button
-                        variant="secondary"
+                        variant="outlined"
                         onClick={() => setConfirmationDialogVisible(false)}
                     >
                         Cancel
                     </Button>
-                    <Button onClick={confirmClicked}>
-                        {waiting ? (
-                            <span className="spinner-surround">
-                                <Spinner animation="border" size="sm" />
-                            </span>
-                        ) : null}
+                    <Button
+                        variant="contained"
+                        onClick={confirmClicked}
+                        disabled={waiting}
+                        startIcon={waiting ? <CircularProgress size={18} /> : null}
+                    >
                         Acknowledge DDAH
                     </Button>
-                </Modal.Footer>
-            </Modal>
+                </DialogActions>
+            </Dialog>
         </div>
     );
 }

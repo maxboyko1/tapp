@@ -6,7 +6,7 @@ class ApplicationService
 
     def initialize(application: nil)
         @application = application
-        @applicant = @application ? @application.applicant : nil
+        @applicant = @application&.applicant
     end
 
     # Return the "prefilled data" associated with this application. This is the data that
@@ -22,7 +22,6 @@ class ApplicationService
                 'program',
                 'department',
                 'yip',
-                'cv_link',
                 'previous_department_ta',
                 'previous_university_ta',
                 'previous_experience_summary',
@@ -36,14 +35,18 @@ class ApplicationService
             data.merge! @application.custom_question_answers.except('utorid')
         end
 
-        # Position-preferences must be reconstructed from the database. Surveyjs expects
-        # an object { [course_code]: preference_level }
+        # Position-preferences and position custom_question_answers must be reconstructed from the database.
         position_preferences = {}
+        position_answers = {}
         position_preferences_subs.each do |preference|
-            position_preferences[preference['position_code']] =
-                preference['preference_level']
+            position_preferences[preference['position_code']] = preference['preference_level']
+            if preference['custom_question_answers'].present?
+                # Re-nest under panel_{code} for SurveyJS
+                position_answers["panel_#{preference['position_code']}"] = preference['custom_question_answers']
+            end
         end
         data[:position_preferences] = position_preferences
+        data.merge!(position_answers)
 
         data.symbolize_keys!
     end
@@ -86,10 +89,12 @@ class ApplicationService
     def position_preferences_subs
         PositionPreference.joins(:position).where(
             id: application.position_preference_ids
-        ).pluck(:"positions.position_code", :preference_level)
-            .map do |(position_code, preference_level)|
+        ).pluck(:"positions.position_code", :preference_level, :custom_question_answers)
+            .map do |(position_code, preference_level, custom_question_answers)|
             {
-                position_code: position_code, preference_level: preference_level
+                position_code: position_code,
+                preference_level: preference_level,
+                custom_question_answers: custom_question_answers
             }.stringify_keys
         end
     end

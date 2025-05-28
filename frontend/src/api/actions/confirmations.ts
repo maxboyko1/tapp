@@ -40,7 +40,10 @@ export const fetchConfirmationsForApplicantMatchingDatumSuccess = actionFactory<
 }>(FETCH_CONFIRMATIONS_FOR_APPLICANT_MATCHING_DATUM_SUCCESS);
 
 // dispatchers
-export const fetchConfirmationHistoryForApplicantMatchingDatum = validatedApiDispatcher({
+export const fetchConfirmationHistoryForApplicantMatchingDatum = validatedApiDispatcher<
+    RawConfirmation[],
+    [HasId]
+>({
     name: "fetchConfirmationHistoryForApplicantMatchingDatum",
     description:
         "Fetch the history of all confirmations associated with an applicant matching datum",
@@ -57,10 +60,14 @@ export const fetchConfirmationHistoryForApplicantMatchingDatum = validatedApiDis
                 confirmations: data,
             })
         );
+        return data;
     },
 });
 
-export const fetchActiveConfirmationForApplicantMatchingDatum = validatedApiDispatcher({
+export const fetchActiveConfirmationForApplicantMatchingDatum = validatedApiDispatcher<
+    RawConfirmation,
+    [HasId]
+>({
     name: "fetchActiveConfirmationForApplicantMatchingDatum",
     description: "Fetch the confirmation currently associated with an applicant matching datum",
     onErrorDispatch: (e) => fetchError(e.toString()),
@@ -74,7 +81,10 @@ export const fetchActiveConfirmationForApplicantMatchingDatum = validatedApiDisp
     },
 });
 
-export const setConfirmationForApplicantMatchingDatumAccepted = validatedApiDispatcher({
+export const setConfirmationForApplicantMatchingDatumAccepted = validatedApiDispatcher<
+    RawConfirmation,
+    [ApplicantMatchingDatum]
+>({
     name: "setConfirmationForApplicantMatchingDatumAccepted",
     description: "Set a confirmation as accepted",
     onErrorDispatch: (e) => fetchError(e.toString()),
@@ -87,10 +97,14 @@ export const setConfirmationForApplicantMatchingDatumAccepted = validatedApiDisp
         // After we update a confirmation, we should refetch the applicant matching datum to make sure
         // there isn't stale data
         await dispatch(fetchApplicantMatchingDatum(applicantMatchingDatum));
+        return data;
     },
 });
 
-export const setConfirmationForApplicantMatchingDatumRejected = validatedApiDispatcher({
+export const setConfirmationForApplicantMatchingDatumRejected = validatedApiDispatcher<
+    RawConfirmation,
+    [ApplicantMatchingDatum]
+>({
     name: "setConfirmationForApplicantMatchingDatumRejected",
     description: "Set a confirmation as rejected",
     onErrorDispatch: (e) => fetchError(e.toString()),
@@ -103,10 +117,14 @@ export const setConfirmationForApplicantMatchingDatumRejected = validatedApiDisp
         // After we update a confirmation, we should refetch the applicant matching datum to make sure
         // there isn't stale data
         await dispatch(fetchApplicantMatchingDatum(applicantMatchingDatum));
+        return data;
     },
 });
 
-export const confirmationForApplicantMatchingDatumWithdraw = validatedApiDispatcher({
+export const confirmationForApplicantMatchingDatumWithdraw = validatedApiDispatcher<
+    RawConfirmation,
+    [ApplicantMatchingDatum]
+>({
     name: "confirmationForApplicantMatchingDatumWithdraw",
     description: "Withdraw a confirmation",
     onErrorDispatch: (e) => fetchError(e.toString()),
@@ -119,10 +137,14 @@ export const confirmationForApplicantMatchingDatumWithdraw = validatedApiDispatc
         // After we update a confirmation, we should refetch the applicant matching datum to make sure
         // there isn't stale data
         await dispatch(fetchApplicantMatchingDatum(applicantMatchingDatum));
+        return data;
     },
 });
 
-export const confirmationForApplicantMatchingDatumCreate = validatedApiDispatcher({
+export const confirmationForApplicantMatchingDatumCreate = validatedApiDispatcher<
+    RawConfirmation,
+    [ApplicantMatchingDatum]
+>({
     name: "confirmationForApplicantMatchingDatumCreate",
     description: "Create a confirmation",
     onErrorDispatch: (e) => fetchError(e.toString()),
@@ -135,10 +157,14 @@ export const confirmationForApplicantMatchingDatumCreate = validatedApiDispatche
         // After we update a confirmation, we should refetch the applicant matching datum to make sure
         // there isn't stale data
         await dispatch(fetchApplicantMatchingDatum(applicantMatchingDatum));
+        return data;
     },
 });
 
-export const confirmationForApplicantMatchingDatumEmail = validatedApiDispatcher({
+export const confirmationForApplicantMatchingDatumEmail = validatedApiDispatcher<
+    RawConfirmation,
+    [ApplicantMatchingDatum]
+>({
     name: "confirmationForApplicantMatchingDatumEmail",
     description: "Email a confirmation letter",
     onErrorDispatch: (e) => fetchError(e.toString()),
@@ -151,10 +177,14 @@ export const confirmationForApplicantMatchingDatumEmail = validatedApiDispatcher
         // After we update a confirmation, we should refetch the applicant matching datum to make sure
         // there isn't stale data
         await dispatch(fetchApplicantMatchingDatum(applicantMatchingDatum));
+        return data;
     },
 });
 
-export const confirmationForApplicantMatchingDatumNag = validatedApiDispatcher({
+export const confirmationForApplicantMatchingDatumNag = validatedApiDispatcher<
+    RawConfirmation,
+    [ApplicantMatchingDatum]
+>({
     name: "confirmationForApplicantMatchingDatumNag",
     description: "Send a nag email for a confirmation letter",
     onErrorDispatch: (e) => fetchError(e.toString()),
@@ -167,5 +197,6 @@ export const confirmationForApplicantMatchingDatumNag = validatedApiDispatcher({
         // After we update a confirmation, we should refetch the applicant matching datum to make sure
         // there isn't stale data
         await dispatch(fetchApplicantMatchingDatum(applicantMatchingDatum));
+        return data;
     },
 });

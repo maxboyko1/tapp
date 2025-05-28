@@ -6,7 +6,6 @@ import { AdminRoutes } from "./views/admin/routes";
 import { InstructorRoutes } from "./views/instructor/routes";
 import { AdminHeader } from "./views/admin/admin-header";
 
-import "bootstrap/dist/css/bootstrap.min.css";
 import "./main-entry.css";
 import { InstructorHeader } from "./views/instructor";
 import { useThunkDispatch } from "./libs/thunk-dispatch";

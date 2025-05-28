@@ -1,5 +1,5 @@
 import React from "react";
-import { Badge, Dropdown } from "react-bootstrap";
+import { Box, Badge, Button, Menu, MenuItem, Typography } from "@mui/material";
 import { User, UserRole } from "../api/defs/types";
 
 const DEFAULT_USER: Omit<User, "id"> = { utorid: "<noid>", roles: [] };
@@ -9,51 +9,88 @@ export function ActiveUserDisplay(props: {
     activeRole?: UserRole | null;
     setActiveUserRole: (role: UserRole) => any;
 }) {
-    const [dropdownVisible, setDropdownVisible] = React.useState(false);
     const { activeUser = DEFAULT_USER, activeRole, setActiveUserRole } = props;
-
     const roles = activeUser.roles;
+
+    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+
     const label = !activeRole ? (
-        <span className="text-secondary mr-2">Select a role</span>
+        <Typography color="inherit" sx={{ mr: 0.5 }} component="span">
+            Select a role
+        </Typography>
     ) : (
-        <span className="text-primary mr-2">{activeRole}</span>
+        <Typography color="inherit" sx={{ mr: 0.5 }} component="span">
+            {activeRole}
+        </Typography>
     );
 
-    const isActiveRole = (role: UserRole) => {
-        return activeRole === role;
+    const isActiveRole = (role: UserRole) => activeRole === role;
+
+    const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+        setAnchorEl(event.currentTarget);
     };
+
+    const handleMenuClose = () => {
+        setAnchorEl(null);
+    };
+
+    const handleSelect = (role: UserRole) => {
+        setActiveUserRole(role);
+        handleMenuClose();
+    };
+
     return (
-        <Badge>
-            Login: {activeUser.utorid}
-            {" as"}
-            <Dropdown
-                onSelect={(i) => {
-                    if (i == null) {
-                        return;
-                    }
-                    setActiveUserRole(roles[+i]);
-                }}
-                onToggle={(desiredVisibility) =>
-                    setDropdownVisible(desiredVisibility)
-                }
-                show={dropdownVisible}
-                alignRight
-            >
-                <Dropdown.Toggle split variant="light">
+        <Badge color="primary" badgeContent="" sx={{ ".MuiBadge-badge": { display: "none" } }}>
+            <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                <Typography variant="body2" color="inherit" sx={{ mb: 0.5 }}>
+                    Login: {activeUser.utorid} as
+                </Typography>
+                <Button
+                    color="secondary"
+                    variant="contained"
+                    onClick={handleMenuOpen}
+                    sx={{
+                        textTransform: "none",
+                    }}
+                >
                     {label}
-                </Dropdown.Toggle>
-                <Dropdown.Menu flip={true}>
+                </Button>
+                <Menu
+                    anchorEl={anchorEl}
+                    open={Boolean(anchorEl)}
+                    onClose={handleMenuClose}
+                    anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+                    transformOrigin={{ vertical: "top", horizontal: "left" }}
+                    slotProps={{ paper: {
+                        sx: {
+                            bgcolor: "secondary.main",
+                            color: "#fff",
+                        },
+                    }}}
+                >
                     {(roles || []).map((role, index) => (
-                        <Dropdown.Item
+                        <MenuItem
                             key={index}
-                            eventKey={"" + index}
-                            active={isActiveRole(role)}
+                            selected={isActiveRole(role)}
+                            onClick={() => handleSelect(role)}
+                            sx={{
+                                bgcolor: "secondary.main",
+                                color: "#fff",
+                                "&.Mui-selected": {
+                                    bgcolor: "secondary.dark",
+                                    color: "#fff",
+                                },
+                                "&:hover": {
+                                    bgcolor: "secondary.dark",
+                                    color: "#fff",
+                                },
+                            }}
                         >
                             {role}
-                        </Dropdown.Item>
+                        </MenuItem>
                     ))}
-                </Dropdown.Menu>
-            </Dropdown>
+                </Menu>
+            </Box>
         </Badge>
     );
 }

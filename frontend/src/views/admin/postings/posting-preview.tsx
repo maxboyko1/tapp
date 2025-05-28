@@ -1,6 +1,8 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { Redirect } from "react-router-dom";
+import { Navigate } from "react-router-dom";
+import { Typography } from "@mui/material";
+
 import {
     activeSessionSelector,
     fetchPostingPositionsForPosting,
@@ -53,13 +55,15 @@ function ConnectedPostingPreview() {
     const posting = postings.find((posting) => posting.id === posting_id);
 
     if (postingIsForDifferentSession) {
-        return <Redirect to="/postings/overview" />;
+        return <Navigate to="/postings/overview" replace />;
     }
     if (posting_id == null) {
         return (
             <div className="page-body">
                 <ContentArea>
-                    <h4>Cannot view a Posting without a valid posting id</h4>
+                    <Typography variant="h4" color="error">
+                        Cannot view a Posting without a valid posting id
+                    </Typography>
                 </ContentArea>
             </div>
         );
@@ -69,7 +73,9 @@ function ConnectedPostingPreview() {
         return (
             <div className="page-body">
                 <ContentArea>
-                    <h4>Cannot Posting with id={posting_id}</h4>
+                    <Typography variant="h4" color="error">
+                        Cannot Posting with id={posting_id}
+                    </Typography>
                 </ContentArea>
             </div>
         );

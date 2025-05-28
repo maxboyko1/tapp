@@ -1,29 +1,40 @@
 import React from "react";
 import { useSelector } from "react-redux";
+import CloseIcon from "@mui/icons-material/Close";
+import SearchIcon from "@mui/icons-material/Search";
+import {
+    Alert,
+    Button,
+    Chip,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    IconButton,
+    Typography,
+} from "@mui/material";
+
 import { activePositionSelector } from "../store/actions";
 import { applicationsSelector } from "../../../api/actions";
-import { AdvancedFilterTable } from "../../../components/filter-table/advanced-filter-table";
+import { AdvancedColumnDef, AdvancedFilterTable } from "../../../components/advanced-filter-table";
 import {
     Application,
     Assignment,
     InstructorPreference,
     Position
 } from "../../../api/defs/types";
-import { generateHeaderCell } from "../../../components/table-utils";
 import { ApplicantRatingAndComment } from "../../../components/applicant-rating";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
 import { upsertInstructorPreference } from "../../../api/actions/instructor_preferences";
-import { CellProps } from "react-table";
-import { Alert, Button, Modal, Badge } from "react-bootstrap";
-import { FaSearch } from "react-icons/fa";
 import { ApplicationDetails } from "../../admin/applications/application-details";
 import { PropsForElement } from "../../../api/defs/types/react";
 import { assignmentsSelector } from "../../../api/actions";
+import { generateHeaderCellProps } from "../../../components/table-utils";
 
-const OFFER_STATUS_TO_VARIANT: Record<string, string> = {
+const OFFER_STATUS_TO_VARIANT: Record<string, 'success' | 'error' | 'warning'> = {
     accepted: "success",
-    rejected: "danger",
-    withdrawn: "danger",
+    rejected: "error",
+    withdrawn: "error",
 };
 
 export function InstructorApplicationsTable() {
@@ -112,57 +123,40 @@ export function InstructorApplicationsTable() {
         return <h4>No position currently selected</h4>;
     }
 
-    const columns = [
+    const columns: AdvancedColumnDef<Application>[] = [
         {
-            Header: "Your Rating",
+            header: "Your Rating",
             id: "instructor_preference",
-            Cell: (props: CellProps<Application>) => (
-                <ConnectedRating application={props.row.original} />
+            Cell: ({ row }) => <ConnectedRating application={row.original} />,
+        },
+        {
+            header: "Application",
+            id: "application",
+            Cell: ({ row }) => (
+                <Button
+                    variant="outlined"
+                    size="small"
+                    onClick={() => setShownApplicationId(row.original.id) }
+                    startIcon={<SearchIcon />}
+                >
+                    View
+                </Button>
             ),
         },
         {
-            Header: "Application",
-            id: "application",
-            Cell: (props: CellProps<Application>) => {
-                const application = props.row.original;
-                return (
-                    <div style={{ display: "flex", justifyContent: "center" }}>
-                        <Button
-                            variant="info"
-                            size="sm"
-                            className="mr-2 py-0"
-                            title="View the full Application"
-                            onClick={() => {
-                                setShownApplicationId(application.id);
-                            }}
-                        >
-                            <FaSearch className="mr-2" />
-                            View
-                        </Button>
-                    </div>
-                );
-            },
+            header: "Last Name",
+            accessorKey: "applicant.last_name",
         },
         {
-            Header: "Last Name",
-            accessor: "applicant.last_name",
+            header: "First Name",
+            accessorKey: "applicant.first_name",
         },
         {
-            Header: "First Name",
-            accessor: "applicant.first_name",
-        },
-        {
-            Header: "Email",
-            accessor: "applicant.email",
-            Cell: ({
-                value,
-                row,
-            }: {
-                value: string;
-                row: { original: Assignment };
-            }) => {
-                const assignment = row.original;
-                const applicant = assignment.applicant;
+            header: "Email",
+            accessorKey: "applicant.email",
+            Cell: ({ row, cell }) => {
+                const value = cell.getValue<string>();
+                const applicant = row.original.applicant;
                 return (
                     <a
                         href={encodeURI(
@@ -175,50 +169,46 @@ export function InstructorApplicationsTable() {
             },
         },
         {
-            Header: generateHeaderCell(
-                "Program",
-                "Program: P (PhD), M (Masters), U (Undergrad)"
-            ),
-            width: 90,
-            accessor: "program",
+            ...generateHeaderCellProps("Program", "Program: P (PhD), M (Masters), U (Undergrad)"),
+            accessorKey: "program",
+            size: 90,
         },
         {
-            Header: generateHeaderCell("YIP", "Year of study"),
-            width: 50,
-            accessor: "yip",
+            ...generateHeaderCellProps("YIP", "Year of study"),
+            accessorKey: "yip",
+            size: 50,
         },
         {
-            Header: generateHeaderCell("GPA"),
-            width: 60,
-            accessor: "gpa",
+            ...generateHeaderCellProps("GPA"),
+            accessorKey: "gpa",
+            size: 60,
         },
         {
-            Header: generateHeaderCell("Experience"),
-            accessor: "previous_experience_summary",
+            ...generateHeaderCellProps("Experience"),
+            accessorKey: "previous_experience_summary",
         },
         {
-            Header: "Assignment(s)",
+            header: "Assignment(s)",
             id: "assignments",
-            width: 300,
-            Cell: (props: CellProps<Application>) => {
+            size: 300,
+            Cell: ({ row }) => {
                 const assignments: Assignment[] =
-                    assignmentsByApplicantId[props.row.original.applicant.id] ||
-                    [];
+                    assignmentsByApplicantId[row.original.applicant.id] || [];
                 return (
-                    <ul className="position-preferences-list">
+                    <ul style={{ paddingLeft: 16, margin: 0 }}>
                         {assignments.map((assignment) => (
-                            <Badge
-                                as="li"
-                                key={assignment.position.position_code}
-                                variant={
-                                    OFFER_STATUS_TO_VARIANT[
-                                        assignment.active_offer_status || ""
-                                    ] || "warning"
-                                }
-                            >
-                                {assignment.position.position_code} (
-                                {assignment.hours})
-                            </Badge>
+                            <li key={assignment.position.position_code}>
+                                <Chip
+                                    label={`${assignment.position.position_code} (${assignment.hours})`}
+                                    color={
+                                        OFFER_STATUS_TO_VARIANT[
+                                            assignment.active_offer_status || ''
+                                        ] || 'warning'
+                                    }
+                                    size="small"
+                                    sx={{ mr: 0.5, mb: 0.5 }}
+                                />
+                            </li>
                         ))}
                     </ul>
                 );
@@ -233,42 +223,54 @@ export function InstructorApplicationsTable() {
                 columns={columns}
                 data={flatApplications}
             />
-
-            <Modal
-                show={!!shownApplication}
-                onHide={() => setShownApplicationId(null)}
-                size="xl"
+            <Dialog
+                open={!!shownApplication}
+                onClose={() => setShownApplicationId(null)}
+                maxWidth="xl"
+                fullWidth
             >
-                <Modal.Header closeButton>
-                    <Modal.Title>Application Details</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
+                <DialogTitle sx={{ m: 0, p: 2 }}>
+                    Application Details
+                    <IconButton
+                        aria-label="close"
+                        onClick={() => setShownApplicationId(null)}
+                        sx={{
+                            position: 'absolute',
+                            right: 8,
+                            top: 8,
+                            color: (theme) => theme.palette.grey[500],
+                        }}
+                        size="large"
+                    >
+                        <CloseIcon />
+                    </IconButton>
+                </DialogTitle>
+                <DialogContent dividers>
                     {shownApplication && (
                         <React.Fragment>
-                            <Alert variant="primary">
-                                <Alert.Heading>
+                            <Alert severity="info" sx={{ mb: 2 }}>
+                                <Typography variant="h6" component="div">
                                     Your Rating <small>(click to edit)</small>
-                                </Alert.Heading>
+                                </Typography>
                                 <ConnectedRating
                                     application={shownApplication}
                                     compact={false}
                                 />
                             </Alert>
-                            <ApplicationDetails
-                                application={shownApplication}
-                            />
+                            <ApplicationDetails application={shownApplication} />
                         </React.Fragment>
                     )}
-                </Modal.Body>
-                <Modal.Footer>
+                </DialogContent>
+                <DialogActions>
                     <Button
                         onClick={() => setShownApplicationId(null)}
-                        variant="outline-secondary"
+                        variant="outlined"
+                        color="secondary"
                     >
                         Close
                     </Button>
-                </Modal.Footer>
-            </Modal>
+                </DialogActions>
+            </Dialog>
         </React.Fragment>
     );
 }

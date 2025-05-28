@@ -1,15 +1,14 @@
-import React from "react";
 import PropTypes from "prop-types";
-import { AdvancedFilterTable } from "./filter-table/advanced-filter-table";
+import { AdvancedColumnDef, AdvancedFilterTable } from "./advanced-filter-table";
 import { Application } from "../api/defs/types";
 
-const DEFAULT_COLUMNS = [
-    { Header: "Last Name", accessor: "applicant.last_name" },
-    { Header: "First Name", accessor: "applicant.first_name" },
-    { Header: "UTORid", accessor: "applicant.utorid" },
-    { Header: "Student Number", accessor: "applicant.student_number" },
-    { Header: "Email", accessor: "applicant.email" },
-    { Header: "Phone", accessor: "applicant.phone" },
+const DEFAULT_COLUMNS: AdvancedColumnDef<Application>[] = [
+    { header: "Last Name", accessorKey: "applicant.last_name" },
+    { header: "First Name", accessorKey: "applicant.first_name" },
+    { header: "UTORid", accessorKey: "applicant.utorid" },
+    { header: "Student Number", accessorKey: "applicant.student_number" },
+    { header: "Email", accessorKey: "applicant.email" },
+    { header: "Phone", accessorKey: "applicant.phone" },
 ];
 
 /**
@@ -23,13 +22,16 @@ const DEFAULT_COLUMNS = [
 export function ApplicationsList(props: {
     applicants: (Omit<Application, "id"> | Application)[];
     columns?: any[];
+    onEditRow?: (row: any, values: any) => void;
 }) {
-    const { applicants, columns = DEFAULT_COLUMNS } = props;
+    const { applicants, columns = DEFAULT_COLUMNS, onEditRow } = props;
     return (
         <AdvancedFilterTable
             columns={columns}
             data={applicants}
             filterable={true}
+            editable={true}
+            onEditRow={onEditRow}
         />
     );
 }

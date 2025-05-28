@@ -1,8 +1,8 @@
-import React from "react";
+import { useSelector } from "react-redux";
+import { Typography } from "@mui/material";
 import { ActionsList, ActionHeader } from "../../../components/action-buttons";
 import { ContentArea } from "../../../components/layout";
 import { InstructorAssignmentsTable } from "./assignments-table";
-import { useSelector } from "react-redux";
 import { activePositionSelector } from "../store/actions";
 import { activeSessionSelector } from "../../../api/actions";
 import { formatDate } from "../../../libs/utils";
@@ -14,7 +14,9 @@ export function InstructorAssignmentsView() {
 
     if (!activeSession || !activePosition) {
         return (
-            <h4>Please select a Session and Position to see TA information</h4>
+            <Typography variant="h4" color="text.primary">
+                Please select a Session and Position to see TA information
+            </Typography>
         );
     }
 
@@ -34,22 +36,24 @@ export function InstructorAssignmentsView() {
                 <ConnectedExportAssignmentsAction />
             </ActionsList>
             <ContentArea>
-                <h4>
-                    <span>{formattedPositionName}</span>
-                </h4>
-                <p>
+                <Typography variant="h4" color="text.primary" gutterBottom>
+                    {formattedPositionName}
+                </Typography>
+                <Typography component="p">
                     Below is a list of your TAs for{" "}
-                    <span className="text-primary">
+                    <Typography component="span" color="primary" display="inline">
                         {formattedPositionName}
-                    </span>{" "}
+                    </Typography>{" "}
                     for the{" "}
-                    <span className="text-primary">{formattedSessionName}</span>{" "}
+                    <Typography component="span" color="primary" display="inline">
+                        {formattedSessionName}
+                    </Typography>{" "}
                     session. TAs will only show up in this list if they have
                     been emailed an offer (status <i>pending</i>) or if they
                     have accepted an offer (status <i>accepted</i>). TAs who
                     have rejected an offer or had their offer withdrawn will now
                     show up.
-                </p>
+                </Typography>
                 <InstructorAssignmentsTable />
             </ContentArea>
         </div>

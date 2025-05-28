@@ -1,9 +1,16 @@
-import React from "react";
 import PropTypes from "prop-types";
-import { Form } from "react-bootstrap";
-import { Typeahead } from "react-bootstrap-typeahead";
+import {
+    Autocomplete,
+    Box,
+    Button,
+    Chip,
+    Grid,
+    IconButton,
+    TextField,
+    Typography,
+} from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
 
-import "react-bootstrap-typeahead/css/Typeahead.css";
 import { docApiPropTypes } from "../../api/defs/doc-generation";
 import { fieldEditorFactory, DialogRow } from "./common-controls";
 import {
@@ -20,6 +27,7 @@ const DEFAULT_POSITION = {
     contract_template: {},
     duties: "Some combination of marking, invigilating, tutorials, office hours, and the help centre.",
     instructors: [],
+    custom_questions: null,
 };
 
 /**
@@ -47,6 +55,11 @@ export function PositionEditor(props: {
         Position,
         keyof typeof DEFAULT_POSITION
     >;
+
+    const instructorsWithFullName: Instructor[] = instructors.map((instructor) => ({
+        ...instructor,
+        full_name: `${instructor.first_name} ${instructor.last_name}`,
+    }))
 
     /**
      * Set `position.instructors` to the specified list.
@@ -78,8 +91,34 @@ export function PositionEditor(props: {
         ? [position.contract_template]
         : [];
 
+    function addCustomQuestion() {
+        const newQuestions = position.custom_questions ?
+            { ...position.custom_questions } : { elements: [] };
+        newQuestions.elements.push({
+            type: "comment",
+            name: "",
+        });
+        setPosition({ ...position, custom_questions: newQuestions });
+    }
+
+    function deleteCustomQuestion(index: number) {
+        if (position.custom_questions) {
+            const newQuestions = { ...position.custom_questions };
+            newQuestions.elements.splice(index, 1);
+            setPosition({ ...position, custom_questions: newQuestions });
+        }
+    }
+
+    function updateCustomQuestion(index: number, value: string) {
+        if (position.custom_questions) {
+            const newQuestions = { ...position.custom_questions };
+            newQuestions.elements[index].name = value;
+            setPosition({ ...position, custom_questions: newQuestions });
+        }
+    }
+
     return (
-        <Form>
+        <Box component="form" noValidate autoComplete="off">
             <DialogRow>
                 {createFieldEditor(
                     "Position Code (e.g. MAT135H1F)",
@@ -87,12 +126,12 @@ export function PositionEditor(props: {
                 )}
                 {createFieldEditor("Course Title", "position_title")}
             </DialogRow>
+            <Typography variant="body2" sx={{ ml: 2, alignSelf: "center" }}>
+                (If start/end dates are left blank, the session start/end dates will be used.)
+            </Typography>
             <DialogRow>
                 {createFieldEditor("Start Date*", "start_date", "date")}
                 {createFieldEditor("End Date*", "end_date", "date")}
-                <p>
-                    If blank, the session start date and end date will be used.
-                </p>
             </DialogRow>
             <DialogRow>
                 {createFieldEditor(
@@ -101,42 +140,84 @@ export function PositionEditor(props: {
                     "number"
                 )}
             </DialogRow>
-            <Form.Group>
-                <Form.Label>Instructors</Form.Label>
-                <Typeahead
-                    id="instructors-input"
-                    ignoreDiacritics={true}
+            <Box sx={{ my: 2 }}>
+                <Typography variant="subtitle1" sx={{ mb: 1 }}>
+                    Instructors
+                </Typography>
+                <Autocomplete
                     multiple
-                    placeholder="Instructors..."
-                    labelKey={(option: Instructor) =>
+                    options={instructorsWithFullName}
+                    getOptionLabel={(option) =>
                         `${option.first_name} ${option.last_name}`
                     }
-                    selected={position.instructors}
-                    options={instructors}
-                    onChange={setInstructors}
+                    value={position.instructors}
+                    onChange={(_, value) => setInstructors(value as Instructor[])}
+                    renderInput={(params) => (
+                        <TextField {...params} placeholder="Instructors..." />
+                    )}
+                    isOptionEqualToValue={(option, value) =>
+                        option.utorid === value.utorid
+                    }
+                    renderValue={(selected) =>
+                        selected.map((option: Instructor) => (
+                            <Chip
+                                key={option.utorid}
+                                label={`${option.first_name} ${option.last_name}`}
+                                color="primary"
+                                variant="outlined"
+                            />
+                        ))
+                    }
+                    slotProps={{
+                        paper: {
+                            sx: (theme) => ({
+                                bgcolor: theme.palette.primary.main,
+                                color: theme.palette.primary.contrastText,
+                            }),
+                        },
+                    }}
                 />
-            </Form.Group>
-            <Form.Group>
-                <Form.Label>
+            </Box>
+            <Box sx={{ my: 2 }}>
+                <Typography variant="subtitle1" sx={{ mb: 1 }}>
                     Contract Template (which offer template will be used)
-                </Form.Label>
-                <Typeahead
-                    id="instructors-input"
-                    ignoreDiacritics={true}
-                    multiple
-                    placeholder="Contract template..."
-                    labelKey={(option) => `${option.template_name}`}
-                    selected={selectedContractTemplate}
+                </Typography>
+                <Autocomplete
+                    multiple={false}
+                    id="contract-template-input"
                     options={contractTemplates}
-                    onChange={setContractTemplate}
+                    getOptionLabel={(option) => option.template_name || ""}
+                    value={selectedContractTemplate[0] || null}
+                    onChange={(_, value) =>
+                        setContractTemplate([value as ContractTemplate])
+                    }
+                    renderInput={(params) => (
+                        <TextField {...params} placeholder="Contract template..." />
+                    )}
+                    isOptionEqualToValue={(option, value) =>
+                        option.id === value.id
+                    }
+                    disableClearable
+                    slotProps={{
+                        paper: {
+                            sx: (theme) => ({
+                                bgcolor: theme.palette.primary.main,
+                                color: theme.palette.primary.contrastText,
+                            }),
+                        },
+                    }}
                 />
-            </Form.Group>
-            <h3>Ad-related Info</h3>
+            </Box>
+            <Typography variant="h6" sx={{ mt: 3 }}>
+                Ad-related Info
+            </Typography>
             <DialogRow>{createFieldEditor("Duties", "duties")}</DialogRow>
             <DialogRow>
                 {createFieldEditor("Qualifications", "qualifications")}
             </DialogRow>
-            <h3>Admin Info</h3>
+            <Typography variant="h6" sx={{ mt: 3 }}>
+                Admin Info
+            </Typography>
             <DialogRow>
                 {createFieldEditor(
                     "Current Enrollment",
@@ -150,7 +231,45 @@ export function PositionEditor(props: {
                     "number"
                 )}
             </DialogRow>
-        </Form>
+            <Typography variant="h6" sx={{ mt: 3 }}>
+                Position-Specific Custom Questions
+            </Typography>
+            <Typography variant="body2" sx={{ mb: 1 }}>
+                Define your custom questions for this position in textboxes you can add below. All must be non-empty.
+            </Typography>
+            <Grid container spacing={2} direction="column">
+                {position.custom_questions?.elements.map((question: { name: string }, index: number) => (
+                    <Grid key={index}>
+                        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                            <TextField
+                                type="text"
+                                value={question.name}
+                                placeholder="Write your question here..."
+                                onChange={(e) => updateCustomQuestion(index, e.target.value)}
+                                size="small"
+                                fullWidth
+                            />
+                            <IconButton
+                                color="info"
+                                onClick={() => deleteCustomQuestion(index)}
+                                aria-label="Delete question"
+                            >
+                                <DeleteIcon />
+                            </IconButton>
+                        </Box>
+                    </Grid>
+                ))}
+                <Grid>
+                    <Button
+                        variant="outlined"
+                        color="info"
+                        onClick={addCustomQuestion}
+                    >
+                        Add Custom Question
+                    </Button>
+                </Grid>
+            </Grid>
+        </Box>
     );
 }
 PositionEditor.propTypes = {

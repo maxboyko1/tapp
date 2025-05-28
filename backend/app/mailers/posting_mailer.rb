@@ -9,21 +9,21 @@ class PostingMailer < ActionMailer::Base
         debug_message = "Emailing application confirmation to \"#{@email}\""
         logger.warn debug_message
 
-        begin
-            mail(
-                to: @email,
-                from: @ta_coordinator_email,
-                subject: "Application Received for #{@posting_name}"
-            ) do |format|
-                html = email_html
-                # by calling format.html/format.text we can use our own templates
-                # in place of the rails erd's.
-                format.html { render inline: html }
-                format.text { render plain: HtmlToPlainText.plain_text(html) }
-            end
-        rescue Net::SMTPFatalError => e
-            raise StandardError, "Error when #{debug_message} (#{e})"
-        end
+        # begin
+        #     mail(
+        #         to: @email,
+        #         from: @ta_coordinator_email,
+        #         subject: "Application Received for #{@posting_name}"
+        #     ) do |format|
+        #         html = email_html
+        #         # by calling format.html/format.text we can use our own templates
+        #         # in place of the rails erd's.
+        #         format.html { render inline: html }
+        #         format.text { render plain: HtmlToPlainText.plain_text(html) }
+        #     end
+        # rescue Net::SMTPFatalError => e
+        #     raise StandardError, "Error when #{debug_message} (#{e})"
+        # end
     end
 
     private

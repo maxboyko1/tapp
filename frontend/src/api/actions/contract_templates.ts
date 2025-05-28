@@ -41,7 +41,7 @@ const MissingActiveSessionError = new Error(
     "Cannot interact with Contract Templates without an active session"
 );
 // dispatchers
-export const fetchContractTemplates = validatedApiDispatcher({
+export const fetchContractTemplates = validatedApiDispatcher<RawContractTemplate[], []>({
     name: "fetchContractTemplates",
     description: "Fetch contract_templates",
     onErrorDispatch: (e) => fetchError(e.toString()),
@@ -64,7 +64,10 @@ export const fetchContractTemplates = validatedApiDispatcher({
     },
 });
 
-export const upsertContractTemplate = validatedApiDispatcher({
+export const upsertContractTemplate = validatedApiDispatcher<
+    RawContractTemplate,
+    [Partial<ContractTemplate>]
+>({
     name: "upsertContractTemplate",
     description: "Add/insert contract_template",
     onErrorDispatch: (e) => upsertError(e.toString()),
@@ -85,7 +88,7 @@ export const upsertContractTemplate = validatedApiDispatcher({
         },
 });
 
-export const deleteContractTemplate = validatedApiDispatcher({
+export const deleteContractTemplate = validatedApiDispatcher<RawContractTemplate, [HasId]>({
     name: "deleteContractTemplate",
     description: "Delete contract_template from a session",
     onErrorDispatch: (e) => deleteError(e.toString()),
@@ -119,7 +122,7 @@ export const fetchAllContractTemplates = validatedApiDispatcher({
     },
 });
 
-export const previewContractTemplate = validatedApiDispatcher({
+export const previewContractTemplate = validatedApiDispatcher<string, [number]>({
     name: "previewContractTemplate",
     description:
         "Preview the html content of a contract template. No redux state is set by this call, but the contents of the template is returned.",
@@ -133,7 +136,7 @@ export const previewContractTemplate = validatedApiDispatcher({
     },
 });
 
-export const downloadContractTemplate = validatedApiDispatcher({
+export const downloadContractTemplate = validatedApiDispatcher<File, [number]>({
     name: "downloadContractTemplate",
     description:
         "Download the content of a contract template. No redux state is set by this call, but a `File` object with the contents of the template is returned.",
@@ -155,7 +158,7 @@ export const downloadContractTemplate = validatedApiDispatcher({
     },
 });
 
-export const uploadContractTemplate = validatedApiDispatcher({
+export const uploadContractTemplate = validatedApiDispatcher<ContractTemplate, [File]>({
     name: "uploadContractTemplate",
     description: "Upload the `File` object as a contract template",
     onErrorDispatch: (e) => fetchError(e.toString()),

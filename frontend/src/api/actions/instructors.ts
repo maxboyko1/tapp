@@ -40,7 +40,7 @@ export const fetchInstructors = validatedApiDispatcher({
     },
 });
 
-export const fetchInstructor = validatedApiDispatcher({
+export const fetchInstructor = validatedApiDispatcher<RawInstructor, [HasId]>({
     name: "fetchInstructor",
     description: "Fetch instructor",
     onErrorDispatch: (e) => fetchError(e.toString()),
@@ -54,7 +54,10 @@ export const fetchInstructor = validatedApiDispatcher({
     },
 });
 
-export const upsertInstructor = validatedApiDispatcher({
+export const upsertInstructor = validatedApiDispatcher<
+    RawInstructor,
+    [Partial<Instructor>]
+>({
     name: "upsertInstructor",
     description: "Add/insert instructor",
     onErrorDispatch: (e) => upsertError(e.toString()),
@@ -70,7 +73,7 @@ export const upsertInstructor = validatedApiDispatcher({
         },
 });
 
-export const deleteInstructor = validatedApiDispatcher({
+export const deleteInstructor = validatedApiDispatcher<void, [HasId]>({
     name: "deleteInstructor",
     description: "Delete instructor",
     onErrorDispatch: (e) => deleteError(e.toString()),
@@ -84,7 +87,10 @@ export const deleteInstructor = validatedApiDispatcher({
     },
 });
 
-export const exportInstructors = validatedApiDispatcher({
+export const exportInstructors = validatedApiDispatcher<
+    ReturnType<PrepareDataFunc<Instructor>>,
+    [PrepareDataFunc<Instructor>, ExportFormat?]
+>({
     name: "exportInstructors",
     description: "Export instructors",
     onErrorDispatch: (e) => fetchError(e.toString()),
@@ -107,20 +113,24 @@ export const exportInstructors = validatedApiDispatcher({
         },
 });
 
-export const upsertInstructors = validatedApiDispatcher({
+export const upsertInstructors = validatedApiDispatcher<
+    RawInstructor[],
+    [Partial<Instructor>[]]
+>({
     name: "upsertInstructors",
     description: "Upsert instructors",
     onErrorDispatch: (e) => fetchError(e.toString()),
     dispatcher: (instructors: Partial<Instructor>[]) => async (dispatch) => {
         if (instructors.length === 0) {
-            return;
+            return [];
         }
         const dispatchers = instructors.map((instructor) =>
             dispatch(upsertInstructor(instructor))
         );
         await Promise.all(dispatchers);
         // Re-fetch all instructors from the server in case things happened to be out of sync.
-        return await dispatch(fetchInstructors());
+        const data = await dispatch(fetchInstructors());
+        return data;
     },
 });
 // selectors

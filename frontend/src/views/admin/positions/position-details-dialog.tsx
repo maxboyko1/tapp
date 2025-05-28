@@ -1,8 +1,16 @@
-import React from "react";
+import {
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    IconButton
+} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+
 import { useSelector } from "react-redux";
 import { Position } from "../../../api/defs/types";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
-import { Button, Modal } from "react-bootstrap";
 import { PositionsDetails } from "./position-details";
 import { selectedPositionSelector, setSelectedPosition } from "./actions";
 
@@ -16,19 +24,32 @@ function PositionDetailsDialog({
     onHide: (...args: any[]) => any;
 }) {
     return (
-        <Modal show={visible} onHide={onHide} size="lg">
-            <Modal.Header closeButton>
-                <Modal.Title>Details for {position.position_code}</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
+        <Dialog open={visible} onClose={onHide} maxWidth="lg" fullWidth>
+            <DialogTitle sx={{ m: 0, p: 2 }}>
+                Details for {position.position_code}
+                <IconButton
+                    aria-label="close"
+                    onClick={onHide}
+                    sx={{
+                        position: 'absolute',
+                        right: 8,
+                        top: 8,
+                        color: (theme) => theme.palette.grey[500],
+                    }}
+                    size="large"
+                >
+                    <CloseIcon />
+                </IconButton>
+            </DialogTitle>
+            <DialogContent dividers>
                 <PositionsDetails position={position} />
-            </Modal.Body>
-            <Modal.Footer>
-                <Button variant="secondary" onClick={onHide}>
+            </DialogContent>
+            <DialogActions>
+                <Button variant="contained" color="secondary" onClick={onHide}>
                     Close
                 </Button>
-            </Modal.Footer>
-        </Modal>
+            </DialogActions>
+        </Dialog>
     );
 }
 

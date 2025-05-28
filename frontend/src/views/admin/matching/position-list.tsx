@@ -1,10 +1,11 @@
 import React from "react";
 import classNames from "classnames";
+import { ButtonBase } from "@mui/material";
+
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
 import { round } from "../../../libs/utils";
 import { PositionSummary } from "./types";
 import { setSelectedMatchingPosition } from "./actions";
-import { Button } from "react-bootstrap";
 
 /**
  * A searchable list of position codes.
@@ -95,8 +96,7 @@ function PositionRow({
     }, [positionSummary, targetHours]);
 
     return (
-        <Button
-            bsPrefix="position-row"
+        <ButtonBase
             className={classNames(
                 "position-row",
                 positionSummary.filledStatus,
@@ -107,32 +107,31 @@ function PositionRow({
                     setSelectedMatchingPosition(positionSummary.position.id)
                 )
             }
+            sx={{ width: "100%", textAlign: "left" }}
         >
-            <React.Fragment>
-                <div className="position-row-background">
-                    <div
-                        style={{ width: `${progress}%` }}
-                        className={`progress ${positionSummary.filledStatus}`}
-                    ></div>
-                </div>
-                <div className="position-row-info">
-                    <span className="position-title">
-                        {positionSummary.position.position_code}
+            <div className="position-row-background">
+                <div
+                    style={{ width: `${progress}%` }}
+                    className={`progress ${positionSummary.filledStatus}`}
+                ></div>
+            </div>
+            <div className="position-row-info">
+                <span className="position-title">
+                    {positionSummary.position.position_code}
+                </span>
+                <span className="position-hours-filled">
+                    {positionSummary.hoursAssigned} / {targetHours} h
+                </span>
+                {focused && (
+                    <span className="position-row-detail">
+                        {positionSummary.applicantSummaries.length}{" "}
+                        applicant
+                        {positionSummary.applicantSummaries.length === 1
+                            ? ""
+                            : "s"}
                     </span>
-                    <span className="position-hours-filled">
-                        {positionSummary.hoursAssigned} / {targetHours} h
-                    </span>
-                    {focused && (
-                        <span className="position-row-detail">
-                            {positionSummary.applicantSummaries.length}{" "}
-                            applicant
-                            {positionSummary.applicantSummaries.length === 1
-                                ? ""
-                                : "s"}
-                        </span>
-                    )}
-                </div>
-            </React.Fragment>
-        </Button>
+                )}
+            </div>
+        </ButtonBase>
     );
 }

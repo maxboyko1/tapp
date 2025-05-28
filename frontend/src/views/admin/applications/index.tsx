@@ -1,4 +1,7 @@
 import React from "react";
+import LinkIcon from "@mui/icons-material/Link";
+import { Typography } from "@mui/material";
+
 import { ConnectedApplicationsList } from "./editable-application-list";
 import { ConnectedExportApplicationsAction } from "./import-export";
 import {
@@ -11,7 +14,6 @@ import { useSelector } from "react-redux";
 import { activeSessionSelector, fetchPostings } from "../../../api/actions";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
 import { PreferencesLinkDialog } from "./application-details";
-import { FaLink } from "react-icons/fa";
 
 export function AdminApplicationsView() {
     const activeSession = useSelector(activeSessionSelector);
@@ -37,7 +39,7 @@ export function AdminApplicationsView() {
                 <ActionHeader>Available Actions</ActionHeader>
                 <ActionButton
                     onClick={() => setGetLinkDialogVisible(true)}
-                    icon={FaLink}
+                    icon={<LinkIcon />}
                 >
                     Instructors' Link
                 </ActionButton>
@@ -46,6 +48,9 @@ export function AdminApplicationsView() {
                 <ConnectedExportApplicationsAction />
             </ActionsList>
             <ContentArea>
+                <Typography variant="h3" sx={{ mb: 2 }}>
+                    Applications
+                </Typography>
                 <ConnectedApplicationsList />
             </ContentArea>
             <PreferencesLinkDialog

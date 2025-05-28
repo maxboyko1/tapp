@@ -1,5 +1,4 @@
-import React from "react";
-import { Route, Switch } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import { ContractView } from "../contracts";
 import { LetterView } from "../letters";
 import { DdahView } from "../ddahs";
@@ -7,19 +6,19 @@ import { PostingView } from "../postings";
 
 export function PublicRoutes() {
     return (
-        <Switch>
-            <Route path="/public/contracts/:url_token">
+        <Routes>
+            <Route path="/public/contracts/:url_token" element={
                 <ContractView />
-            </Route>
-            <Route path="/public/letters/:url_token">
+            }/>
+            <Route path="/public/letters/:url_token" element={
                 <LetterView />
-            </Route>
-            <Route path="/public/ddahs/:url_token">
+            }/>
+            <Route path="/public/ddahs/:url_token" element={
                 <DdahView />
-            </Route>
-            <Route path="/public/postings/:url_token">
+            }/>
+            <Route path="/public/postings/:url_token" element={
                 <PostingView />
-            </Route>
-        </Switch>
+            }/>
+        </Routes>
     );
 }

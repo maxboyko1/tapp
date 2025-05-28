@@ -1,6 +1,3 @@
-import React from "react";
-
-import "bootstrap/dist/css/bootstrap.min.css";
 import { PublicRoutes } from "./views/public/routes";
 
 /**

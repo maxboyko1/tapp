@@ -1,196 +1,208 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import {
+    Button,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogActions,
+    IconButton,
+} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import SearchIcon from "@mui/icons-material/Search";
+
+import {
     applicationsSelector,
-    assignmentsSelector,
     upsertApplicant,
     upsertApplication,
 } from "../../../api/actions";
 import type {
     Applicant,
     Application,
-    Assignment,
 } from "../../../api/defs/types";
 import { ApplicationsList } from "../../../components/applications";
-import { generateHeaderCell } from "../../../components/table-utils";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
-import { Cell } from "react-table";
-import { FaSearch } from "react-icons/fa";
-import { Button, Modal } from "react-bootstrap";
 import { ApplicationDetails } from "./application-details";
-import { EditableCell } from "../../../components/editable-cell";
 import { formatDate, formatDateTime } from "../../../libs/utils";
+import { AdvancedColumnDef } from "../../../components/advanced-filter-table";
 
 export function ConnectedApplicationsList() {
     const applicants = useSelector(applicationsSelector) as Application[];
-    const assignments = useSelector(assignmentsSelector) as Assignment[];
     const dispatch = useThunkDispatch();
     // If `shownApplication` is non-null, a dialog will be displayed with its details.
     const [shownApplication, setShownApplication] =
         React.useState<Application | null>(null);
 
-    const assignmentsHash: { [key: string]: boolean } = {};
-    for (const assignment of assignments) {
-        assignmentsHash[assignment.applicant.id] = true;
-    }
+    const _upsertApplication = React.useCallback(
+        (application: Partial<Application>) => {
+            return dispatch(upsertApplication(application));
+        },
+        [dispatch]
+    );
 
-    function _upsertApplication(applicant: Partial<Application>) {
-        return dispatch(upsertApplication(applicant));
-    }
+    const _upsertApplicant = React.useCallback(
+        (applicant: Partial<Applicant>) => {
+            return dispatch(upsertApplicant(applicant));
+        },
+        [dispatch]
+    );
 
-    function _upsertApplicant(applicant: Partial<Applicant>) {
-        return dispatch(upsertApplicant(applicant));
-    }
+    const handleEditRow = React.useCallback(
+        (original: Application, values: Partial<Application>) => {
+            // Split values into applicant and application updates
+            const applicantUpdates: Partial<Applicant> = {};
+            const applicationUpdates: Partial<Application> = {};
 
-    /**
-     * Factory that returns a cell to edit the Applicant referenced by an Application.
-     *
-     * @param {string} field
-     * @returns
-     */
-    function generateApplicantCell(field: keyof Applicant) {
-        return (props: Cell<Application>) => {
-            const application = props.row.original;
-            return (
-                <EditableCell
-                    column={props.column}
-                    value={props.value}
-                    field={field}
-                    upsert={_upsertApplicant}
-                    row={{ original: application.applicant }}
-                />
-            );
-        };
-    }
+            Object.entries(values).forEach(([key, val]) => {
+                if (key.startsWith("applicant.")) {
+                    // Remove "applicant." prefix for applicant fields
+                    applicantUpdates[key.replace("applicant.", "") as keyof Applicant] = val as any;
+                } else {
+                    applicationUpdates[key as keyof Application] = val as any;
+                }
+            });
 
-    function generateApplicationCell(field: keyof Application) {
-        return (props: Cell<Application>) => (
-            <EditableCell
-                column={props.column}
-                value={props.value}
-                field={field}
-                upsert={_upsertApplication}
-                row={props.row}
-            />
-        );
-    }
+            if (Object.keys(applicantUpdates).length > 0) {
+                _upsertApplicant({ ...original.applicant, ...applicantUpdates });
+            }
+            if (Object.keys(applicationUpdates).length > 0) {
+                _upsertApplication({ ...original, ...applicationUpdates });
+            }
+        },
+        [_upsertApplication, _upsertApplicant]
+    );
 
-    function CellDetailsButton({ row }: Cell<Application>) {
+    const CellDetailsButton = React.useCallback(({ row }: any) => {
         const application = row?.original || {};
+        const firstName = application.applicant?.first_name ?? "";
+        const lastName = application.applicant?.last_name ?? "";
         return (
-            <div
-                className="details-button-container"
+            <IconButton
+                className="details-row-button"
+                title={`View details of ${firstName} ${lastName}'s Application`}
                 onClick={() => setShownApplication(application)}
+                size="small"
             >
-                <FaSearch
-                    className="details-row-button"
-                    title={`View details of ${application.applicant.first_name} ${application.applicant.last_name}'s Application`}
-                />
-            </div>
+                <SearchIcon fontSize="inherit" />
+            </IconButton>
         );
-    }
+    }, [setShownApplication]);
 
-    const DEFAULT_COLUMNS = [
+    const DEFAULT_COLUMNS: AdvancedColumnDef<Application>[] = React.useMemo(() => [
         {
-            Header: generateHeaderCell("Details"),
+            header: "Details",
             id: "details-col",
-            className: "details-col",
-            maxWidth: 32,
-            resizable: false,
+            maxSize: 32,
+            enableResizing: false,
             Cell: CellDetailsButton,
         },
         {
-            Header: generateHeaderCell("Posting"),
-            accessor: "posting.name",
-            width: 90,
+            header: "Posting",
+            accessorKey: "posting.name",
+            size: 90,
         },
         {
-            Header: generateHeaderCell("Program"),
-            accessor: "program",
-            Cell: generateApplicationCell("program"),
-            width: 50,
+            header: "Program",
+            accessorKey: "program",
+            size: 50,
+            meta: { editable: true },
         },
         {
-            Header: generateHeaderCell("YIP"),
-            accessor: "yip",
-            Cell: generateApplicationCell("yip"),
-            width: 50,
+            header: "YIP",
+            accessorKey: "yip",
+            size: 50,
+            meta: { editable: true },
         },
         {
-            Header: generateHeaderCell("Last Name"),
-            accessor: "applicant.last_name",
-            Cell: generateApplicantCell("last_name"),
+            header: "Last Name",
+            accessorKey: "applicant.last_name",
+            meta: { editable: true },
         },
         {
-            Header: generateHeaderCell("First Name"),
-            accessor: "applicant.first_name",
-            Cell: generateApplicantCell("first_name"),
+            header: "First Name",
+            accessorKey: "applicant.first_name",
+            meta: { editable: true },
         },
         {
-            Header: generateHeaderCell("Email"),
-            accessor: "applicant.email",
-            Cell: generateApplicantCell("email"),
+            header: "Email",
+            accessorKey: "applicant.email",
+            meta: { editable: true },
         },
         {
-            Header: generateHeaderCell("Department"),
-            Cell: generateApplicationCell("department"),
-            accessor: "department",
+            header: "Department",
+            accessorKey: "department",
+            meta: { editable: true },
         },
         {
-            Header: generateHeaderCell("UTORid"),
-            accessor: "applicant.utorid",
-            Cell: generateApplicantCell("utorid"),
+            header: "UTORid",
+            accessorKey: "applicant.utorid",
+            meta: { editable: true },
         },
         {
-            Header: generateHeaderCell("Student Number"),
-            accessor: "applicant.student_number",
-            Cell: generateApplicantCell("student_number"),
+            header: "Student Number",
+            accessorKey: "applicant.student_number",
+            meta: { editable: true },
         },
         {
-            Header: generateHeaderCell("Phone"),
-            accessor: "applicant.phone",
-            Cell: generateApplicantCell("phone"),
+            header: "Phone",
+            accessorKey: "applicant.phone",
+            meta: { editable: true },
         },
         {
-            Header: generateHeaderCell("Submitted"),
-            accessor: "submission_date",
-            Cell: (row: any) => {
-                const date = formatDate(row.value) || "";
-                const fullDate = formatDateTime(row.value) || "";
-                return <div title={fullDate}>{date}</div>;
+            header: "Submitted",
+            accessorKey: "submission_date",
+            Cell: ({ cell }) => {
+                const date = cell.getValue();
+                return typeof date === "string" ? formatDate(date) : <></>;
             },
-        },
-    ];
+        }
+    ], [CellDetailsButton]);
 
     return (
         <React.Fragment>
             <ApplicationsList
                 applicants={applicants}
                 columns={DEFAULT_COLUMNS}
+                onEditRow={handleEditRow}
             />
 
-            <Modal
-                show={!!shownApplication}
-                onHide={() => setShownApplication(null)}
-                size="xl"
+            <Dialog
+                open={!!shownApplication}
+                onClose={() => setShownApplication(null)}
+                maxWidth="xl"
+                fullWidth
             >
-                <Modal.Header closeButton>
-                    <Modal.Title>Application Details</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
+                <DialogTitle sx={{ m: 0, p: 2 }}>
+                    Application Details
+                    <IconButton
+                        aria-label="close"
+                        onClick={() => setShownApplication(null)}
+                        sx={{
+                            position: "absolute",
+                            right: 8,
+                            top: 8,
+                            color: (theme) => theme.palette.grey[500],
+                        }}
+                        size="large"
+                    >
+                        <CloseIcon />
+                    </IconButton>
+                </DialogTitle>
+                <DialogContent dividers>
                     {shownApplication && (
                         <ApplicationDetails application={shownApplication} />
                     )}
-                </Modal.Body>
-                <Modal.Footer>
+                </DialogContent>
+                <DialogActions>
                     <Button
                         onClick={() => setShownApplication(null)}
-                        variant="outline-secondary"
+                        variant="contained"
+                        color="secondary"
                     >
                         Close
                     </Button>
-                </Modal.Footer>
-            </Modal>
+                </DialogActions>
+            </Dialog>
         </React.Fragment>
     );
 }

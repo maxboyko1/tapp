@@ -1,11 +1,33 @@
 import React from "react";
 import { useSelector } from "react-redux";
+import {
+    Alert,
+    Box,
+    Button,
+    CircularProgress,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    IconButton,
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableRow,
+    Tooltip,
+    Typography,
+} from "@mui/material";
+import { useTheme } from "@mui/material/styles";
+import CloseIcon from "@mui/icons-material/Close";
+import SearchIcon from "@mui/icons-material/Search";
+import SavedSearchIcon from "@mui/icons-material/SavedSearch";
+
 import { guaranteeTableSelector } from "./actions";
 import {
     applicantMatchingDataSelector,
     fetchConfirmationHistoryForApplicantMatchingDatum,
 } from "../../../api/actions";
-import { Button, Modal, Alert, Spinner } from "react-bootstrap";
 import { Confirmation } from "../../../api/defs/types";
 import {
     capitalize,
@@ -14,83 +36,88 @@ import {
     formatDownloadUrl,
 } from "../../../libs/utils";
 import { ActionButton } from "../../../components/action-buttons";
-import { FaSearch, FaSearchDollar } from "react-icons/fa";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
+import { getStatusColor } from "../../../libs/utils";
 
 function ConfirmationHistoryDetails({ confirmations }: { confirmations: Confirmation[] }) {
+    const theme = useTheme();
     if (confirmations.length === 0) {
-        return <span>No Letter Sent</span>;
+        return (
+            <Typography variant="body2" color="textSecondary">
+                No Letter Sent
+            </Typography>
+        );
     }
     return (
-        <table className="confirmation-history-details-table">
-            <thead>
-                <tr>
-                    <th></th>
-                    <th>Status</th>
-                    <th>Min Hours Owed</th>
-                    <th>Max Hours Owed</th>
-                    <th>Hours Previously Fulfilled</th>
-                    <th>Emailed Date</th>
-                    <th>Accepted Date</th>
-                    <th>Rejected Date</th>
-                    <th>Withdrawn Date</th>
-                </tr>
-            </thead>
-            <tbody>
+        <Table className="confirmation-history-details-table" size="small" sx={{ minWidth: 650 }}>
+            <TableHead>
+                <TableRow>
+                    <TableCell />
+                    <TableCell>Status</TableCell>
+                    <TableCell>Min Hours Owed</TableCell>
+                    <TableCell>Max Hours Owed</TableCell>
+                    <TableCell>Hours Previously Fulfilled</TableCell>
+                    <TableCell>Emailed Date</TableCell>
+                    <TableCell>Accepted Date</TableCell>
+                    <TableCell>Rejected Date</TableCell>
+                    <TableCell>Withdrawn Date</TableCell>
+                </TableRow>
+            </TableHead>
+            <TableBody>
                 {(confirmations || []).map((confirmation, i) => {
                     const url = `/public/letters/${confirmation.url_token}.pdf`;
                     return (
-                        <tr key={i}>
-                            <td>
+                        <TableRow key={i}>
+                            <TableCell>
                                 <Button
                                     href={formatDownloadUrl(url)}
-                                    variant="light"
-                                    size="sm"
-                                    className="py-0"
+                                    variant="outlined"
+                                    size="small"
+                                    sx={{ py: 0, minWidth: 0 }}
                                     title="Download letter PDF"
                                 >
-                                    <FaSearch />
+                                    <SearchIcon fontSize="small" />
                                 </Button>
-                            </td>
-                            <td className={`status ${confirmation.status}`}>
-                                {capitalize(confirmation.status)}
-                            </td>
-                            <td className="number">{confirmation.min_hours_owed}</td>
-                            <td className="number">{confirmation.max_hours_owed}</td>
-                            <td className="number">{confirmation.prev_hours_fulfilled}</td>
-                            <td
-                                title={formatDateTime(
-                                    confirmation.emailed_date || undefined
-                                )}
-                            >
-                                {formatDate(confirmation.emailed_date || "")}
-                            </td>
-                            <td
-                                title={formatDateTime(
-                                    confirmation.accepted_date || undefined
-                                )}
-                            >
-                                {formatDate(confirmation.accepted_date || "")}
-                            </td>
-                            <td
-                                title={formatDateTime(
-                                    confirmation.rejected_date || undefined
-                                )}
-                            >
-                                {formatDate(confirmation.rejected_date || "")}
-                            </td>
-                            <td
-                                title={formatDateTime(
-                                    confirmation.withdrawn_date || undefined
-                                )}
-                            >
-                                {formatDate(confirmation.withdrawn_date || "")}
-                            </td>
-                        </tr>
+                            </TableCell>
+                            <TableCell>
+                                <Typography
+                                    variant="body2"
+                                    sx={{
+                                        color: getStatusColor(confirmation.status, theme),
+                                        fontWeight: 500,
+                                    }}
+                                >
+                                    {capitalize(confirmation.status)}
+                                </Typography>
+                            </TableCell>
+                            <TableCell>{confirmation.min_hours_owed}</TableCell>
+                            <TableCell>{confirmation.max_hours_owed}</TableCell>
+                            <TableCell>{confirmation.prev_hours_fulfilled}</TableCell>
+                            <TableCell>
+                                <Tooltip title={formatDateTime(confirmation.emailed_date || undefined)}>
+                                    <span>{formatDate(confirmation.emailed_date || "")}</span>
+                                </Tooltip>
+                            </TableCell>
+                            <TableCell>
+                                <Tooltip title={formatDateTime(confirmation.accepted_date || undefined)}>
+                                    <span>{formatDate(confirmation.accepted_date || "")}</span>
+                                </Tooltip>
+                            </TableCell>
+                            <TableCell>
+                                <Tooltip title={formatDateTime(confirmation.rejected_date || undefined)}>
+                                    <span>{formatDate(confirmation.rejected_date || "")}</span>
+                                </Tooltip>
+                            </TableCell>
+                            <TableCell>
+                                <Tooltip title={formatDateTime(confirmation.withdrawn_date || undefined)}>
+                                    <span>{formatDate(confirmation.withdrawn_date || "")}</span>
+                                </Tooltip>
+                            </TableCell>
+                        </TableRow>
                     );
                 })}
-            </tbody>
-        </table>
+            </TableBody>
+        </Table>
     );
 }
 
@@ -112,59 +139,80 @@ export function ConnectedApplicantMatchingDatumDetails({
     }, [applicantMatchingDatumId, dispatch, applicantMatchingDatumNotFound]);
 
     if (!applicantMatchingDatum) {
-        return <div>No Appointment found with ID "{applicantMatchingDatumId}"</div>;
+        return <Typography>No Appointment found with ID "{applicantMatchingDatumId}"</Typography>;
     }
 
     return (
-        <table className="appointment-details-table">
-            <tbody>
-                <tr>
-                    <th>Applicant Name</th>
-                    <td>
-                        {applicantMatchingDatum.applicant.last_name},{" "}
-                        {applicantMatchingDatum.applicant.first_name}
-                    </td>
-                </tr>
-                <tr>
-                    <th>Student Number</th>
-                    <td>{applicantMatchingDatum.applicant.student_number}</td>
-                </tr>
-                <tr>
-                    <th>Minimum Hours Owed</th>
-                    <td>{applicantMatchingDatum.min_hours_owed}</td>
-                </tr>
-                <tr>
-                    <th>Maximum Hours Owed</th>
-                    <td>{applicantMatchingDatum.max_hours_owed}</td>
-                </tr>
-                <tr>
-                    <th>Hours Previously Fulfilled</th>
-                    <td>{applicantMatchingDatum.prev_hours_fulfilled}</td>
-                </tr>
-                <tr>
-                    <th>Appointment Confirmation Status</th>
-                    <td className={`status ${applicantMatchingDatum.active_confirmation_status}`}>
-                        {capitalize(
-                            applicantMatchingDatum.active_confirmation_status || "No Letter Sent"
-                        )}
-                    </td>
-                </tr>
-                <tr>
-                    <th>Appointment Confirmation History</th>
-                    <td>
+        <Table size="small" className="appointment-details-table">
+            <TableBody>
+                <TableRow>
+                    <TableCell variant="head">Applicant Name</TableCell>
+                    <TableCell>
+                        <Typography variant="body2">
+                            {applicantMatchingDatum.applicant.last_name}, {applicantMatchingDatum.applicant.first_name}
+                        </Typography>
+                    </TableCell>
+                </TableRow>
+                <TableRow>
+                    <TableCell variant="head">Student Number</TableCell>
+                    <TableCell>
+                        <Typography variant="body2">
+                            {applicantMatchingDatum.applicant.student_number}
+                        </Typography>
+                    </TableCell>
+                </TableRow>
+                <TableRow>
+                    <TableCell variant="head">Minimum Hours Owed</TableCell>
+                    <TableCell>
+                        <Typography variant="body2">
+                            {applicantMatchingDatum.min_hours_owed}
+                        </Typography>
+                    </TableCell>
+                </TableRow>
+                <TableRow>
+                    <TableCell variant="head">Maximum Hours Owed</TableCell>
+                    <TableCell>
+                        <Typography variant="body2">
+                            {applicantMatchingDatum.max_hours_owed}
+                        </Typography>
+                    </TableCell>
+                </TableRow>
+                <TableRow>
+                    <TableCell variant="head">Hours Previously Fulfilled</TableCell>
+                    <TableCell>
+                        <Typography variant="body2">
+                            {applicantMatchingDatum.prev_hours_fulfilled}
+                        </Typography>
+                    </TableCell>
+                </TableRow>
+                <TableRow>
+                    <TableCell variant="head">Appointment Confirmation Status</TableCell>
+                    <TableCell>
+                        <Typography
+                            variant="body2"
+                            className={`status ${applicantMatchingDatum.active_confirmation_status}`}
+                        >
+                            {capitalize(applicantMatchingDatum.active_confirmation_status || "No Letter Sent")}
+                        </Typography>
+                    </TableCell>
+                </TableRow>
+                <TableRow>
+                    <TableCell variant="head" sx={{ verticalAlign: "top" }}>
+                        Appointment Confirmation History
+                    </TableCell>
+                    <TableCell>
                         {applicantMatchingDatum.confirmations ? (
                             <ConfirmationHistoryDetails confirmations={applicantMatchingDatum.confirmations} />
                         ) : (
-                            <Spinner
-                                animation="border"
-                                size="sm"
-                                className="mr-1"
-                            />
+                            <Box sx={{ display: "flex", alignItems: "center" }}>
+                                <CircularProgress size={18} sx={{ mr: 1 }} />
+                                <Typography variant="body2">Loading...</Typography>
+                            </Box>
                         )}
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+                    </TableCell>
+                </TableRow>
+            </TableBody>
+        </Table>
     );
 }
 
@@ -179,8 +227,8 @@ export function ConnectedViewApplicantMatchingDatumDetailsAction() {
     );
     const [dialogVisible, setDialogVisible] = React.useState<boolean>(false);
 
-    let applicantMatchingDatumDetails: JSX.Element | JSX.Element[] = (
-        <Alert variant="info">
+    let applicantMatchingDatumDetails: React.ReactNode = (
+        <Alert severity="info">
             There are no selected appointments. You must select appointment items to see their details.
         </Alert>
     );
@@ -204,7 +252,7 @@ export function ConnectedViewApplicantMatchingDatumDetailsAction() {
     return (
         <React.Fragment>
             <ActionButton
-                icon={FaSearchDollar}
+                icon={<SavedSearchIcon />}
                 onClick={() => setDialogVisible(true)}
                 title={
                     disabled
@@ -215,24 +263,41 @@ export function ConnectedViewApplicantMatchingDatumDetailsAction() {
             >
                 Appointment Details
             </ActionButton>
-            <Modal
-                show={dialogVisible}
-                onHide={() => setDialogVisible(false)}
-                size="xl"
+            <Dialog
+                open={dialogVisible}
+                onClose={() => setDialogVisible(false)}
+                maxWidth="xl"
+                fullWidth
             >
-                <Modal.Header closeButton>
-                    <Modal.Title>Appointment Details</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>{applicantMatchingDatumDetails}</Modal.Body>
-                <Modal.Footer>
-                    <Button
-                        variant="light"
+                <DialogTitle sx={{ m: 0, p: 2 }}>
+                    Appointment Details
+                    <IconButton
+                        aria-label="close"
                         onClick={() => setDialogVisible(false)}
+                        sx={{
+                            position: "absolute",
+                            right: 8,
+                            top: 8,
+                            color: (theme) => theme.palette.grey[500],
+                        }}
+                        size="large"
+                    >
+                        <CloseIcon />
+                    </IconButton>
+                </DialogTitle>
+                <DialogContent dividers>
+                    {applicantMatchingDatumDetails}
+                </DialogContent>
+                <DialogActions>
+                    <Button
+                        variant="outlined"
+                        onClick={() => setDialogVisible(false)}
+                        color="secondary"
                     >
                         Close
                     </Button>
-                </Modal.Footer>
-            </Modal>
+                </DialogActions>
+            </Dialog>
         </React.Fragment>
     );
 }

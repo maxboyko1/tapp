@@ -1,17 +1,4 @@
 /* DDAH Styles */
-.accepted-ddah {
-    color: var(--success);
-}
-.rejected-ddah,
-.hours-mismatch-ddah {
-    color: var(--danger);
-}
-
-.missing-ddah {
-    color: var(--gray);
-    font-style: italic;
-}
-
 .ddah-preview-container h4 {
     text-align: center;
 }
@@ -31,43 +18,4 @@
 }
 .ddah-preview-container li:last-child .ddah-duty-description {
     font-style: italic;
-}
-
-.add-ddah-hours-mismatch {
-    color: var(--red);
-    font-weight: bold;
-}
-
-.ddah-duty-category {
-    width: 8em;
-    display: inline-block;
-}
-
-.ddah-duty-category.meeting::after {
-    content: "Meetings";
-    color: var(--orange);
-}
-.ddah-duty-category.prep::after {
-    content: "Preparation";
-    color: var(--pink);
-}
-.ddah-duty-category.contact::after {
-    content: "Contact time";
-    color: var(--green);
-}
-.ddah-duty-category.other::after {
-    content: "Other duties";
-    color: var(--cyan);
-}
-.ddah-duty-category.marking::after {
-    content: "Marking/Grading";
-    color: var(--blue);
-}
-.ddah-duty-category.training::after {
-    content: "Training";
-    color: var(--purple);
-}
-.ddah-duty-category.note::after {
-    content: "Note";
-    color: var(--gray);
 }

@@ -1,19 +1,34 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import FileSaver from "file-saver";
-import { FaDownload } from "react-icons/fa";
+import { MRT_Row } from "material-react-table";
+import {
+    Alert,
+    Box,
+    Button,
+    CircularProgress,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    IconButton,
+    Tooltip,
+    Typography,
+} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import DownloadIcon from "@mui/icons-material/Download";
+import SearchIcon from "@mui/icons-material/Search";
+
 import {
     contractTemplatesSelector,
     previewContractTemplate,
     downloadContractTemplate,
+    upsertContractTemplate,
 } from "../../../api/actions";
 import { ContractTemplatesList } from "../../../components/contract-templates-list";
-import { FaSearch } from "react-icons/fa";
-import { Button, Modal, Alert, Spinner } from "react-bootstrap";
-import ModalHeader from "react-bootstrap/ModalHeader";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
-import { CellProps } from "react-table";
 import { ContractTemplate } from "../../../api/defs/types";
+import { AdvancedColumnDef } from "../../../components/advanced-filter-table";
 
 function TemplatePreviewDialog({
     show,
@@ -63,58 +78,68 @@ function TemplatePreviewDialog({
     }
 
     return (
-        <Modal
-            size="xl"
-            show={show}
-            onHide={onClose}
-            dialogClassName="fullscreen-modal"
+        <Dialog
+            open={show}
+            onClose={onClose}
+            maxWidth="xl"
+            fullWidth
+            slotProps={{ paper: { sx: { minHeight: "80vh" } }}}
         >
-            <ModalHeader closeButton>
-                <Modal.Title>Previewing Template</Modal.Title>
-            </ModalHeader>
-            <Modal.Body className="d-flex">
-                <p>
-                    The template you are previewing has its fields filled in
-                    with dummy values. These values will be replaced with
-                    correct values when the template is used to create a
-                    contract.
-                </p>
+            <DialogTitle sx={{ m: 0, p: 2 }}>
+                Previewing Template
+                <IconButton
+                    aria-label="close"
+                    onClick={onClose}
+                    sx={{
+                        position: "absolute",
+                        right: 8,
+                        top: 8,
+                        color: (theme) => theme.palette.grey[500],
+                    }}
+                    size="large"
+                >
+                    <CloseIcon />
+                </IconButton>
+            </DialogTitle>
+            <DialogContent dividers sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                <Typography variant="body1" sx={{ mb: 2 }}>
+                    The template you are previewing has its fields filled in with dummy values. These values will be replaced with correct values when the template is used to create a contract.
+                </Typography>
                 {isLoading && (
-                    <Alert variant="info">
-                        <Spinner animation="border" className="mr-3" />
+                    <Alert severity="info" sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+                        <CircularProgress size={20} sx={{ mr: 2 }} />
                         Loading Template...
                     </Alert>
                 )}
                 {template_id != null && !isLoading && (
-                    <iframe
-                        style={{
-                            border: "1px solid black",
-                            width: "100%",
-                            flexGrow: 1,
-                        }}
-                        srcDoc={
-                            isLoading
-                                ? undefined
-                                : cachedPreview.content || undefined
-                        }
-                        title="Contract template preview"
-                    />
+                    <Box sx={{ flexGrow: 1, display: "flex" }}>
+                        <iframe
+                            style={{
+                                border: "1px solid black",
+                                width: "100%",
+                                flexGrow: 1,
+                                minHeight: "60vh",
+                            }}
+                            srcDoc={cachedPreview.content || undefined}
+                            title="Contract template preview"
+                        />
+                    </Box>
                 )}
-            </Modal.Body>
-            <Modal.Footer>
+            </DialogContent>
+            <DialogActions>
                 <Button
                     title="Download a copy of this template. The downloaded copy will have no substitutions made and will be suitable for editing."
                     onClick={downloadClicked}
-                    variant="link"
+                    variant="text"
+                    startIcon={<DownloadIcon sx={{ mr: 1 }} />}
                 >
-                    <FaDownload className="mr-2" />
                     Download Template
                 </Button>
-                <Button variant="secondary" onClick={onClose}>
+                <Button variant="outlined" color="secondary" onClick={onClose}>
                     Close
                 </Button>
-            </Modal.Footer>
-        </Modal>
+            </DialogActions>
+        </Dialog>
     );
 }
 
@@ -124,34 +149,46 @@ export function ConnectedContractTemplateList() {
         number | null
     >(null);
     const contractTemplates = useSelector(contractTemplatesSelector);
-    const columns = [
-        { Header: "Template Name", accessor: "template_name", width: 200 },
+    const dispatch = useThunkDispatch();
+
+    const columns: AdvancedColumnDef<ContractTemplate>[] = [
+        { 
+            header: "Template Name", 
+            accessorKey: "template_name",
+            size: 200,
+            meta: { editable: true },
+        },
         {
-            Header: "Template File",
-            accessor: "template_file",
+            header: "Template File",
+            accessorKey: "template_file",
             Cell: TemplateFileCell,
-            width: 400,
+            size: 400,
         },
     ];
 
-    function TemplateFileCell({ row }: CellProps<ContractTemplate>) {
+    function handleEditRow(original: ContractTemplate, values: Partial<ContractTemplate>) {
+        const newTemplate = { ...original, ...values };
+        dispatch(upsertContractTemplate(newTemplate));
+    }
+
+    function TemplateFileCell({ row }: { row: MRT_Row<ContractTemplate> }) {
         const rowData = row.original;
         const template_id = rowData.id;
         const template_file = rowData.template_file;
 
         return (
-            <div>
-                <Button
-                    variant="light"
-                    size="sm"
-                    className="mr-2 py-0"
-                    title="Preview Template"
-                    onClick={() => previewClicked(template_id)}
-                >
-                    <FaSearch />
-                </Button>
+            <span style={{ display: "flex", alignItems: "center" }}>
+                <Tooltip title="Preview Template">
+                    <IconButton
+                        size="small"
+                        sx={{ mr: 1, py: 0 }}
+                        onClick={() => previewClicked(template_id)}
+                    >
+                        <SearchIcon fontSize="small" />
+                    </IconButton>
+                </Tooltip>
                 {template_file}
-            </div>
+            </span>
         );
     }
 
@@ -165,6 +202,7 @@ export function ConnectedContractTemplateList() {
             <ContractTemplatesList
                 contractTemplates={contractTemplates}
                 columns={columns}
+                onEditRow={handleEditRow}
             />
             <TemplatePreviewDialog
                 show={previewVisible}

@@ -1,4 +1,6 @@
 import React from "react";
+import { CircularProgress, Typography } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
 
 import {
     ActionsList,
@@ -6,15 +8,12 @@ import {
     ActionHeader,
 } from "../../../components/action-buttons";
 import { ContentArea } from "../../../components/layout";
-import { FaEdit, FaPlus } from "react-icons/fa";
 import { MissingActiveSessionWarning } from "../../../components/sessions";
 import { useSelector } from "react-redux";
 import {
     activeSessionSelector,
     applicantMatchingDataSelector,
-    letterTemplatesSelector,
 } from "../../../api/actions";
-import { Spinner } from "react-bootstrap";
 import { ConnectedGuaranteeTable } from "./guarantee-table";
 
 import { ConnectedAddAppointmentDialog } from "./add-guarantee-dialog";
@@ -26,7 +25,6 @@ import {
 } from "./import-export";
 import { ConnectedViewApplicantMatchingDatumDetailsAction } from "./appointment-details";
 import { ConnectedConfirmationActionButtons } from "./confirmation-actions";
-import { ConnectedEditAppointmentDialog } from "./edit-appointment-dialog"
 import { DownloadConfirmationPdfs } from "./download-confirmations";
 import { guaranteeTableSelector } from "./actions";
 import { ApplicantMatchingDatum } from "../../../api/defs/types";
@@ -34,9 +32,7 @@ import { ApplicantMatchingDatum } from "../../../api/defs/types";
 export function AdminAppointmentsView() {
     const [addDialogVisible, setAddDialogVisible] = React.useState(false);
     const [addLetterDialogVisible, setAddLetterDialogVisible] = React.useState(false);
-    const [editDialogVisible, setEditDialogVisible] = React.useState(false);
     const activeSession = useSelector(activeSessionSelector);
-    const letterTemplates = useSelector(letterTemplatesSelector);
     // While data is being imported, updating the react table takes a long time,
     // so we use this variable to hide the react table during import.
     const [inProgress, setInProgress] = React.useState(false);
@@ -59,7 +55,7 @@ export function AdminAppointmentsView() {
             <ActionsList>
                 <ActionHeader>Available Actions</ActionHeader>
                 <ActionButton
-                    icon={<FaPlus />}
+                    icon={<AddIcon />}
                     onClick={() => {
                         setAddDialogVisible(true);
                     }}
@@ -68,7 +64,7 @@ export function AdminAppointmentsView() {
                     Add Appointment
                 </ActionButton>
                 <ActionButton 
-                    icon={<FaPlus />}
+                    icon={<AddIcon />}
                     onClick={() => {
                         setAddLetterDialogVisible(true);
                     }}
@@ -92,28 +88,17 @@ export function AdminAppointmentsView() {
                 <ActionHeader>Selected Appointment Actions</ActionHeader>
                 <ConnectedViewApplicantMatchingDatumDetailsAction />
                 <ConnectedConfirmationActionButtons selectedApplicantMatchingData={selectedApplicantMatchingData}/>
-
-                <ActionButton
-                    disabled={!(selectedApplicantMatchingData.length === 1)}
-                    title={
-                        selectedApplicantMatchingData.length === 1
-                            ? "Edit the selected appointment"
-                            : "Please select a single appointment to edit (you cannot edit multiple appointments at the same time)"
-                    }
-                    onClick={() => setEditDialogVisible(true)}
-                    icon={<FaEdit />}
-                >
-                    Edit Appointment
-                </ActionButton>
             </ActionsList>
             <ContentArea>
                 {activeSession ? null : (
                     <MissingActiveSessionWarning extraText="To view or modify subsequent appointment guarantees, you must select a session." />
                 )}
-
+                <Typography variant="h3" sx={{ mb: 2 }}>
+                    Subsequent Appointments
+                </Typography>
                 {inProgress ? (
                     <React.Fragment>
-                        <Spinner animation="border" className="mr-2" />
+                        <CircularProgress size={20} sx={{ mr: 2 }} />
                         In Progress
                     </React.Fragment>
                 ) : (
@@ -130,14 +115,6 @@ export function AdminAppointmentsView() {
                     onHide={() => {
                         setAddLetterDialogVisible(false);
                     }}
-                />
-                <ConnectedEditAppointmentDialog
-                    show={editDialogVisible}
-                    onHide={() => {
-                        setEditDialogVisible(false);
-                    }}
-                    applicantMatchingDatum={selectedApplicantMatchingData[0]}
-                    letterTemplates={letterTemplates}
                 />
             </ContentArea>
         </div>

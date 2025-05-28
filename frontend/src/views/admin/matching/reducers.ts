@@ -4,7 +4,6 @@ import {
 } from "./constants";
 import { createReducer } from "redux-create-reducer";
 import { ApplicantViewMode } from "./types";
-export { matchingDataReducer };
 
 export interface MatchingDataState {
     selectedMatchingPositionId: number | null;
@@ -24,3 +23,5 @@ const matchingDataReducer = createReducer(initialState, {
         return { ...state, applicantViewMode: action.payload };
     },
 });
+
+export { matchingDataReducer };

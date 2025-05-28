@@ -1,5 +1,4 @@
-import React from "react";
-import { Form } from "react-bootstrap";
+import { Box } from "@mui/material";
 import { fieldEditorFactory, DialogRow } from "./common-controls";
 import { Session } from "../../api/defs/types";
 /**
@@ -18,7 +17,7 @@ export function SessionEditor(props: {
     const createFieldEditor = fieldEditorFactory(session, setSession);
 
     return (
-        <Form>
+        <Box component="form" noValidate autoComplete="off">
             <DialogRow>
                 {createFieldEditor("Session Name (e.g. 2019 Fall)", "name")}
             </DialogRow>
@@ -46,6 +45,6 @@ export function SessionEditor(props: {
                     }
                 )}
             </DialogRow>
-        </Form>
+        </Box>
     );
 }

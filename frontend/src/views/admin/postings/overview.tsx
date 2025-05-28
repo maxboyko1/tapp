@@ -1,5 +1,8 @@
 import React from "react";
 import { useSelector } from "react-redux";
+import AddIcon from "@mui/icons-material/Add";
+import { Typography } from "@mui/material";
+
 import { activeSessionSelector, fetchPostings } from "../../../api/actions";
 import { ContentArea } from "../../../components/layout";
 import { Session } from "../../../api/defs/types";
@@ -9,7 +12,6 @@ import {
     ActionsList,
 } from "../../../components/action-buttons";
 import { MissingActiveSessionWarning } from "../../../components/sessions";
-import { FaPlus } from "react-icons/fa";
 import { ConnectedPostingsList } from "./posting-list";
 import { ConnectedAddPostingDialog } from "./add-posting-dialog";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
@@ -37,7 +39,7 @@ function ConnectedPostingOverview() {
             <ActionsList>
                 <ActionHeader>Available Actions</ActionHeader>
                 <ActionButton
-                    icon={<FaPlus />}
+                    icon={<AddIcon />}
                     onClick={() => setAddDialogVisible(true)}
                     disabled={!activeSession}
                 >
@@ -54,6 +56,9 @@ function ConnectedPostingOverview() {
                     show={addDialogVisible}
                     onHide={() => setAddDialogVisible(false)}
                 />
+                <Typography variant="h3" sx={{ mb: 2 }}>
+                    Postings
+                </Typography>
                 <ConnectedPostingsList />
             </ContentArea>
         </div>

@@ -34,7 +34,7 @@ const approveOneDdahSuccess = actionFactory<RawDdah>(DDAH_APPROVE_SUCCESS);
 const emailOneDdahSuccess = actionFactory<RawDdah>(DDAH_EMAIL_SUCCESS);
 
 // dispatchers
-export const fetchDdahs = validatedApiDispatcher({
+export const fetchDdahs = validatedApiDispatcher<RawDdah[], []>({
     name: "fetchDdahs",
     description: "Fetch DDAHs",
     onErrorDispatch: (e) => fetchError(e.toString()),
@@ -57,7 +57,7 @@ export const fetchDdahs = validatedApiDispatcher({
     },
 });
 
-export const fetchDdah = validatedApiDispatcher({
+export const fetchDdah = validatedApiDispatcher<RawDdah, [HasId]>({
     name: "fetchDdah",
     description: "Fetch a DDAH",
     onErrorDispatch: (e) => fetchError(e.toString()),
@@ -82,7 +82,7 @@ function prepForApi(data: Partial<Ddah>) {
     return data;
 }
 
-export const approveDdah = validatedApiDispatcher({
+export const approveDdah = validatedApiDispatcher<RawDdah, [HasId]>({
     name: "approveDdah",
     description: "Set a DDAH's status to approved",
     onErrorDispatch: (e) => upsertError(e.toString()),
@@ -100,7 +100,7 @@ export const approveDdah = validatedApiDispatcher({
     },
 });
 
-export const emailDdah = validatedApiDispatcher({
+export const emailDdah = validatedApiDispatcher<RawDdah, [HasId]>({
     name: "emailDdah",
     description: "Email a DDAH",
     onErrorDispatch: (e) => upsertError(e.toString()),
@@ -118,7 +118,7 @@ export const emailDdah = validatedApiDispatcher({
     },
 });
 
-export const upsertDdah = validatedApiDispatcher({
+export const upsertDdah = validatedApiDispatcher<RawDdah, [Partial<Ddah>]>({
     name: "upsertDdah",
     description: "Add/insert a DDAH",
     onErrorDispatch: (e) => upsertError(e.toString()),
@@ -133,7 +133,7 @@ export const upsertDdah = validatedApiDispatcher({
     },
 });
 
-export const deleteDdah = validatedApiDispatcher({
+export const deleteDdah = validatedApiDispatcher<RawDdah, [HasId]>({
     name: "deleteDdah",
     description: "Delete a DDAH",
     onErrorDispatch: (e) => deleteError(e.toString()),
@@ -144,6 +144,7 @@ export const deleteDdah = validatedApiDispatcher({
             prepForApi(payload)
         )) as RawDdah;
         dispatch(deleteOneDdahSuccess(data));
+        return data;
     },
 });
 
@@ -167,7 +168,7 @@ export const exportDdahs = validatedApiDispatcher({
         },
 });
 
-export const upsertDdahs = validatedApiDispatcher({
+export const upsertDdahs = validatedApiDispatcher<void, [Partial<Ddah>[]]>({
     name: "upsertDdahs",
     description: "Upsert a list of DDAHs",
     onErrorDispatch: (e) => fetchError(e.toString()),

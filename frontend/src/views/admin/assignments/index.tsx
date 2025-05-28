@@ -1,4 +1,8 @@
 import React from "react";
+import { useSelector } from "react-redux";
+import { CircularProgress, Typography } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
+
 import { ConnectedOfferTable } from "../offertable";
 import { ConnectedAddAssignmentDialog } from "./add-assignment-dialog";
 import { ConnectedViewAssignmentDetailsAction } from "./assignment-details";
@@ -14,21 +18,16 @@ import {
     ActionHeader,
 } from "../../../components/action-buttons";
 import { ContentArea } from "../../../components/layout";
-import { FaEdit, FaPlus } from "react-icons/fa";
 import { MissingActiveSessionWarning } from "../../../components/sessions";
-import { useSelector } from "react-redux";
 import {
     activeSessionSelector,
     assignmentsSelector,
 } from "../../../api/actions";
-import { Spinner } from "react-bootstrap";
 import { offerTableSelector } from "../offertable/actions";
 import { Assignment } from "../../../api/defs/types";
-import { ConnectedEditAssignmentDialog } from "./edit-assignment-dialog";
 
 export function AdminAssignmentsView() {
     const [addDialogVisible, setAddDialogVisible] = React.useState(false);
-    const [editDialogVisible, setEditDialogVisible] = React.useState(false);
     const activeSession = useSelector(activeSessionSelector);
     // While data is being imported, updating the react table takes a long time,
     // so we use this variable to hide the react table during import.
@@ -52,7 +51,7 @@ export function AdminAssignmentsView() {
             <ActionsList>
                 <ActionHeader>Available Actions</ActionHeader>
                 <ActionButton
-                    icon={<FaPlus />}
+                    icon={<AddIcon />}
                     onClick={() => {
                         setAddDialogVisible(true);
                     }}
@@ -75,27 +74,17 @@ export function AdminAssignmentsView() {
                 <ConnectedOfferActionButtons
                     selectedAssignments={selectedAssignments}
                 />
-                <ActionButton
-                    disabled={!(selectedAssignments.length === 1)}
-                    title={
-                        selectedAssignments.length === 1
-                            ? "Edit the selected assignment"
-                            : "Please select a single assignment to edit (you cannot edit multiple assignments at the same time)"
-                    }
-                    onClick={() => setEditDialogVisible(true)}
-                    icon={<FaEdit />}
-                >
-                    Edit Assignment
-                </ActionButton>
             </ActionsList>
             <ContentArea>
                 {activeSession ? null : (
                     <MissingActiveSessionWarning extraText="To view or modify assignments, you must select a session." />
                 )}
-
+                <Typography variant="h3" sx={{ mb: 2 }}>
+                    Assignments
+                </Typography>
                 {inProgress ? (
                     <React.Fragment>
-                        <Spinner animation="border" className="mr-2" />
+                        <CircularProgress size={20} sx={{ mr: 2 }} />
                         In Progress
                     </React.Fragment>
                 ) : (
@@ -106,13 +95,6 @@ export function AdminAssignmentsView() {
                     onHide={() => {
                         setAddDialogVisible(false);
                     }}
-                />
-                <ConnectedEditAssignmentDialog
-                    show={editDialogVisible}
-                    onHide={() => {
-                        setEditDialogVisible(false);
-                    }}
-                    assignment={selectedAssignments[0]}
                 />
             </ContentArea>
         </div>

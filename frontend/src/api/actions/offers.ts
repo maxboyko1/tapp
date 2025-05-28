@@ -40,7 +40,7 @@ export const fetchOffersForAssignmentSuccess = actionFactory<{
 }>(FETCH_OFFERS_FOR_ASSIGNMENT_SUCCESS);
 
 // dispatchers
-export const fetchOfferHistoryForAssignment = validatedApiDispatcher({
+export const fetchOfferHistoryForAssignment = validatedApiDispatcher<void, [HasId]>({
     name: "fetchOfferHistoryForAssignment",
     description:
         "Fetch the history of all offers associated with an assignment",
@@ -59,7 +59,7 @@ export const fetchOfferHistoryForAssignment = validatedApiDispatcher({
         );
     },
 });
-export const fetchActiveOfferForAssignment = validatedApiDispatcher({
+export const fetchActiveOfferForAssignment = validatedApiDispatcher<RawOffer, [HasId]>({
     name: "fetchActiveOfferForAssignment",
     description: "Fetch an offer associated with an assignment",
     onErrorDispatch: (e) => fetchError(e.toString()),
@@ -73,7 +73,7 @@ export const fetchActiveOfferForAssignment = validatedApiDispatcher({
     },
 });
 
-export const setOfferForAssignmentAccepted = validatedApiDispatcher({
+export const setOfferForAssignmentAccepted = validatedApiDispatcher<RawOffer,[Assignment]>({
     name: "setOfferForAssignmentAccepted",
     description: "Set an offer as accepted",
     onErrorDispatch: (e) => fetchError(e.toString()),
@@ -86,10 +86,11 @@ export const setOfferForAssignmentAccepted = validatedApiDispatcher({
         // After we update an offer, we should refetch the assignment to make sure
         // there isn't stale data
         await dispatch(fetchAssignment(assignment));
+        return data;
     },
 });
 
-export const setOfferForAssignmentRejected = validatedApiDispatcher({
+export const setOfferForAssignmentRejected = validatedApiDispatcher<RawOffer,[Assignment]>({
     name: "setOfferForAssignmentRejected",
     description: "Set an offer as rejected",
     onErrorDispatch: (e) => fetchError(e.toString()),
@@ -102,10 +103,11 @@ export const setOfferForAssignmentRejected = validatedApiDispatcher({
         // After we update an offer, we should refetch the assignment to make sure
         // there isn't stale data
         await dispatch(fetchAssignment(assignment));
+        return data;
     },
 });
 
-export const offerForAssignmentWithdraw = validatedApiDispatcher({
+export const offerForAssignmentWithdraw = validatedApiDispatcher<RawOffer,[Assignment]>({
     name: "offerForAssignmentWithdraw",
     description: "Withdraw an offer",
     onErrorDispatch: (e) => fetchError(e.toString()),
@@ -118,10 +120,11 @@ export const offerForAssignmentWithdraw = validatedApiDispatcher({
         // After we update an offer, we should refetch the assignment to make sure
         // there isn't stale data
         await dispatch(fetchAssignment(assignment));
+        return data;
     },
 });
 
-export const offerForAssignmentCreate = validatedApiDispatcher({
+export const offerForAssignmentCreate = validatedApiDispatcher<RawOffer,[Assignment]>({
     name: "offerForAssignmentCreate",
     description: "Create an offer",
     onErrorDispatch: (e) => fetchError(e.toString()),
@@ -134,10 +137,11 @@ export const offerForAssignmentCreate = validatedApiDispatcher({
         // After we update an offer, we should refetch the assignment to make sure
         // there isn't stale data
         await dispatch(fetchAssignment(assignment));
+        return data;
     },
 });
 
-export const offerForAssignmentEmail = validatedApiDispatcher({
+export const offerForAssignmentEmail = validatedApiDispatcher<RawOffer,[Assignment]>({
     name: "offerForAssignmentEmail",
     description: "Email an offer",
     onErrorDispatch: (e) => fetchError(e.toString()),
@@ -150,10 +154,11 @@ export const offerForAssignmentEmail = validatedApiDispatcher({
         // After we update an offer, we should refetch the assignment to make sure
         // there isn't stale data
         await dispatch(fetchAssignment(assignment));
+        return data;
     },
 });
 
-export const offerForAssignmentNag = validatedApiDispatcher({
+export const offerForAssignmentNag = validatedApiDispatcher<RawOffer,[Assignment]>({
     name: "offerForAssignmentNag",
     description: "Send a nag email for an offer",
     onErrorDispatch: (e) => fetchError(e.toString()),
@@ -166,5 +171,6 @@ export const offerForAssignmentNag = validatedApiDispatcher({
         // After we update an offer, we should refetch the assignment to make sure
         // there isn't stale data
         await dispatch(fetchAssignment(assignment));
+        return data;
     },
 });

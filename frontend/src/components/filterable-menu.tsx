@@ -1,83 +1,19 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Dropdown, FormControl } from "react-bootstrap";
+import { Menu, MenuItem, TextField, Typography } from "@mui/material";
+
 import { HasId } from "../api/defs/types";
-/**
- * react-bootstrap dropdown menu that is filterable. Expects
- * children which are `Dropdown.Item` and contain just text
- * as content. To use, set as the `as=` attribute on a `Dropdown.Menu`.
- *
- * Notes: Because of the way react-bootstrap works, this
- * component must be wrapped in a `React.forwardRef`.
- */
-const FilterableMenuContents = React.forwardRef(
-    (
-        props: {
-            children: React.ReactNode[];
-            style?: React.StyleHTMLAttributes<{}>;
-            className: string;
-            clearFilter: boolean;
-        },
-        ref: React.Ref<HTMLDivElement>
-    ) => {
-        const { children, style, className, clearFilter } = props;
-        const [filter, setFilter] = React.useState("");
-        // If the `clearFilter` flag is set, make sure we start
-        // with an empty filter. This is used to clear the filter when the
-        // widget is hidden.
-        React.useEffect(() => {
-            if (clearFilter) {
-                setFilter("");
-            }
-        }, [clearFilter]);
-        function onChange(e: React.ChangeEvent<HTMLInputElement>) {
-            setFilter(e.currentTarget.value);
-        }
-        // Filter the child `Dropdown.Item` items
-        const sessionList = React.Children.toArray(children).filter((child) => {
-            let ret = false;
-            if (typeof child === "string") {
-                ret = child.includes(filter.trim());
-            } else if (typeof child === "number") {
-                ret = ("" + child).includes(filter.trim());
-            } else {
-                ret = (child as any).props.children
-                    .toLowerCase()
-                    .includes(filter.trim());
-            }
-            return !filter.trim() || ret;
-        });
-        // The sessions list could be empty for two reasons: there are
-        // no sessions, or we've filtered them all away. Display an
-        // appropriate message in either case
-        const emptyListMessage =
-            children.length === 0
-                ? "No Available Sessions"
-                : "No Matching Sessions";
-        return (
-            <div style={style} className={className} ref={ref}>
-                <FormControl
-                    autoFocus
-                    className="mx-3 my-2 w-auto"
-                    placeholder="Type to filter..."
-                    title="Filter sessions"
-                    onChange={onChange}
-                    value={filter}
-                    tabIndex={0}
-                />
-                <ul className="list-unstyled my-0">
-                    {sessionList.length > 0 ? (
-                        sessionList
-                    ) : (
-                        <li className="dropdown-item text-muted">
-                            {emptyListMessage}
-                        </li>
-                    )}
-                </ul>
-            </div>
-        );
-    }
-);
+
+interface FilterableMenuProps {
+    items: (HasId & { name: string })[];
+    activeItemId: number | null;
+    clearFilter: boolean;
+    anchorEl: null | HTMLElement;
+    open: boolean;
+    onClose: () => void;
+    onSelect: (item: HasId & { name: string }, index: number) => void;
+}
+
 /**
  * A menu that nests inside a `Dropdown`. Pass in a list
  * `items` which are objects of the form `{id: ..., name: ...}`.
@@ -88,25 +24,99 @@ export function FilterableMenu({
     items,
     activeItemId,
     clearFilter,
-}: {
-    items: (HasId & { name: string })[];
-    activeItemId: number | null;
-    clearFilter: boolean;
-}) {
-    return (
-        <Dropdown.Menu as={FilterableMenuContents} clearFilter={clearFilter}>
-            {items.map((s, index) => (
-                <Dropdown.Item
-                    key={s.id}
-                    // `eventKey` must be a string. If it is a number, 0 is coerced to null
-                    eventKey={"" + index}
-                    active={activeItemId === s.id}
-                >
-                    {s.name}
-                </Dropdown.Item>
-            ))}
-        </Dropdown.Menu>
+    anchorEl,
+    open,
+    onClose,
+    onSelect,
+}: FilterableMenuProps) {
+    const [filter, setFilter] = React.useState("");
+
+    React.useEffect(() => {
+        if (clearFilter) setFilter("");
+    }, [clearFilter, open]);
+
+    const filteredItems = items.filter((item) =>
+        item.name.toLowerCase().includes(filter.trim().toLowerCase())
     );
+
+    const emptyListMessage =
+        items.length === 0
+            ? "No Available Sessions"
+            : "No Matching Sessions";
+
+    return (
+        <Menu
+            anchorEl={anchorEl}
+            open={open}
+            onClose={onClose}
+            sx={{ minWidth: 250 }}
+            disableAutoFocusItem
+            slotProps={{paper: {
+                sx: {
+                    bgcolor: "secondary.main",
+                    color: "#fff",
+                },
+            }}}
+        >
+            <MenuItem disableRipple disableTouchRipple>
+                <TextField
+                    autoFocus
+                    fullWidth
+                    size="small"
+                    placeholder="Type to filter..."
+                    value={filter}
+                    onChange={(e) => setFilter(e.target.value)}
+                    variant="standard"
+                    sx={{
+                        tabIndex: 0,
+                        input: { color: "#fff" },
+                        "& .MuiInput-underline:before": { borderBottomColor: "#fff" },
+                        "& .MuiInput-underline:after": { borderBottomColor: "#fff" },
+                    }}
+                    slotProps={{
+                        input: {
+                            style: { color: "#fff" },
+                        },
+                        inputLabel: {
+                            style: { color: "#fff" },
+                        },
+                    }}
+                />
+            </MenuItem>
+            {filteredItems.length > 0 ? (
+                filteredItems.map((item, index) => (
+                    <MenuItem
+                        key={item.id}
+                        selected={activeItemId === item.id}
+                        onClick={() => {
+                            onSelect(item, index);
+                            onClose();
+                        }}
+                        sx={{
+                            bgcolor: "secondary.main",
+                            color: "#fff",
+                            "&.Mui-selected": {
+                                bgcolor: "secondary.dark",
+                                color: "#fff",
+                            },
+                            "&:hover": {
+                                bgcolor: "secondary.dark",
+                                color: "#fff",
+                            },
+                        }}
+                    >
+                        {item.name}
+                    </MenuItem>
+                ))
+            ) : (
+                <MenuItem disabled>
+                    <Typography variant="body2" color="text.secondary">
+                        {emptyListMessage}
+                    </Typography>
+                </MenuItem>
+            )}
+        </Menu>
+    )    
 }
 FilterableMenu.propTypes = {
     items: PropTypes.arrayOf(

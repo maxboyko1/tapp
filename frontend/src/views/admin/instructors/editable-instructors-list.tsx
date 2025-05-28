@@ -1,129 +1,157 @@
 import React from "react";
 import { connect } from "react-redux";
 import {
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    Typography,
+} from "@mui/material";
+
+import {
     instructorsSelector,
     upsertInstructor,
     deleteInstructor,
     positionsSelector,
 } from "../../../api/actions";
 import { InstructorsList } from "../../../components/instructors";
-import { DeleteInstructorDialog } from "./delete-instructor-dialog";
-import { FaTrash, FaLock, FaTimes } from "react-icons/fa";
-import { EditableCell } from "../../../components/editable-cell";
-import { CellProps } from "react-table";
 import { Instructor, Position } from "../../../api/defs/types";
+import { useThunkDispatch } from "../../../libs/thunk-dispatch";
+import { AdvancedColumnDef } from "../../../components/advanced-filter-table";
 
 function EditableInstructorsList(props: {
     upsertInstructor: (instructor: Partial<Instructor>) => any;
-    deleteInstructor: (instructor: { id: number }) => any;
     inDeleteMode: boolean;
     positions: Position[];
     instructors: Instructor[];
 }) {
     const {
         upsertInstructor,
-        deleteInstructor,
         inDeleteMode,
         positions,
+        instructors,
         ...rest
     } = props;
 
+    const dispatch = useThunkDispatch();
     const [deleteDialogVisible, setDeleteDialogVisible] = React.useState(false);
     const [instructorToDelete, setInstructorToDelete] =
         React.useState<Instructor | null>(null);
 
-    function generateCell(field: keyof Instructor) {
-        return (props: CellProps<Instructor>) => (
-            <EditableCell field={field} upsert={upsertInstructor} {...props} />
-        );
-    }
+    const handleEditRow = React.useCallback(
+        (original: Instructor, values: Partial<Instructor>) => {
+            dispatch(upsertInstructor({ ...original, ...values }));
+        },
+        [dispatch, upsertInstructor]
+    );
 
-    const instructorCurrentlyAssignedHash: Record<number, boolean> = {};
-    for (const position of positions || []) {
-        for (const instructor of position.instructors || []) {
-            instructorCurrentlyAssignedHash[instructor.id] = true;
+    const handleDelete = React.useCallback(
+        (instructor: Instructor) => {
+            setInstructorToDelete(instructor);
+            setDeleteDialogVisible(true);
+        },
+        []
+    );
+
+    // Build a hash of instructors that are currently assigned to positions
+    const instructorCurrentlyAssignedHash = React.useMemo(() => {
+        const hash: Record<number, boolean> = {};
+        for (const position of positions || []) {
+            for (const instructor of position.instructors || []) {
+                hash[instructor.id] = true;
+            }
         }
-    }
+        return hash;
+    }, [positions]);
 
-    // props.original contains the row data for this particular instructor
-    function CellDeleteButton({ row }: CellProps<Instructor>) {
-        const instructor = row.original;
-        const disabled = instructorCurrentlyAssignedHash[instructor.id];
-        if (disabled) {
-            return (
-                <div className="delete-button-container">
-                    <FaLock
-                        className="delete-row-button disabled"
-                        title="This instructor is assigned to a position and so cannot be deleted. Unassign the instructor from all positions to delete."
-                    />
-                </div>
-            );
-        }
-        return (
-            <div className="delete-button-container">
-                <FaTimes
-                    className="delete-row-button"
-                    title={`Delete ${instructor.last_name}, ${instructor.first_name}`}
-                    onClick={() => {
-                        setInstructorToDelete(instructor);
-                        setDeleteDialogVisible(true);
-                    }}
-                />
-            </div>
-        );
-    }
-
-    const columns = [
+    const columns: AdvancedColumnDef<Instructor>[] = React.useMemo(() => [
         {
-            Header: <FaTrash className="delete-row-column-header-icon" />,
-            id: "delete_col",
-            className: "delete-col",
-            Cell: CellDeleteButton,
-            show: inDeleteMode,
-            maxWidth: 32,
-            resizable: false,
+            header: "Last Name",
+            accessorKey: "last_name",
+            meta: { editable: true },
         },
         {
-            Header: "Last Name",
-            accessor: "last_name",
-            Cell: generateCell("last_name"),
+            header: "First Name",
+            accessorKey: "first_name",
+            meta: { editable: true },
         },
         {
-            Header: "First Name",
-            accessor: "first_name",
-            Cell: generateCell("first_name"),
+            header: "Email",
+            accessorKey: "email",
+            meta: { editable: true },
+            minSize: 150,
         },
         {
-            Header: "Email",
-            accessor: "email",
-            Cell: generateCell("email"),
-            minWidth: 150,
+            header: "UTORid",
+            accessorKey: "utorid",
+            meta: { editable: true },
         },
-        {
-            Header: "UTORid",
-            accessor: "utorid",
-            Cell: generateCell("utorid"),
-        },
-    ];
+    ], []);
 
     return (
         <React.Fragment>
-            <InstructorsList columns={columns} {...rest} />
-            <DeleteInstructorDialog
-                show={deleteDialogVisible}
-                onHide={() => {
+            <InstructorsList
+                columns={columns}
+                instructors={instructors}
+                editable={true}
+                onEditRow={handleEditRow}
+                deleteable={inDeleteMode}
+                onDelete={handleDelete}
+                deleteBlocked={(instructor) =>
+                    instructorCurrentlyAssignedHash[instructor.id]
+                        ? "This instructor is assigned to a position and cannot be deleted. Unassign the instructor from all positions to delete."
+                        : false
+                }
+                {...rest}
+            />
+            <Dialog
+                open={deleteDialogVisible}
+                onClose={() => {
                     setDeleteDialogVisible(false);
                     setInstructorToDelete(null);
                 }}
-                onDelete={() => {
-                    if (!instructorToDelete) {
-                        return;
-                    }
-                    deleteInstructor(instructorToDelete);
-                    setDeleteDialogVisible(false);
-                }}
-                instructor={instructorToDelete}
-            />
+            >
+                <DialogTitle>Confirm Deletion</DialogTitle>
+                <DialogContent>
+                    <Typography variant="body2">
+                        Are you sure you want to delete instructor{" "}
+                        <Typography
+                            component="span"
+                            color="primary"
+                            fontWeight="bold"
+                            display="inline"
+                        >
+                            {instructorToDelete
+                                ? `${instructorToDelete.last_name}, ${instructorToDelete.first_name}`
+                                : null}
+                        </Typography>
+                        ? This action cannot be undone.
+                    </Typography>
+                </DialogContent>
+                <DialogActions>
+                    <Button
+                        onClick={() => {
+                            setDeleteDialogVisible(false);
+                            setInstructorToDelete(null);
+                        }}
+                    >
+                        Cancel
+                    </Button>
+                    <Button
+                        color="error"
+                        onClick={async () => {
+                            if (instructorToDelete) {
+                                await dispatch(deleteInstructor(instructorToDelete));
+                                setDeleteDialogVisible(false);
+                                setInstructorToDelete(null);
+                            }
+                        }}
+                    >
+                        Delete
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </React.Fragment>
     );
 }
@@ -137,5 +165,5 @@ export const ConnectedInstructorsList = connect(
         instructors: instructorsSelector(state),
         positions: positionsSelector(state),
     }),
-    { upsertInstructor, deleteInstructor }
+    { upsertInstructor }
 )(EditableInstructorsList);

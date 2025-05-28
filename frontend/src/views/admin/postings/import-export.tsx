@@ -1,6 +1,12 @@
 import React from "react";
 import FileSaver from "file-saver";
 import {
+    Alert,
+    Divider,
+    Typography,
+} from "@mui/material";
+
+import {
     exportPosting,
     positionsSelector,
     upsertPosting,
@@ -18,7 +24,7 @@ import { useSelector } from "react-redux";
 import { MinimalPosting, Posting } from "../../../api/defs/types";
 import { postingSchema } from "../../../libs/schema";
 import { ImportActionButton } from "../../../components/import-button";
-import { Alert } from "react-bootstrap";
+import { isQuestionsJsonImportInValidFormat } from "../../../components/custom-question-utils";
 
 /**
  * Allows for the download of a file blob containing the exported posting.
@@ -137,6 +143,12 @@ export function ConnectedImportPostingAction({
                     delete row.position_code;
                     return row;
                 });
+
+                if (!isQuestionsJsonImportInValidFormat(JSON.stringify(firstRow.custom_questions))) {
+                    throw new Error(
+                        `Invalid custom questions format in posting, expected array of non-empty strings such as ["Who?", "What?", "Where?"]`
+                    );
+                }
             } else {
                 // If we're here, we are importing from a spreadsheet
                 const postingPositions = data.map((row) => ({
@@ -151,15 +163,13 @@ export function ConnectedImportPostingAction({
                 delete postingData.num_positions;
                 delete postingData.position_code;
                 postingData.posting_positions = postingPositions;
-                try {
-                    postingData.custom_questions = JSON.parse(
-                        postingData.custom_questions
-                    );
-                } catch (e) {
+
+                if (!isQuestionsJsonImportInValidFormat(postingData.custom_questions)) {
                     throw new Error(
-                        `Could not parse JSON data for custom questions (${e})`
+                        `Invalid custom questions format in posting, expected array of non-empty strings such as ["Who?", "What?", "Where?"]`
                     );
                 }
+                postingData.custom_questions = JSON.parse(postingData.custom_questions);
                 data = [postingData];
             }
 
@@ -210,66 +220,54 @@ const DialogContent = React.memo(function DialogContent({
     newPostings: Omit<Posting, "id">[] | null;
     processingError: string | null;
 }) {
-    let dialogContent = <p>No data loaded...</p>;
+    let dialogContent = (
+        <Typography color="textSecondary">No data loaded...</Typography>
+    );
     if (processingError) {
-        dialogContent = <Alert variant="danger">{"" + processingError}</Alert>;
+        dialogContent = <Alert severity="error">{"" + processingError}</Alert>;
     } else if (newPostings) {
         if (newPostings.length === 0) {
             dialogContent = (
-                <Alert variant="warning">No imported postings detected.</Alert>
+                <Alert severity="warning">No imported postings detected.</Alert>
             );
         } else {
             dialogContent = (
                 <React.Fragment>
-                    <Alert variant="primary">
+                    <Alert severity="success" sx={{ mb: 2 }}>
                         <span className="mb-1">
-                            The following postings will be{" "}
-                            <strong>added</strong>
+                            The following postings will be <strong>added</strong>
                         </span>
                     </Alert>
                     {newPostings.map((posting) => (
                         <React.Fragment key={posting.name}>
-                            <div>
+                            <Typography>
                                 <b>Name:</b> {posting.name}
-                            </div>
-                            <div>
+                            </Typography>
+                            <Typography>
                                 <b>Open Date:</b> {posting.open_date}
-                            </div>
-                            <div>
+                            </Typography>
+                            <Typography>
                                 <b>Close Date:</b> {posting.close_date}
-                            </div>
-                            <div>
+                            </Typography>
+                            <Typography>
                                 <b>Intro Text:</b> {posting.intro_text}
-                            </div>
-                            <h4>Posting Positions</h4>
+                            </Typography>
+                            <Typography>
+                                <b>Custom Questions:</b> {JSON.stringify(posting.custom_questions)}
+                            </Typography>
+                            <Typography variant="h6" sx={{ mt: 2 }}>
+                                Posting Positions
+                            </Typography>
                             <ul>
-                                {posting.posting_positions.map(
-                                    (postingPosition) => (
-                                        <li
-                                            key={
-                                                postingPosition.position
-                                                    .position_code
-                                            }
-                                        >
-                                            {
-                                                postingPosition.position
-                                                    .position_code
-                                            }{" "}
-                                            (
-                                            {postingPosition.num_positions ||
-                                                "?"}{" "}
-                                            positions at{" "}
-                                            {postingPosition.hours || "?"}{" "}
-                                            hours)
-                                        </li>
-                                    )
-                                )}
+                                {posting.posting_positions.map((postingPosition) => (
+                                    <li key={postingPosition.position.position_code}>
+                                        {postingPosition.position.position_code} (
+                                        {postingPosition.num_positions || "?"} positions at{" "}
+                                        {postingPosition.hours || "?"} hours)
+                                    </li>
+                                ))}
                             </ul>
-                            <div>
-                                <b>Custom Questions:</b>{" "}
-                                {JSON.stringify(posting.custom_questions)}
-                            </div>
-                            <hr />
+                            <Divider sx={{ my: 2 }} />
                         </React.Fragment>
                     ))}
                 </React.Fragment>

@@ -34,7 +34,8 @@ class ApplicationSerializer < ActiveModel::Serializer
         object.position_preferences.map do |position_preference|
             {
                 position_id: position_preference.position_id,
-                preference_level: position_preference.preference_level
+                preference_level: position_preference.preference_level,
+                custom_question_answers: position_preference.custom_question_answers
             }
         end
     end

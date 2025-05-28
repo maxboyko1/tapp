@@ -14,12 +14,13 @@ end
 #
 # Table name: position_preferences
 #
-#  id               :integer          not null, primary key
-#  position_id      :integer          not null
-#  application_id   :integer          not null
-#  preference_level :integer
-#  created_at       :datetime         not null
-#  updated_at       :datetime         not null
+#  id                      :integer          not null, primary key
+#  position_id             :integer          not null
+#  application_id          :integer          not null
+#  custom_question_answers :json
+#  preference_level        :integer
+#  created_at              :datetime         not null
+#  updated_at              :datetime         not null
 #
 # Indexes
 #

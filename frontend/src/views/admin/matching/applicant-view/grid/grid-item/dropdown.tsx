@@ -1,7 +1,8 @@
 import React from "react";
+import { MenuItem, ListItemText } from "@mui/material";
+
 import { ApplicantSummary } from "../../../types";
 import { Application, Position } from "../../../../../../api/defs/types";
-import { Dropdown } from "react-bootstrap";
 import {
     toggleAssigned,
     toggleStarred,
@@ -20,12 +21,14 @@ export function GridItemDropdown({
     setShownApplication,
     setShowChangeHours,
     setShowNote,
+    onClose,
 }: {
     applicantSummary: ApplicantSummary;
     position: Position;
     setShownApplication: (shownApplication: Application | null) => void;
     setShowChangeHours: (show: boolean) => void;
     setShowNote: (show: boolean) => void;
+    onClose: () => void;
 }) {
     const matchStatus = React.useMemo(() => {
         return getMatchStatus(applicantSummary, position);
@@ -76,53 +79,88 @@ export function GridItemDropdown({
 
     return (
         <>
-            <Dropdown.Item
-                onClick={() =>
-                    setShownApplication(applicantSummary.application)
-                }
+            <MenuItem
+                onClick={() => {
+                    setShownApplication(applicantSummary.application);
+                    onClose();
+                }}
             >
-                View application details
-            </Dropdown.Item>
-            <Dropdown.Item onClick={() => setShowNote(true)}>
-                View/edit applicant notes
-            </Dropdown.Item>
+                <ListItemText>View application details</ListItemText>
+            </MenuItem>
+            <MenuItem
+                onClick={() => {
+                    setShowNote(true);
+                    onClose();
+                }}
+            >
+                <ListItemText>View/edit applicant notes</ListItemText>
+            </MenuItem>
 
             {matchStatus === "staged-assigned" && (
-                <>
-                    <Dropdown.Item onClick={() => setShowChangeHours(true)}>
-                        Change assigned hours
-                    </Dropdown.Item>
-                </>
+                <MenuItem
+                    onClick={() => {
+                        setShowChangeHours(true);
+                        onClose();
+                    }}
+                >
+                    <ListItemText>Change assigned hours</ListItemText>
+                </MenuItem>
             )}
             {(canBeAssigned || matchStatus === "staged-assigned") && (
-                <>
-                    <Dropdown.Item onClick={_toggleAssigned}>
+                <MenuItem
+                    onClick={() => {
+                        _toggleAssigned();
+                        onClose();
+                    }}
+                >
+                    <ListItemText>
                         {canBeAssigned ? "Assign to " : "Unassign from "}
                         <b>{position.position_code}</b>
                         {canBeAssigned
                             ? ` (${position.hours_per_assignment || 0})`
                             : ""}
-                    </Dropdown.Item>
-                </>
+                    </ListItemText>
+                </MenuItem>
             )}
             {canBeStarred && (
-                <Dropdown.Item onClick={_toggleStarred}>
-                    {applicantMatch.starred ? "Star for " : "Unstar from "}
-                    <b>{position.position_code}</b>
-                </Dropdown.Item>
+                <MenuItem
+                    onClick={() => {
+                        _toggleStarred();
+                        onClose();
+                    }}
+                >
+                    <ListItemText>
+                        {applicantMatch.starred ? "Star for " : "Unstar from "}
+                        <b>{position.position_code}</b>
+                    </ListItemText>
+                </MenuItem>
             )}
             {canBeHidden && (
                 <>
-                    <Dropdown.Item onClick={_toggleHidden}>
-                        {applicantMatch.hidden ? "Unhide " : "Hide "} from{" "}
-                        <b>{position.position_code}</b>
-                    </Dropdown.Item>
-                    <Dropdown.Item onClick={_toggleApplicantHidden}>
-                        {applicantSummary.applicantMatchingDatum.hidden
-                            ? "Unhide"
-                            : "Hide"}{" "}
-                        from all courses
-                    </Dropdown.Item>
+                    <MenuItem
+                        onClick={() => {
+                            _toggleHidden();
+                            onClose();
+                        }}
+                    >
+                        <ListItemText>
+                            {applicantMatch.hidden ? "Unhide " : "Hide "} from{" "}
+                            <b>{position.position_code}</b>
+                        </ListItemText>
+                    </MenuItem>
+                    <MenuItem
+                        onClick={() => {
+                            _toggleApplicantHidden();
+                            onClose();
+                        }}
+                    >
+                        <ListItemText>
+                            {applicantSummary.applicantMatchingDatum.hidden
+                                ? "Unhide"
+                                : "Hide"}{" "}
+                            from all courses
+                        </ListItemText>
+                    </MenuItem>
                 </>
             )}
         </>

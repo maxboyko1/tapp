@@ -1,19 +1,21 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { Box, TextField } from "@mui/material";
+
 import { createDiffColumnsFromColumns } from "./diff-table";
 import { Applicant, MinimalApplicant } from "../api/defs/types";
 import { DiffSpec } from "../libs/diffs";
-import { Form } from "react-bootstrap";
 import { DialogRow } from "./forms/common-controls";
-import { AdvancedFilterTable } from "./filter-table/advanced-filter-table";
+import { AdvancedFilterTable, AdvancedColumnDef } from "./advanced-filter-table";
 
-const DEFAULT_COLUMNS = [
-    { Header: "Last Name", accessor: "last_name" },
-    { Header: "First Name", accessor: "first_name" },
-    { Header: "UTORid", accessor: "utorid" },
-    { Header: "Student Number", accessor: "student_number" },
-    { Header: "Email", accessor: "email" },
-    { Header: "Phone", accessor: "phone" },
+
+const DEFAULT_COLUMNS: AdvancedColumnDef<Applicant>[] = [
+    { header: "Last Name", accessorKey: "last_name" },
+    { header: "First Name", accessorKey: "first_name" },
+    { header: "UTORid", accessorKey: "utorid" },
+    { header: "Student Number", accessorKey: "student_number" },
+    { header: "Email", accessorKey: "email" },
+    { header: "Phone", accessorKey: "phone" },
 ];
 
 /**
@@ -47,13 +49,31 @@ export function ApplicantsDiffList({
 export function ApplicantsList(props: {
     applicants: (Omit<Applicant, "id"> | Applicant)[];
     columns?: any[];
+    deleteable?: boolean;
+    onDelete?: (row: any) => void;
+    deleteBlocked?: (row: any) => string | false;
+    editable?: boolean;
+    onEditRow?: (row: any, values: any) => void;
 }) {
-    const { applicants, columns = DEFAULT_COLUMNS } = props;
+    const {
+        applicants,
+        columns = DEFAULT_COLUMNS,
+        deleteable = false,
+        onDelete,
+        deleteBlocked,
+        editable = false,
+        onEditRow,
+    } = props;
     return (
         <AdvancedFilterTable
             columns={columns}
             data={applicants}
             filterable={true}
+            deleteable={deleteable}
+            onDelete={onDelete}
+            deleteBlocked={deleteBlocked}
+            editable={editable}
+            onEditRow={onEditRow}
         />
     );
 }
@@ -103,7 +123,7 @@ export function ApplicantEditor(props: {
     }
 
     /**
-     * Create a bootstrap form component that updates the specified attr
+     * Create a MaterialUI form component that updates the specified attr
      * of `position`
      *
      * @param {string} title - Label text of the form control
@@ -116,33 +136,33 @@ export function ApplicantEditor(props: {
         type = "text"
     ) {
         return (
-            <React.Fragment>
-                <Form.Label>{title}</Form.Label>
-                <Form.Control
-                    type={type}
-                    value={applicant[attr] || ""}
-                    onChange={setAttrFactory(attr)}
-                />
-            </React.Fragment>
+            <TextField
+                label={title}
+                type={type}
+                value={applicant[attr] || ""}
+                onChange={setAttrFactory(attr)}
+                variant="outlined"
+                size="small"
+                fullWidth
+                margin="normal"
+            />
         );
     }
 
     return (
-        <Form>
-            <Form.Row>
-                <DialogRow>
-                    {createFieldEditor("First Name", "first_name")}
-                    {createFieldEditor("Last Name", "last_name")}
-                </DialogRow>
-                <DialogRow>
-                    {createFieldEditor("Email", "email")}
-                    {createFieldEditor("UTORid", "utorid")}
-                </DialogRow>
-                <DialogRow>
-                    {createFieldEditor("Student Number", "student_number")}
-                    {createFieldEditor("Phone", "phone")}
-                </DialogRow>
-            </Form.Row>
-        </Form>
+        <Box component="form" noValidate autoComplete="off">
+            <DialogRow>
+                {createFieldEditor("First Name", "first_name")}
+                {createFieldEditor("Last Name", "last_name")}
+            </DialogRow>
+            <DialogRow>
+                {createFieldEditor("Email", "email")}
+                {createFieldEditor("UTORid", "utorid")}
+            </DialogRow>
+            <DialogRow>
+                {createFieldEditor("Student Number", "student_number")}
+                {createFieldEditor("Phone", "phone")} 
+            </DialogRow>
+        </Box>
     );
 }

@@ -1,5 +1,14 @@
 import React from "react";
-import { Button, Modal, Spinner } from "react-bootstrap";
+import {
+    Button,
+    CircularProgress,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    IconButton,
+} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 import { useParams } from "react-router-dom";
 import { RawConfirmation } from "../../../api/defs/types";
 import { apiGET, apiPOST } from "../../../libs/api-utils";
@@ -14,7 +23,7 @@ function capitalize(text: string) {
 }
 
 export function LetterView() {
-    const params = useParams<{ url_token?: string } | null>();
+    const params = useParams<{ url_token?: string }>();
     const url_token = params?.url_token;
     const [confirmation, setConfirmation] = React.useState<RawConfirmation | null>(null);
     const [decision, setDecision] = React.useState<"accept" | "reject" | null>(
@@ -80,8 +89,11 @@ export function LetterView() {
                 <div className="decision">
                     <h3>
                         <Button
+                            component="a"
                             href={`/public/letters/${url_token}.pdf`}
-                            role="button"
+                            target="_blank"
+                            rel="noopener"
+                            variant="contained"
                         >
                             Download PDF
                         </Button>
@@ -141,6 +153,7 @@ export function LetterView() {
                                 </div>
                             </div>
                             <Button
+                                variant="contained"
                                 disabled={
                                     decision == null ||
                                     (decision === "accept" && signature === "")
@@ -169,36 +182,49 @@ export function LetterView() {
                     ></iframe>
                 </div>
             </div>
-            <Modal
-                show={confirmDialogVisible}
-                onHide={() => setConfirmDialogVisible(false)}
+            <Dialog
+                open={confirmDialogVisible}
+                onClose={() => setConfirmDialogVisible(false)}
+                maxWidth="xs"
+                fullWidth
             >
-                <Modal.Header closeButton>
-                    <Modal.Title>
-                        {capitalize(decision || "")} Participation
-                    </Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
+                <DialogTitle sx={{ m: 0, p: 2 }}>
+                    {capitalize(decision || "")} Participation
+                    <IconButton
+                        aria-label="close"
+                        onClick={() => setConfirmDialogVisible(false)}
+                        sx={{
+                            position: 'absolute',
+                            right: 8,
+                            top: 8,
+                            color: (theme) => theme.palette.grey[500],
+                        }}
+                        size="large"
+                    >
+                        <CloseIcon />
+                    </IconButton>
+                </DialogTitle>
+                <DialogContent dividers>
                     Are you sure you want to <b>{decision}</b> your participation
                     in the upcoming Fall/Winter term?
-                </Modal.Body>
-                <Modal.Footer>
+                </DialogContent>
+                <DialogActions>
                     <Button
-                        variant="secondary"
+                        variant="outlined"
                         onClick={() => setConfirmDialogVisible(false)}
                     >
                         Cancel
                     </Button>
-                    <Button onClick={confirmClicked}>
-                        {waiting ? (
-                            <span className="spinner-surround">
-                                <Spinner animation="border" size="sm" />
-                            </span>
-                        ) : null}
+                    <Button
+                        variant="contained"
+                        onClick={confirmClicked}
+                        disabled={waiting}
+                        startIcon={waiting ? <CircularProgress size={18} /> : null}
+                    >
                         {capitalize(decision || "")} Offer
                     </Button>
-                </Modal.Footer>
-            </Modal>
+                </DialogActions>
+            </Dialog>
         </div>
     );
 }

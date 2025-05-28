@@ -1,22 +1,65 @@
-.sv_q_required_text {
-    color: red;
-    font-weight: bold;
-}
-/* In a type="rating" question, the difference between bootstrap's 
-.btn-secondary and .btn-secondary.active is hard to see, so we force
-the active button to be bright. */
-.sv_qstn .btn-secondary.active {
-    background-color: var(--primary) !important;
-}
-
-.sv_main.sv_main .sv-boolean__switch {
-    background-color: var(--primary) !important;
+/* Expand/collapse for SurveyJS ranking item descriptions */
+.sv-ranking-item__description {
+    display: none;
+    font-size: 0.95em;
+    margin-top: 0.5em;
+    background: #f5f5f5;
+    border-radius: 4px;
+    padding: 0.5em 1em;
+    transition: max-height 0.2s;
+    cursor: pointer;
 }
 
-.table.sv_q_matrix thead th, .table.sv_q_matrix thead td {
-    position: sticky;
-    top: 0;
-    border-top: 0;
-    z-index: 1;
-    background: white;
+.sv-ranking-item.expanded .sv-ranking-item__description {
+    display: block;
+}
+.sv-ranking-item__expand-toggle {
+    color: black;
+    cursor: pointer;
+    font-size: 0.95em;
+    margin-left: 0.5em;
+    text-decoration: underline;
+}
+
+
+/* Preserve newlines in checkbox labels */
+.sv-checkbox-label {
+    white-space: pre-line;
+}
+
+/* Color coding for ranking items */
+.sv-ranking .sv-ranking-item:nth-child(1) {
+    background: #e8f5e9 !important;
+    border-left: 6px solid #00a189
+}
+.sv-ranking .sv-ranking-item:nth-child(2),
+.sv-ranking .sv-ranking-item:nth-child(3),
+.sv-ranking .sv-ranking-item:nth-child(4) {
+    background: #f3e5f5 !important;
+    border-left: 6px solid #ab1368;
+}
+.sv-ranking .sv-ranking-item:nth-child(5),
+.sv-ranking .sv-ranking-item:nth-child(6),
+.sv-ranking .sv-ranking-item:nth-child(7) {
+    background: #e3f2fd !important;
+    border-left: 6px solid #6fc7ea;
+}
+.sv-ranking .sv-ranking-item:nth-child(8),
+.sv-ranking .sv-ranking-item:nth-child(9),
+.sv-ranking .sv-ranking-item:nth-child(10) {
+    background: #fffde7 !important; /* light yellow */
+    border-left: 6px solid #f1c500;
+}
+/* The rest: grey */
+.sv-ranking .sv-ranking-item {
+    margin-bottom: 0.5em;
+    border-radius: 6px;
+    transition: background 0.2s;
+    background: #f0f0f0 !important; /* light grey */
+    border-left: 6px solid #b0b0b0; /* grey border */
+}
+
+/* Preserve newlines in checkbox labels */
+.sv-checkbox-label {
+    white-space: pre-line;
 }

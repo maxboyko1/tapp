@@ -1,6 +1,16 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { Modal, Button, Alert } from "react-bootstrap";
+import {
+    Alert,
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    IconButton,
+} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+
 import {
     letterTemplatesSelector,
     allLetterTemplatesSelector,
@@ -94,36 +104,50 @@ function AddLetterTemplateDialog(props: {
     const conflicts = getConflicts(newLetterTemplate, letterTemplates);
 
     return (
-        <Modal show={show} onHide={onHide}>
-            <Modal.Header closeButton>
-                <Modal.Title>Add Letter Template</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
+        <Dialog open={show} onClose={onHide} maxWidth="sm" fullWidth>
+            <DialogTitle sx={{ m: 0, p: 2 }}>
+                Add Letter Template
+                <IconButton
+                    aria-label="close"
+                    onClick={onHide}
+                    sx={{
+                        position: "absolute",
+                        right: 8,
+                        top: 8,
+                        color: (theme) => theme.palette.grey[500],
+                    }}
+                    size="large"
+                >
+                    <CloseIcon />
+                </IconButton>
+            </DialogTitle>
+            <DialogContent dividers>
                 <LetterTemplateEditor
                     letterTemplate={newLetterTemplate}
                     setLetterTemplate={setNewLetterTemplate}
                     availableTemplates={availableTemplates}
                 />
-
                 {conflicts.immediateShow ? (
-                    <Alert variant="danger">{conflicts.immediateShow}</Alert>
+                    <Alert severity="error" sx={{ mt: 2 }}>
+                        {conflicts.immediateShow}
+                    </Alert>
                 ) : null}
-            </Modal.Body>
-            <Modal.Footer>
-                <Button onClick={onHide} variant="light">
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={onHide} variant="contained" color="secondary">
                     Cancel
                 </Button>
                 <Button
                     onClick={createLetterTemplate}
                     title={conflicts.delayShow || "Create Letter Template"}
-                    disabled={
-                        !!conflicts.delayShow || !!conflicts.immediateShow
-                    }
+                    disabled={!!conflicts.delayShow || !!conflicts.immediateShow}
+                    variant="contained"
+                    color="primary"
                 >
                     Create Letter Template
                 </Button>
-            </Modal.Footer>
-        </Modal>
+            </DialogActions>
+        </Dialog>
     );
 }
 /**
@@ -139,7 +163,7 @@ export function ConnectedAddLetterTemplateDialog(
     const availableTemplates = useSelector(allLetterTemplatesSelector);
     const dispatch = useThunkDispatch();
     const _upsertLetterTemplate = React.useCallback(
-        (template) => dispatch(upsertLetterTemplate(template)),
+        (template: Partial<LetterTemplate>) => dispatch(upsertLetterTemplate(template)),
         [dispatch]
     );
     const _fetchAllLetterTemplates = React.useCallback(

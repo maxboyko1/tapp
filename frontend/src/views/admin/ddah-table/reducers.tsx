@@ -1,6 +1,6 @@
-import { SET_SELECTED_DDAH_TABLE_ROWS } from "./constants";
 import { createReducer } from "redux-create-reducer";
-export { ddahsTableReducer };
+import { SET_SELECTED_DDAH_TABLE_ROWS } from "./constants";
+
 // initialize the state of offer table
 const initialState = {
     selectedDdahIds: [] as number[],
@@ -13,3 +13,5 @@ const ddahsTableReducer = createReducer(initialState, {
 });
 
 export type DdahsTableType = typeof initialState;
+
+export { ddahsTableReducer };

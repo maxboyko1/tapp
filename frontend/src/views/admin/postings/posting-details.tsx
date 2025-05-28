@@ -1,6 +1,20 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { Redirect } from "react-router-dom";
+import { Navigate } from "react-router-dom";
+import { useParams } from "react-router";
+import {
+    Alert,
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    IconButton,
+    Typography,
+} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import LinkIcon from "@mui/icons-material/Link";
+
 import {
     activeSessionSelector,
     fetchPostingPositionsForPosting,
@@ -16,10 +30,7 @@ import {
 } from "../../../components/action-buttons";
 import { MissingActiveSessionWarning } from "../../../components/sessions";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
-import { useParams } from "react-router";
 import { ConnectedPostingDetailsView } from "./posting-details/details-view";
-import { Alert, Modal } from "react-bootstrap";
-import { FaLink } from "react-icons/fa";
 import { ConnectedExportPostingsAction } from "./import-export";
 
 function PostingLinkDialog({
@@ -31,15 +42,19 @@ function PostingLinkDialog({
     visible: boolean;
     onHide: (...args: any[]) => void;
 }) {
-    const url = new URL(window.location.origin);
-    // We use `pathname` instead of `hash` here to work around routing
-    // issues for pre-authenticated users.
-    url.pathname = `/hash/public/postings/${posting.url_token}`;
+    let urlString: string;
+    if (process.env.REACT_APP_DEV_FEATURES) {
+        // In development mode, use hash routing as a string
+        urlString = `${window.location.origin}/#/public/postings/${posting.url_token}`;
+    } else {
+        // In production, use the /hash route
+        urlString = `${window.location.origin}/hash/public/postings/${posting.url_token}`;
+    }
 
     let warning = null;
     if (posting.posting_positions.length === 0) {
         warning = (
-            <Alert variant="warning">
+            <Alert severity="warning" sx={{ mb: 2 }}>
                 This posting has no associated positions, which means applicants
                 cannot currently complete an application.
             </Alert>
@@ -47,21 +62,38 @@ function PostingLinkDialog({
     }
 
     return (
-        <Modal show={visible} onHide={onHide} size="lg">
-            <Modal.Header closeButton>
-                <Modal.Title>Posting URL</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
+        <Dialog open={visible} onClose={onHide} maxWidth="md" fullWidth>
+            <DialogTitle sx={{ m: 0, p: 2 }}>
+                Posting URL
+                <IconButton
+                    aria-label="close"
+                    onClick={onHide}
+                    sx={{
+                        position: 'absolute',
+                        right: 8,
+                        top: 8,
+                        color: (theme) => theme.palette.grey[500],
+                    }}
+                    size="large"
+                >
+                    <CloseIcon />
+                </IconButton>
+            </DialogTitle>
+            <DialogContent dividers>
                 {warning}
-                <p>
-                    You can distribute the following link to give access to the
-                    posting <em>{posting.name}</em>
-                </p>
-                <p>
-                    <a href={url.href}>{url.href}</a>
-                </p>
-            </Modal.Body>
-        </Modal>
+                <Typography variant="body1">
+                    You can distribute the following link to give access to the posting <em>{posting.name}</em>
+                </Typography>
+                <Typography variant="body1" sx={{ mt: 1 }}>
+                    <a href={urlString}>{urlString}</a>
+                </Typography>
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={onHide} variant="contained" color="secondary">
+                    Close
+                </Button>
+            </DialogActions>
+        </Dialog>
     );
 }
 
@@ -104,14 +136,16 @@ function ConnectedPostingDetails() {
     const posting = postings.find((posting) => posting.id === posting_id);
 
     if (postingIsForDifferentSession) {
-        return <Redirect to="/postings/overview" />;
+        return <Navigate to="/postings/overview" replace />;
     }
 
     if (posting_id == null) {
         return (
             <div className="page-body">
                 <ContentArea>
-                    <h4>Cannot view a Posting without a valid posting id</h4>
+                    <Typography variant="h4" color="error">
+                        Cannot view a Posting without a valid posting id
+                    </Typography>
                 </ContentArea>
             </div>
         );
@@ -121,7 +155,9 @@ function ConnectedPostingDetails() {
         return (
             <div className="page-body">
                 <ContentArea>
-                    <h4>Cannot Posting with id={posting_id}</h4>
+                    <Typography variant="h4" color="error">
+                        Cannot find Posting with id={posting_id}
+                    </Typography>
                 </ContentArea>
             </div>
         );
@@ -130,7 +166,7 @@ function ConnectedPostingDetails() {
     let warning = null;
     if (posting.posting_positions.length === 0) {
         warning = (
-            <Alert variant="warning">
+            <Alert severity="warning">
                 This posting has no associated positions, which means applicants
                 cannot currently complete an application.
             </Alert>
@@ -143,7 +179,7 @@ function ConnectedPostingDetails() {
                 <ActionHeader>Available Actions</ActionHeader>
                 <ActionButton
                     onClick={() => setUrlDialogVisible(true)}
-                    icon={FaLink}
+                    icon={<LinkIcon />}
                 >
                     Get Link to Posting
                 </ActionButton>

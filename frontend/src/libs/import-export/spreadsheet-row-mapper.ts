@@ -96,6 +96,11 @@ export class SpreadsheetRowMapper<
     formatRow(row: Record<string, any>, log = true) {
         const ret: Record<string, any> = {};
         for (const [key, value] of Object.entries(row)) {
+            // Some spreadsheets will have columns like "question", possibly "questionon1", "question2", etc.
+            if (/^question\d*$/i.test(key)) {
+                // These are used to define custom questions, can safely ignore
+                continue;
+            }
             // If we've found this key before, use the cached version.
             if (key in this.empiricalKeyMap) {
                 ret[this.empiricalKeyMap[key]] = value;

@@ -1,5 +1,8 @@
 import React from "react";
 import { useSelector } from "react-redux";
+import { Typography } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
+import TrashIcon from "@mui/icons-material/Delete";
 
 import { ConnectedAddPositionDialog } from "./add-position-dialog";
 import { ConnectedPositionsList } from "./position-list";
@@ -13,7 +16,6 @@ import {
     ActionHeader,
 } from "../../../components/action-buttons";
 import { ContentArea } from "../../../components/layout";
-import { FaPlus, FaTrash } from "react-icons/fa";
 import { activeSessionSelector } from "../../../api/actions";
 import { MissingActiveSessionWarning } from "../../../components/sessions";
 import { ConnectedPositionDetailsDialog } from "./position-details-dialog";
@@ -31,7 +33,7 @@ export function AdminPositionsView() {
             <ActionsList>
                 <ActionHeader>Available Actions</ActionHeader>
                 <ActionButton
-                    icon={<FaPlus />}
+                    icon={<AddIcon />}
                     onClick={() => {
                         setAddDialogVisible(true);
                     }}
@@ -40,7 +42,7 @@ export function AdminPositionsView() {
                     Add Position
                 </ActionButton>
                 <ActionButton
-                    icon={<FaTrash />}
+                    icon={<TrashIcon />}
                     onClick={() => setInDeleteMode(!inDeleteMode)}
                     active={inDeleteMode}
                     disabled={!activeSession}
@@ -58,6 +60,9 @@ export function AdminPositionsView() {
                 {activeSession ? null : (
                     <MissingActiveSessionWarning extraText="To view or modify positions, you must select a session." />
                 )}
+                <Typography variant="h3" sx={{ mb: 2 }}>
+                    Positions
+                </Typography>
                 <ConnectedAddPositionDialog
                     show={addDialogVisible}
                     onHide={() => {

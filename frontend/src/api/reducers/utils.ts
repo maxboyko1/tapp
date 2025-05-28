@@ -4,15 +4,17 @@
 
 import { combineReducers as _origCombineReducers } from "redux";
 import { createReducer as _origCreateReducer } from "redux-create-reducer";
-import type { Action, AnyAction, Reducer } from "redux";
+import type { Action, Reducer } from "redux";
 import type { Selector } from "reselect";
 
 type HasIdField = { id: number };
-export interface HasPayload<T> extends AnyAction {
+export interface HasPayload<T> extends Action {
     payload: T;
 }
-//export type HasPayload<T> = { payload: T } & AnyAction;
 export type BasicState<T> = { _modelData: T[] };
+
+export type AdvancedState<T> = { _modelData: T[], _allData: T[] };
+
 export type TaggedState<T> = BasicState<T> & { _storePath: _StorePath };
 type Handlers<State> = {
     [key: string]: (state: State, action: any) => State;
@@ -25,7 +27,7 @@ type _StorePath = {
 interface _StorePathWithPushToPath extends _StorePath {
     pushToPath: (dir: string | number) => void;
 }
-interface TaggedReducer<State, A extends Action = AnyAction>
+interface TaggedReducer<State, A extends Action = Action>
     extends Reducer<State, A> {
     _storePath: _StorePathWithPushToPath;
 }
@@ -34,7 +36,7 @@ interface TaggedReducerWithSelector<State> extends TaggedReducer<State> {
     _localStoreSelector: Selector<any, State>;
 }
 
-type TaggedReducersMapObject<State, A extends Action = AnyAction> = {
+type TaggedReducersMapObject<State, A extends Action = Action> = {
     [K in keyof State & string]: TaggedReducer<State[K], A>;
 };
 
@@ -94,6 +96,42 @@ export function createBasicReducerObject<T extends HasIdField>(
             _modelData: upsertItem(state._modelData, action.payload),
         }),
         [DELETE_ONE]: (state: BasicState<T>, action: HasPayload<T>) => {
+            const deletedItem = action.payload;
+            return {
+                ...state,
+                _modelData: state._modelData.filter(
+                    (item) => item.id !== deletedItem.id
+                ),
+            };
+        },
+    };
+}
+
+export function createAdvancedReducerObject<T extends HasIdField>(
+    FETCH_ALL: string,
+    FETCH_MANY: string,
+    FETCH_ONE: string,
+    UPSERT_ONE: string,
+    DELETE_ONE: string
+) {
+    return {
+        [FETCH_ALL]: (state: AdvancedState<T>, action: HasPayload<T[]>) => ({
+            ...state,
+            _allData: action.payload,
+        }),
+        [FETCH_MANY]: (state: AdvancedState<T>, action: HasPayload<T[]>) => ({
+            ...state,
+            _modelData: action.payload,
+        }),
+        [FETCH_ONE]: (state: AdvancedState<T>, action: HasPayload<T>) => ({
+            ...state,
+            _modelData: upsertItem(state._modelData, action.payload),
+        }),
+        [UPSERT_ONE]: (state: AdvancedState<T>, action: HasPayload<T>) => ({
+            ...state,
+            _modelData: upsertItem(state._modelData, action.payload),
+        }),
+        [DELETE_ONE]: (state: AdvancedState<T>, action: HasPayload<T>) => {
             const deletedItem = action.payload;
             return {
                 ...state,

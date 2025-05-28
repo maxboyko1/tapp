@@ -1,118 +1,138 @@
 import React from "react";
 import { useSelector } from "react-redux";
+import {
+    Alert,
+    Button,
+    CircularProgress,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogActions,
+    IconButton,
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableRow,
+    Typography,
+} from "@mui/material";
+import { useTheme } from "@mui/material/styles";
+import CloseIcon from "@mui/icons-material/Close";
+import SearchIcon from "@mui/icons-material/Search";
+import SavedSearchIcon from "@mui/icons-material/SavedSearch";
+
 import { offerTableSelector } from "../offertable/actions";
 import {
     assignmentsSelector,
     fetchOfferHistoryForAssignment,
     fetchWageChunksForAssignment,
 } from "../../../api/actions";
-import { Button, Modal, Alert, Spinner } from "react-bootstrap";
 import { Offer, WageChunk } from "../../../api/defs/types";
 import {
     capitalize,
     formatDate,
     formatDateTime,
     formatDownloadUrl,
+    getStatusColor,
 } from "../../../libs/utils";
 import { ActionButton } from "../../../components/action-buttons";
-import { FaSearch, FaSearchDollar } from "react-icons/fa";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
 
 function OfferHistoryDetails({ offers }: { offers: Offer[] }) {
+    const theme = useTheme();
     if (offers.length === 0) {
-        return <span>No Offer</span>;
+        return <Typography variant="body2">No Offer</Typography>;
     }
     return (
-        <table className="offer-history-details-table">
-            <thead>
-                <tr>
-                    <th></th>
-                    <th>Status</th>
-                    <th>Hours</th>
-                    <th>Emailed Date</th>
-                    <th>Accepted Date</th>
-                    <th>Rejected Date</th>
-                    <th>Withdrawn Date</th>
-                </tr>
-            </thead>
-            <tbody>
+        <Table className="offer-history-details-table" size="small" sx={{ minWidth: 650 }}>
+            <TableHead>
+                <TableRow>
+                    <TableCell />
+                    <TableCell>Status</TableCell>
+                    <TableCell>Hours</TableCell>
+                    <TableCell>Emailed Date</TableCell>
+                    <TableCell>Accepted Date</TableCell>
+                    <TableCell>Rejected Date</TableCell>
+                    <TableCell>Withdrawn Date</TableCell>
+                </TableRow>
+            </TableHead>
+            <TableBody>
                 {(offers || []).map((offer, i) => {
                     const url = `/public/contracts/${offer.url_token}.pdf`;
                     return (
-                        <tr key={i}>
-                            <td>
+                        <TableRow key={i}>
+                            <TableCell>
                                 <Button
                                     href={formatDownloadUrl(url)}
-                                    variant="light"
-                                    size="sm"
-                                    className="py-0"
+                                    variant="outlined"
+                                    size="small"
+                                    sx={{ minWidth: 0, p: 0.5 }}
                                     title="Download offer PDF"
+                                    target="_blank"
+                                    rel="noopener"
                                 >
-                                    <FaSearch />
+                                    <SearchIcon />
                                 </Button>
-                            </td>
-                            <td className={`status ${offer.status}`}>
-                                {capitalize(offer.status)}
-                            </td>
-                            <td className="number">{offer.hours}</td>
-                            <td
-                                title={formatDateTime(
-                                    offer.emailed_date || undefined
-                                )}
+                            </TableCell>
+                            <TableCell>
+                                <Typography variant="body2" color={getStatusColor(offer.status, theme)}>
+                                    {capitalize(offer.status)}
+                                </Typography>
+                            </TableCell>
+                            <TableCell className="number">{offer.hours}</TableCell>
+                            <TableCell
+                                title={formatDateTime(offer.emailed_date || undefined)}
                             >
                                 {formatDate(offer.emailed_date || "")}
-                            </td>
-                            <td
-                                title={formatDateTime(
-                                    offer.accepted_date || undefined
-                                )}
+                            </TableCell>
+                            <TableCell
+                                title={formatDateTime(offer.accepted_date || undefined)}
                             >
                                 {formatDate(offer.accepted_date || "")}
-                            </td>
-                            <td
-                                title={formatDateTime(
-                                    offer.rejected_date || undefined
-                                )}
+                            </TableCell>
+                            <TableCell
+                                title={formatDateTime(offer.rejected_date || undefined)}
                             >
                                 {formatDate(offer.rejected_date || "")}
-                            </td>
-                            <td
-                                title={formatDateTime(
-                                    offer.withdrawn_date || undefined
-                                )}
+                            </TableCell>
+                            <TableCell
+                                title={formatDateTime(offer.withdrawn_date || undefined)}
                             >
                                 {formatDate(offer.withdrawn_date || "")}
-                            </td>
-                        </tr>
+                            </TableCell>
+                        </TableRow>
                     );
                 })}
-            </tbody>
-        </table>
+            </TableBody>
+        </Table>
     );
 }
 
 function WagechunkDetails({ wageChunks }: { wageChunks: WageChunk[] }) {
+    if (!wageChunks || wageChunks.length === 0) {
+        return <Typography variant="body2">No Wage Chunks</Typography>;
+    }
     return (
-        <table className="wagechunk-details-table">
-            <thead>
-                <tr>
-                    <th>Hours</th>
-                    <th>Rate</th>
-                    <th>Start Date</th>
-                    <th>End Date</th>
-                </tr>
-            </thead>
-            <tbody>
-                {(wageChunks || []).map((chunk, i) => (
-                    <tr key={i}>
-                        <td>{chunk.hours}</td>
-                        <td>{chunk.rate}</td>
-                        <td>{formatDate(chunk.start_date || "")}</td>
-                        <td>{formatDate(chunk.end_date || "")}</td>
-                    </tr>
+        <Table className="wagechunk-details-table" size="small" sx={{ minWidth: 400 }}>
+            <TableHead>
+                <TableRow>
+                    <TableCell>Hours</TableCell>
+                    <TableCell>Rate</TableCell>
+                    <TableCell>Start Date</TableCell>
+                    <TableCell>End Date</TableCell>
+                </TableRow>
+            </TableHead>
+            <TableBody>
+                {wageChunks.map((chunk, i) => (
+                    <TableRow key={i}>
+                        <TableCell>{chunk.hours}</TableCell>
+                        <TableCell>{chunk.rate}</TableCell>
+                        <TableCell>{formatDate(chunk.start_date || "")}</TableCell>
+                        <TableCell>{formatDate(chunk.end_date || "")}</TableCell>
+                    </TableRow>
                 ))}
-            </tbody>
-        </table>
+            </TableBody>
+        </Table>
     );
 }
 
@@ -126,6 +146,7 @@ export function ConnectedAssignmentDetails({
     const assignmentNotFound = !assignment;
     const wageChunksNotFound = !assignment?.wage_chunks;
     const dispatch = useThunkDispatch();
+    const theme = useTheme();
 
     React.useEffect(() => {
         if (assignmentNotFound) {
@@ -142,74 +163,64 @@ export function ConnectedAssignmentDetails({
     }, [assignmentId, dispatch, assignmentNotFound, wageChunksNotFound]);
 
     if (!assignment) {
-        return <div>No Assignment found with ID "{assignmentId}"</div>;
+        return <Typography>No Assignment found with ID "{assignmentId}"</Typography>;
     }
 
     return (
-        <table className="assignment-details-table">
-            <tbody>
-                <tr>
-                    <th>Position</th>
-                    <td>
+        <Table className="assignment-details-table" size="small">
+            <TableBody>
+                <TableRow>
+                    <TableCell component="th" scope="row">Position</TableCell>
+                    <TableCell>
                         {assignment.position.position_code}{" "}
                         {assignment.position.position_title}
-                    </td>
-                </tr>
-                <tr>
-                    <th>Applicant Name</th>
-                    <td>
+                    </TableCell>
+                </TableRow>
+                <TableRow>
+                    <TableCell component="th" scope="row">Applicant Name</TableCell>
+                    <TableCell>
                         {assignment.applicant.last_name},{" "}
                         {assignment.applicant.first_name}
-                    </td>
-                </tr>
-                <tr>
-                    <th>Student Number</th>
-                    <td>{assignment.applicant.student_number}</td>
-                </tr>
-                <tr>
-                    <th>Total Hours</th>
-                    <td>{assignment.hours}</td>
-                </tr>
-                <tr>
-                    <th>Offer Status</th>
-                    <td className={`status ${assignment.active_offer_status}`}>
-                        {capitalize(
-                            assignment.active_offer_status || "No Offer"
-                        )}
-                    </td>
-                </tr>
-                <tr>
-                    <th>Pay Description</th>
-                    <td>
+                    </TableCell>
+                </TableRow>
+                <TableRow>
+                    <TableCell component="th" scope="row">Student Number</TableCell>
+                    <TableCell>{assignment.applicant.student_number}</TableCell>
+                </TableRow>
+                <TableRow>
+                    <TableCell component="th" scope="row">Total Hours</TableCell>
+                    <TableCell>{assignment.hours}</TableCell>
+                </TableRow>
+                <TableRow>
+                    <TableCell component="th" scope="row">Offer Status</TableCell>
+                    <TableCell>
+                        <Typography variant="body2" color={getStatusColor(assignment.active_offer_status, theme)}>
+                            {capitalize(assignment.active_offer_status || "No Offer")}
+                        </Typography>
+                    </TableCell>
+                </TableRow>
+                <TableRow>
+                    <TableCell component="th" scope="row">Pay Description</TableCell>
+                    <TableCell>
                         {assignment.wage_chunks ? (
-                            <WagechunkDetails
-                                wageChunks={assignment.wage_chunks}
-                            />
+                            <WagechunkDetails wageChunks={assignment.wage_chunks} />
                         ) : (
-                            <Spinner
-                                animation="border"
-                                size="sm"
-                                className="mr-1"
-                            />
+                            <CircularProgress size={20} sx={{ mr: 1 }} />
                         )}
-                    </td>
-                </tr>
-                <tr>
-                    <th>Offer History</th>
-                    <td>
+                    </TableCell>
+                </TableRow>
+                <TableRow>
+                    <TableCell component="th" scope="row">Offer History</TableCell>
+                    <TableCell>
                         {assignment.offers ? (
                             <OfferHistoryDetails offers={assignment.offers} />
                         ) : (
-                            <Spinner
-                                animation="border"
-                                size="sm"
-                                className="mr-1"
-                            />
+                            <CircularProgress size={20} sx={{ mr: 1 }} />
                         )}
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+                    </TableCell>
+                </TableRow>
+            </TableBody>
+        </Table>
     );
 }
 
@@ -232,8 +243,8 @@ export function ConnectedViewAssignmentDetailsAction() {
         return aHash === bHash ? 0 : aHash > bHash ? 1 : -1;
     });
 
-    let assignmentDetails: JSX.Element | JSX.Element[] = (
-        <Alert variant="info">
+    let assignmentDetails: React.ReactNode = (
+        <Alert severity="info">
             There are no selected assignments. You must select assignments to
             see their details.
         </Alert>
@@ -258,7 +269,7 @@ export function ConnectedViewAssignmentDetailsAction() {
     return (
         <React.Fragment>
             <ActionButton
-                icon={FaSearchDollar}
+                icon={<SavedSearchIcon />}
                 onClick={() => setDialogVisible(true)}
                 title={
                     disabled
@@ -269,24 +280,41 @@ export function ConnectedViewAssignmentDetailsAction() {
             >
                 Assignment Details
             </ActionButton>
-            <Modal
-                show={dialogVisible}
-                onHide={() => setDialogVisible(false)}
-                size="xl"
+            <Dialog
+                open={dialogVisible}
+                onClose={() => setDialogVisible(false)}
+                maxWidth="xl"
+                fullWidth
             >
-                <Modal.Header closeButton>
-                    <Modal.Title>Assignment Details</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>{assignmentDetails}</Modal.Body>
-                <Modal.Footer>
+                <DialogTitle sx={{ m: 0, p: 2 }}>
+                    Assignment Details
+                    <IconButton
+                        aria-label="close"
+                        onClick={() => setDialogVisible(false)}
+                        sx={{
+                            position: "absolute",
+                            right: 8,
+                            top: 8,
+                            color: (theme) => theme.palette.grey[500],
+                        }}
+                        size="large"
+                    >
+                        <CloseIcon />
+                    </IconButton>
+                </DialogTitle>
+                <DialogContent dividers>
+                    {assignmentDetails}
+                </DialogContent>
+                <DialogActions>
                     <Button
-                        variant="light"
+                        variant="contained"
+                        color="secondary"
                         onClick={() => setDialogVisible(false)}
                     >
                         Close
                     </Button>
-                </Modal.Footer>
-            </Modal>
+                </DialogActions>
+            </Dialog>
         </React.Fragment>
     );
 }

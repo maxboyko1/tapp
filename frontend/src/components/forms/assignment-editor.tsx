@@ -1,9 +1,12 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Form } from "react-bootstrap";
-import { Typeahead } from "react-bootstrap-typeahead";
+import {
+    Autocomplete,
+    Box,
+    TextField,
+    Typography,
+} from "@mui/material";
 
-import "react-bootstrap-typeahead/css/Typeahead.css";
 import { docApiPropTypes } from "../../api/defs/doc-generation";
 import { fieldEditorFactory, DialogRow } from "./common-controls";
 import { splitDateRangeAtNewYear } from "../../api/mockAPI/utils";
@@ -100,6 +103,14 @@ export function AssignmentEditor(props: {
         () => ({ ...DEFAULT_ASSIGNMENT, ...assignmentProp }),
         [assignmentProp]
     );
+    const positionsWithTitle = positions.map((position) => ({
+        ...position,
+        display_title: `${position.position_code} (${position.position_title})`,
+    }));
+    const applicantsWithFullName = applicants.map((applicant) => ({
+        ...applicant,
+        full_name: `${applicant.first_name} ${applicant.last_name}`,
+    }));
 
     React.useEffect(() => {
         // Create or destroy wage chunks based on whether an assignment's dates
@@ -172,9 +183,12 @@ export function AssignmentEditor(props: {
         const wageChunks = assignment.wage_chunks;
         wageChunkAdjuster1 = (
             <>
-                <Form.Label>F Hours</Form.Label>
-                <Form.Control
+                <Typography variant="body2" sx={{ mb: 1 }}>
+                    F Hours
+                </Typography>
+                <TextField
                     type="number"
+                    label="F Hours"
                     title="The number of pre-January hours"
                     value={wageChunks[0].hours}
                     onChange={(e) => {
@@ -193,63 +207,81 @@ export function AssignmentEditor(props: {
                             ],
                         });
                     }}
+                    size="small"
+                    fullWidth
+                    margin="normal"
                 />
             </>
         );
+
         wageChunkAdjuster2 = (
             <>
-                <Form.Label>S Hours</Form.Label>
-                <Form.Control
+                <Typography variant="body2" sx={{ mb: 1 }}>
+                    S Hours
+                </Typography>
+                <TextField
                     type="number"
+                    label="S Hours"
                     title="The number of post-January hours. This value cannot be set directly. You must set the number of pre-January hours."
                     disabled
                     value={wageChunks[1]?.hours}
+                    size="small"
+                    fullWidth
+                    margin="normal"
                 />
             </>
         );
     }
 
     return (
-        <Form>
+        <Box component="form" noValidate autoComplete="off">
             <DialogRow>
                 <React.Fragment>
-                    <Form.Label>Position</Form.Label>
-                    <Typeahead
+                    <Autocomplete
                         id="position-input"
-                        ignoreDiacritics={true}
-                        placeholder="Position..."
-                        multiple
-                        labelKey={(option) =>
+                        options={positionsWithTitle}
+                        getOptionLabel={(option) =>
                             `${option.position_code} (${option.position_title})`
                         }
-                        selected={
+                        value={
                             assignment.position.id == null
-                                ? []
-                                : [assignment.position]
+                                ? null
+                                : positionsWithTitle.find(
+                                    (p) => p.id === assignment.position.id
+                                ) || null
                         }
-                        options={positions}
-                        onChange={setPosition}
+                        onChange={(_, value) =>
+                            setPosition(value ? [value] : [])
+                        }
+                        renderInput={(params) => (
+                            <TextField {...params} placeholder="Position..." size="small" />
+                        )}
                         disabled={lockPositionAndApplicant}
+                        isOptionEqualToValue={(option, value) => option.id === value.id}
                     />
                 </React.Fragment>
                 <React.Fragment>
-                    <Form.Label>Applicant</Form.Label>
-                    <Typeahead
+                    <Autocomplete
                         id="applicant-input"
-                        ignoreDiacritics={true}
-                        placeholder="Applicant..."
-                        multiple
-                        labelKey={(option) =>
+                        options={applicantsWithFullName}
+                        getOptionLabel={(option) =>
                             `${option.first_name} ${option.last_name}`
                         }
-                        selected={
+                        value={
                             assignment.applicant.id == null
-                                ? []
-                                : [assignment.applicant]
+                                ? null
+                                : applicantsWithFullName.find(
+                                    (a) => a.id === assignment.applicant.id
+                                ) || null
                         }
-                        options={applicants}
-                        onChange={setApplicant}
+                        onChange={(_, value) =>
+                            setApplicant(value ? [value] : [])
+                        }
+                        renderInput={(params) => (
+                            <TextField {...params} placeholder="Applicant..." size="small" />
+                        )}
                         disabled={lockPositionAndApplicant}
+                        isOptionEqualToValue={(option, value) => option.id === value.id}
                     />
                 </React.Fragment>
             </DialogRow>
@@ -257,7 +289,9 @@ export function AssignmentEditor(props: {
                 {createFieldEditor("Hours", "hours", "number")}
             </DialogRow>
 
-            <h4>Optional Settings</h4>
+            <Typography variant="h6" sx={{ mt: 2 }}>
+                Optional Settings
+            </Typography>
             <DialogRow>
                 {createFieldEditor("Start Date", "start_date", "date")}
                 {createFieldEditor("End Date", "end_date", "date")}
@@ -266,7 +300,7 @@ export function AssignmentEditor(props: {
                 {wageChunkAdjuster1}
                 {wageChunkAdjuster2}
             </DialogRow>
-        </Form>
+        </Box>
     );
 }
 AssignmentEditor.propTypes = {

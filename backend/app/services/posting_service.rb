@@ -11,59 +11,120 @@ class PostingService
 
     # Assemble a survey for the posting
     def survey
-        fixed_survey =
-            JSON.parse File.read(Rails.root.join('app', 'data', 'survey.json'))
-        position_description_template =
-            Liquid::Template.parse(
-                File.read(
-                    Rails.root.join('app', 'data', 'position_descriptions.html')
-                )
-            )
+        # Load the base survey structure from survey.json
+        fixed_survey = JSON.parse(File.read(Rails.root.join('app', 'data', 'survey.json')))
 
-        # Set the global survey title
-        availability_desc =
-            if @posting.open_date.year == @posting.close_date.year
-                "Available from #{@posting.open_date.strftime('%b %d')} to #{
-                    @posting.close_date.strftime('%b %d, %Y')
-                }"
-            else
-                "Available from #{
-                    @posting.open_date.strftime('%b %d, %Y')
-                } to #{@posting.close_date.strftime('%b %d, %Y')}"
+        # Add the posting_questions_page, if there are any posting-specific questions
+        if @posting.custom_questions.present? && @posting.custom_questions['elements'].present?
+            posting_questions_page = {
+                'title' => 'Posting-Specific Questions',
+                'name' => 'posting_questions_page',
+                'elements' => @posting.custom_questions['elements']
+            }
+            fixed_survey['pages'] << posting_questions_page
+        end
+
+        # Prepare all position data for choices and panels
+        positions = assemble_position_data
+
+        # For checkboxes: full details in text
+        checkbox_choices = positions.map do |pos|
+            {
+                'value' => pos[:value],
+                'text' => pos[:text],
+                'title' => 'TEST'
+            }
+        end
+
+        # For ranking: just code/title
+        ranking_choices = positions.map do |pos|
+            {
+                'value' => pos[:value],
+                'text' => pos[:text]
+            }
+        end
+
+        preferences_page = {
+            'name' => 'preferences_page',
+            'elements' => [
+                {
+                    'type' => 'checkbox',
+                    'name' => 'willing_positions',
+                    'title' => 'Select all positions you are willing to TA.',
+                    'description' =>
+                        'You may rank your selections in order of preference in the next question below. Duties, qualifications, etc for each of your selections will be shown on the next page, and each one may also have additional position-specific questions for you to answer.',
+                    'choices' => checkbox_choices
+                },
+                {
+                    'type' => 'ranking',
+                    'name' => 'position_preferences',
+                    'title' => 'Rank your selected positions in order of preference, from highest to lowest.',
+                    'description' => 'Any positions that are colour-coded the same here will be considered equivalent regarding your preference ranking.',
+                    'choices' => ranking_choices,
+                    'visibleIf' => '{willing_positions.length} > 0'
+                }
+            ],
+            'title' => 'Position Preferences'
+        }
+        fixed_survey['pages'] << preferences_page
+
+        # Add position-specific questions page (static panels, visible only if opted in)
+        position_questions_page = {
+            'title' => 'Position-Specific Questions',
+            'name' => 'position_questions_page',
+            'elements' => positions.map do |pos|
+                custom_elements =
+                    if pos[:custom_questions].present? && pos[:custom_questions]['elements'].present?
+                        pos[:custom_questions]['elements'].map do |el|
+                            el = el.deep_dup
+                            el['name'] = "#{pos[:id]}:#{el['name']}"
+                            el['title'] = el['title'] || el['name'].split(':', 2).last
+                            el
+                        end
+                    else
+                        [
+                            {
+                                'type' => 'html',
+                                'name' => "no_questions_#{pos[:value]}",
+                                'html' => '<i>No questions for this position.</i>'
+                            }
+                        ]
+                    end
+                {
+                    'type' => 'panel',
+                    'name' => "panel_#{pos[:value]}",
+                    'title' => pos[:text].to_s,
+                    'visibleIf' => "{willing_positions} contains '#{pos[:value]}'",
+                    'elements' => [
+                        {
+                            'type' => 'html',
+                            'name' => "desc_#{pos[:value]}",
+                            'html' => "<b>Hours per assignment:</b> #{pos[:hours_per_assignment]}<br/><b>Duties:</b> #{pos[:duties].to_s.gsub("\n", "<br/>")}<br/><b>Qualifications:</b> #{pos[:qualifications].to_s.gsub("\n", "<br/>")}"
+                        }
+                    ] + custom_elements
+                }
             end
-        fixed_survey['title'] = "#{@posting.name} (#{availability_desc})"
+        }
+        fixed_survey['pages'] << position_questions_page
+
+        # Add comments page
+        comments_page = {
+            'name' => 'comments_page',
+            'elements' => [
+                {
+                    'type' => 'comment',
+                    'name' => 'comments',
+                    'title' => 'Additional Comments',
+                    'description' =>
+                        'If there is anything you feel we should know, special arrangements/requests for work, etc., enter it below.'
+                }
+            ]
+        }
+        fixed_survey['pages'] << comments_page
+
+        # Update the survey title and description
+        fixed_survey['title'] = "#{@posting.name} (#{availability_description})"
         fixed_survey['description'] = @posting.intro_text
-
-        # Find the preferences page and set a preference for each PostingPosition
-        preferences_page =
-            fixed_survey['pages'].find do |page|
-                page['name'] == 'preferences_page'
-            end
-
-        preferences_question =
-            preferences_page['elements'].find do |elm|
-                elm['name'] == 'position_preferences'
-            end
-        preferences_question['rows'] = assemble_preferences_rows
-        position_descriptions =
-            preferences_page['elements'].find do |elm|
-                elm['name'] == 'position_descriptions'
-            end
-        position_descriptions['html'] =
-            position_description_template.render position_description_subs
-
-        # Add any custom questions there may be.
-        # These should show up after all fixed questions but before the comments page.
-        custom_questions = @posting.custom_questions
-        custom_pages =
-            custom_questions.respond_to?(:dig) ? custom_questions['pages'] : []
-
-        comments_page, fixed_pages =
-            fixed_survey['pages'].partition do |page|
-                page['name'] == 'comments_page'
-            end
-
-        fixed_survey['pages'] = fixed_pages + custom_pages + comments_page
 
         fixed_survey
     end
@@ -106,9 +167,6 @@ class PostingService
             unless offer_history.blank?
                 data[:previous_department_ta] = true
                 data[:previous_university_ta] = true
-                # Technically we cannot infer this, but if they've TAed for the department
-                # before, we don't care about other history
-                data[:previous_other_university_ta] = false
                 data[:previous_experience_summary] =
                     offer_history
                         .map do |(course, hours, start_date, end_date)|
@@ -139,112 +197,109 @@ class PostingService
         data
     end
 
-    # Splits a Survey.js response object into the required pieces
-    # (some of the data gets stored in database tables, some of it gets stored
-    # as JSON blobs).
     def process_answers(user:, answers:)
         utorid = user.utorid
-
         answers = answers.to_hash.symbolize_keys
 
-        # grab the applicant information
-        applicant_attributes = answers
-        rest =
-            applicant_attributes.slice!(
-                :email,
-                :first_name,
-                :last_name,
-                :phone,
-                :student_number
-            )
-        applicant_attributes[:utorid] = utorid
-        # grab the application information
-        application_attributes = rest
-        rest =
-            application_attributes.slice!(
-                :comments,
-                :department,
-                :gpa,
-                :cv_link,
-                :previous_experience_summary,
-                :previous_department_ta,
-                :previous_university_ta,
-                :program
-            )
-        # the year in progress is computed backwards from the date
-        if rest[:program_start]
-            # We compute the year in progress as follows:
-            #   (a) assume all programs start on Oct 1 (we choose October over Sept.,
-            #       because some peope will say their program started on e.g. Sept 14
-            #       rather than Sept 1; we need a date that is at least their start date)
-            #   (b) Find the number of years that have passed between (a) and the applicant's program_start
-            #   (c) Add 1 (since we don't talk about 0th year PhDs, etc.)
-            # This algorithm needs to give the correct year of study even if applicants
-            # fill out an application _before_ they officially advance a year. E.g., a student who
-            # started in 2012 will be in their 3.5th year in the summer of 2015, but we want to call
-            # them a 4th year (since they'll be a fourth year in the fall of 2015).
+        # Get all valid position codes and ids for this posting
+        all_positions = PostingPosition.joins(:position)
+            .where(posting: @posting)
+            .pluck('positions.position_code', 'positions.id')
+        code_to_id = all_positions.to_h # code => positions.id
+        all_ids = all_positions.map(&:last) # positions.id
 
-            start_of_fall = Date.today.beginning_of_year + 9.months
-            if Date.today - Date.today.beginning_of_year < 4.months.in_days
-                start_of_fall -= 1.year
+        # Extract position preferences and willing positions
+        ranking_codes = answers[:position_preferences] || []
+        willing_codes = answers[:willing_positions] || []
+
+        # Extract position-specific custom question answers
+        position_custom_answers = {}
+        all_ids.each do |position_id|
+            answers_for_id = answers.select { |k, _| k.to_s.start_with?("#{position_id}:") }
+            cleaned = {}
+            answers_for_id.each do |k, v|
+                cleaned[k.to_s.sub(/^#{position_id}:/, '')] = v
             end
+            position_custom_answers[position_id] = cleaned unless cleaned.empty?
+        end
 
+        # Clean up posting answers json by removing position preferences and willing positions
+        answers.delete(:willing_positions)
+        answers.delete(:position_preferences)
+        all_ids.each do |position_id|
+            answers.keys.grep(/^#{position_id}:/).each { |k| answers.delete(k) }
+        end
+
+        # Extract applicant info
+        applicant_attributes = answers
+        rest = applicant_attributes.slice!(
+            :email, :first_name, :last_name, :phone, :student_number
+        )
+        applicant_attributes[:utorid] = utorid
+
+        # Extract application info
+        application_attributes = rest
+        rest = application_attributes.slice!(
+            :comments, :department, :gpa, :cv_link, :previous_experience_summary,
+            :previous_department_ta, :previous_university_ta, :program
+        )
+
+        # Year in progress computed backwards from the date
+        if rest[:program_start]
+            start_of_fall = Date.today.beginning_of_year + 9.months
+            start_of_fall -= 1.year if Date.today - Date.today.beginning_of_year < 4.months.in_days
             application_attributes[:yip] =
-                ((start_of_fall - Date.parse(rest[:program_start])) / 356)
-                    .floor + 1
+                ((start_of_fall - Date.parse(rest[:program_start])) / 356).floor + 1
         end
         application_attributes[:session] = @posting.session
         application_attributes[:posting] = @posting
 
-        # Create the position preferences
-        position_preferences_hash = rest[:position_preferences]
-        if !(position_preferences_hash.is_a? Hash) &&
-               !position_preferences_hash.nil?
-            raise StandardError,
-                  "Unknown format of position_preferences: '#{
-                      position_preferences_hash
-                  }'"
-        end
-        rest.except!(:position_preferences)
-        # Find the position_id and position_code of all items listed
-        # in `position_preferences`. However, take special care to limit
-        # to only positions that are actually associated with this posting
-        # through a PostingPosition
-        valid_position_codes = []
-        position_preferences_attributes =
-            if position_preferences_hash
-                PostingPosition.joins(:position).where(
-                    position: { position_code: position_preferences_hash.keys },
-                    posting: @posting
-                ).pluck('position.id', 'position.position_code')
-                    .map do |(position_id, position_code)|
-                    # We need to keep track of the valid position codes so that we can error if a
-                    # user has submitted an invalid code
-                    valid_position_codes.push position_code
-                    {
-                        position_id: position_id,
-                        preference_level:
-                            position_preferences_hash[position_code],
-                        # These are needed so we can use the upsert method
-                        created_at: DateTime.now,
-                        updated_at: DateTime.now
-                    }
-                end
-            else
-                []
-            end
+        # Map codes to ids
+        ranking_ids = ranking_codes.map { |code| code_to_id[code] }.compact
+        willing_ids = willing_codes.map { |code| code_to_id[code] }.compact
 
-        # `valid_position_codes` now contains
-        # a list of all position pereferences that were submitted and are valid for
-        # this posting. We want to error if we received any position preferences
-        # that weren't valid for this posting.
-        invalid_position_preferences =
-            position_preferences_hash.keys - valid_position_codes
-        unless invalid_position_preferences.empty?
+        # Compute preference levels
+        preference_levels = {}
+        ranking_ids.each_with_index do |position_id, idx|
+            level =
+                if idx.zero?
+                    4
+                elsif idx < 4
+                    3
+                elsif idx < 7
+                    2
+                elsif idx < 10
+                    1
+                else
+                    0
+                end
+            preference_levels[position_id] = level
+        end
+        # Positions in "Willing" category get 0
+        (willing_ids - ranking_ids).each { |position_id| preference_levels[position_id] = 0 }
+        # All other positions get -1
+        (all_ids - willing_ids).each { |position_id| preference_levels[position_id] = -1 }
+        Rails.logger.info("process_answers: preference_levels=#{preference_levels.inspect}")
+
+        # Build position_preferences_attributes for all positions
+        position_preferences_attributes = all_ids.map do |position_id|
+            {
+                position_id: position_id,
+                preference_level: preference_levels[position_id],
+                custom_question_answers: position_custom_answers[position_id] || {},
+                created_at: DateTime.now,
+                updated_at: DateTime.now
+            }
+        end
+
+        # Error if any ranked codes are not valid for this posting
+        invalid_codes = (ranking_codes + willing_codes).uniq - code_to_id.keys
+        unless invalid_codes.empty?
+            Rails.logger.error("process_answers: invalid_codes=#{invalid_codes.inspect}")
             raise StandardError,
                   "Cannot set preferences for the following positions: '#{
-                      invalid_position_preferences
-                  }'"
+                    invalid_codes
+                }'"
         end
 
         # Extract all the file upload questions
@@ -256,7 +311,8 @@ class PostingService
         application = @applicant.applications.find_by(posting: @posting)
         application_attributes[:id] = application.id if application
 
-        # Everything left at this point is the answer to a custom question
+        # As a fallback, store anything else remaining as posting-level custom question answers
+        rest.keys.grep(/^panel_/).each { |k| rest.delete(k) }
         application_attributes[:custom_question_answers] = rest
 
         @applicant.attributes =
@@ -266,6 +322,9 @@ class PostingService
         @position_preferences_attributes = position_preferences_attributes
     end
 
+    # Splits a Survey.js response object into the required pieces
+    # (some of the data gets stored in database tables, some of it gets stored
+    # as JSON blobs).
     def save_answers!
         start_transaction_and_rollback_on_exception do
             @applicant.save!
@@ -289,40 +348,40 @@ class PostingService
 
     private
 
-    # Assemble JSON that can be used to do the substitutions in a liquid template.
-    def position_description_subs
-        {
-            'positions' =>
-                PostingPosition.joins(:position).where(posting: @posting).order(
-                    :'positions.position_code'
-                ).pluck(
-                    'positions.position_code',
-                    'positions.position_title',
-                    'positions.duties',
-                    'positions.qualifications',
-                    'hours',
-                    'num_positions'
-                )
-                    .map do |(code, title, duties, qualifications, hours, num_positions)|
-                    {
-                        position_code: code,
-                        position_title: title,
-                        duties: duties,
-                        qualifications: qualifications,
-                        hours: hours,
-                        num_positions: num_positions
-                    }.stringify_keys
-                end
-        }
+    def availability_description
+        if @posting.open_date.year == @posting.close_date.year
+            "Available from #{@posting.open_date.strftime('%b %d')} to #{
+                @posting.close_date.strftime('%b %d, %Y')
+            }"
+        else
+            "Available from #{
+                @posting.open_date.strftime('%b %d, %Y')
+            } to #{@posting.close_date.strftime('%b %d, %Y')}"
+        end
     end
 
     # We need to use the `posting_positions` to create
-    def assemble_preferences_rows
+    def assemble_position_data
         PostingPosition.joins(:position).where(posting: @posting).order(
             :'positions.position_code'
-        ).pluck('positions.position_code', 'positions.position_title')
-            .map do |(code, title)|
-            { text: (title.blank? ? code : "#{code} - #{title}"), value: code }
+        ).pluck(
+            'positions.position_code',
+            'positions.position_title',
+            'positions.duties',
+            'positions.qualifications',
+            'positions.hours_per_assignment',
+            'positions.custom_questions',
+            'positions.id'
+        ).map do |(code, title, duties, qualifications, hours, custom_questions, id)|
+            {
+                id: id,
+                text: (title.blank? ? code : "#{code} - #{title}"),
+                value: code,
+                duties: duties,
+                qualifications: qualifications,
+                hours_per_assignment: hours,
+                custom_questions: custom_questions
+            }
         end
     end
 

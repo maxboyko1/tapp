@@ -1,6 +1,18 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { Modal, Button, Alert, Spinner } from "react-bootstrap";
+import {
+    Alert,
+    Button,
+    CircularProgress,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    IconButton,
+    Typography,
+} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+
 import { applicantsSelector, upsertApplicant } from "../../../api/actions";
 import { strip } from "../../../libs/utils";
 import { Applicant } from "../../../api/defs/types";
@@ -40,12 +52,12 @@ function getConflicts(applicant: Partial<Applicant>, applicants: Applicant[]) {
     );
     if (matchingApplicant) {
         ret.immediateShow = (
-            <p>
+            <Typography variant="body2" color="error">
                 Another applicant exists with utorid={applicant.utorid}:{" "}
                 <b>
                     {matchingApplicant.first_name} {matchingApplicant.last_name}
                 </b>
-            </p>
+            </Typography>
         );
     }
     return ret;
@@ -84,39 +96,57 @@ export function ConnectedAddApplicantDialog(props: {
     // When a confirm operation is in progress, a spinner is displayed; otherwise
     // it's hidden
     const spinner = inProgress ? (
-        <Spinner animation="border" size="sm" className="mr-1" />
+        <CircularProgress size={18} sx={{ mr: 1 }} />
     ) : null;
 
     const conflicts = getConflicts(newApplicant, applicants);
 
     return (
-        <Modal show={show} onHide={onHide}>
-            <Modal.Header closeButton>
-                <Modal.Title>Add Applicant</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
+        <Dialog open={show} onClose={onHide} maxWidth="sm" fullWidth>
+            <DialogTitle sx={{ m: 0, p: 2 }}>
+                Add Applicant
+                <IconButton
+                    aria-label="close"
+                    onClick={onHide}
+                    sx={{
+                        position: "absolute",
+                        right: 8,
+                        top: 8,
+                        color: (theme) => theme.palette.grey[500],
+                    }}
+                    size="large"
+                >
+                    <CloseIcon />
+                </IconButton>
+            </DialogTitle>
+            <DialogContent dividers>
                 <ApplicantEditor
                     applicant={newApplicant}
                     setApplicant={setNewApplicant}
                 />
                 {conflicts.immediateShow ? (
-                    <Alert variant="danger">{conflicts.immediateShow}</Alert>
+                    <Alert severity="error" sx={{ mt: 2 }}>
+                        <Typography variant="body2" color="error">
+                            {conflicts.immediateShow}
+                        </Typography>
+                    </Alert>
                 ) : null}
-            </Modal.Body>
-            <Modal.Footer>
-                <Button onClick={onHide} variant="light">
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={onHide} variant="contained" color="secondary">
                     Cancel
                 </Button>
                 <Button
                     onClick={createInstructor}
                     title={conflicts.delayShow || "Create Instructor"}
-                    disabled={
-                        !!conflicts.delayShow || !!conflicts.immediateShow
-                    }
+                    disabled={!!conflicts.delayShow || !!conflicts.immediateShow}
+                    variant="contained"
+                    color="primary"
+                    startIcon={spinner}
                 >
-                    {spinner}Create Applicant
+                    Create Applicant
                 </Button>
-            </Modal.Footer>
-        </Modal>
+            </DialogActions>
+        </Dialog>
     );
 }

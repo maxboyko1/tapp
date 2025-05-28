@@ -42,7 +42,8 @@
                     "readOnly": true,
                     "placeHolder": "xxxxxxxx"
                 }
-            ]
+            ],
+            "title": "Basic Information"
         },
         {
             "name": "program_page",
@@ -58,20 +59,24 @@
                             "text": "PhD Student"
                         },
                         {
+                            "value": "M",
+                            "text": "MS (Research Masters)"
+                        },
+                        {
                             "value": "MScAC",
                             "text": "MScAC (Professional Masters)"
                         },
                         {
-                            "value": "M",
-                            "text": "Masters Student (Research Masters)"
+                            "value": "MEng",
+                            "text": "MEng (Master of Engineering)"
                         },
                         {
                             "value": "U",
-                            "text": "Undergraduate Student"
+                            "text": "Undergraduate Student (e.g. BSc, BEng)"
                         },
                         {
                             "value": "PD",
-                            "text": "Postdoctorate Fellow"
+                            "text": "Post-doctoral Fellow"
                         }
                     ],
                     "hasOther": true
@@ -101,32 +106,16 @@
                             "text": "Computer Science"
                         },
                         {
+                            "value": "ece",
+                            "text": "Electrical & Computer Engineering"
+                        },
+                        {
+                            "value": "information",
+                            "text": "Faculty of Information"
+                        },
+                        {
                             "value": "math",
-                            "text": "Mathematics/Applied Mathematics"
-                        },
-                        {
-                            "value": "engr",
-                            "text": "Engineering"
-                        },
-                        {
-                            "value": "astro",
-                            "text": "Astronomy and Astrophysics"
-                        },
-                        {
-                            "value": "chem",
-                            "text": "Chemistry"
-                        },
-                        {
-                            "value": "biophys",
-                            "text": "Medical Biophysics"
-                        },
-                        {
-                            "value": "phys",
-                            "text": "Physics"
-                        },
-                        {
-                            "value": "stat",
-                            "text": "Statistics"
+                            "text": "Mathematics"
                         }
                     ],
                     "hasOther": true
@@ -145,113 +134,110 @@
                     "type": "file",
                     "name": "transcripts",
                     "visibleIf": "{program} = 'U'",
-                    "title": "Please upload your unofficial transcript(s).",
+                    "title": "Please upload your unofficial transcript(s), in PDF format.",
                     "isRequired": true,
                     "allowMultiple": true,
-                    "maxSize": 5242880
+                    "maxSize": 5242880,
+                    "acceptedTypes": "application/pdf"
                 }
-            ]
+            ],
+            "title": "Current Status"
+        },
+        {
+            "name": "upcoming_session_status",
+            "elements": [
+                {
+                    "type": "radiogroup",
+                    "name": "registered_during_session",
+                    "title": "Will you be a registered student at the University of Toronto during the session for which you are applying?",
+                    "isRequired": true,
+                    "choices": ["Yes", "No"]
+                },
+                {
+                    "type": "radiogroup",
+                    "name": "graduating_during_session",
+                    "title": "Will you be graduating during the session for which you are applying?",
+                    "isRequired": true,
+                    "choices": ["Yes", "No"]
+                },
+                {
+                    "type": "radiogroup",
+                    "name": "working_during_session",
+                    "title": "Will you be on a work term or on a full-time internship during the session for which you are applying?",
+                    "isRequired": true,
+                    "choices": ["Yes", "No", "Unsure"]
+                }
+            ],
+            "title": "Status for the Upcoming Session"
         },
         {
             "name": "previous_experience_page",
             "elements": [
                 {
-                    "type": "text",
-                    "name": "cv_link",
-                    "title": "Please provide a link to your CV or LinkedIn profile. This is preferable to uploading a file of your CV.",
+                    "type": "comment",
+                    "name": "completed_degrees",
+                    "title": "Completed Degrees (if any; do not list degrees in progress)",
                     "isRequired": false
                 },
                 {
                     "type": "file",
                     "name": "cv",
-                    "title": "If you’re unable to provide a link to your CV/LinkedIn, please upload your CV here.",
-                    "isRequired": false,
+                    "title": "Please upload your CV/resume here, in PDF format.",
+                    "isRequired": true,
                     "allowMultiple": false,
-                    "maxSize": 5242880
-                },
-                {
-                    "type": "boolean",
-                    "name": "previous_university_ta",
-                    "title": "Have you had previous appointment(s) as a TA at this university?",
-                    "isRequired": true
-                },
-                {
-                    "type": "boolean",
-                    "name": "previous_department_ta",
-                    "title": "Have you had previous appointment(s) as a TA in *this department*?",
-                    "isRequired": true
-                },
-                {
-                    "type": "boolean",
-                    "name": "previous_other_university_ta",
-                    "title": "Have you had previous appointment(s) as a TA at another university?",
-                    "isRequired": true
+                    "maxSize": 5242880,
+                    "acceptedTypes": "application/pdf"
                 },
                 {
                     "type": "comment",
                     "name": "previous_experience_summary",
-                    "visibleIf": "{previous_department_ta} = true or {previous_university_ta} = true or {previous_other_university_ta} = true",
-                    "title": "Please briefly describe your previous TA experience.",
-                    "description": "If your experience is at U of T, you only need to list the course codes of courses you've TAed and the total number of hours you TAed. If your experience is at another university, please include course titles along with other relevant information."
-                }
-            ],
-            "title": "Work Experience"
-        },
-        {
-            "name": "preferences_page",
-            "elements": [
-                {
-                    "type": "html",
-                    "name": "position_descriptions",
-                    "html": "<h5>Duties and Qualifications</h5>\n<p>Please find information below regarding the duties and qualifications for each position.</p>"
+                    "title": "Please briefly summarize your teaching experience, if any.",
+                    "isRequired": false,
+                    "description": "Prioritize teaching experience at U of T, but also include teaching experience at other universities, if applicable.",
+                    "maxLength": 1500
                 },
                 {
-                    "type": "matrix",
-                    "name": "position_preferences",
-                    "title": "Position Preferences",
-                    "description": "Please rank your preferences for the available positions. High indicates your most preferred positions; Medium indicates positions you are strongly interested in but are not your top choice; Low indicates positions you are willing to TA. Marking N/A is equivalent to not marking a position.",
-                    "isRequired": true,
-                    "columns": [
-                        {
-                            "value": 3,
-                            "text": "High"
-                        },
-                        {
-                            "value": 2,
-                            "text": "Medium"
-                        },
-                        {
-                            "value": 1,
-                            "text": "Low"
-                        },
-                        {
-                            "value": 0,
-                            "text": "N/A"
-                        },
-                        {
-                            "value": -1,
-                            "text": "Strong Preference Against"
-                        }
-                    ],
-                    "rows": [
-                        {
-                            "value": "EXAMPLE_COURSE",
-                            "text": "Example Course"
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "name": "comments_page",
-            "elements": [
+                    "type": "comment",
+                    "name": "previous_cs_ta",
+                    "title": "Please briefly summarize your work experience relevant to TAships within CS, if any.",
+                    "isRequired": false,
+                    "maxLength": 1500
+                },
                 {
                     "type": "comment",
-                    "name": "comments",
-                    "title": "Additional Comments",
-                    "description": "If there is anything you feel we should know, special arrangements/requests for work, etc., enter it below."
+                    "name": "research_interests",
+                    "title": "Please briefly list your research interests and specialization(s), if any.",
+                    "isRequired": false,
+                    "maxLength": 300
                 }
-            ]
+            ],
+            "title": "Past Experience"
+        },
+        {
+            "name": "other_info_page",
+            "elements": [
+                {
+                    "type": "boolean",
+                    "name": "previous_university_ta",
+                    "title": "Have you held a TA position at the University of Toronto before this upcoming term?",
+                    "isRequired": true
+                },
+                {
+                    "type": "comment",
+                    "name": "other_applications",
+                    "title": "List any other campuses/departments/units where you have submitted or intend to submit a TA application for the session that you are applying for.",
+                    "isRequired": false
+                },
+                {
+                    "type": "radiogroup",
+                    "name": "ideal_workload",
+                    "title": "What is your ideal workload of the TAship in the Department of Computer Science for this upcoming term?",
+                    "isRequired": true,
+                    "choices": ["30 hours", "60 hours", "70-115 hours", "120 hours"],
+                    "description": "The standard TA assignment is 60 hours in the Department of Computer Science.\n\nThe 30-hour positions are limited in number and typically reserved for CS graduate students researching in the course's field.\n\nNote: TAships beyond 60 hours are rare in summer sessions and emergency postings.\n\nWe cannot guarantee assignments to students outside of the CS funded cohort of graduate students. For CS funded graduate students, we cannot guarantee hours beyond the standard 60 hours."
+                }
+            ],
+            "title": "Other Information"
         }
     ],
     "showProgressBar": "top"

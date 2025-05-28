@@ -1,4 +1,7 @@
 import React from "react";
+import { Typography } from "@mui/material"; 
+import AddIcon from "@mui/icons-material/Add";
+
 import { ConnectedAddContractTemplateDialog } from "./contract-template-dialog";
 import { ConnectedContractTemplateList } from "./contract-template-list";
 import {
@@ -7,7 +10,6 @@ import {
     ActionHeader,
 } from "../../../components/action-buttons";
 import { ContentArea } from "../../../components/layout";
-import { FaPlus } from "react-icons/fa";
 import { ConnectedUploadContractTemplateAction } from "./upload-contract-template-button";
 import { useSelector } from "react-redux";
 import { activeSessionSelector } from "../../../api/actions";
@@ -21,7 +23,7 @@ export function AdminContractTemplatesView() {
             <ActionsList>
                 <ActionHeader>Available Actions</ActionHeader>
                 <ActionButton
-                    icon={<FaPlus />}
+                    icon={<AddIcon />}
                     onClick={() => {
                         setAddDialogVisible(true);
                     }}
@@ -37,6 +39,9 @@ export function AdminContractTemplatesView() {
                 {activeSession ? null : (
                     <MissingActiveSessionWarning extraText="To view or modify contract templates, you must select a session." />
                 )}
+                <Typography variant="h3" sx={{ mb: 2 }}>
+                    Contract Templates
+                </Typography>
                 <ConnectedContractTemplateList />
                 <ConnectedAddContractTemplateDialog
                     show={addDialogVisible}

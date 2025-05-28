@@ -30,6 +30,7 @@ import {
     ApplicantMatchingDatum,
     MinimalApplicantMatchingDatum,
 } from "../../api/defs/types";
+import { formatCustomQuestionsForExport } from "../../components/custom-question-utils";
 
 /**
  * Determine whether `wageChunks` can be derived from `session`. E.g.,
@@ -155,6 +156,13 @@ export const prepareMinimal = {
         };
     },
     position: function (position: Position): MinimalPosition {
+        let customQuestionsString = formatCustomQuestionsForExport(position.custom_questions);
+        let customQuestions;
+        try {
+            customQuestions = customQuestionsString ? JSON.parse(customQuestionsString) : [];
+        } catch (e) {
+            customQuestions = [];
+        }
         return {
             position_code: position.position_code,
             position_title: position.position_title,
@@ -163,6 +171,7 @@ export const prepareMinimal = {
             end_date: position.end_date,
             duties: position.duties,
             qualifications: position.qualifications,
+            custom_questions: customQuestions,
             desired_num_assignments: position.desired_num_assignments,
             current_enrollment: position.current_enrollment,
             current_waitlisted: position.current_waitlisted,
@@ -170,6 +179,7 @@ export const prepareMinimal = {
                 (instructor) => instructor.utorid
             ),
             contract_template: position.contract_template.template_name,
+            session_id: position.session_id,
         };
     },
     posting: function (posting: Posting): MinimalPosting {
@@ -178,7 +188,7 @@ export const prepareMinimal = {
             open_date: posting.open_date,
             close_date: posting.close_date,
             intro_text: posting.intro_text,
-            custom_questions: posting.custom_questions,
+            custom_questions: JSON.parse(formatCustomQuestionsForExport(posting.custom_questions)),
             posting_positions: posting.posting_positions.map(
                 prepareMinimal.postingPosition
             ),
@@ -283,6 +293,7 @@ export const prepareMinimal = {
                 (position_preference) => ({
                     position_code: position_preference.position.position_code,
                     preference_level: position_preference.preference_level,
+                    custom_question_answers: position_preference.custom_question_answers,
                 })
             ),
             instructor_preferences: application.instructor_preferences.map(

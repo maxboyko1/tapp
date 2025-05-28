@@ -76,7 +76,11 @@ export interface MinimalApplication
         >,
         MinimalApplicant {
     posting: string | null;
-    position_preferences: { position_code: string; preference_level: number }[];
+    position_preferences: {
+        position_code: string;
+        preference_level: number;
+        custom_question_answers: unknown | null;
+    }[];
     instructor_preferences: MinimalInstructorPreference[];
 }
 

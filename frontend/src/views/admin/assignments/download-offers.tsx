@@ -1,9 +1,10 @@
 import React from "react";
-import { FaDownload } from "react-icons/fa";
-import { Assignment } from "../../../api/defs/types";
-import { ActionButton } from "../../../components/action-buttons";
 import JSZip from "jszip";
 import FileSaver from "file-saver";
+import DownloadIcon from "@mui/icons-material/Download";
+
+import { Assignment } from "../../../api/defs/types";
+import { ActionButton } from "../../../components/action-buttons";
 import { OfferConfirmationDialog } from "./offer-confirmation-dialog";
 
 /**
@@ -71,7 +72,7 @@ export function DownloadOfferPdfs({
     return (
         <React.Fragment>
             <ActionButton
-                icon={FaDownload}
+                icon={<DownloadIcon />}
                 disabled={!!disabledString}
                 onClick={() => setShowConfirmation(true)}
                 title={

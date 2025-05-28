@@ -23,7 +23,7 @@ import { parseURLSearchString } from "../../libs/urls";
 import { fetchDdahs } from "./ddahs";
 import { ThunkAction } from "redux-thunk";
 import { RootState } from "../../rootReducer";
-import { AnyAction } from "redux";
+import { Action } from "redux";
 import {
     fetchInstructorPreferences,
     fetchInstructorPreferencesSuccess,
@@ -110,7 +110,7 @@ function prepareGlobals<T extends Record<string, string | number | null>>(
 export function initFromStage(
     stage: InitStages,
     options = { startAfterStage: false }
-): ThunkAction<Promise<void>, RootState, void, AnyAction> {
+): ThunkAction<Promise<void>, RootState, void, Action> {
     const startAfterStage = options.startAfterStage ? 1 : 0;
 
     return async (dispatch, getState) => {
@@ -255,21 +255,25 @@ export function initFromStage(
                 [];
 
             const activeRole = activeRoleSelector(getState());
+
+            const wrapThunk = <T>(thunk: () => ThunkAction<Promise<T>, RootState, void, Action>) =>
+                () => (dispatch: any) => dispatch(thunk());
+            
             if (activeRole === "admin" || activeRole === "instructor") {
                 fetchActions = [
-                    fetchContractTemplates,
-                    fetchApplicants,
-                    fetchPositions,
-                    fetchApplications,
-                    fetchAssignments,
-                    fetchDdahs,
-                    fetchInstructorPreferences,
+                    wrapThunk(fetchContractTemplates),
+                    wrapThunk(fetchApplicants),
+                    wrapThunk(fetchPositions),
+                    wrapThunk(fetchApplications),
+                    wrapThunk(fetchAssignments),
+                    wrapThunk(fetchDdahs),
+                    wrapThunk(fetchInstructorPreferences),
                 ];
             }
             if (activeRole === "admin") {
-                fetchActions.push(fetchMatches);
-                fetchActions.push(fetchApplicantMatchingData);
-                fetchActions.push(fetchLetterTemplates);
+                fetchActions.push(wrapThunk(fetchMatches));
+                fetchActions.push(wrapThunk(fetchApplicantMatchingData));
+                fetchActions.push(wrapThunk(fetchLetterTemplates));
             }
 
             // The order of fetching here doesn't matter, so dispatch all at once
@@ -294,7 +298,7 @@ export function clearSessionDependentData(): ThunkAction<
     Promise<void>,
     RootState,
     void,
-    AnyAction
+    Action
 > {
     return async (dispatch) => {
         await Promise.all([

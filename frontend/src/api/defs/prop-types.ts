@@ -52,6 +52,7 @@ function generatePropTypes(PropTypes: typeof OrigPropTypes) {
             contract_template_id: id,
             duties: PropTypes.string,
             qualifications: PropTypes.string,
+            custom_questions: PropTypes.any,
             desired_num_assignments: PropTypes.number,
             current_enrollment: PropTypes.number,
             current_waitlisted: PropTypes.number,

@@ -1,5 +1,7 @@
 import React from "react";
 import FileSaver from "file-saver";
+import { Alert, Typography } from "@mui/material";
+
 import {
     instructorsSelector,
     exportInstructors,
@@ -12,7 +14,6 @@ import {
     InstructorsList,
     InstructorsDiffList,
 } from "../../../components/instructors";
-import { Alert } from "react-bootstrap";
 import {
     DataFormat,
     ExportFormat,
@@ -157,7 +158,7 @@ const DialogContent = React.memo(function DialogContent({
 }) {
     let dialogContent = <p>No data loaded...</p>;
     if (processingError) {
-        dialogContent = <Alert variant="danger">{"" + processingError}</Alert>;
+        dialogContent = <Alert severity="error">{"" + processingError}</Alert>;
     } else if (diffed) {
         // Separate out the modified and new instructors
         const newItems = diffed
@@ -169,7 +170,7 @@ const DialogContent = React.memo(function DialogContent({
 
         if (newItems.length === 0 && modifiedDiffSpec.length === 0) {
             dialogContent = (
-                <Alert variant="warning">
+                <Alert severity="warning">
                     No difference between imported instructors and those already
                     on the system.
                 </Alert>
@@ -178,20 +179,18 @@ const DialogContent = React.memo(function DialogContent({
             dialogContent = (
                 <>
                     {newItems.length > 0 && (
-                        <Alert variant="primary">
-                            <span className="mb-1">
-                                The following instructors will be{" "}
-                                <strong>added</strong>
-                            </span>
+                        <Alert severity="success" sx={{ mb: 2 }}>
+                            <Typography variant="body1" sx={{ mb: 1 }}>
+                                The following instructors will be <strong>added</strong>
+                            </Typography>
                             <InstructorsList instructors={newItems} />
                         </Alert>
                     )}
                     {modifiedDiffSpec.length > 0 && (
-                        <Alert variant="info">
-                            <span className="mb-1">
-                                The following instructors will be{" "}
-                                <strong>modified</strong>
-                            </span>
+                        <Alert severity="info" sx={{ mb: 2 }}>
+                            <Typography variant="body1" sx={{ mb: 1 }}>
+                                The following instructors will be <strong>modified</strong>
+                            </Typography>
                             <InstructorsDiffList
                                 modifiedInstructors={modifiedDiffSpec}
                             />
