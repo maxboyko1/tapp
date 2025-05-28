@@ -47,7 +47,7 @@ const MissingActiveSessionError = new Error(
 );
 
 // dispatchers
-export const fetchAssignments = validatedApiDispatcher({
+export const fetchAssignments = validatedApiDispatcher<RawAssignment[], []>({
     name: "fetchAssignments",
     description: "Fetch assignments",
     onErrorDispatch: (e) => fetchError(e.toString()),
@@ -70,17 +70,19 @@ export const fetchAssignments = validatedApiDispatcher({
     },
 });
 
-export const fetchAssignment = validatedApiDispatcher({
+export const fetchAssignment = validatedApiDispatcher<RawAssignment, [HasId]>({
     name: "fetchAssignment",
     description: "Fetch assignment",
     onErrorDispatch: (e) => fetchError(e.toString()),
-    dispatcher: (payload: HasId) => async (dispatch, getState) => {
-        const role = activeRoleSelector(getState());
-        const data = (await apiGET(
-            `/${role}/assignments/${payload.id}`
-        )) as RawAssignment;
-        dispatch(fetchOneAssignmentSuccess(data));
-        return data;
+    dispatcher: (payload: HasId) => {
+        return async (dispatch, getState) => {
+            const role = activeRoleSelector(getState());
+            const data = (await apiGET(
+                `/${role}/assignments/${payload.id}`
+            )) as RawAssignment;
+            dispatch(fetchOneAssignmentSuccess(data));
+            return data;
+        };
     },
 });
 
@@ -100,7 +102,10 @@ function prepForApi(data: Partial<Assignment>) {
     ) as Partial<RawAssignment>;
 }
 
-export const upsertAssignment = validatedApiDispatcher({
+export const upsertAssignment = validatedApiDispatcher<
+    RawAssignment,
+    [Partial<Assignment>]
+>({
     name: "upsertAssignment",
     description: "Add/insert assignment",
     onErrorDispatch: (e) => upsertError(e.toString()),
@@ -125,7 +130,7 @@ export const upsertAssignment = validatedApiDispatcher({
         },
 });
 
-export const deleteAssignment = validatedApiDispatcher({
+export const deleteAssignment = validatedApiDispatcher<void, [HasId]>({
     name: "deleteAssignment",
     description: "Delete assignment",
     onErrorDispatch: (e) => deleteError(e.toString()),
@@ -139,7 +144,10 @@ export const deleteAssignment = validatedApiDispatcher({
     },
 });
 
-export const exportAssignments = validatedApiDispatcher({
+export const exportAssignments = validatedApiDispatcher<
+    Blob,
+    [PrepareDataFunc<Assignment>, ExportFormat]
+>({
     name: "exportAssignments",
     description: "Export assignments",
     onErrorDispatch: (e) => fetchError(e.toString()),
@@ -175,7 +183,10 @@ export const exportAssignments = validatedApiDispatcher({
         },
 });
 
-export const upsertAssignments = validatedApiDispatcher({
+export const upsertAssignments = validatedApiDispatcher<
+    void,
+    [Partial<Assignment>[]]
+>({
     name: "upsertAssignments",
     description: "Upsert a list of assignments",
     onErrorDispatch: (e) => fetchError(e.toString()),

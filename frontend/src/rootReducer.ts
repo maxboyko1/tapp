@@ -1,4 +1,4 @@
-import { reducer as notificationReducer } from "react-notification-system-redux";
+import { notificationReducer } from "./api/reducers/notifications";
 import { combineReducers } from "./api/reducers/utils";
 import { globalReducer } from "./api/reducers";
 import { offerTableReducer } from "./views/admin/offertable/reducers";

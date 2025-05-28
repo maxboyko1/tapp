@@ -1,10 +1,12 @@
 import React from "react";
+import LockIcon from "@mui/icons-material/Lock";
+import { Tooltip } from "@mui/material";
+
 import { Position } from "../../../../../api/defs/types";
 import { ApplicantSummary, MatchStatus } from "../../types";
 import { getMatchStatus } from "../../utils";
 import { ConnectedApplicantPill } from "./grid-item";
 import { matchingStatusToString } from "../";
-import { FaLock } from "react-icons/fa";
 
 /**
  * A presentation of applicants and their summaries in a grid-based view.
@@ -92,18 +94,20 @@ function GridSection({
             <h4>
                 {matchingStatusToString[status]}
                 {status === "assigned" && (
-                    <FaLock
-                        className="header-lock"
-                        title="These assignments can only be changed through the Assignments &
-            Positions > Assignments tab."
-                    />
+                    <Tooltip
+                        title="These assignments can only be changed through the Assignments & Positions > Assignments tab."
+                        placement="right"
+                    >
+                        <LockIcon className="header-lock" fontSize="small" />
+                    </Tooltip>
                 )}
                 {status === "unassignable" && (
-                    <FaLock
-                        className="header-lock"
-                        title="These applicants have an assignment for this position that was previously
-            rejected/withdrawn, and can only be changed through the Assignments & Positions > Assignments tab."
-                    />
+                    <Tooltip
+                        title="These applicants have an assignment for this position that was previously rejected/withdrawn, and can only be changed through the Assignments & Positions > Assignments tab."
+                        placement="right"
+                    >
+                        <LockIcon className="header-lock" fontSize="small" />
+                    </Tooltip>
                 )}
             </h4>
             <div className="grid-view-list">

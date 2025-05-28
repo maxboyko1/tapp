@@ -52,7 +52,7 @@ function prepInstructorPreferenceForApi(data: Partial<InstructorPreference>) {
 }
 
 // dispatchers
-export const fetchInstructorPreferences = validatedApiDispatcher({
+export const fetchInstructorPreferences = validatedApiDispatcher<RawInstructorPreference[], []>({
     name: "fetchInstructorPreferences",
     description: "Fetch instructor_preferences",
     onErrorDispatch: (e) => fetchError(e.toString()),
@@ -77,7 +77,10 @@ export const fetchInstructorPreferences = validatedApiDispatcher({
     },
 });
 
-export const fetchInstructorPreference = validatedApiDispatcher({
+export const fetchInstructorPreference = validatedApiDispatcher<
+    RawInstructorPreference,
+    [HasId]
+>({
     name: "fetchInstructorPreference",
     description: "Fetch instructor_preference",
     onErrorDispatch: (e) => fetchError(e.toString()),
@@ -98,7 +101,10 @@ export const fetchInstructorPreference = validatedApiDispatcher({
     },
 });
 
-export const upsertInstructorPreference = validatedApiDispatcher({
+export const upsertInstructorPreference = validatedApiDispatcher<
+    RawInstructorPreference,
+    [Partial<InstructorPreference>]
+>({
     name: "upsertInstructorPreference",
     description: "Add/insert instructor_preference",
     onErrorDispatch: (e) => upsertError(e.toString()),
@@ -115,7 +121,10 @@ export const upsertInstructorPreference = validatedApiDispatcher({
         },
 });
 
-export const deleteInstructorPreference = validatedApiDispatcher({
+export const deleteInstructorPreference = validatedApiDispatcher<
+    void,
+    [Pick<InstructorPreference, "application" | "position">]
+>({
     name: "deleteInstructorPreference",
     description: "Delete instructor_preference",
     onErrorDispatch: (e) => deleteError(e.toString()),

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_04_25_153020) do
+ActiveRecord::Schema.define(version: 2025_04_20_200528) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -261,6 +261,7 @@ ActiveRecord::Schema.define(version: 2024_04_25_153020) do
     t.integer "preference_level"
     t.datetime "created_at", precision: 6, default: -> { "now()" }, null: false
     t.datetime "updated_at", precision: 6, default: -> { "now()" }, null: false
+    t.json "custom_question_answers"
     t.index ["application_id"], name: "index_position_preferences_on_application_id"
     t.index ["position_id", "application_id"], name: "index_position_preferences_on_position_id_and_application_id", unique: true
     t.index ["position_id"], name: "index_position_preferences_on_position_id"
@@ -281,6 +282,7 @@ ActiveRecord::Schema.define(version: 2024_04_25_153020) do
     t.integer "desired_num_assignments"
     t.integer "current_enrollment"
     t.integer "current_waitlisted"
+    t.json "custom_questions"
     t.index ["contract_template_id"], name: "index_positions_on_contract_template_id"
     t.index ["session_id"], name: "index_positions_on_session_id"
   end

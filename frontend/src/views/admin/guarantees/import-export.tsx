@@ -1,5 +1,10 @@
 import React from "react";
 import FileSaver from "file-saver";
+import {
+    Alert,
+    Typography,
+} from "@mui/material";
+
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
 import { useSelector } from "react-redux";
 import { ExportActionButton } from "../../../components/export-button";
@@ -25,9 +30,8 @@ import {
     MinimalApplicantMatchingDatum,
 } from "../../../api/defs/types";
 import { applicantMatchingDatumSchema } from "../../../libs/schema";
-import { Alert } from "react-bootstrap";
 import { createDiffColumnsFromColumns } from "../../../components/diff-table";
-import { AdvancedFilterTable } from "../../../components/filter-table/advanced-filter-table";
+import { AdvancedColumnDef, AdvancedFilterTable } from "../../../components/advanced-filter-table";
 
 export function ConnectedImportAppointmentsAction({
     disabled, 
@@ -110,7 +114,11 @@ export function ConnectedImportAppointmentsAction({
 
     let dialogContent = <p>No data loaded...</p>;
     if (processingError) {
-        dialogContent = <Alert variant="danger">{"" + processingError}</Alert>;
+        dialogContent = (
+            <Alert severity="error" sx={{ mb: 2 }}>
+                {"" + processingError}
+            </Alert>
+        );
     } else if (diffed) {
         const newItems = diffed
             .filter((item) => item.status === "new")
@@ -121,35 +129,28 @@ export function ConnectedImportAppointmentsAction({
 
         if (newItems.length === 0 && modifiedDiffSpec.length === 0) {
             dialogContent = (
-                <Alert variant="warning">
-                    No difference between imported applicants and those already
-                    on the system.
+                <Alert severity="warning" sx={{ mb: 2 }}>
+                    No difference between imported applicants and those already on the system.
                 </Alert>
             );
         } else {
             dialogContent = (
                 <>
                     {newItems.length > 0 && (
-                        <Alert variant="primary">
-                            <span className="mb-1">
+                        <Alert severity="success" sx={{ mb: 2 }}>
+                            <Typography variant="body1" sx={{ mb: 1 }}>
                                 The following <strong>{newItems.length}</strong>{" "}
-                                appointment{newItems.length > 1 ? "s" : ""} will
-                                be <strong>added</strong>
-                            </span>
-                            <AppointmentsList
-                                applicantMatchingData={newItems}
-                            />
+                                appointment{newItems.length > 1 ? "s" : ""} will be <strong>added</strong>
+                            </Typography>
+                            <AppointmentsList applicantMatchingData={newItems} />
                         </Alert>
                     )}
                     {modifiedDiffSpec.length > 0 && (
-                        <Alert variant="info">
-                            <span className="mb-1">
-                                The following appointments will be{" "}
-                                <strong>modified</strong>
-                            </span>
-                            <AppointmentsDiffList
-                                modifiedApplicantMatchingData={modifiedDiffSpec}
-                            />
+                        <Alert severity="info" sx={{ mb: 2 }}>
+                            <Typography variant="body1" sx={{ mb: 1 }}>
+                                The following appointments will be <strong>modified</strong>
+                            </Typography>
+                            <AppointmentsDiffList modifiedApplicantMatchingData={modifiedDiffSpec} />
                         </Alert>
                     )}
                 </>
@@ -181,7 +182,7 @@ export function ConnectedExportAppointmentsAction({
     );
 
     const setInProgress = React.useCallback(
-        function setInProgress(val) {
+        function setInProgress(val: boolean) {
             if (typeof setExportInProgress === "function") {
                 setExportInProgress(val);
             }
@@ -272,12 +273,33 @@ AppointmentsList.propTypes = {
     ),
 };
 
-const DEFAULT_COLUMNS = [
-    { Header: "Last Name", accessor: "applicant.last_name" },
-    { Header: "First Name", accessor: "applicant.first_name" },
-    { Header: "UTORid", accessor: "applicant.utorid" },
-    { Header: "Student Number", accessor: "applicant.student_number" },
-    { Header: "Min Hours Owed", accessor: "min_hours_owed" },
-    { Header: "Max Hours Owed", accessor: "max_hours_owed" },
-    { Header: "Previous Hours Fulfilled", accessor: "prev_hours_fulfilled" },
+const DEFAULT_COLUMNS: AdvancedColumnDef<ApplicantMatchingDatum>[] = [
+    { 
+        header: "Last Name",
+        accessorKey: "applicant.last_name"
+    },
+    { 
+        header: "First Name",
+        accessorKey: "applicant.first_name"
+    },
+    {
+        header: "UTORid",
+        accessorKey: "applicant.utorid"
+    },
+    {   
+        header: "Student Number",
+        accessorKey: "applicant.student_number"
+    },
+    {   
+        header: "Min Hours Owed",
+        accessorKey: "min_hours_owed"
+    },
+    {
+        header: "Max Hours Owed",
+        accessorKey: "max_hours_owed"
+    },
+    {
+        header: "Previous Hours Fulfilled",
+        accessorKey: "prev_hours_fulfilled"
+    },
 ];

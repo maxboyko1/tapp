@@ -1,70 +1,100 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Badge } from "react-bootstrap";
+import { Chip } from "@mui/material";
+
 import { formatDate } from "../libs/utils";
 import { createDiffColumnsFromColumns } from "./diff-table";
-import { generateHeaderCell } from "./table-utils";
-import { AdvancedFilterTable } from "./filter-table/advanced-filter-table";
+import { generateHeaderCellProps } from "./table-utils";
+import { AdvancedFilterTable, AdvancedColumnDef } from "./advanced-filter-table";
 import { Instructor, MinimalPosition, Position } from "../api/defs/types";
-import { Cell, Column } from "react-table";
 import { DiffSpec } from "../libs/diffs";
 
-const DEFAULT_COLUMNS: (Column<any> & {
-    className?: string;
-    accessor?: string;
-})[] = [
-    { Header: generateHeaderCell("Position Code"), accessor: "position_code" },
+const DEFAULT_COLUMNS: AdvancedColumnDef<Position>[] = [
     {
-        Header: generateHeaderCell("Position Title"),
-        accessor: "position_title",
+        ...generateHeaderCellProps("Position Code"),
+        accessorKey: "position_code"
     },
     {
-        Header: generateHeaderCell("Hours"),
-        accessor: "hours_per_assignment",
-        maxWidth: 64,
-        className: "number-cell",
+        ...generateHeaderCellProps("Position Title"),
+        accessorKey: "position_title",
     },
     {
-        Header: generateHeaderCell("Start"),
-        accessor: "start_date",
-        Cell: (row: Cell<Position>) => formatDate(row.value),
+        ...generateHeaderCellProps("Hours"),
+        accessorKey: "hours_per_assignment",
+        muiTableBodyCellProps: { className: "number-cell" },
     },
     {
-        Header: generateHeaderCell("End"),
-        accessor: "end_date",
-        Cell: (row: Cell<Position>) => formatDate(row.value),
+        ...generateHeaderCellProps("Start"),
+        accessorKey: "start_date",
+        Cell: ({ cell }) => {
+            const value = cell?.getValue?.();
+            return typeof value === "string" && value ? formatDate(value) : "";
+        },
     },
     {
-        Header: generateHeaderCell("Instructors"),
-        accessor: "instructors",
-        Cell: (props: Cell<Position, Instructor[]>) => (
-            <React.Fragment>
-                {props.value.map((instructor: Instructor = {} as any) => {
-                    const name = `${instructor.first_name} ${instructor.last_name}`;
-                    return (
-                        <Badge variant="secondary" className="mr-1" key={name}>
-                            {name}
-                        </Badge>
-                    );
-                })}
-            </React.Fragment>
-        ),
+        ...generateHeaderCellProps("End"),
+        accessorKey: "end_date",
+        Cell: ({ cell }) => {
+            const value = cell?.getValue?.();
+            return typeof value === "string" && value ? formatDate(value) : "";
+        },
     },
     {
-        Header: generateHeaderCell("Enrolled"),
-        accessor: "current_enrollment",
-        maxWidth: 80,
+        ...generateHeaderCellProps("Instructors"),
+        accessorKey: "instructors",
+        Cell: ({ cell }) => {
+            const value = cell?.getValue?.();
+            if (Array.isArray(value)) {
+                return (
+                    <React.Fragment>
+                        {value.map((instructor: Instructor) => (
+                            <Chip
+                                variant="outlined"
+                                color="primary"
+                                label={`${instructor.first_name} ${instructor.last_name}`}
+                                key={instructor.id}
+                                size="small"
+                                sx={{ mr: 0.5 }}
+                            />
+                        ))}
+                    </React.Fragment>
+                );
+            }
+            return "";
+        },
     },
     {
-        Header: generateHeaderCell("Waitlist"),
-        accessor: "current_waitlisted",
-        maxWidth: 90,
+        ...generateHeaderCellProps("Enrolled"),
+        accessorKey: "current_enrollment",
     },
-
     {
-        Header: generateHeaderCell("Contract Template"),
-        accessor: "contract_template.template_name",
+        ...generateHeaderCellProps("Waitlist"),
+        accessorKey: "current_waitlisted",
     },
+    {
+        ...generateHeaderCellProps("Contract Template"),
+        accessorKey: "contract_template.template_name",
+        Cell: ({ cell }) => {
+            const value = cell?.getValue?.();
+            return typeof value === "string" ? value : "";
+        },
+    },
+    {
+        ...generateHeaderCellProps("Custom Questions"),
+        accessorKey: "custom_questions",
+        Cell: ({ cell }) => {
+            const value = cell?.getValue?.();
+            if (
+                value &&
+                typeof value === "object" &&
+                "elements" in value &&
+                Array.isArray((value as any).elements)
+            ) {
+                return (value as any).elements.map((q: any) => q.name).join(", ");
+            }
+            return "";
+        },
+    }
 ];
 
 /**
@@ -79,11 +109,31 @@ export function PositionsDiffList({
 }: {
     modifiedPositions: DiffSpec<MinimalPosition, Position>[];
 }) {
+    // Special handling for contract template column diffs, showing the template_name
+    const diffColumns = DEFAULT_COLUMNS.map((col) =>
+        col.accessorKey === "contract_template.template_name"
+            ? {
+                  ...col,
+                  accessorKey: "contract_template",
+                  Cell: ({ cell }: { cell: any }) => {
+                      const value = cell?.getValue?.();
+                      if (typeof value === "string") {
+                          return value;
+                      }
+                      if (value && typeof value === "object" && "template_name" in value) {
+                          return value.template_name;
+                      }
+                      return "";
+                  },
+              }
+            : col
+    );
+
     return (
         <PositionsList
             positions={modifiedPositions}
             columns={createDiffColumnsFromColumns<Position>(
-                DEFAULT_COLUMNS as any[]
+                diffColumns as any[]
             )}
         />
     );
@@ -97,15 +147,33 @@ export function PositionsList(props: {
     positions:
         | Position[]
         | Omit<Position, "id">[]
-        | DiffSpec<MinimalPosition, Position>[];
-    columns?: Column<any>[];
+        | DiffSpec<MinimalPosition, Position>[]
+    columns?: AdvancedColumnDef<any>[];
+    deleteable?: boolean;
+    onDelete?: (row: any) => void;
+    deleteBlocked?: (row: any) => string | false;
+    editable?: boolean;
+    onEditRow?: (row: any, values: any) => void;
 }) {
-    const { positions, columns = DEFAULT_COLUMNS } = props;
+    const {
+        positions,
+        columns = DEFAULT_COLUMNS,
+        deleteable = false,
+        onDelete,
+        deleteBlocked,
+        editable = false,
+        onEditRow,
+    } = props;
     return (
         <AdvancedFilterTable
             columns={columns}
             data={positions}
             filterable={true}
+            deleteable={deleteable}
+            onDelete={onDelete}
+            deleteBlocked={deleteBlocked}
+            editable={editable}
+            onEditRow={onEditRow}
         />
     );
 }

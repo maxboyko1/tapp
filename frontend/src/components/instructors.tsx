@@ -1,18 +1,31 @@
-import React from "react";
 import PropTypes from "prop-types";
+import { Box, Grid } from "@mui/material";
+
 import { docApiPropTypes } from "../api/defs/doc-generation";
-import { Form } from "react-bootstrap";
-import { DialogRow, fieldEditorFactory } from "./forms/common-controls";
+import { fieldEditorFactory } from "./forms/common-controls";
 import { createDiffColumnsFromColumns } from "./diff-table";
-import { AdvancedFilterTable } from "./filter-table/advanced-filter-table";
+import { AdvancedColumnDef, AdvancedFilterTable } from "./advanced-filter-table";
 import { Instructor, MinimalInstructor } from "../api/defs/types";
 import { DiffSpec } from "../libs/diffs";
 
-const DEFAULT_COLUMNS = [
-    { Header: "Last Name", accessor: "last_name" },
-    { Header: "First Name", accessor: "first_name" },
-    { Header: "Email", accessor: "email", minWidth: 120 },
-    { Header: "UTORid", accessor: "utorid" },
+const DEFAULT_COLUMNS: AdvancedColumnDef<Instructor>[] = [
+    {   
+        header: "Last Name",
+        accessorKey: "last_name"
+    },
+    {   
+        header: "First Name",
+        accessorKey: "first_name"
+    },
+    {
+        header: "Email",
+        accessorKey: "email",
+        minSize: 120
+    },
+    {   
+        header: "UTORid",
+        accessorKey: "utorid"
+    },
 ];
 
 /**
@@ -26,13 +39,31 @@ const DEFAULT_COLUMNS = [
 export function InstructorsList(props: {
     instructors: Omit<Instructor, "id">[];
     columns?: any[];
+    deleteable?: boolean;
+    onDelete?: (row: any) => void;
+    deleteBlocked?: (row: any) => string | false;
+    editable?: boolean;
+    onEditRow?: (row: any, values: any) => void;
 }) {
-    const { instructors, columns = DEFAULT_COLUMNS } = props;
+    const {
+        instructors,
+        columns = DEFAULT_COLUMNS,
+        deleteable = false,
+        onDelete,
+        deleteBlocked,
+        editable = false,
+        onEditRow,
+    } = props;
     return (
         <AdvancedFilterTable
             data={instructors}
             columns={columns}
+            editable={editable}
+            onEditRow={onEditRow}
             filterable={true}
+            deleteable={deleteable}
+            onDelete={onDelete}
+            deleteBlocked={deleteBlocked}
         />
     );
 }
@@ -85,18 +116,22 @@ export function InstructorEditor(props: {
     );
 
     return (
-        <Form>
-            <Form.Row>
-                <DialogRow>
+        <Box component="form" noValidate autoComplete="off">
+            <Grid container spacing={2}>
+                <Grid sx={{ xs: 12, sm: 6 }}>
                     {createFieldEditor("First Name", "first_name")}
+                </Grid>
+                <Grid sx={{ xs: 12, sm: 6 }}>
                     {createFieldEditor("Last Name", "last_name")}
-                </DialogRow>
-                <DialogRow>
+                </Grid>
+                <Grid sx={{ xs: 12, sm: 6 }}>
                     {createFieldEditor("Email", "email")}
+                </Grid>
+                <Grid sx={{ xs: 12, sm: 6 }}>
                     {createFieldEditor("UTORid", "utorid")}
-                </DialogRow>
-            </Form.Row>
-        </Form>
+                </Grid>
+            </Grid>
+        </Box>
     );
 }
 InstructorEditor.propTypes = {

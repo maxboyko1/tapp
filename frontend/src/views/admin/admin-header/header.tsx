@@ -1,5 +1,4 @@
-import React from "react";
-import { useRouteMatch } from "react-router";
+import { useMatch } from "react-router-dom";
 import { Header } from "../../../components/header";
 import {
     ConnectedActiveSessionDisplay,
@@ -109,10 +108,7 @@ const POSTINGS_ROUTES = {
  */
 
 function AdminHeader() {
-    const match = useRouteMatch<{ posting_id: string }>(
-        "/postings/:posting_id/"
-    );
-
+    const match = useMatch("/postings/:posting_id/*");
     const routes = [...ROUTES];
 
     // There are routes that are visible only when viewing a posting;

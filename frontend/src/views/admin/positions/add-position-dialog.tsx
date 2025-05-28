@@ -1,14 +1,23 @@
 import React from "react";
-import { strip } from "../../../libs/utils";
 import { connect } from "react-redux";
+import {
+    Alert,
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+} from "@mui/material";
+
+import { strip } from "../../../libs/utils";
 import {
     upsertPosition,
     positionsSelector,
     instructorsSelector,
     contractTemplatesSelector,
 } from "../../../api/actions";
-import { Modal, Button, Alert } from "react-bootstrap";
 import { PositionEditor } from "../../../components/forms/position-editor";
+import { areAllQuestionsNonEmpty, emptyCustomQuestions } from "../../../components/custom-question-utils";
 import {
     ContractTemplate,
     Instructor,
@@ -40,6 +49,7 @@ const BLANK_POSITION: Partial<Position> = {
     hours_per_assignment: 0,
     duties: "Some combination of marking, invigilating, tutorials, office hours, and the help centre.",
     instructors: [],
+    custom_questions: emptyCustomQuestions,
 };
 
 export function AddPositionDialog(props: {
@@ -99,11 +109,9 @@ export function AddPositionDialog(props: {
     const conflicts = getConflicts(newPosition as Position, positions);
 
     return (
-        <Modal show={show} onHide={onHide} size="xl">
-            <Modal.Header closeButton>
-                <Modal.Title>Add Position</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
+        <Dialog open={show} onClose={onHide} maxWidth="xl" fullWidth>
+            <DialogTitle>Add Position</DialogTitle>
+            <DialogContent dividers>
                 <PositionEditor
                     position={newPosition}
                     setPosition={setNewPosition}
@@ -112,24 +120,28 @@ export function AddPositionDialog(props: {
                     defaultContractTemplate={BLANK_POSITION.contract_template}
                 />
                 {conflicts.immediateShow ? (
-                    <Alert variant="danger">{conflicts.immediateShow}</Alert>
+                    <Alert severity="error">{conflicts.immediateShow}</Alert>
                 ) : null}
-            </Modal.Body>
-            <Modal.Footer>
-                <Button onClick={onHide} variant="light">
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={onHide} variant="contained" color="secondary">
                     Cancel
                 </Button>
                 <Button
                     onClick={createPosition}
                     title={conflicts.delayShow || "Create Position"}
                     disabled={
-                        !!conflicts.delayShow || !!conflicts.immediateShow
+                        !!conflicts.delayShow ||
+                        !!conflicts.immediateShow ||
+                        !areAllQuestionsNonEmpty(newPosition.custom_questions)
                     }
+                    variant="contained"
+                    color="primary"
                 >
                     Create Position
                 </Button>
-            </Modal.Footer>
-        </Modal>
+            </DialogActions>
+        </Dialog>
     );
 }
 

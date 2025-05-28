@@ -1,6 +1,14 @@
-import React from "react";
+import {
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    IconButton
+} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+
 import { Application } from "../../../../api/defs/types";
-import { Modal, Button } from "react-bootstrap";
 import { ApplicationDetails } from "../../applications/application-details";
 
 /**
@@ -18,27 +26,40 @@ export function ApplicationDetailModal({
     }
 
     return (
-        <Modal
-            show={Boolean(application)}
-            onHide={() => setShownApplication(null)}
-            size="xl"
+        <Dialog
+            open={Boolean(application)}
+            onClose={() => setShownApplication(null)}
+            maxWidth="xl"
+            fullWidth
         >
-            <Modal.Header closeButton>
-                <Modal.Title>Application Details</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                {application && (
-                    <ApplicationDetails application={application} />
-                )}
-            </Modal.Body>
-            <Modal.Footer>
+            <DialogTitle sx={{ m: 0, p: 2 }}>
+                Application Details
+                <IconButton
+                    aria-label="close"
+                    onClick={() => setShownApplication(null)}
+                    sx={{
+                        position: 'absolute',
+                        right: 8,
+                        top: 8,
+                        color: (theme) => theme.palette.grey[500],
+                    }}
+                    size="large"
+                >
+                    <CloseIcon />
+                </IconButton>
+            </DialogTitle>
+            <DialogContent dividers>
+                <ApplicationDetails application={application} />
+            </DialogContent>
+            <DialogActions>
                 <Button
                     onClick={() => setShownApplication(null)}
-                    variant="outline-secondary"
+                    variant="outlined"
+                    color="secondary"
                 >
                     Close
                 </Button>
-            </Modal.Footer>
-        </Modal>
+            </DialogActions>
+        </Dialog>
     );
 }

@@ -9,6 +9,7 @@ import {
     Posting,
     WageChunk,
 } from "../../api/defs/types";
+import { isQuestionsFieldInValidFormat, formatCustomQuestionsForExport } from "../../components/custom-question-utils";
 import { spreadsheetUndefinedToNull } from "../import-export/undefinedToNull";
 import { prepareMinimal } from "./prepare-minimal";
 
@@ -155,6 +156,19 @@ export const prepareSpreadsheet = {
     application: function (applications: Application[]) {
         const minApps = applications.map(prepareMinimal.application);
         const baseUrl = document.location.origin;
+
+        // Collect all unique posting-level custom question keys (excluding "utorid"),
+        // rendering each of them as a column in the spreadsheet.
+        const allCustomQuestionKeys = Array.from(
+            new Set(
+                minApps.flatMap(app =>
+                    app.custom_question_answers
+                        ? Object.keys(app.custom_question_answers).filter((k) => k !== "utorid")
+                        : []
+                )
+            )
+        );
+
         return spreadsheetUndefinedToNull(
             (
                 [
@@ -178,8 +192,8 @@ export const prepareSpreadsheet = {
                         "Documents",
                         "Instructor Preferences",
                         "Instructor Comments",
-                        "Custom Question Answers",
                         "Submission Date",
+                        ...allCustomQuestionKeys,
                     ],
                 ] as CellType[][]
             ).concat(
@@ -198,11 +212,13 @@ export const prepareSpreadsheet = {
                     application.cv_link,
                     application.posting,
                     application.position_preferences
-                        .map(
-                            (pref) =>
-                                `${pref.position_code}:${pref.preference_level}`
-                        )
-                        .join("; "),
+                        .map((pref) => {
+                            const posCode = pref.position_code;
+                            const prefLevel = pref.preference_level;
+                            const customAnswers = pref.custom_question_answers ?
+                                JSON.stringify(pref.custom_question_answers) : null;
+                            return `${posCode}:${prefLevel}:${customAnswers}`;
+                        }).join("; "),
                     application.previous_experience_summary,
                     application.comments,
                     application.documents
@@ -225,57 +241,84 @@ export const prepareSpreadsheet = {
                             (pref) => `${pref.position_code}:"${pref.comment}"`
                         )
                         .join("; "),
-                    application.custom_question_answers
-                        ? JSON.stringify(application.custom_question_answers)
-                        : null,
                     application.submission_date,
+                    ...allCustomQuestionKeys.map(
+                        (key) => (application.custom_question_answers as Record<string, any> | undefined)?.[key] ?? ""
+                    ),
                 ])
             )
         );
     },
     position: function (positions: Position[]) {
-        return spreadsheetUndefinedToNull(
-            (
-                [
-                    [
-                        "Position Code",
-                        "Position Title",
-                        "Start Date",
-                        "End Date",
-                        "Hours Per Assignment",
-                        "Number of Assignments",
-                        "Contract Template",
-                        "Instructors",
-                        "Duties",
-                        "Qualifications",
-                        "Current Enrollment",
-                        "Current Waitlist",
-                    ],
-                ] as CellType[][]
-            ).concat(
-                positions.map((position) => [
-                    position.position_code,
-                    position.position_title,
-                    position.start_date &&
-                        new Date(position.start_date).toJSON().slice(0, 10),
-                    position.end_date &&
-                        new Date(position.end_date).toJSON().slice(0, 10),
-                    position.hours_per_assignment,
-                    position.desired_num_assignments,
-                    position.contract_template.template_name,
-                    position.instructors
-                        .map(
-                            (instructor) =>
-                                `${instructor.last_name}, ${instructor.first_name}`
-                        )
-                        .join("; "),
-                    position.duties || "",
-                    position.qualifications || "",
-                    position.current_enrollment,
-                    position.current_waitlisted,
-                ])
+        // Find the maximum number of questions in any position
+        const maxQuestions = Math.max(
+            ...positions.map((position) =>
+                isQuestionsFieldInValidFormat(position.custom_questions)
+                    ? (position.custom_questions?.elements.length ?? 0)
+                    : 1 // If invalid, we will show just one column for the error message
             )
         );
+
+        // Build the header row
+        const baseHeaders = [
+            "Position Code",
+            "Position Title",
+            "Start Date",
+            "End Date",
+            "Hours Per Assignment",
+            "Number of Assignments",
+            "Contract Template",
+            "Instructors",
+            "Duties",
+            "Qualifications",
+            "Current Enrollment",
+            "Current Waitlist",
+        ];
+        const questionHeaders = Array.from({ length: maxQuestions }, () => "question");
+        const headers = [...baseHeaders, ...questionHeaders];
+
+        // Build the data rows
+        const rows = positions.map((position) => {
+            const baseRow = [
+                position.position_code,
+                position.position_title,
+                position.start_date && new Date(position.start_date).toJSON().slice(0, 10),
+                position.end_date && new Date(position.end_date).toJSON().slice(0, 10),
+                position.hours_per_assignment,
+                position.desired_num_assignments,
+                position.contract_template.template_name,
+                position.instructors
+                    .map(
+                        (instructor) =>
+                            `${instructor.last_name}, ${instructor.first_name}`
+                    )
+                    .join("; "),
+                position.duties || "",
+                position.qualifications || "",
+                position.current_enrollment,
+                position.current_waitlisted,
+            ];
+
+            let questionCells: string[] = [];
+            if (!isQuestionsFieldInValidFormat(position.custom_questions)) {
+                // Invalid format: put error message in first question column, rest blank
+                questionCells = ["Unsupported questions format", ...Array(maxQuestions - 1).fill("")];
+            } else {
+                // Valid format: fill with question names, pad with blanks if needed
+                const questions = position.custom_questions?.elements.map(q => q.name) ?? [];
+                questionCells = [
+                    ...questions,
+                    ...Array(maxQuestions - questions.length).fill("")
+                ];
+            }
+
+            return [...baseRow, ...questionCells];
+        });
+
+        return spreadsheetUndefinedToNull([
+            headers,
+            ...rows
+        ]);
     },
     posting: function (posting: Posting) {
         // Most of the information about the posting is exported in the first row of the spreadsheet.
@@ -288,7 +331,7 @@ export const prepareSpreadsheet = {
         ];
         const lastItems = [
             posting.intro_text,
-            JSON.stringify(posting.custom_questions),
+            formatCustomQuestionsForExport(posting.custom_questions),
         ];
         const emptyFirstItems = [null, null, null];
         const emptyLastItems = [null, null];

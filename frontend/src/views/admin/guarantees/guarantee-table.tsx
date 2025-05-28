@@ -2,89 +2,20 @@ import React from "react";
 import { useSelector } from "react-redux";
 import {
     applicantMatchingDataSelector,
+    letterTemplatesSelector,
     upsertApplicant,
     upsertApplicantMatchingDatum,
 } from "../../../api/actions";
-import { EditableField } from "../../../components/edit-field-widgets";
 import { guaranteeTableSelector, setSelectedRows } from "./actions";
-import { EditLetterTemplateCell } from "./letter-template-cell";
-import { Button } from "react-bootstrap";
-import { FaSearch } from "react-icons/fa";
 import { formatDownloadUrl, capitalize, formatDate } from "../../../libs/utils";
-import { AdvancedFilterTable } from "../../../components/filter-table/advanced-filter-table";
+import { AdvancedColumnDef, AdvancedFilterTable } from "../../../components/advanced-filter-table";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
-import { CellProps } from "react-table";
 import { Applicant, ApplicantMatchingDatum } from "../../../api/defs/types";
 import { PropsForElement } from "../../../api/defs/types/react";
-
-/**
- * A cell that renders editable appointment guarantee information.
- */
-export function GuaranteeCell(
-    props: CellProps<ApplicantMatchingDatum> & {
-        field: keyof ApplicantMatchingDatum;
-        upsertApplicantMatchingDatum: (
-            applicantMatchingDatum: Partial<ApplicantMatchingDatum>
-        ) => any;
-        editable: boolean;
-    }
-) {
-    const title = `Edit ${"" + props.column.Header}`;
-    const { upsertApplicantMatchingDatum, field, editable } = props;
-    const applicantMatchingDatum = props.row.original;
-
-    async function onChange(newVal: ApplicantMatchingDatum[typeof field]) {
-        return await upsertApplicantMatchingDatum({
-            applicant: applicantMatchingDatum.applicant,
-            session: applicantMatchingDatum.session,
-            [field]: newVal,
-        });
-    }
-
-    return (
-        <EditableField
-            title={title}
-            value={props.value || ""}
-            onChange={onChange}
-            editable={editable}
-        >
-            {props.value}
-        </EditableField>
-    );
-}
-
-/**
- * A cell that renders editable applicant information. This component is expected
- * to be passed an **ApplicantMatchingDatum**. It will read the applicant from the
- * applicant matching datum.
- */
-export function ApplicantCell(
-    props: CellProps<ApplicantMatchingDatum> & {
-        field: keyof Applicant;
-        upsertApplicant: (applicant: Partial<Applicant>) => any;
-        editable: boolean;
-    }
-) {
-    const title = `Edit ${"" + props.column.Header}`;
-    const { upsertApplicant, field, editable } = props;
-    const applicant = props.row.original;
-
-    async function onChange(newVal: Applicant[typeof field]) {
-        const applicantId = applicant.applicant.id;
-        return await upsertApplicant({ id: applicantId, [field]: newVal });
-    }
-
-    return (
-        <EditableField
-            title={title}
-            value={props.value || ""}
-            onChange={onChange}
-            editable={editable}
-        >
-            {props.value}
-        </EditableField>
-    );
-}
+import { MRT_Row } from "material-react-table";
+import { Button, Stack, Tooltip, Typography } from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
+import { generateNumberCell, generateSingleSelectColumnProps } from "../../../components/table-utils";
 
 /**
  * Cell to show the status of a letter and offer a download button if a letter has been created.
@@ -93,32 +24,38 @@ export function ApplicantCell(
  * @param {*} { original }
  * @returns
  */
-export function StatusCell({ row }: CellProps<ApplicantMatchingDatum>) {
-    const original = row.original;
-    const formattedStatus = capitalize(original.active_confirmation_status || "");
-    const activeConfirmationUrlToken = original.active_confirmation_url_token;
-
-    let download = null;
-    if (activeConfirmationUrlToken) {
-        const url = `/public/letters/${activeConfirmationUrlToken}.pdf`;
-        download = (
-            <Button
-                href={formatDownloadUrl(url)}
-                variant="light"
-                size="sm"
-                className="mr-2 py-0"
-                title="Download letter PDF"
-            >
-                <FaSearch />
-            </Button>
-        );
-    }
+export function StatusCell({
+    value,
+    row 
+}: {
+    value: ApplicantMatchingDatum["active_confirmation_status"];
+    row: MRT_Row<ApplicantMatchingDatum>;
+}) {
+    const formattedStatus = capitalize(value || "No Letter Sent");
+    const activeConfirmationUrlToken = row.original.active_confirmation_url_token;
 
     return (
-        <>
-            {download}
-            {formattedStatus}
-        </>
+        <Stack direction="row" spacing={1} alignItems="center">
+            {activeConfirmationUrlToken && (
+                <Tooltip title="Download letter PDF">
+                    <Button
+                        href={formatDownloadUrl(
+                            `/public/letters/${activeConfirmationUrlToken}.pdf`
+                        )}
+                        variant="outlined"
+                        size="small"
+                        target="_blank"
+                        rel="noopener"
+                        sx={{ minWidth: 0, padding: "2px 6px" }}
+                    >
+                        <SearchIcon fontSize="small" />
+                    </Button>
+                </Tooltip>
+            )}
+            <Typography variant="body2">
+                {formattedStatus}
+            </Typography>
+        </Stack>
     );
 }
 
@@ -129,13 +66,21 @@ export function ConnectedGuaranteeTable({
     PropsForElement<typeof AdvancedFilterTable>
 >) {
     const dispatch = useThunkDispatch();
-    const setSelected = React.useCallback(
-        (rows: number[]) => dispatch(setSelectedRows(rows)),
-        [dispatch]
-    );
     const selected = useSelector(
         guaranteeTableSelector
     ).selectedApplicantMatchingDatumIds;
+    const setSelected = React.useCallback(
+        (rows: number[]) => {
+            const filtered = rows.filter((id) => !isNaN(id));
+            if (
+                filtered.length !== selected.length ||
+                filtered.some((id, i) => id !== selected[i])
+            ) {
+                dispatch(setSelectedRows(filtered));
+            }
+        },
+        [dispatch, selected]
+    );
     const applicantMatchingData = useSelector(applicantMatchingDataSelector);
     const data = React.useMemo(
         () =>
@@ -147,127 +92,161 @@ export function ConnectedGuaranteeTable({
             }),
         [applicantMatchingData]
     );
+    const allTemplates = useSelector(letterTemplatesSelector);
+
+    // Row editing is blocked for assignments that have an active offer
+    const editBlocked = React.useCallback((applicantMatchingDatum: ApplicantMatchingDatum) => {
+        if (["pending", "rejected", "accepted"].includes(applicantMatchingDatum.active_confirmation_status || "")) {
+            return `This applicant matching currently has an active appointment confirmation. You must first
+                withdraw the existing appointment confirmation before making a modification.`
+        }
+        return false;
+    }, []);
+
+    const _upsertApplicantMatchingDatum = React.useCallback(
+        (applicantMatchingDatum: Partial<ApplicantMatchingDatum>) => {
+            return dispatch(upsertApplicantMatchingDatum(applicantMatchingDatum));
+        },
+        [dispatch]
+    );
+
+    const _upsertApplicant = React.useCallback(
+        (applicant: Partial<Applicant>) => {
+            return dispatch(upsertApplicant(applicant));
+        },
+        [dispatch]
+    );
+
+    const handleEditRow = React.useCallback(
+        (original: ApplicantMatchingDatum, values: Partial<ApplicantMatchingDatum>) => {
+            // Split values into applicant and appointment updates
+            const applicantUpdates: Partial<Applicant> = {};
+            const appointmentUpdates: Partial<ApplicantMatchingDatum> = {};
+
+            Object.entries(values).forEach(([key, val]) => {
+                if (key.startsWith("applicant.")) {
+                    // Remove "applicant." prefix for applicant fields
+                    applicantUpdates[key.replace("applicant.", "") as keyof Applicant] = val as any;
+                } else {
+                    appointmentUpdates[key as keyof ApplicantMatchingDatum] = val as any;
+                }
+            });
+
+            if (Object.keys(applicantUpdates).length > 0) {
+                _upsertApplicant({ ...original.applicant, ...applicantUpdates });
+            }
+            if (Object.keys(appointmentUpdates).length > 0) {
+                _upsertApplicantMatchingDatum({ ...original, ...appointmentUpdates });
+            }
+        },
+        [_upsertApplicantMatchingDatum, _upsertApplicant]
+    );
 
     // We want to minimize the re-render of the table. Since some bindings for columns
     // are generated on-the-fly, memoize the result so we don't trigger unneeded re-renders.
-    const columns = React.useMemo(() => {
-        // Bind an `ApplicantCell` to a particular field
-        function generateApplicantCell(field: keyof Applicant) {
-            return (props: CellProps<ApplicantMatchingDatum>) => (
-                <ApplicantCell
-                    field={field}
-                    upsertApplicant={(applicant: Partial<Applicant>) =>
-                        dispatch(upsertApplicant(applicant))
-                    }
-                    editable={editable}
-                    {...props}
-                />
-            );
-        }
-
-        // Bind an `GuaranteeCell` to a particular field
-        function generateGuaranteeCell(field: keyof ApplicantMatchingDatum) {
-            return (props: CellProps<ApplicantMatchingDatum>) => (
-                <GuaranteeCell
-                    field={field}
-                    upsertApplicantMatchingDatum={(
-                        applicantMatchingDatum: Partial<ApplicantMatchingDatum>
-                    ) =>
-                        dispatch(
-                            upsertApplicantMatchingDatum(applicantMatchingDatum)
-                        )
-                    }
-                    editable={editable}
-                    {...props}
-                />
-            );
-        }
-
+    const columns: AdvancedColumnDef<ApplicantMatchingDatum>[] = React.useMemo(() => {
         return [
             {
-                Header: "Last Name",
-                accessor: "applicant.last_name",
-                Cell: generateApplicantCell("last_name"),
+                header: "Last Name",
+                accessorKey: "applicant.last_name",
+                meta: { editable: editable },
             },
             {
-                Header: "First Name",
-                accessor: "applicant.first_name",
-                Cell: generateApplicantCell("first_name"),
+                header: "First Name",
+                accessorKey: "applicant.first_name",
+                meta: { editable: editable },
             },
             {
-                Header: "Email",
-                accessor: "applicant.email",
-                Cell: generateApplicantCell("email"),
+                header: "Email",
+                accessorKey: "applicant.email",
+                meta: { editable: editable },
             },
             {
-                Header: "Student Number",
-                accessor: "applicant.student_number",
-                Cell: generateApplicantCell("student_number"),
+                header: "Student Number",
+                accessorKey: "applicant.student_number",
+                meta: { editable: editable },
             },
             {
-                Header: "Min. Hours Owed",
-                accessor: "min_hours_owed",
-                className: "number-cell",
-                maxWidth: 70,
-                Cell: generateGuaranteeCell("min_hours_owed"),
+                header: "Min. Hours Owed",
+                accessorKey: "min_hours_owed",
+                meta: { editable: editable },
+                maxSize: 70,
+                EditCell: generateNumberCell(),
             },
             {
-                Header: "Max. Hours Owed",
-                accessor: "max_hours_owed",
-                className: "number-cell",
-                maxWidth: 70,
-                Cell: generateGuaranteeCell("max_hours_owed"),
+                header: "Max. Hours Owed",
+                accessorKey: "max_hours_owed",
+                meta: { editable: editable },
+                maxSize: 70,
+                EditCell: generateNumberCell(),
             },
             {
-                Header: "Prev. Hours Fulfilled",
-                accessor: "prev_hours_fulfilled",
-                className: "number-cell",
-                maxWidth: 70,
-                Cell: generateGuaranteeCell("prev_hours_fulfilled"),
+                header: "Prev. Hours Fulfilled",
+                accessorKey: "prev_hours_fulfilled",
+                meta: { editable: editable },
+                maxSize: 100,
+                EditCell: generateNumberCell(),
             },
             {
-                Header: "Letter Template",
-                accessor: "letter_template.template_name",
-                Cell: EditLetterTemplateCell,
+                header: "Letter Template",
+                accessorKey: "letter_template",
+                meta: { editable: editable },
+                ...generateSingleSelectColumnProps({
+                    options: allTemplates,
+                    getLabel: (option) => option?.template_name ?? "",
+                }),
             },
             {
-                Header: "Status",
+                header: "Status",
                 id: "status",
                 // We want items with no active confirmation to appear at the end of the list
                 // when sorted, so we set their accessor to null (the accessor is used by react table
                 // when sorting items).
-                accessor: (dat: typeof data[number]) =>
+                accessorFn: (dat: typeof data[number]) =>
                     dat.active_confirmation_status === "No Letter Sent"
                         ? null
                         : dat.active_confirmation_status,
-                Cell: StatusCell,
+                Cell: ({ cell, row }) => (
+                    <StatusCell
+                        value={cell.getValue() as ApplicantMatchingDatum["active_confirmation_status"]}
+                        row={row}
+                    />
+                ),
             },
             {
-                Header: "Date",
-                accessor: "active_confirmation_recent_activity_date",
-                Cell: ({ value }: CellProps<typeof data>) =>
-                    value ? formatDate(value) : null,
-                maxWidth: 120,
+                header: "Last Updated",
+                accessorKey: "active_confirmation_recent_activity_date",
+                Cell: ({ cell }) => {
+                    const date = cell.getValue();
+                    return typeof date === "string" ? formatDate(date) : <></>;
+                },
+                maxSize: 120,
             },
             {
-                Header: "Nag Count",
-                accessor: "active_confirmation_nag_count",
+                header: "Nag Count",
+                accessorKey: "active_confirmation_nag_count",
                 // If the nag-count is 0, we don't want to show it,
                 // so we return null in that case, which displays nothing.
-                Cell: ({ value }: CellProps<typeof data>) =>
-                    value ? value : null,
-                maxWidth: 30,
+                Cell: ({ cell }) => {
+                    const value = cell.getValue();
+                    return value ? <>{value}</> : null;
+                },
+                maxSize: 30,
             },
         ];
-    }, [dispatch, editable]);
+    }, [allTemplates, editable]);
 
     return (
         <AdvancedFilterTable
             filterable={true}
             columns={columns}
             data={data}
+            selectable={true}
             selected={selected}
             setSelected={setSelected}
+            editable={editable}
+            onEditRow={handleEditRow}
+            editBlocked={editBlocked}
             {...rest}
         />
     );

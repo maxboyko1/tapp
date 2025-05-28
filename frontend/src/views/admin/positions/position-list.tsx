@@ -1,51 +1,33 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import {
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    IconButton,
+    Tooltip,
+    Typography,
+} from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
+import { MRT_Cell, MRT_Column, MRT_Row, MRT_TableInstance } from "material-react-table";
+
+import {
+    contractTemplatesSelector,
+    instructorsSelector,
     positionsSelector,
     deletePosition,
     assignmentsSelector,
     upsertPosition,
 } from "../../../api/actions";
 import { PositionsList } from "../../../components/positions-list";
-import { FaTimes, FaLock, FaTrash, FaSearch } from "react-icons/fa";
-import { Modal, Button } from "react-bootstrap";
-import { generateHeaderCell } from "../../../components/table-utils";
+import { generateDateColumnProps, generateMultiSelectColumnProps, generateNumberCell, generateSingleSelectColumnProps } from "../../../components/table-utils";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
-import { HasId, Position } from "../../../api/defs/types";
-import { Cell, Column } from "react-table";
-import { EditableCell, EditableType } from "../../../components/editable-cell";
+import { Position } from "../../../api/defs/types";
 import { setSelectedPosition } from "./actions";
-import { EditContractTemplateCell } from "./contract-template-cell";
-import { hashInstructorList, EditInstructorsCell } from "./instructors-cell";
-
-function ConfirmDeleteDialog(props: {
-    show: boolean;
-    onHide: (...args: any[]) => any;
-    onDelete: (...args: any[]) => any;
-    position: Position | null;
-}) {
-    const { show, onHide, onDelete, position } = props;
-    return (
-        <Modal show={show} onHide={onHide}>
-            <Modal.Header closeButton>
-                <Modal.Title>Delete Session</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                Are you sure you want to delete the position{" "}
-                {position ? position.position_code : null}? This action cannot
-                be undone.
-            </Modal.Body>
-            <Modal.Footer>
-                <Button onClick={onHide} variant="light">
-                    Cancel
-                </Button>
-                <Button onClick={onDelete} title="Delete Position">
-                    Delete
-                </Button>
-            </Modal.Footer>
-        </Modal>
-    );
-}
+import { EditCustomQuestionsCell } from "./custom-questions-cell";
+import { AdvancedColumnDef } from "../../../components/advanced-filter-table";
 
 export function ConnectedPositionsList({
     inDeleteMode = false,
@@ -54,189 +36,210 @@ export function ConnectedPositionsList({
 }: {
     inDeleteMode?: boolean;
     editable?: boolean;
-    columns?: Column<any>[] | null;
+    columns?: AdvancedColumnDef<Position>[] | null;
 }) {
     const positions = useSelector(positionsSelector);
     const assignments = useSelector(assignmentsSelector);
+    const allInstructors = useSelector(instructorsSelector);
+    const allTemplates = useSelector(contractTemplatesSelector);
+
     const [positionToDelete, setPositionToDelete] =
         React.useState<Position | null>(null);
     const dispatch = useThunkDispatch();
 
-    async function _upsertPosition(position: Partial<Position> & HasId) {
-        return await dispatch(upsertPosition(position));
-    }
-
-    const numAssignmentsByPositionCode = assignments.reduce(
-        (acc, assignment) => {
-            const position_code = assignment.position.position_code;
-            acc[position_code] = acc[position_code] || 0;
-            acc[position_code] += 1;
-            return acc;
-        },
-        {} as Record<string, number>
+    const numAssignmentsByPositionCode = React.useMemo(
+        () =>
+            assignments.reduce((acc, assignment) => {
+                const position_code = assignment.position.position_code;
+                acc[position_code] = acc[position_code] || 0;
+                acc[position_code] += 1;
+                return acc;
+            }, {} as Record<string, number>),
+        [assignments]
     );
 
-    // props.original contains the row data for this particular instructor
-    function CellDeleteButton({ row }: Cell<Position>) {
-        const position = row.original;
-        // If there are any assignments for this position, we should be disabled
-        const disabled = numAssignmentsByPositionCode[position.position_code];
-        if (disabled) {
-            return (
-                <div className="delete-button-container">
-                    <FaLock
-                        className="delete-row-button disabled"
-                        title="This position has an associated assignment and so cannot be deleted."
-                    />
-                </div>
-            );
-        }
-        return (
-            <div className="delete-button-container">
-                <FaTimes
-                    className="delete-row-button"
-                    title={`Delete ${position.position_code}`}
-                    onClick={() => {
-                        setPositionToDelete(position);
-                    }}
-                />
-            </div>
-        );
-    }
-
-    function generateCell(field: keyof Position, type?: EditableType) {
-        return (props: Cell<Position>) => (
-            <EditableCell
-                field={field}
-                type={type}
-                upsert={_upsertPosition}
-                editable={editable}
-                {...props}
-            />
-        );
-    }
-
-    function CellDetailsButton({ row }: Cell<Position>) {
-        const position = row?.original || {};
-        return (
-            <div
-                className="details-button-container"
-                onClick={() => dispatch(setSelectedPosition(position.id))}
-            >
-                <FaSearch
-                    className="details-row-button"
-                    title={`View details of ${position.position_code}`}
-                />
-            </div>
-        );
-    }
-
-    const DEFAULT_COLUMNS = [
-        {
-            Header: <FaTrash className="delete-row-column-header-icon" />,
-            Cell: CellDeleteButton,
-            id: "delete_col",
-            className: "delete-col",
-            show: inDeleteMode,
-            maxWidth: 32,
-            resizable: false,
+    const handleEditRow = React.useCallback(
+        (original: Position, values: Partial<Position>) => {
+            dispatch(upsertPosition({ ...original, ...values }));
         },
+        [dispatch]
+    );
+
+    const handleDelete = React.useCallback(
+        (position: Position) => {
+            const hasAssignments = numAssignmentsByPositionCode[position.position_code];
+            if (hasAssignments) {
+                alert("This position has associated assignments and so cannot be deleted.");
+                return;
+            }
+            setPositionToDelete(position);
+        },
+        [numAssignmentsByPositionCode]
+    );
+
+    const CellDetailsButton = React.useCallback(
+        ({
+            row,
+        }: {
+            cell: MRT_Cell<Position, unknown>;
+            column: MRT_Column<Position, unknown>;
+            row: MRT_Row<Position>;
+            renderedCellValue: React.ReactNode;
+            table: MRT_TableInstance<Position>;
+        }) => {
+            const position = row.original;
+            return (
+                <Tooltip title={`View details of ${position.position_code}`}>
+                    <IconButton
+                        onClick={() => dispatch(setSelectedPosition(position.id))}
+                        size="small"
+                    >
+                        <SearchIcon />
+                    </IconButton>
+                </Tooltip>
+            );
+        },
+        [dispatch]
+    );
+
+    const DEFAULT_COLUMNS: AdvancedColumnDef<Position>[] = React.useMemo(() => [
         {
-            Header: generateHeaderCell("Details"),
+            header: "Details",
             id: "details-col",
-            className: "details-col",
-            maxWidth: 32,
-            resizable: false,
+            maxSize: 32,
+            meta: { className: "details-col" },
+            enableResizing: false,
             Cell: CellDetailsButton,
         },
         {
-            Header: generateHeaderCell("Position Code"),
-            accessor: "position_code",
-            Cell: generateCell("position_code"),
+            header: "Position Code",
+            accessorKey: "position_code",
+            meta: { editable: {editable} },
         },
         {
-            Header: generateHeaderCell("Position Title"),
-            accessor: "position_title",
-            Cell: generateCell("position_title"),
+            header: "Position Title",
+            accessorKey: "position_title",
+            meta: { editable: {editable} },
         },
         {
-            Header: generateHeaderCell("Start"),
-            accessor: "start_date",
-            Cell: generateCell("start_date", "date"),
+            header: "Start",
+            accessorKey: "start_date",
+            meta: { editable: {editable} },
+            ...generateDateColumnProps(),
         },
         {
-            Header: generateHeaderCell("End"),
-            accessor: "end_date",
-            Cell: generateCell("end_date", "date"),
+            header: "End",
+            accessorKey: "end_date",
+            meta: { editable: {editable} },
+            ...generateDateColumnProps(),
         },
         {
-            Header: generateHeaderCell("Instructor(s)"),
+            header: "Instructor(s)",
             id: "instructors",
-            accessor: (position: Position) =>
-                hashInstructorList(position.instructors),
-            Cell: EditInstructorsCell,
+            accessorKey: "instructors",
+            meta: { editable: {editable} },
+            ...generateMultiSelectColumnProps({
+                options: allInstructors,
+                getLabel: (option) => `${option.first_name} ${option.last_name}`,
+            }),
         },
         {
-            Header: generateHeaderCell("Hours/Assignment"),
-            accessor: "hours_per_assignment",
-            width: 64,
-            className: "number-cell",
-            Cell: generateCell("hours_per_assignment"),
+            header: "Hours/Assignment",
+            accessorKey: "hours_per_assignment",
+            size: 64,
+            meta: { editable: {editable} },
+            EditCell: generateNumberCell(),
         },
         {
-            Header: generateHeaderCell("Enrolled"),
-            accessor: "current_enrollment",
-            className: "number-cell",
-            maxWidth: 80,
-            Cell: generateCell("current_enrollment"),
+            header: "Enrolled",
+            accessorKey: "current_enrollment",
+            maxSize: 80,
+            meta: { editable: {editable} },
+            EditCell: generateNumberCell(),
         },
         {
-            Header: generateHeaderCell("Waitlist"),
-            accessor: "current_waitlisted",
-            className: "number-cell",
-            width: 50,
-            Cell: generateCell("current_waitlisted", "number"),
+            header: "Waitlist",
+            accessorKey: "current_waitlisted",
+            size: 50,
+            meta: { editable: {editable} },
+            EditCell: generateNumberCell(),
         },
         {
-            Header: generateHeaderCell("Desired Assignments"),
-            accessor: "desired_num_assignments",
-            className: "number-cell",
-            width: 50,
-            Cell: generateCell("desired_num_assignments"),
+            header: "Desired Assignments",
+            accessorKey: "desired_num_assignments",
+            meta: { editable: {editable} },
+            size: 50,
+            EditCell: generateNumberCell(),
         },
         {
-            Header: generateHeaderCell("Assigned"),
+            header: "Assigned",
             id: "current_num_assignments",
-            className: "number-cell",
-            accessor: (position: Position) =>
+            accessorFn: (position: Position) =>
                 numAssignmentsByPositionCode[position.position_code] || "",
-            width: 50,
+            size: 50,
         },
         {
-            Header: generateHeaderCell("Contract Template"),
-            accessor: "contract_template.template_name",
-            Cell: EditContractTemplateCell,
+            header: "Contract Template",
+            accessorKey: "contract_template",
+            meta: { editable: {editable} },
+            ...generateSingleSelectColumnProps({
+                options: allTemplates,
+                getLabel: (option) => option?.template_name ?? "",
+            })
         },
-    ];
+        {
+            header: "Custom Questions",
+            accessorKey: "custom_questions",
+            Cell: EditCustomQuestionsCell,
+        },
+    ], [editable, allInstructors, allTemplates, numAssignmentsByPositionCode, CellDetailsButton]);
 
     return (
         <React.Fragment>
             <PositionsList
                 positions={positions}
                 columns={columns || DEFAULT_COLUMNS}
+                deleteable={inDeleteMode}
+                onDelete={handleDelete}
+                deleteBlocked={(position) =>
+                    numAssignmentsByPositionCode[position.position_code]
+                        ? "This position has associated assignments and cannot be deleted."
+                        : false
+                }
+                editable={editable}
+                onEditRow={handleEditRow}
             />
-            <ConfirmDeleteDialog
-                position={positionToDelete}
-                show={!!positionToDelete}
-                onHide={() => setPositionToDelete(null)}
-                onDelete={async () => {
-                    if (positionToDelete == null) {
-                        return;
-                    }
-                    await dispatch(deletePosition(positionToDelete));
-                    setPositionToDelete(null);
-                }}
-            />
+            <Dialog open={!!positionToDelete} onClose={() => setPositionToDelete(null)}>
+                <DialogTitle>Confirm Deletion</DialogTitle>
+                <DialogContent>
+                    <Typography variant="body2">
+                        Are you sure you want to delete the position{" "}
+                        <Typography
+                            component="span"
+                            color="primary"
+                            fontWeight="bold"
+                            display="inline"
+                        >
+                            {positionToDelete?.position_code}
+                        </Typography>
+                        ?
+                    </Typography>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setPositionToDelete(null)}>Cancel</Button>
+                    <Button
+                        color="error"
+                        onClick={async () => {
+                            if (positionToDelete) {
+                                await dispatch(deletePosition(positionToDelete));
+                                setPositionToDelete(null);
+                            }
+                        }}
+                    >
+                        Delete
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </React.Fragment>
     );
 }

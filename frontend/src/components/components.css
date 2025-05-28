@@ -5,7 +5,7 @@
 .header-container {
     display: flex;
     flex-direction: row;
-    background-color: #f3f4f5;
+    background-color: primary;
 }
 .header-nav {
     flex-grow: 1;
@@ -72,46 +72,8 @@
     align-items: center;
 }
 
-.delete-button-container {
-    text-align: center;
-}
-
-.delete-row-button.disabled,
-.delete-row-button.disabled:hover {
-    color: rgb(180, 180, 180);
-    cursor: default;
-}
-
-.delete-row-button {
-    transition: color 0.2s;
-    cursor: pointer;
-}
-.delete-row-button:hover {
-    color: var(--danger);
-}
-
-.delete-row-column-header-icon {
-    color: var(--danger);
-}
-
 .input-row-icon {
     align-self: center;
-}
-
-.form-row .input-row-icon {
-    margin-top: 16px;
-}
-
-.add-duty-btn-icon {
-    margin-right: 0.8em;
-    margin-bottom: 0.3em;
-}
-
-.details-button-container {
-    text-align: center;
-}
-.details-button-container a {
-    color: unset;
 }
 
 .details-row-button.disabled,
@@ -125,10 +87,6 @@
     cursor: pointer;
 }
 .details-row-button:hover {
-    color: var(--primary);
-}
-
-.details-row-column-header-icon {
     color: var(--primary);
 }
 
@@ -200,15 +158,6 @@ div.p {
     margin-bottom: 1rem;
 }
 
-.display-rating {
-    padding: 0px 3px;
-}
-.display-rating-container {
-    display: inline-block;
-}
 .applicant-rating-container.expanded .large-rating-button {
     display: flex;
-}
-.large-rating-button > div:first-child {
-    width: 3em;
 }

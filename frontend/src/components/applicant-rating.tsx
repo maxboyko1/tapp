@@ -1,23 +1,28 @@
 import React from "react";
-import { Button, ButtonGroup } from "react-bootstrap";
-import { FaComment, FaRegComment } from "react-icons/fa";
 import { InstructorPreference } from "../api/defs/types";
-import { EditFieldDialog } from "./edit-field-widgets";
-
-const VARIAN_SEQUENCE: Record<string, string[]> = {
-    null: ["outline", "outline", "outline", "outline"],
-    "-1": ["outline", "outline", "outline", "danger"],
-    "0": ["outline", "outline", "secondary", "outline"],
-    "1": ["outline", "primary", "outline", "outline"],
-    "2": ["success", "success", "outline", "outline"],
-};
+import { 
+    Box,
+    Button,
+    ButtonGroup,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    IconButton,
+    Stack,
+    TextField,
+    Tooltip,
+    Typography
+} from "@mui/material";
+import CommentIcon from "@mui/icons-material/Comment";
+import CommentOutlineIcon from "@mui/icons-material/CommentOutlined";
 
 const RATING_TO_BG_COLOR: Record<string, string> = {
-    null: "bg-light",
-    "-1": "bg-danger",
-    "0": "bg-secondary",
-    "1": "bg-primary",
-    "2": "bg-success",
+    null: "grey.200",
+    "-1": "error.main",
+    "0": "grey.500",
+    "1": "primary.main",
+    "2": "success.main",
 };
 
 const RATING_TO_DESCRIPTION: Record<string, string> = {
@@ -37,101 +42,73 @@ export function ApplicantRating({
 }) {
     const clampedRating =
         rating == null ? null : Math.max(Math.min(rating, 2), -1);
-    const variants = VARIAN_SEQUENCE["" + clampedRating];
-    const setRating = React.useCallback(
-        (newRating: number) => {
-            if (onChange) {
-                onChange(newRating);
-            }
+    const setRating = (r: number) => onChange?.(r);
+
+    const buttons = [
+        {
+            value: 2,
+            label: "+",
+            title: "Outstanding TA",
         },
-        [onChange]
-    );
+        {
+            value: 1,
+            label: "+",
+            title: "Good TA",
+        },
+        {
+            value: 0,
+            label: "?",
+            title: "Neutral / Not enough info",
+        },
+        {
+            value: -1,
+            label: "-",
+            title: "Not suitable",
+        },
+    ]
 
     return (
-        <ButtonGroup
-            aria-label="Applicant Rating"
-            className="applicant-rating-buttons"
-        >
-            <Button
-                variant={variants[0]}
-                onClick={() => {
-                    setRating(2);
-                }}
-                title="This applicant would make an outstanding TA for the position."
-            >
-                +
-            </Button>
-            <Button
-                variant={variants[1]}
-                onClick={() => {
-                    setRating(1);
-                }}
-                title="This applicant would make a good TA for the position."
-            >
-                +
-            </Button>
-            <Button
-                variant={variants[2]}
-                onClick={() => {
-                    setRating(0);
-                }}
-                title="Neutral or do not have enough information to rate."
-            >
-                ?
-            </Button>
-            <Button
-                variant={variants[3]}
-                onClick={() => {
-                    setRating(-1);
-                }}
-                title="This applicant is not suitable for the position."
-            >
-                -
-            </Button>
+        <ButtonGroup aria-label="Applicant Rating" size="small">
+            {buttons.map(({ value, label, title }) => (
+                <Tooltip key={value} title={title}>
+                    <Button
+                        variant={clampedRating === value ? "contained" : "outlined"}
+                        onClick={() => setRating(value)}
+                    >
+                        {label}
+                    </Button>
+                </Tooltip>
+            ))}
         </ButtonGroup>
     );
 }
 
 export function ApplicantComment({
     comment,
-    onClick: _onClick,
+    onClick
 }: {
     comment: null | string;
-    onClick?: Function;
+    onClick?: () => void;
 }) {
-    const onClick = React.useCallback(() => {
-        if (_onClick) {
-            _onClick();
-        }
-    }, [_onClick]);
+    const handleClick = () => onClick?.();
 
-    if (comment == null) {
-        return (
-            <Button
-                onClick={onClick}
-                variant="outline"
-                className="add-comment no-comment"
-                title="Add comment"
-            >
-                <div className="comment-icon">
-                    <FaRegComment />
-                </div>
-            </Button>
-        );
-    }
     return (
         <Button
-            variant="outline"
-            className="add-comment"
-            title="Edit comment"
-            onClick={onClick}
+            onClick={handleClick}
+            variant="outlined"
+            size="small"
+            startIcon={comment ? <CommentIcon /> : <CommentOutlineIcon />}
+            sx={{ textTransform: "none" }}
         >
-            <div className="comment-container">{comment}</div>
-            <div className="comment-icon full">
-                <FaComment />
-            </div>
+            {comment ? (
+                <Typography variant="body2" noWrap>
+                    {comment}
+                </Typography>
+            ) : (
+                "Add Comment"
+            )}
         </Button>
-    );
+    )
 }
 
 export function ApplicantRatingAndComment({
@@ -179,77 +156,93 @@ export function ApplicantRatingAndComment({
         widget = (
             <React.Fragment>
                 <ApplicantRating rating={rating} onChange={setRating} />
-                <ApplicantComment
-                    comment={comment}
-                    onClick={() => setEditDialogShow(true)}
-                />
+                <IconButton onClick={() => setEditDialogShow(true)} size="small">
+                    <CommentIcon fontSize="small" />
+                </IconButton>
+                {comment && (
+                    <Typography variant="caption" sx={{ ml: 1 }}>
+                        {comment}
+                    </Typography>
+                )}
             </React.Fragment>
         );
     } else {
         widget = (
-            <React.Fragment>
-                <div>
-                    <ButtonGroup vertical>
+            <Stack direction="row" spacing={2}>
+                <Stack spacing={1}>
+                    {[2, 1, 0, -1].map((r) => (
                         <LargeRatingButton
-                            rating={2}
+                            key={r}
+                            rating={r}
                             activeRating={rating}
-                            onClick={() => setRating(2)}
+                            onClick={() => setRating(r)}
                         />
-                        <LargeRatingButton
-                            rating={1}
-                            activeRating={rating}
-                            onClick={() => setRating(1)}
-                        />
-                        <LargeRatingButton
-                            rating={0}
-                            activeRating={rating}
-                            onClick={() => setRating(0)}
-                        />
-                        <LargeRatingButton
-                            rating={-1}
-                            activeRating={rating}
-                            onClick={() => setRating(-1)}
-                        />
-                    </ButtonGroup>
-                </div>
-                <div>
+                    ))}
+                </Stack>
+                <Stack spacing={1}>
                     <Button
-                        variant="light"
+                        variant="outlined"
                         onClick={() => setEditDialogShow(true)}
+                        startIcon={<CommentIcon />}
                     >
-                        <FaRegComment className="mb-1" /> Edit Comment
+                        Edit Comment
                     </Button>
-                    <div>
-                        {comment && <b className="mr-2">Comment:</b>}
-                        {comment || <i>No Comment</i>}
-                    </div>
-                </div>
-            </React.Fragment>
+                    <Typography variant="body2">
+                        {comment ? (
+                            <>
+                                <strong>Comment:</strong> {comment}
+                            </>
+                        ) : (
+                            <i>No Comment</i>
+                        )}
+                    </Typography>
+                </Stack>
+            </Stack>
         );
     }
 
     return (
-        <div
-            className={`applicant-rating-container ${
-                compact ? "compact" : "expanded"
-            }`}
+        <Box
+            className="applicant-rating-container"
+            sx={{
+            display: "flex",
+            flexDirection: compact ? "row" : "column",
+            alignItems: compact ? "center" : "flex-start",
+            gap: 1,
+            }}
         >
             {widget}
-            <EditFieldDialog
-                title="Comment"
-                value={comment || ""}
-                onChange={(c: string) => {
-                    if (c) {
-                        setComment(c);
-                    } else {
-                        setComment(null);
-                    }
-                }}
-                show={editDialogShow}
-                onHide={() => setEditDialogShow(false)}
-                type="paragraph"
-            />
-        </div>
+            <Dialog
+                open={editDialogShow}
+                onClose={() => setEditDialogShow(false)}
+                maxWidth="sm"
+                fullWidth
+            >
+                <DialogTitle>Edit Comment</DialogTitle>
+                <DialogContent>
+                    <TextField
+                        autoFocus
+                        margin="dense"
+                        label="Comment"
+                        type="text"
+                        fullWidth
+                        multiline
+                        minRows={3}
+                        value={comment || ""}
+                        onChange={(e) => setComment(e.target.value)}
+                    />
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setEditDialogShow(false)}>Cancel</Button>
+                    <Button
+                        onClick={() => setEditDialogShow(false)}
+                        variant="contained"
+                    >
+                        Save
+                    </Button>
+                </DialogActions>
+            </Dialog>
+        </Box>
     );
 }
 
@@ -260,20 +253,26 @@ function LargeRatingButton({
 }: {
     rating: number | null;
     activeRating: number | null;
-    onClick?: Function;
+    onClick?: () => void;
 }) {
     const clampedRating =
         activeRating == null ? null : Math.max(Math.min(activeRating, 2), -1);
+    const isActive = clampedRating === rating;
+
     return (
         <Button
-            className={`py-0 pl-0 large-rating-button`}
-            variant={clampedRating === rating ? "primary" : "light"}
-            onClick={() => (onClick ? onClick() : undefined)}
+            variant={isActive ? "contained" : "outlined"}
+            color={isActive ? "primary" : "inherit"}
+            onClick={onClick}
+            fullWidth
+            sx={{ py: 1 }}
         >
-            <div>
+            <Box>
                 <DisplayRating rating={rating} />
-            </div>
-            <div>{RATING_TO_DESCRIPTION["" + rating]}</div>
+                <Typography variant="caption">
+                    {RATING_TO_DESCRIPTION["" + rating]}
+                </Typography>
+            </Box>
         </Button>
     );
 }
@@ -284,36 +283,30 @@ function LargeRatingButton({
 export function DisplayRating({ rating }: { rating: number | null }) {
     const clampedRating =
         rating == null ? null : Math.max(Math.min(rating, 2), -1);
-    const bgColor = RATING_TO_BG_COLOR["" + rating];
+    const key = String(clampedRating);
+    const bgColor = RATING_TO_BG_COLOR[key] || "grey.200";;
+    const symbol = {
+        "-1": "-",
+        "0": "?",
+        "1": "+",
+        "2": "++",
+    }[key] ?? "?";
 
-    let inner = <span className={`display-rating ${bgColor}`}>?</span>;
-    if (clampedRating === -1) {
-        inner = (
-            <span className={`display-rating ${bgColor} text-white`}>-</span>
-        );
-    }
-    if (clampedRating === 0) {
-        inner = (
-            <span className={`display-rating ${bgColor} text-white`}>?</span>
-        );
-    }
-    if (clampedRating === 1) {
-        inner = (
-            <span className={`display-rating ${bgColor} text-white`}>+</span>
-        );
-    }
-    if (clampedRating === 2) {
-        inner = (
-            <React.Fragment>
-                <span className={`display-rating ${bgColor} text-white`}>
-                    +
-                </span>
-                <span className={`display-rating ${bgColor} text-white`}>
-                    +
-                </span>
-            </React.Fragment>
-        );
-    }
-
-    return <span className="display-rating-container">{inner}</span>;
+    return (
+        <Box
+            sx={{
+                display: "inline-block",
+                px: 1,
+                py: 0.5,
+                borderRadius: 1,
+                bgColor: bgColor,
+                color: "white",
+                fontWeight: "bold",
+                textAlign: "center",
+                minWidth: 24,
+            }}
+        >
+            {symbol}
+        </Box>
+    )
 }

@@ -9,6 +9,7 @@ FactoryBot.define do
         hours_per_assignment { 1.5 }
         start_date { '2019-11-10 14:40:15' }
         end_date { '2019-11-10 14:40:15' }
+        custom_questions { 'MyText' }
     end
 end
 
@@ -21,6 +22,7 @@ end
 #  position_code        :string
 #  position_title       :string
 #  hours_per_assignment :float
+#  custom_questions     :json
 #  start_date           :datetime
 #  end_date             :datetime
 #  created_at           :datetime         not null

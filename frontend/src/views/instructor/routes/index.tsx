@@ -1,5 +1,5 @@
 import React from "react";
-import { Redirect, Route, Switch, useParams } from "react-router-dom";
+import { Navigate, Route, Routes, useParams } from "react-router-dom";
 import { InstructorAssignmentsView } from "../assignments";
 import { InstructorDdahsView } from "../ddahs";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
@@ -34,30 +34,41 @@ export function InstructorRoutes() {
         : "/positions/:position_id/assignments";
 
     return (
-        <Switch>
-            <Route exact path="/">
-                <Redirect from="/" to="/sessions/details" />
-            </Route>
-            <Route path="/positions/:position_id/preferences">
-                <UpdateActivePosition />
-                {showPreferences && <InstructorPreferencesView />}
-            </Route>
-            <Route path="/positions/:position_id/assignments">
-                <UpdateActivePosition />
-                <InstructorAssignmentsView />
-            </Route>
-            <Route path="/positions/:position_id/ddahs">
-                <UpdateActivePosition />
-                <InstructorDdahsView />
-            </Route>
-            <Route exact path="/sessions/details">
+        <Routes>
+            <Route path="/" element={
+                <Navigate to="/sessions/details" replace />
+            }/>
+            <Route path="/positions/:position_id/preferences" element={
+                showPreferences ? (
+                    <>
+                        <UpdateActivePosition />
+                        <InstructorPreferencesView />
+                    </>
+                ) : (
+                    <Navigate to="/sessions/details" replace />
+                )
+            }/>
+            <Route path="/positions/:position_id/assignments" element={
+                <>
+                    <UpdateActivePosition />
+                    <InstructorAssignmentsView />
+                </>
+            }/>
+            <Route path="/positions/:position_id/ddahs" element={
+                <>
+                    <UpdateActivePosition />
+                    <InstructorDdahsView />
+                </>
+            }/>
+            <Route path="/sessions/details" element={
                 <InstructorSessionsView />
-            </Route>
-            <Redirect
-                from="/positions/:position_id"
-                to={defaultPositionsRedirect}
-            />
-            <Redirect from="/sessions" to="/sessions/details" />
-        </Switch>
+            }/>
+            <Route path="/positions/:position_id" element={
+                <Navigate to={defaultPositionsRedirect} replace />
+            }/>
+            <Route path="/sessions" element={
+                <Navigate to="/sessions/details" replace />
+            }/>
+        </Routes>
     );
 }

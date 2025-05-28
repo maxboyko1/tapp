@@ -1,5 +1,5 @@
 import React from "react";
-import { Alert } from "react-bootstrap";
+import { Alert } from "@mui/material";
 import { useSelector } from "react-redux";
 import { assignmentsSelector, applicantsSelector } from "../../../api/actions";
 import { ddahsSelector, upsertDdahs } from "../../../api/actions/ddahs";
@@ -288,7 +288,7 @@ const DialogContent = React.memo(function DialogContent({
     fileLoaded: boolean;
 }) {
     if (processingError) {
-        return <Alert variant="danger">{"" + processingError}</Alert>;
+        return <Alert severity="error">{"" + processingError}</Alert>;
     }
 
     if (!fileLoaded) {
@@ -297,7 +297,7 @@ const DialogContent = React.memo(function DialogContent({
 
     if (newDdahs.length === 0 && ddahUpdates.length === 0) {
         return (
-            <Alert variant="warning">
+            <Alert severity="warning">
                 No difference between imported and existing DDAHs.
             </Alert>
         );
@@ -306,18 +306,14 @@ const DialogContent = React.memo(function DialogContent({
     return (
         <React.Fragment>
             {newDdahs.length > 0 && (
-                <Alert variant="primary">
-                    <span className="mb-1">
-                        The following DDAHs will be <strong>added</strong>
-                    </span>
+                <Alert severity="info">
+                    The following DDAHs will be <strong>added</strong>
                     <DdahsList ddahs={newDdahs} />
                 </Alert>
             )}
             {ddahUpdates.length > 0 && (
-                <Alert variant="info">
-                    <span className="mb-1">
-                        The following DDAHs will be <strong>modified</strong>
-                    </span>
+                <Alert severity="info">
+                    The following DDAHs will be <strong>modified</strong>
                     <DdahsDiffList ddahUpdates={ddahUpdates} />
                 </Alert>
             )}

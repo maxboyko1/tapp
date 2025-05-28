@@ -52,9 +52,10 @@ function linkApplicationsWithData(
         }) => {
             const position_preferences = filterNull(
                 rawPositionPreferences.map(
-                    ({ position_id, preference_level }) => ({
+                    ({ position_id, preference_level, custom_question_answers }) => ({
                         position: positionsById.get(position_id),
                         preference_level,
+                        custom_question_answers
                     })
                 ),
                 "position"

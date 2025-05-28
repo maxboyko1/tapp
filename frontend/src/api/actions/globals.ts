@@ -4,12 +4,12 @@ import { activeSessionSelector } from "./sessions";
 import { initFromStage } from "./init";
 import { RootState } from "../../rootReducer";
 
-export const setGlobals = validatedApiDispatcher({
+export const setGlobals = validatedApiDispatcher<void, [Record<string, any>]>({
     name: "setGlobals",
     description: "Sets global variables",
     onErrorDispatch: (e) => apiError(e.toString()),
-    dispatcher:
-        (payload: Record<string, any>) => async (dispatch, getState) => {
+    dispatcher: (payload: Record<string, any>) => {
+        return async (dispatch, getState) => {
             const globals = { ...globalsSelector(getState()), ...payload };
 
             // Store the globals in the URL
@@ -17,7 +17,8 @@ export const setGlobals = validatedApiDispatcher({
 
             // Now store the globals in the Redux store
             dispatch({ type: "SET_GLOBALS", payload: globals });
-        },
+        };
+    }
 });
 
 /**
@@ -46,7 +47,10 @@ export const setGlobalsInUrl = validatedApiDispatcher({
     },
 });
 
-export const setMockAPIState = validatedApiDispatcher({
+export const setMockAPIState = validatedApiDispatcher<
+    void,
+    [boolean, { skipInit?: boolean }]
+>({
     name: "setMockAPIState",
     description: "Activates or deactivates the mockAPI",
     onErrorDispatch: (e) => apiError(e.toString()),

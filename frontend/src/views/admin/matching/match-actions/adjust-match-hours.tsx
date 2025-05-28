@@ -1,5 +1,13 @@
 import React from "react";
-import { Modal, Button } from "react-bootstrap";
+import {
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogActions,
+    Button,
+    TextField,
+} from "@mui/material";
+
 import { upsertMatch } from "../../../../api/actions";
 import { useThunkDispatch } from "../../../../libs/thunk-dispatch";
 import { Position } from "../../../../api/defs/types";
@@ -28,22 +36,24 @@ export function AdjustHourModal({
 
     const dispatch = useThunkDispatch();
     return (
-        <Modal show={show} onHide={() => setShow(false)} size="sm">
-            <Modal.Header closeButton>
-                <Modal.Title>Update Hours</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                <input
-                    className="form-control"
+        <Dialog open={show} onClose={() => setShow(false)} maxWidth="sm" fullWidth>
+            <DialogTitle>Update Hours</DialogTitle>
+            <DialogContent>
+                <TextField
+                    label="Assigned Hours"
                     type="number"
+                    fullWidth
                     defaultValue={applicantMatch.hours_assigned || 0}
                     onChange={(e) => setHoursAssigned(e.target.value)}
+                    inputProps={{ min: 0 }}
+                    sx={{ mt: 1 }}
                 />
-            </Modal.Body>
-            <Modal.Footer>
+            </DialogContent>
+            <DialogActions>
                 <Button
                     onClick={() => setShow(false)}
-                    variant="outline-secondary"
+                    variant="outlined"
+                    color="secondary"
                 >
                     Close
                 </Button>
@@ -58,11 +68,12 @@ export function AdjustHourModal({
                         );
                         setShow(false);
                     }}
-                    variant="outline-primary"
+                    variant="outlined"
+                    color="primary"
                 >
                     Save
                 </Button>
-            </Modal.Footer>
-        </Modal>
+            </DialogActions>
+        </Dialog>
     );
 }

@@ -1,12 +1,14 @@
 import React from "react";
 import FileSaver from "file-saver";
 import JSZip from "jszip";
-import XLSX from "xlsx";
+import * as XLSX from "xlsx";
+import { Alert } from "@mui/material";
+import DownloadIcon from "@mui/icons-material/Download";
+
 import { applicantsSelector, assignmentsSelector } from "../../../api/actions";
 import { useSelector } from "react-redux";
 import { ExportActionButton } from "../../../components/export-button";
 import { ImportActionButton } from "../../../components/import-button";
-import { Alert } from "react-bootstrap";
 import {
     prepareSpreadsheet,
     prepareDdahDataFactory,
@@ -29,7 +31,6 @@ import {
 import { DdahsList, DdahsDiffList } from "../../../components/ddahs";
 import { ddahTableSelector } from "../ddah-table/actions";
 import { ActionButton } from "../../../components/action-buttons";
-import { FaDownload } from "react-icons/fa";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
 
 /**
@@ -306,7 +307,7 @@ export function ConnectedDownloadPositionDdahTemplatesAction({
 
     return (
         <ActionButton
-            icon={FaDownload}
+            icon={<DownloadIcon />}
             title="Download by-position spreadsheets appropriate for filling in and uploading to create DDAHs"
             onClick={() => download()}
             disabled={disabled}
@@ -326,7 +327,7 @@ export function ConnectedDownloadDdahsAcceptedListAction({ disabled = false }) {
 
     return (
         <ActionButton
-            icon={FaDownload}
+            icon={<DownloadIcon />}
             title="Download a list of DDAHs that have been signed by TAs this session"
             onClick={() => downloadClicked()}
             disabled={disabled}
@@ -345,7 +346,7 @@ const DialogContent = React.memo(function DialogContent({
 }) {
     let dialogContent = <p>No data loaded...</p>;
     if (processingError) {
-        dialogContent = <Alert variant="danger">{"" + processingError}</Alert>;
+        dialogContent = <Alert severity="error">{"" + processingError}</Alert>;
     } else if (diffed) {
         const newItems = diffed
             .filter((item) => item.status === "new")
@@ -356,7 +357,7 @@ const DialogContent = React.memo(function DialogContent({
 
         if (newItems.length === 0 && modifiedDiffSpec.length === 0) {
             dialogContent = (
-                <Alert variant="warning">
+                <Alert severity="warning">
                     No difference between imported and existing DDAHs.
                 </Alert>
             );
@@ -364,7 +365,7 @@ const DialogContent = React.memo(function DialogContent({
             dialogContent = (
                 <>
                     {newItems.length > 0 && (
-                        <Alert variant="primary">
+                        <Alert severity="success">
                             <span className="mb-1">
                                 The following DDAHs will be{" "}
                                 <strong>added</strong>
@@ -373,7 +374,7 @@ const DialogContent = React.memo(function DialogContent({
                         </Alert>
                     )}
                     {modifiedDiffSpec.length > 0 && (
-                        <Alert variant="info">
+                        <Alert severity="info">
                             <span className="mb-1">
                                 The following DDAHs will be{" "}
                                 <strong>modified</strong>

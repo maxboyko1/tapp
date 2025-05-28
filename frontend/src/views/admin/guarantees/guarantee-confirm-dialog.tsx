@@ -1,49 +1,68 @@
 import React from "react";
-import { AdvancedFilterTable } from "../../../components/filter-table/advanced-filter-table";
-import { Button, Modal, Spinner } from "react-bootstrap";
+import {
+    Alert,
+    Box,
+    Button,
+    CircularProgress,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    IconButton,
+    Typography,
+} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+
+import { AdvancedColumnDef, AdvancedFilterTable } from "../../../components/advanced-filter-table";
 import { ApplicantMatchingDatum } from "../../../api/defs/types";
 import { compareString } from "../../../libs/utils";
 
-const applicantMatchingDatumModalColumn = [
+const applicantMatchingDatumModalColumn: AdvancedColumnDef<ApplicantMatchingDatum>[] = [
     {
-        Header: "Last Name",
-        accessor: "applicant.last_name",
-        maxWidth: 120,
+        header: "Last Name",
+        accessorKey: "applicant.last_name",
+        maxSize: 120,
     },
     {
-        Header: "First Name",
-        accessor: "applicant.first_name",
-        maxWidth: 120,
+        header: "First Name",
+        accessorKey: "applicant.first_name",
+        maxSize: 120,
     },
     {
-        Header: "Minimum Hours Owed",
-        accessor: "min_hours_owed",
-        className: "number-cell",
-        maxWidth: 70,
+        header: "Minimum Hours Owed",
+        accessorKey: "min_hours_owed",
+        meta: {
+            className: "number-cell",
+        },
+        maxSize: 70,
     },
     {
-        Header: "Maximum Hours Owed",
-        accessor: "max_hours_owed",
-        className: "number-cell",
-        maxWidth: 70,
+        header: "Maximum Hours Owed",
+        accessorKey: "max_hours_owed",
+        meta: {
+            className: "number-cell",
+        },
+        maxSize: 70,
     },
     {
-        Header: "Hours Previously Fulfilled",
-        accessor: "prev_hours_fulfilled",
-        className: "number-cell",
-        maxWidth: 70,
+        header: "Hours Previously Fulfilled",
+        accessorKey: "prev_hours_fulfilled",
+        meta: {
+            className: "number-cell",
+        },
+        maxSize: 70,
     },
     {
-        Header: "Status",
-        maxWidth: 100,
+        header: "Status",
+        maxSize: 100,
         id: "status",
         // We want items with no active confirmation to appear at the end of the list
         // when sorted, so we set their accessor to null (the accessor is used by react table
         // when sorting items).
-        accessor: (data: { active_confirmation_status: string }) =>
-            data.active_confirmation_status === "No Letter Sent"
+        accessorFn: (dat: any) =>
+            dat.active_confirmation_status === "No Letter Sent"
                 ? null
-                : data.active_confirmation_status,
+                : dat.active_confirmation_status,
     },
 ];
 
@@ -75,53 +94,63 @@ export function GuaranteeConfirmDialog(props: {
         setVisible(false);
     }
 
-    // When a confirm operation is in progress, a spinner is displayed; otherwise
-    // it's hidden
-    const spinner = inProgress ? (
-        <Spinner animation="border" size="sm" className="mr-1" />
-    ) : null;
-
     // We want to minimize the re-render of the table. Since some bindings for columns
     // are generated on-the-fly, memoize the result so we don't trigger unneeded re-renders.
     data.sort(compareAppointment);
 
     return (
-        <Modal
-            show={visible}
-            onHide={() => {
-                setVisible(false);
-            }}
-            size="lg"
+        <Dialog
+            open={visible}
+            onClose={() => setVisible(false)}
+            maxWidth="lg"
+            fullWidth
         >
-            <Modal.Header closeButton>
-                <Modal.Title>{title}</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                <div className="mb-3 alert alert-info" role="alert">
-                    {body}
-                </div>
-                <div className="mb-3">
+            <DialogTitle sx={{ m: 0, p: 2 }}>
+                {title}
+                <IconButton
+                    aria-label="close"
+                    onClick={() => setVisible(false)}
+                    sx={{
+                        position: "absolute",
+                        right: 8,
+                        top: 8,
+                        color: (theme) => theme.palette.grey[500],
+                    }}
+                    size="large"
+                >
+                    <CloseIcon />
+                </IconButton>
+            </DialogTitle>
+            <DialogContent dividers>
+                <Alert severity="info" sx={{ mb: 3 }}>
+                    <Typography variant="body1">{body}</Typography>
+                </Alert>
+                <Box sx={{ mb: 3 }}>
                     <AdvancedFilterTable
                         filterable={false}
                         columns={applicantMatchingDatumModalColumn}
                         data={data}
                     />
-                </div>
-            </Modal.Body>
-            <Modal.Footer>
+                </Box>
+            </DialogContent>
+            <DialogActions>
                 <Button
-                    onClick={() => {
-                        setVisible(false);
-                    }}
-                    variant="light"
+                    onClick={() => setVisible(false)}
+                    variant="contained"
+                    color="secondary"
                 >
                     Cancel
                 </Button>
-                <Button onClick={executeCallback}>
-                    {spinner}
+                <Button
+                    onClick={executeCallback}
+                    variant="contained"
+                    color="primary"
+                    disabled={inProgress}
+                    startIcon={inProgress ? <CircularProgress size={18} sx={{ mr: 1 }} /> : null}
+                >
                     {confirm}
                 </Button>
-            </Modal.Footer>
-        </Modal>
+            </DialogActions>
+        </Dialog>
     );
 }

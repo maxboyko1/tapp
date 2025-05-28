@@ -1,6 +1,27 @@
 import React from "react";
-import { Form, Col, FormControlProps } from "react-bootstrap";
-import { EditableType } from "../editable-cell";
+import { Grid, TextField } from "@mui/material";
+import { DatePicker } from "@mui/x-date-pickers";
+import { format } from "date-fns";
+
+import { parseLocalDate } from "../../libs/utils";
+
+export type EditableType =
+    | "boolean"
+    | "paragraph"
+    | "checkbox"
+    | "date"
+    | "email"
+    | "file"
+    | "number"
+    | "password"
+    | "radio"
+    | "range"
+    | "search"
+    | "text"
+    | "time"
+    | "url"
+    | "week"
+    | "money";
 
 /**
  * A higher-order-function which returns a function that creates editable fields.
@@ -49,9 +70,7 @@ export function fieldEditorFactory<T>(
         title: string,
         attr: keyof T,
         type: EditableType = "text",
-        inputAttrs: Partial<
-            FormControlProps & React.HTMLProps<HTMLInputElement>
-        > = {}
+        inputAttrs: Partial<React.InputHTMLAttributes<HTMLInputElement>> = {},
     ) {
         // Function called on the value before it is passed to setBoundData
         let coerceFunc = (x: any) => x;
@@ -65,29 +84,53 @@ export function fieldEditorFactory<T>(
                 coerceFunc = Number;
                 break;
             case "date":
-                coerceFunc = (x) => new Date(x).toISOString();
-                valueFunc = (x) => {
-                    try {
-                        return new Date(x).toISOString().slice(0, 10);
-                    } catch (e) {
-                        return "";
-                    }
-                };
+                // DatePicker will handle the coercion below
                 break;
             default:
                 break;
         }
 
-        return (
-            <React.Fragment>
-                <Form.Label>{title}</Form.Label>
-                <Form.Control
-                    type={type}
-                    value={valueFunc(boundData[attr])}
-                    onChange={setAttrFactory(attr, coerceFunc)}
-                    {...inputAttrs}
+        const { size, color, ...safeInputAttrs } = inputAttrs;
+
+        if (type === "date") {
+            return (
+                <DatePicker
+                    label={title}
+                    value={parseLocalDate(boundData[attr] as string)}
+                    onChange={date => {
+                        // Format as YYYY-MM-DD for storage
+                        setBoundData({
+                            ...boundData,
+                            [attr]: date ? format(date, "yyyy-MM-dd") : "",
+                        });
+                    }}
+                    slotProps={{
+                        textField: {
+                            variant: "outlined",
+                            size: "small",
+                            fullWidth: true,
+                            margin: "normal",
+                            ...safeInputAttrs,
+                            InputLabelProps: { shrink: true },
+                        },
+                    }}
                 />
-            </React.Fragment>
+            );
+        }
+
+        return (
+            <TextField
+                label={title}
+                type={type}
+                value={valueFunc(boundData[attr])}
+                onChange={setAttrFactory(attr, coerceFunc)}
+                variant="outlined"
+                size="small"
+                fullWidth
+                margin="normal"
+                slotProps={{ inputLabel: { shrink: true } }}
+                {...safeInputAttrs}
+            />
         );
     }
 
@@ -107,29 +150,31 @@ export function DialogRow({
     icon = null,
     colStretch = [],
 }: {
-    children: JSX.Element[] | JSX.Element;
-    icon?: JSX.Element | null;
+    children: React.ReactNode[] | React.ReactNode;
+    icon?: React.ReactNode | null;
     colStretch?: number[];
 }) {
-    let iconNode: JSX.Element | null = null;
+    let iconNode: React.ReactNode | null = null;
     if (icon) {
-        iconNode = <div className="input-row-icon">{icon}</div>;
+        iconNode = icon;
     }
+    const childrenArray = React.Children.toArray(children);
+
     return (
-        <Form.Row style={{ alignItems: "baseline" }}>
-            {iconNode}
-            {React.Children.map(children, (child, index) => {
-                return (
-                    <Form.Group
-                        as={Col}
-                        key={index}
-                        xs={colStretch[index] || null}
-                        className="form-cell"
-                    >
-                        {child}
-                    </Form.Group>
-                );
-            })}
-        </Form.Row>
+        <Grid container alignItems="baseline" spacing={2}>
+            {iconNode && (
+                <Grid>
+                    {iconNode}
+                </Grid>
+            )}
+            {childrenArray.map((child, index) => (
+                <Grid
+                    key={index}
+                    size={{ xs: (colStretch[index] || 6) }}
+                >
+                    {child}
+                </Grid>
+            ))}
+        </Grid>
     );
 }

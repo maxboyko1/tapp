@@ -1,9 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { Badge, Button, Typography } from "@mui/material";
 import { FilterableMenu } from "./filterable-menu";
-import { Badge, Dropdown } from "react-bootstrap";
 import { apiPropTypes } from "../api/defs/prop-types";
-import { Session } from "../api/defs/types";
+import { HasId, Session } from "../api/defs/types";
 
 export function ActiveSessionDisplay(props: {
     sessions: Session[];
@@ -11,37 +11,64 @@ export function ActiveSessionDisplay(props: {
     setActiveSession: (session: Session | null) => void;
 }) {
     const { sessions = [], activeSession, setActiveSession } = props;
-    // keep track of the dropdown visibility so that the filter can be cleared
-    // whenever the dropdown is invisible.
-    const [dropdownVisible, setDropdownVisible] = React.useState(false);
+    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+
     const activeSessionId = activeSession ? activeSession.id : null;
 
-    let label = <span className="text-secondary mr-2">Select a Session</span>;
+    let label = (
+        <Typography color="inherit" sx={{ mr: 0.5 }} component="span">
+            Select a Session
+        </Typography>
+    );
     if (activeSession != null) {
-        label = <span className="text-primary mr-2">{activeSession.name}</span>;
+        label = (
+            <Typography color="inherit" sx={{ mr: 0.5 }} component="span">
+                {activeSession.name}
+            </Typography>
+        );
     }
 
+    const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleMenuClose = () => {
+        setAnchorEl(null);
+    };
+
+    const handleSelect = (session: Session, _index: number) => {
+        setActiveSession(session);
+        handleMenuClose();
+    };
+
     return (
-        <Badge>
-            Selected session:
-            <Dropdown
-                onSelect={(i) => {
-                    setActiveSession(i == null ? null : sessions[+i]);
-                }}
-                onToggle={(desiredVisibility) =>
-                    setDropdownVisible(desiredVisibility)
-                }
-                show={dropdownVisible}
-            >
-                <Dropdown.Toggle split variant="light">
+        <Badge
+            color="primary"
+            badgeContent=""
+            sx={{ ".MuiBadge-badge": { display: "none" } }}
+        >
+            <span>
+                <Typography variant="body2" color="inherit" sx={{ mb: 0.5, display: "block", textAlign: "center" }}>
+                    Selected session:
+                </Typography>
+                <Button
+                    color="secondary"
+                    variant="contained"
+                    onClick={handleMenuOpen}
+                    sx={{ textTransform: "none", display: "block", mx: "auto" }}
+                >
                     {label}
-                </Dropdown.Toggle>
+                </Button>
                 <FilterableMenu
-                    items={sessions}
+                    items={sessions as (HasId & { name: string })[]}
                     activeItemId={activeSessionId}
-                    clearFilter={!dropdownVisible}
+                    clearFilter={!Boolean(anchorEl)}
+                    anchorEl={anchorEl}
+                    open={Boolean(anchorEl)}
+                    onClose={handleMenuClose}
+                    onSelect={handleSelect as any}
                 />
-            </Dropdown>
+            </span>
         </Badge>
     );
 }

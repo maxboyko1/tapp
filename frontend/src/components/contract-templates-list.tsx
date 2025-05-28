@@ -1,13 +1,14 @@
-import React from "react";
-
-import { AdvancedFilterTable } from "./filter-table/advanced-filter-table";
+import { AdvancedFilterTable, AdvancedColumnDef } from "./advanced-filter-table";
 import { ContractTemplate } from "../api/defs/types";
 
-const DEFAULT_COLUMNS = [
-    { Header: "Template Name", accessor: "template_name" },
+const DEFAULT_COLUMNS: AdvancedColumnDef<ContractTemplate>[] = [
+    { 
+        header: "Template Name",
+        accessorKey: "template_name"
+    },
     {
-        Header: "Template File",
-        accessor: "template_file",
+        header: "Template File",
+        accessorKey: "template_file",
     },
 ];
 
@@ -17,14 +18,17 @@ const DEFAULT_COLUMNS = [
  */
 export function ContractTemplatesList(props: {
     contractTemplates: ContractTemplate[];
-    columns?: any[];
+    columns?: AdvancedColumnDef<ContractTemplate>[];
+    onEditRow?: (row: ContractTemplate, values: Partial<ContractTemplate>) => void;
 }) {
-    const { contractTemplates, columns = DEFAULT_COLUMNS } = props;
+    const { contractTemplates, columns = DEFAULT_COLUMNS, onEditRow } = props;
     return (
         <AdvancedFilterTable
             data={contractTemplates}
             columns={columns}
             filterable={true}
+            editable={!!onEditRow}
+            onEditRow={onEditRow}
         />
     );
 }

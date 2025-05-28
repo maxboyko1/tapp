@@ -1,10 +1,24 @@
 import React from "react";
 import { useParams } from "react-router-dom";
+import { Model } from "survey-core";
+import { DoubleBorderLight } from "survey-core/themes";
+import { Survey } from "survey-react-ui";
+import {
+    Alert,
+    Button,
+    CircularProgress,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    IconButton,
+} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+
 import { apiGET, apiPOST } from "../../../libs/api-utils";
-import * as Survey from "survey-react";
-//import "survey-react/survey.css";
+
+import "survey-core/survey-core.css";
 import "./survey.css";
-import { Alert, Button, Modal, Spinner } from "react-bootstrap";
 
 /**
  * Determine whether a survey.js survey has has at least one
@@ -18,8 +32,8 @@ function validSurvey(surveyJson: any): boolean {
     for (const page of surveyJson?.pages || []) {
         for (const item of page?.elements || []) {
             if (
-                item.name === "position_preferences" &&
-                item?.rows?.length > 0
+                item.name === "willing_positions" &&
+                item?.choices?.length > 0
             ) {
                 return true;
             }
@@ -66,20 +80,33 @@ function ConfirmDialog({
     }, [submitDialogVisible, setSessionTimeout]);
 
     return (
-        <Modal show={submitDialogVisible} onHide={hideDialogAndResetData}>
-            <Modal.Header closeButton>
-                <Modal.Title>Submit Application</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
+        <Dialog open={submitDialogVisible} onClose={hideDialogAndResetData} maxWidth="sm" fullWidth>
+            <DialogTitle sx={{ m: 0, p: 2 }}>
+                Submit Application
+                <IconButton
+                    aria-label="close"
+                    onClick={hideDialogAndResetData}
+                    sx={{
+                        position: 'absolute',
+                        right: 8,
+                        top: 8,
+                        color: (theme) => theme.palette.grey[500],
+                    }}
+                    size="large"
+                >
+                    <CloseIcon />
+                </IconButton>
+            </DialogTitle>
+            <DialogContent dividers>
                 {!applicationOpen ? (
-                    <Alert variant="warning">
+                    <Alert severity="warning" sx={{ mb: 2 }}>
                         The application window is currently not open. Any
                         applications submitted outside of the application window
                         may not be considered.
                     </Alert>
                 ) : null}
                 {sessionTimeout && (
-                    <Alert variant="danger">
+                    <Alert severity="error" sx={{ mb: 2 }}>
                         <b>Error:</b> Your session has timed out. Please refresh
                         the browser and try again. (Your answers have not been
                         saved, but you may copy-and-paste them to another
@@ -87,7 +114,7 @@ function ConfirmDialog({
                     </Alert>
                 )}
                 {submissionError ? (
-                    <Alert variant="danger">
+                    <Alert severity="error" sx={{ mb: 2 }}>
                         <b>Error:</b> {submissionError} Please review your
                         answers and make sure all questions are answered
                         appropriately.
@@ -106,28 +133,28 @@ function ConfirmDialog({
                         </ul>
                     </Alert>
                 ) : (
-                    "Are you sure you want to submit this TA application?"
+                    <span>Are you sure you want to submit this TA application?</span>
                 )}
-            </Modal.Body>
-            <Modal.Footer>
-                <Button variant="secondary" onClick={hideDialogAndResetData}>
+            </DialogContent>
+            <DialogActions>
+                <Button variant="contained" color="secondary" onClick={hideDialogAndResetData}>
                     Cancel
                 </Button>
-                <Button onClick={confirmClicked} disabled={!!submissionError}>
-                    {waiting ? (
-                        <span className="spinner-surround">
-                            <Spinner animation="border" size="sm" />
-                        </span>
-                    ) : null}
+                <Button
+                    variant="contained"
+                    onClick={confirmClicked}
+                    disabled={!!submissionError}
+                    startIcon={waiting ? <CircularProgress size={18} /> : null}
+                >
                     Submit
                 </Button>
-            </Modal.Footer>
-        </Modal>
+            </DialogActions>
+        </Dialog>
     );
 }
 
 export function PostingView() {
-    const params = useParams<{ url_token?: string } | null>();
+    const params = useParams<{ url_token?: string }>();
     const url_token = params?.url_token;
     const [surveyJson, setSurveyJson] = React.useState<any>(null);
     const [surveyPrefilledData, setSurveyPrefilledData] =
@@ -162,10 +189,13 @@ export function PostingView() {
         fetchSurvey();
     }, [url_token, setSurveyJson, setSurveyPrefilledData, setApplicationOpen]);
 
+    console.log("PostingView: surveyJson", surveyJson);
+
     const survey = React.useMemo(() => {
-        Survey.StylesManager.applyTheme("bootstrap");
-        Survey.defaultBootstrapCss.navigationButton = "btn btn-primary";
-        const survey = new Survey.Model(surveyJson);
+        if (!surveyJson) return null;
+
+        const survey = new Model(surveyJson);
+        survey.applyTheme(DoubleBorderLight);
         survey.showPreviewBeforeComplete = "showAnsweredQuestions";
         survey.showQuestionNumbers = "off";
 
@@ -182,16 +212,38 @@ export function PostingView() {
     }, [surveyJson, surveyData, surveyPrefilledData, hasSubmitted]);
 
     React.useEffect(() => {
+        if (!survey) return;
         // We only want to add this callback once when the survey is initialized
         survey.onCompleting.add((result, options) => {
             if (!hasSubmitted) {
-                options.allowComplete = false;
+                options.allow = false;
                 setSurveyData(result.data);
                 setSubmitDialogVisible(true);
                 setTimeout(() => survey.showPreview(), 0);
             }
         });
     }, [survey, setSurveyData, setSubmitDialogVisible, hasSubmitted]);
+
+    React.useEffect(() => {
+        if (!survey) return;
+        survey.onValueChanged.add((sender, options) => {
+            if (options.name === "willing_positions") {
+                const rankingQuestion = sender.getQuestionByName("position_preferences");
+                if (rankingQuestion) {
+                    // Only show choices that are in willing_positions
+                    const allChoices = surveyJson.pages
+                        .find((p: any) =>
+                            p.elements.some((el: any) => el.name === "position_preferences")
+                        )
+                        ?.elements.find((el: any) => el.name === "position_preferences")
+                        ?.choices || [];
+                    rankingQuestion.choices = allChoices.filter((choice: any) =>
+                        (options.value || []).includes(choice.value)
+                    );
+                }
+            }
+        });
+    }, [survey, surveyJson]);
 
     if (url_token == null) {
         return <React.Fragment>Unknown URL token.</React.Fragment>;
@@ -203,7 +255,7 @@ export function PostingView() {
 
     if (!validSurvey(surveyJson)) {
         return (
-            <Alert variant="warning">
+            <Alert severity="warning">
                 There are not positions that can be applied for at this time. An
                 administrator may update this posting in the future.
             </Alert>
@@ -220,7 +272,7 @@ export function PostingView() {
                 true
             );
             setHasSubmitted(true);
-            survey.doComplete();
+            survey?.doComplete();
             setSurveyData(surveyPrefilledData);
             setSubmitDialogVisible(false);
             setSubmissionError(null);
@@ -233,7 +285,9 @@ export function PostingView() {
     }
 
     function hideDialogAndResetData() {
-        survey.data = surveyData || survey.data;
+        if (survey) {
+            survey.data = surveyData || survey.data;
+        }
         setHasSubmitted(false);
         setSubmitDialogVisible(false);
         setSubmissionError(null);
@@ -241,7 +295,7 @@ export function PostingView() {
 
     return (
         <React.Fragment>
-            <Survey.Survey model={survey} />
+            {survey && <Survey model={survey} />}
             <ConfirmDialog
                 submitDialogVisible={submitDialogVisible}
                 hideDialogAndResetData={hideDialogAndResetData}

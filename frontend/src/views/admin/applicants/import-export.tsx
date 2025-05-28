@@ -1,5 +1,7 @@
 import React from "react";
 import FileSaver from "file-saver";
+import { Alert } from "@mui/material";
+
 import {
     exportApplicants,
     applicantsSelector,
@@ -8,7 +10,6 @@ import {
 import { useSelector } from "react-redux";
 import { ExportActionButton } from "../../../components/export-button";
 import { ImportActionButton } from "../../../components/import-button";
-import { Alert } from "react-bootstrap";
 import {
     prepareApplicantData,
     normalizeImport,
@@ -125,7 +126,7 @@ export function ConnectedImportInstructorAction() {
 
     let dialogContent = <p>No data loaded...</p>;
     if (processingError) {
-        dialogContent = <Alert variant="danger">{"" + processingError}</Alert>;
+        dialogContent = <Alert severity="error">{"" + processingError}</Alert>;
     } else if (diffed) {
         const newItems = diffed
             .filter((item) => item.status === "new")
@@ -136,7 +137,7 @@ export function ConnectedImportInstructorAction() {
 
         if (newItems.length === 0 && modifiedDiffSpec.length === 0) {
             dialogContent = (
-                <Alert variant="warning">
+                <Alert severity="warning">
                     No difference between imported applicants and those already
                     on the system.
                 </Alert>
@@ -145,21 +146,17 @@ export function ConnectedImportInstructorAction() {
             dialogContent = (
                 <>
                     {newItems.length > 0 && (
-                        <Alert variant="primary">
-                            <span className="mb-1">
-                                The following <strong>{newItems.length}</strong>{" "}
-                                applicant{newItems.length > 1 ? "s" : ""} will
-                                be <strong>added</strong>
-                            </span>
+                        <Alert severity="success">
+                            The following <strong>{newItems.length}</strong>{" "}
+                            applicant{newItems.length > 1 ? "s" : ""} will
+                            be <strong>added</strong>
                             <ApplicantsList applicants={newItems} />
                         </Alert>
                     )}
                     {modifiedDiffSpec.length > 0 && (
-                        <Alert variant="info">
-                            <span className="mb-1">
-                                The following applicants will be{" "}
-                                <strong>modified</strong>
-                            </span>
+                        <Alert severity="info">
+                            The following applicants will be{" "}
+                            <strong>modified</strong>
                             <ApplicantsDiffList
                                 modifiedApplicants={modifiedDiffSpec}
                             />

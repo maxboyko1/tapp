@@ -99,6 +99,32 @@ export function formatDateTime<T extends string | null | undefined>(
     return date.toLocaleString("en-CA") as T;
 }
 
+export function getStatusColor(status: string | null, theme: any) {
+    switch (status) {
+        case "provisional":
+            return theme.palette.secondary.main;
+        case "pending":
+            return theme.palette.info.main;
+        case "accepted":
+            return theme.palette.success.main;
+        case "withdrawn":
+            return theme.palette.warning.main;
+        case "rejected":
+            return theme.palette.error.main;
+        default:
+            return theme.palette.text.primary;
+    }
+}
+
+export function parseLocalDate(dateStr?: string | null): Date | null {
+    if (!dateStr) return null;
+    const match = dateStr.match(/^(\d{4})-(\d{2})-(\d{2})/);
+    if (!match) return null;
+    const [, year, month, day] = match;
+    const date = new Date(Number(year), Number(month) - 1, Number(day));
+    return isNaN(date.getTime()) ? null : date;
+}
+
 /**
  * Format a url for downloading. In production, this is the
  * identity function. In development mode, this function replaces
@@ -108,6 +134,13 @@ export function formatDateTime<T extends string | null | undefined>(
  * @param {string} url
  */
 let formatDownloadUrl = (url: string) => url;
+
+if (process.env.REACT_APP_DEV_FEATURES) {
+    formatDownloadUrl = (url: string) => {
+        // In development mode, we need to fetch from backend port 3000
+        return `http://localhost:3000${url}`;
+    };
+}
 
 export { formatDownloadUrl };
 

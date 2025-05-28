@@ -1,51 +1,31 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import {
+    Alert,
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    FormControlLabel,
+    Switch,
+    TextField,
+    Typography,
+} from "@mui/material";
+
+import {
+    allPositionsSelector,
+    fetchAllPositions,
     sessionsSelector,
     activeSessionSelector,
     upsertSession,
     deleteSession,
     setActiveSession,
 } from "../api/actions";
-import { Alert, Modal, Button } from "react-bootstrap";
-import { FaTimes, FaTrash } from "react-icons/fa";
-import { generateHeaderCell } from "./table-utils";
-import { AdvancedFilterTable } from "./filter-table/advanced-filter-table";
+import { generateDateColumnProps, generateHeaderCellProps } from "./table-utils";
+import { AdvancedFilterTable, AdvancedColumnDef } from "./advanced-filter-table";
 import { useThunkDispatch } from "../libs/thunk-dispatch";
-import { EditableCell, EditableType } from "./editable-cell";
 import { Session } from "../api/defs/types";
-
-function ConfirmDeleteDialog({
-    show,
-    onHide,
-    onDelete,
-    session,
-}: {
-    show: boolean;
-    onHide: (...args: any[]) => void;
-    onDelete: (...args: any[]) => void;
-    session: Session | null;
-}) {
-    return (
-        <Modal show={show} onHide={onHide}>
-            <Modal.Header closeButton>
-                <Modal.Title>Delete Session</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                Are you sure you want to delete the session{" "}
-                {(session || {}).name}? This action cannot be undone.
-            </Modal.Body>
-            <Modal.Footer>
-                <Button onClick={onHide} variant="light">
-                    Cancel
-                </Button>
-                <Button onClick={onDelete} title="Delete Session">
-                    Delete
-                </Button>
-            </Modal.Footer>
-        </Modal>
-    );
-}
 
 /**
  * List the sessions using a ReactTable. `columns` can be passed
@@ -57,7 +37,7 @@ function ConfirmDeleteDialog({
  */
 export function ConnectedSessionsList(props: {
     inDeleteMode?: boolean;
-    columns?: any[];
+    columns?: AdvancedColumnDef<Session>[];
 }) {
     const { inDeleteMode = false } = props;
     const [sessionToDelete, setSessionToDelete] =
@@ -66,87 +46,89 @@ export function ConnectedSessionsList(props: {
     const activeSession = useSelector(activeSessionSelector);
     const dispatch = useThunkDispatch();
 
-    function _upsertSession(session: Session) {
-        return dispatch(upsertSession(session));
+    React.useEffect(() => {
+        dispatch(fetchAllPositions());
+    }, [dispatch]);
+    const allPositions = useSelector(allPositionsSelector);
+
+    function handleEditRow(original: Session, values: Partial<Session>) {
+        dispatch(upsertSession({ ...original, ...values }));
     }
 
-    function generateCell(field: keyof Session, type?: EditableType) {
-        return (props: any) => (
-            <EditableCell
-                field={field}
-                upsert={_upsertSession}
-                type={type}
-                {...props}
-            />
-        );
+    // Build a hash of sessions that currently have positions assigned 
+    const sessionsCurrentlyAssignedHash: Record<number, boolean> = {};
+    for (const position of allPositions || []) {
+        sessionsCurrentlyAssignedHash[position.session_id] = true;
     }
 
-    // props.original contains the row data for this particular session
-    function CellDeleteButton({ row }: { row: { original: Session } }) {
-        const session = row?.original || {};
-        return (
-            <div className="delete-button-container">
-                <FaTimes
-                    className="delete-row-button"
-                    title={`Delete ${session.name}`}
-                    onClick={() => {
-                        setSessionToDelete(session);
-                    }}
+    const DEFAULT_COLUMNS: AdvancedColumnDef<Session>[] = [
+        {
+            header: "Name",
+            accessorKey: "name",
+            meta: { editable: true },
+        },
+        {
+            header: "Start Date",
+            accessorKey: "start_date",
+            meta: { editable: true },
+            ...generateDateColumnProps(),
+        },
+        {
+            header: "End Date",
+            accessorKey: "end_date",
+            meta: { editable: true },
+            ...generateDateColumnProps(),
+        },
+        {
+            header: "Rate (Pre-January)",
+            accessorKey: "rate1",
+            meta: { editable: true },
+            EditCell: ({ value, onChange }) => (
+                <TextField
+                    type="number"
+                    value={value ?? ""}
+                    onChange={e => onChange(e.target.value)}
+                    size="small"
+                    variant="standard"
+                    fullWidth
                 />
-            </div>
-        );
-    }
-
-    const DEFAULT_COLUMNS = [
-        {
-            Header: <FaTrash className="delete-row-column-header-icon" />,
-            Cell: CellDeleteButton,
-            id: "delete_col",
-            className: "delete-col",
-            show: inDeleteMode,
-            maxWidth: 32,
-            resizable: false,
+            ),
         },
         {
-            Header: generateHeaderCell("Name"),
-            accessor: "name",
-            Cell: generateCell("name"),
+            header: "Rate (Post-January)",
+            accessorKey: "rate2",
+            meta: { editable: true },
+            EditCell: ({ value, onChange }) => (
+                <TextField
+                    type="number"
+                    value={value ?? ""}
+                    onChange={e => onChange(e.target.value)}
+                    size="small"
+                    variant="standard"
+                    fullWidth
+                />
+            ),
         },
         {
-            Header: generateHeaderCell("Start Date"),
-            accessor: "start_date",
-            Cell: generateCell("start_date", "date"),
-        },
-        {
-            Header: generateHeaderCell("End Date"),
-            accessor: "end_date",
-            Cell: generateCell("end_date", "date"),
-        },
-        {
-            Header: generateHeaderCell("Rate (Pre-January)"),
-            accessor: "rate1",
-            className: "number-cell",
-            Cell: generateCell("rate1", "money"),
-        },
-        {
-            Header: generateHeaderCell("Rate (Post-January)"),
-            accessor: "rate2",
-            className: "number-cell",
-            Cell: generateCell("rate2", "money"),
-        },
-        {
-            Header: generateHeaderCell(
+            ...generateHeaderCellProps(
                 "Applications Visible",
                 "Whether instructors can view applications for their courses"
             ),
-            accessor: "applications_visible_to_instructors",
-
-            //           accessor: (session: Session) =>
-            //             session.applications_visible_to_instructors ? "True" : "False",
-            Cell: generateCell(
-                "applications_visible_to_instructors",
-                "boolean"
+            accessorKey: "applications_visible_to_instructors",
+            meta: { editable: true },
+            EditCell: ({ value, onChange }) => (
+                <FormControlLabel
+                    control={
+                        <Switch
+                            checked={!!value}
+                            onChange={e => onChange(e.target.checked)}
+                            color="secondary"
+                        />
+                    }
+                    label={value ? "True" : "False"}
+                />
             ),
+            Cell: ({ cell }) => (cell.getValue() ? "True" : "False"),
         },
     ];
 
@@ -157,29 +139,57 @@ export function ConnectedSessionsList(props: {
                 columns={columns}
                 filterable={true}
                 data={sessions}
+                editable={true}
+                onEditRow={handleEditRow}
+                deleteable={inDeleteMode}
+                onDelete={setSessionToDelete}
+                deleteBlocked={(session) => (
+                    sessionsCurrentlyAssignedHash[session.id]
+                        ? "Cannot delete a session that has existing positions"
+                        : false
+                )}
             />
-            <ConfirmDeleteDialog
-                session={sessionToDelete}
-                show={!!sessionToDelete}
-                onHide={() => setSessionToDelete(null)}
-                onDelete={async () => {
-                    if (sessionToDelete === activeSession) {
-                        await dispatch(setActiveSession(null));
-                    }
-                    if (!sessionToDelete) {
-                        return;
-                    }
-                    await dispatch(deleteSession(sessionToDelete));
-                    setSessionToDelete(null);
-                }}
-            />
+            <Dialog open={!!sessionToDelete} onClose={() => setSessionToDelete(null)}>
+                <DialogTitle>Confirm Deletion</DialogTitle>
+                <DialogContent>
+                    <Typography variant="body2">
+                        Are you sure you want to delete the position{" "}
+                        <Typography
+                            component="span"
+                            color="primary"
+                            fontWeight="bold"
+                            display="inline"
+                        >
+                            {sessionToDelete?.name}
+                        </Typography>
+                        ?
+                    </Typography>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setSessionToDelete(null)}>Cancel</Button>
+                    <Button
+                        color="error"
+                        onClick={async () => {
+                            if (sessionToDelete === activeSession) {
+                                await dispatch(setActiveSession(null));
+                            }
+                            if (sessionToDelete) {
+                                await dispatch(deleteSession(sessionToDelete));
+                                setSessionToDelete(null);
+                            }
+                        }}
+                    >
+                        Delete
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </React.Fragment>
     );
 }
 
 export function MissingActiveSessionWarning({ extraText = "" }) {
     return (
-        <Alert variant="info">
+        <Alert severity="info">
             There is no active session selected. {extraText}
         </Alert>
     );

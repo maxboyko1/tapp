@@ -1,6 +1,8 @@
 import React from "react";
+import { Typography } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
+
 import { ConnectedAddDdahDialog } from "./add-ddah-dialog";
-import { FaPlus } from "react-icons/fa";
 import {
     ConnectedImportDdahsAction,
     ConnectedExportDdahsAction,
@@ -44,7 +46,7 @@ export function AdminDdahsView() {
             <ActionsList>
                 <ActionHeader>Available Actions</ActionHeader>
                 <ActionButton
-                    icon={<FaPlus />}
+                    icon={<AddIcon />}
                     onClick={() => {
                         setAddDialogVisible(true);
                     }}
@@ -81,6 +83,9 @@ export function AdminDdahsView() {
                         setAddDialogVisible(false);
                     }}
                 />
+                <Typography variant="h3" sx={{ mb: 2 }}>
+                    DDAHs
+                </Typography>
                 {!importInProgress && <ConnectedDdahsTable />}
             </ContentArea>
         </div>

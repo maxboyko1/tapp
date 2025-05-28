@@ -1,4 +1,5 @@
 import {
+    FETCH_ALL_POSITIONS_SUCCESS,
     FETCH_POSITIONS_SUCCESS,
     FETCH_ONE_POSITION_SUCCESS,
     UPSERT_ONE_POSITION_SUCCESS,
@@ -24,6 +25,9 @@ import { activeSessionSelector } from "./sessions";
 import { ExportFormat, PrepareDataFunc } from "../../libs/import-export";
 
 // actions
+export const fetchAllPositionsSuccess = actionFactory<RawPosition[]>(
+    FETCH_ALL_POSITIONS_SUCCESS
+);
 export const fetchPositionsSuccess = actionFactory<RawPosition[]>(
     FETCH_POSITIONS_SUCCESS
 );
@@ -42,7 +46,19 @@ const MissingActiveSessionError = new Error(
 );
 
 // dispatchers
-export const fetchPositions = validatedApiDispatcher({
+export const fetchAllPositions = validatedApiDispatcher<RawPosition[], []>({
+    name: "fetchAllPositions",
+    description: "Fetch all positions (across all sessions)",
+    onErrorDispatch: (e) => fetchError(e.toString()),
+    dispatcher: () => async (dispatch, getState) => {
+        const role = activeRoleSelector(getState());
+        const data = (await apiGET(`/${role}/positions/all`)) as RawPosition[];
+        dispatch(fetchAllPositionsSuccess(data));
+        return data;
+    },
+});
+
+export const fetchPositions = validatedApiDispatcher<RawPosition[], []>({
     name: "fetchPositions",
     description: "Fetch positions",
     onErrorDispatch: (e) => fetchError(e.toString()),
@@ -65,7 +81,7 @@ export const fetchPositions = validatedApiDispatcher({
     },
 });
 
-export const fetchPosition = validatedApiDispatcher({
+export const fetchPosition = validatedApiDispatcher<void, [HasId]>({
     name: "fetchPosition",
     description: "Fetch position",
     onErrorDispatch: (e) => fetchError(e.toString()),
@@ -100,7 +116,10 @@ function prepForApi(data: Partial<Position>) {
     ) as Partial<RawPosition>;
 }
 
-export const upsertPosition = validatedApiDispatcher({
+export const upsertPosition = validatedApiDispatcher<
+    RawPosition,
+    [Partial<Position>]
+>({
     name: "upsertPosition",
     description: "Add/insert position",
     onErrorDispatch: (e) => upsertError(e.toString()),
@@ -120,7 +139,10 @@ export const upsertPosition = validatedApiDispatcher({
     },
 });
 
-export const deletePosition = validatedApiDispatcher({
+export const deletePosition = validatedApiDispatcher<
+    void,
+    [HasId]
+>({
     name: "deletePosition",
     description: "Delete position",
     onErrorDispatch: (e) => deleteError(e.toString()),
@@ -134,7 +156,10 @@ export const deletePosition = validatedApiDispatcher({
     },
 });
 
-export const exportPositions = validatedApiDispatcher({
+export const exportPositions = validatedApiDispatcher<
+    ReturnType<PrepareDataFunc<Position>>,
+    [PrepareDataFunc<Position>, ExportFormat?]
+>({
     name: "exportPositions",
     description: "Export positions",
     onErrorDispatch: (e) => fetchError(e.toString()),
@@ -157,7 +182,10 @@ export const exportPositions = validatedApiDispatcher({
         },
 });
 
-export const upsertPositions = validatedApiDispatcher({
+export const upsertPositions = validatedApiDispatcher<
+    void,
+    [Partial<Position>[]]
+>({
     name: "upsertPositions",
     description: "Upsert a list of positions",
     onErrorDispatch: (e) => fetchError(e.toString()),
@@ -203,6 +231,28 @@ export const positionsSelector = createSelector(
                 ...rest,
                 // When the instructor list references an instructor that we haven't loaded
                 // we don't want the frontend to crash, so filter out any null instructors
+                instructors: instructor_ids
+                    .map((x) => instructorsById[x])
+                    .filter((x) => x),
+                contract_template: contractTemplatesById[contract_template_id],
+            })
+        ) as Position[];
+    }
+);
+
+const _allPositionsSelector = createSelector(
+    localStoreSelector,
+    (state) => state._allData
+);
+
+export const allPositionsSelector = createSelector(
+    [_allPositionsSelector, instructorsSelector, contractTemplatesSelector],
+    (positions, instructors, contractTemplates) => {
+        const instructorsById = arrayToHash(instructors);
+        const contractTemplatesById = arrayToHash(contractTemplates);
+        return (positions || []).map(
+            ({ instructor_ids, contract_template_id, ...rest }) => ({
+                ...rest,
                 instructors: instructor_ids
                     .map((x) => instructorsById[x])
                     .filter((x) => x),

@@ -1,9 +1,11 @@
-import React from "react";
 import PropTypes from "prop-types";
-import { Form } from "react-bootstrap";
-import { Typeahead } from "react-bootstrap-typeahead";
+import {
+    Autocomplete,
+    Box,
+    TextField,
+    Typography,
+} from "@mui/material";
 
-import "react-bootstrap-typeahead/css/Typeahead.css";
 import { docApiPropTypes } from "../../api/defs/doc-generation";
 import { fieldEditorFactory, DialogRow } from "./common-controls";
 import {
@@ -48,6 +50,11 @@ export function AppointmentEditor(props: {
         ...applicantMatchingDatumProp,
     } as RequireSome<ApplicantMatchingDatum, keyof typeof DEFAULT_APPOINTMENT>;
 
+    const applicantsWithFullName: (Applicant & { full_name: string })[] = applicants.map((applicant) => ({
+        ...applicant,
+        full_name: `${applicant.first_name} ${applicant.last_name}`,
+    }));
+
     function setApplicant(applicants: Applicant[]) {
         const applicant = applicants[applicants.length - 1] || { id: null };
         setApplicantMatchingDatum({
@@ -78,27 +85,38 @@ export function AppointmentEditor(props: {
         : [];
 
     return (
-        <Form>
-            <Form.Group>
-                <Form.Label>Applicant</Form.Label>
-                <Typeahead
+        <Box component="form" noValidate autoComplete="off">
+            <Box sx={{ mb: 2 }}>
+                <Autocomplete
                     id="applicant-input"
-                    ignoreDiacritics={true}
-                    placeholder="Applicant..."
-                    labelKey={(option: Applicant) =>
-                        `${option.first_name} ${option.last_name}`
-                    }
-                    selected={
+                    options={applicantsWithFullName}
+                    getOptionLabel={(option) => option.full_name}
+                    value={
                         !applicantMatchingDatum.applicant ||
                         applicantMatchingDatum.applicant.id === null
-                            ? []
-                            : [applicantMatchingDatum.applicant]
+                            ? null
+                            : applicantsWithFullName.find(
+                                (a) => a.id === applicantMatchingDatum.applicant.id
+                            ) || null
                     }
-                    options={applicants}
-                    onChange={setApplicant}
+                    onChange={(_, value) =>
+                        setApplicant(value ? [value] : [])
+                    }
+                    renderInput={(params) => (
+                        <TextField {...params} placeholder="Applicant..." size="small" />
+                    )}
                     disabled={lockApplicant}
+                    isOptionEqualToValue={(option, value) => option.id === value.id}
+                    slotProps={{
+                        paper: {
+                            sx: (theme) => ({
+                                bgcolor: theme.palette.primary.main,
+                                color: theme.palette.primary.contrastText,
+                            }),
+                        },
+                    }}
                 />
-            </Form.Group>
+            </Box>
             <DialogRow>
                 {createFieldEditor(
                     "Minimum Hours Owed",
@@ -116,22 +134,36 @@ export function AppointmentEditor(props: {
                     "number"
                 )}
             </DialogRow>
-            <Form.Group>
-                <Form.Label>
-                    Letter Template (which letter template will be used)
-                </Form.Label>
-                <Typeahead
-                    id="instructors-input"
-                    ignoreDiacritics={true}
-                    multiple
-                    placeholder="Letter template..."
-                    labelKey={(option) => `${option.template_name}`}
-                    selected={selectedLetterTemplate}
+            <Box sx={{ mt: 2 }}>
+                <Typography variant="subtitle2" sx={{ mb: 1 }}>
+                    Letter Template
+                </Typography>
+                <Autocomplete
+                    id="letter-template-input"
                     options={letterTemplates}
-                    onChange={setLetterTemplate}
+                    getOptionLabel={(option) => option.template_name}
+                    value={selectedLetterTemplate[0] || null}
+                    onChange={(_, value) =>
+                        setLetterTemplate([
+                            (value as LetterTemplate) || defaultLetterTemplate,
+                        ])
+                    }
+                    renderInput={(params) => (
+                        <TextField {...params} placeholder="Letter template..." size="small" />
+                    )}
+                    isOptionEqualToValue={(option, value) => option.id === value.id}
+                    disableClearable
+                    slotProps={{
+                        paper: {
+                            sx: (theme) => ({
+                                bgcolor: theme.palette.primary.main,
+                                color: theme.palette.primary.contrastText,
+                            }),
+                        },
+                    }}
                 />
-            </Form.Group>
-        </Form>
+            </Box>
+        </Box>
     );
 }
 AppointmentEditor.propTypes = {

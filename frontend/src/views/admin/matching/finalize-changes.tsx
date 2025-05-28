@@ -1,17 +1,26 @@
 import React from "react";
-import { matchesSelector, assignmentsSelector } from "../../../api/actions";
 import { useSelector } from "react-redux";
-import { Modal, Button, Alert } from "react-bootstrap";
-import { useThunkDispatch } from "../../../libs/thunk-dispatch";
-import { AdvancedFilterTable } from "../../../components/filter-table/advanced-filter-table";
-import { upsertAssignment } from "../../../api/actions";
+import {
+    Alert,
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+} from "@mui/material";
 
-const DEFAULT_COLUMNS = [
-    { Header: "Position Code", accessor: "position.position_code" },
-    { Header: "Hours", accessor: "hours_assigned" },
-    { Header: "Last Name", accessor: "applicant.last_name" },
-    { Header: "First Name", accessor: "applicant.first_name" },
-    { Header: "UTORid", accessor: "applicant.utorid" },
+import { matchesSelector, assignmentsSelector } from "../../../api/actions";
+import { useThunkDispatch } from "../../../libs/thunk-dispatch";
+import { AdvancedColumnDef, AdvancedFilterTable } from "../../../components/advanced-filter-table";
+import { upsertAssignment } from "../../../api/actions";
+import { Assignment } from "../../../api/defs/types";
+
+const DEFAULT_COLUMNS: AdvancedColumnDef<Assignment>[] = [
+    { header: "Position Code", accessorKey: "position.position_code" },
+    { header: "Hours", accessorKey: "hours_assigned" },
+    { header: "Last Name", accessorKey: "applicant.last_name" },
+    { header: "First Name", accessorKey: "applicant.first_name" },
+    { header: "UTORid", accessorKey: "applicant.utorid" },
 ];
 
 /**
@@ -63,8 +72,8 @@ export function FinalizeChangesButton() {
     return (
         <>
             <Button
-                variant="outline-primary"
-                size="sm"
+                variant="outlined"
+                size="small"
                 className="footer-button finalize"
                 onClick={() => setDialogVisible(true)}
                 disabled={stagedAssignments.length === 0}
@@ -74,17 +83,16 @@ export function FinalizeChangesButton() {
                     ? ` (${stagedAssignments.length})`
                     : ""}
             </Button>
-            <Modal
-                show={dialogVisible}
-                dialogClassName="finalize-changes-modal"
-                onHide={() => setDialogVisible(false)}
-                size="lg"
+            <Dialog
+                open={dialogVisible}
+                onClose={() => setDialogVisible(false)}
+                maxWidth="lg"
+                fullWidth
+                slotProps={{ paper: { className: "finalize-changes-modal" } }}
             >
-                <Modal.Header>
-                    <Modal.Title>Finalize Changes</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Alert variant="info">
+                <DialogTitle>Finalize Changes</DialogTitle>
+                <DialogContent>
+                    <Alert severity="info" sx={{ mb: 2 }}>
                         The following assignments will be made.
                     </Alert>
                     <AdvancedFilterTable
@@ -92,19 +100,24 @@ export function FinalizeChangesButton() {
                         data={stagedAssignments}
                         filterable={true}
                     />
-                </Modal.Body>
-                <Modal.Footer>
+                </DialogContent>
+                <DialogActions>
                     <Button
                         onClick={() => setDialogVisible(false)}
-                        variant="light"
+                        variant="outlined"
+                        color="secondary"
                     >
                         Cancel
                     </Button>
-                    <Button variant="primary" onClick={_onConfirm}>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={_onConfirm}
+                    >
                         Confirm
                     </Button>
-                </Modal.Footer>
-            </Modal>
+                </DialogActions>
+            </Dialog>
         </>
     );
 }

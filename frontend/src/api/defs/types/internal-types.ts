@@ -75,7 +75,11 @@ export interface Application
     > {
     applicant: Applicant;
     posting: Posting | null;
-    position_preferences: { position: Position; preference_level: number }[];
+    position_preferences: { 
+        position: Position;
+        preference_level: number;
+        custom_question_answers: unknown | null; 
+    }[];
     instructor_preferences: InstructorPreference[];
 }
 

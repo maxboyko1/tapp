@@ -1,5 +1,4 @@
-import React from "react";
-import { Cell, Column } from "react-table";
+import { MRT_Cell, MRT_ColumnDef } from "material-react-table";
 import { DiffSpec } from "../libs/diffs";
 
 /**
@@ -10,10 +9,10 @@ import { DiffSpec } from "../libs/diffs";
  * @returns
  */
 export function createDiffCell<T extends object>({
-    accessor,
+    accessorKey,
     Cell,
-}: Column<T> & { Cell?: any }) {
-    const accessors = String(accessor).split(".");
+}: { accessorKey: string; Cell?: any }) {
+    const accessors = String(accessorKey).split(".");
     function get(obj: any) {
         let ret = obj;
         for (const key of accessors) {
@@ -32,8 +31,10 @@ export function createDiffCell<T extends object>({
      * @param {*} {original}
      * @returns
      */
-    function DiffCell<T extends object>({ row }: Cell<DiffSpec<any, T>>) {
-        const original = row.original;
+    function DiffCell(props: {
+        cell: MRT_Cell<DiffSpec<any, T>>;
+    }) {
+        const original = props.cell.row.original;
         const value = get(original.obj);
         const changed = get(original.changes);
         if (changed != null) {
@@ -65,18 +66,35 @@ export function createDiffCell<T extends object>({
  * @returns
  */
 export function createDiffColumnsFromColumns<T extends object>(
-    columns: (Column<T> & { accessor?: string })[]
-) {
+    columns: (MRT_ColumnDef<T> & { accessorKey?: string })[]
+): MRT_ColumnDef<DiffSpec<any, T>>[] {
     return columns.map((column) => {
-        const ret = {
-            // ReactTable really wants columns to have ids. If a column
-            // doesn't have an id, it uses the accessor as an id. However, we
-            // delete the accessor, so put an id in manually.
-            id: column.accessor,
-            ...column,
-            Cell: createDiffCell(column),
+        const {
+            accessorKey,
+            header,
+            size,
+            minSize,
+            maxSize,
+            enableSorting,
+            enableColumnFilter,
+            Cell,
+            meta,
+            // add any other display-only props you use
+        } = column;
+
+        const safeAccessorKey = String(accessorKey);
+
+        return {
+            id: accessorKey,
+            accessorKey,
+            header,
+            size,
+            minSize,
+            maxSize,
+            enableSorting,
+            enableColumnFilter,
+            meta,
+            Cell: createDiffCell({ accessorKey: safeAccessorKey, Cell }),
         };
-        delete ret.accessor;
-        return ret;
     });
 }

@@ -1,10 +1,18 @@
 import React from "react";
 import classNames from "classnames";
 import { useSelector } from "react-redux";
+import {
+    IconButton,
+    TextField,
+    ToggleButton,
+    ToggleButtonGroup,
+} from "@mui/material";
+import FilterListIcon from "@mui/icons-material/FilterList";
+import TableChartIcon from "@mui/icons-material/TableChart";
+import ViewModuleIcon from "@mui/icons-material/ViewModule";
+
 import { useThunkDispatch } from "../../../../libs/thunk-dispatch";
 import { setApplicantViewMode, applicantViewModeSelector } from "../actions";
-import { FaFilter, FaTable, FaTh } from "react-icons/fa";
-import { ToggleButton, ToggleButtonGroup } from "react-bootstrap";
 import { SortBar } from "../sorts";
 import { SortListItem } from "../sorts/sorts";
 import { FilterModal } from "../filters";
@@ -34,11 +42,15 @@ export function ApplicantViewHeader({
         <div className="matching-course-header">
             <div className="search-container">
                 <div className="form-inline">
-                    <input
-                        className="form-control mr-sm-2 search-bar"
-                        type="text"
+                    <TextField
+                        className="search-bar"
+                        size="small"
+                        variant="outlined"
                         placeholder="Filter by name/UTORid..."
                         onChange={(e) => setFilterString(e.target.value)}
+                        InputProps={{
+                            sx: { minWidth: 250, mr: 2 },
+                        }}
                     />
                 </div>
                 <ApplicantFilterButton
@@ -63,16 +75,31 @@ function DisplayToggle() {
 
     return (
         <ToggleButtonGroup
-            type="radio"
-            name="views"
-            defaultValue={applicantViewMode}
-            onChange={(e) => dispatch(setApplicantViewMode(e))}
+            exclusive
+            value={applicantViewMode}
+            onChange={(_, value) => {
+                if (value !== null) {
+                    dispatch(setApplicantViewMode(value));
+                }
+            }}
+            aria-label="view mode"
+            size="small"
         >
-            <ToggleButton className="no-highlight" value={"grid"}>
-                <FaTh />
+            <ToggleButton
+                id="view-toggle-grid"
+                className="no-highlight"
+                value="grid"
+                aria-label="grid view"
+            >
+                <ViewModuleIcon />
             </ToggleButton>
-            <ToggleButton className="no-highlight" value={"table"}>
-                <FaTable />
+            <ToggleButton
+                id="view-toggle-table"
+                className="no-highlight"
+                value="table"
+                aria-label="table view"
+            >
+                <TableChartIcon />
             </ToggleButton>
         </ToggleButtonGroup>
     );
@@ -100,12 +127,17 @@ function ApplicantFilterButton({
     return (
         <>
             <div className="filter-button-container">
-                <FaFilter
+                <IconButton
                     className={classNames("filter-button", {
                         active: numActiveFilters > 0,
                     })}
                     onClick={() => setShow(!show)}
-                />
+                    title="Filter applicants"
+                    color={numActiveFilters > 0 ? "primary" : "default"}
+                    size="large"
+                >
+                    <FilterListIcon />
+                </IconButton>
             </div>
             <FilterModal
                 showFilters={show}

@@ -23,10 +23,12 @@ class PositionSerializer < ActiveModel::Serializer
             contract_template_id
             qualifications
             duties
+            custom_questions
             desired_num_assignments
             current_enrollment
             current_waitlisted
             instructor_ids
+            session_id
         ]
     end
 

@@ -1,5 +1,5 @@
 import React, { Suspense } from "react";
-import { useRouteMatch } from "react-router";
+import { useMatch } from "react-router-dom";
 
 const MainEntry = React.lazy(() => import("./main-entry"));
 const PublicEntry = React.lazy(() => import("./public-entry"));
@@ -11,11 +11,8 @@ const PublicEntry = React.lazy(() => import("./public-entry"));
  * @returns
  */
 export default function DynamicEntryRouter() {
-    const publicRoute = useRouteMatch("/public");
-    let content = <MainEntry />;
-    if (publicRoute) {
-        content = <PublicEntry />;
-    }
+    const match = useMatch("/public/*");
+    const content = match ? <PublicEntry /> : <MainEntry />;
 
     return (
         <React.Fragment>

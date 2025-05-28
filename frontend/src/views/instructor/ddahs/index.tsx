@@ -1,7 +1,10 @@
 import React from "react";
-import XLSX from "xlsx";
+import * as XLSX from "xlsx";
 import FileSaver from "file-saver";
 import { useSelector } from "react-redux";
+import { Typography } from "@mui/material";
+import DownloadIcon from "@mui/icons-material/Download";
+
 import {
     activeSessionSelector,
     assignmentsSelector,
@@ -21,7 +24,6 @@ import {
 } from "../../admin/ddahs/import-export";
 import { setSelectedRows as setSelectedDdahs } from "../../admin/ddah-table/actions";
 import { formatDate } from "../../../libs/utils";
-import { FaDownload } from "react-icons/fa";
 import { InstructorImportDdahsAction } from "./import";
 
 export function ConnectedDownloadPositionDdahTemplatesAction({
@@ -70,7 +72,7 @@ export function ConnectedDownloadPositionDdahTemplatesAction({
 
     return (
         <ActionButton
-            icon={FaDownload}
+            icon={<DownloadIcon />}
             title="Download a spreadsheet template that you may fill to bulk create/update DDAHs"
             onClick={() => download()}
             disabled={disabled}
@@ -128,7 +130,9 @@ export function InstructorDdahsView() {
 
     if (!activeSession || !activePosition) {
         return (
-            <h4>Please select a Session and Position to see TA information</h4>
+            <Typography variant="h4" color="textPrimary">
+                Please select a Session and Position to see TA information
+            </Typography>
         );
     }
 
@@ -151,28 +155,21 @@ export function InstructorDdahsView() {
                 <ConnectedExportDdahsAction disabled={!activeSession} />
             </ActionsList>
             <ContentArea>
-                <h4>
+                <Typography variant="h4" gutterBottom>
                     <span>{formattedPositionName}</span>
-                </h4>
-                <p>
+                </Typography>
+                <Typography component="p">
                     Below is a list of your TAs for{" "}
-                    <span className="text-primary">
-                        {formattedPositionName}
-                    </span>{" "}
-                    for the{" "}
-                    <span className="text-primary">{formattedSessionName}</span>{" "}
-                    session. You can view, create, and edit DDAH forms for your
-                    TAs. After you create/edit a DDAH form, please save and close the
-                    file. The TA coordinator will review and send these files to the
+                    <span className="text-primary">{formattedPositionName}</span> for the{" "}
+                    <span className="text-primary">{formattedSessionName}</span> session. You can view, create, and edit DDAH forms for your
+                    TAs. After you create/edit a DDAH form, please save and close the file. The TA coordinator will review and send these files to the
                     students in the coming days.
-                </p>
-                <p>
-                    The <i>Approved</i> column indicates whether the TA
-                    coordinator has reviewed and approved the DDAH. If you have
-                    any questions about DDAHs and their requirements, please
-                    contact the TA coordinator at{" "}
+                </Typography>
+                <Typography component="p">
+                    The <i>Approved</i> column indicates whether the TA coordinator has reviewed and approved the DDAH. If you have
+                    any questions about DDAHs and their requirements, please contact the TA coordinator at{" "}
                     <a href="mailto:tacoord@cs.toronto.edu">tacoord@cs.toronto.edu</a>.
-                </p>
+                </Typography>
                 <ConnectedDdahsTable
                     position_id={activePosition?.id || -1}
                     onView={(ddah_id) => {

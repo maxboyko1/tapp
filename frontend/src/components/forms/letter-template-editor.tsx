@@ -1,9 +1,12 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Form } from "react-bootstrap";
-import { Typeahead } from "react-bootstrap-typeahead";
+import {
+    Autocomplete,
+    Box,
+    TextField,
+    Typography,
+} from "@mui/material";
 
-import "react-bootstrap-typeahead/css/Typeahead.css";
 import { docApiPropTypes } from "../../api/defs/doc-generation";
 import { fieldEditorFactory, DialogRow } from "./common-controls";
 import { LetterTemplate } from "../../api/defs/types";
@@ -50,42 +53,44 @@ export function LetterTemplateEditor(props: {
     );
 
     return (
-        <Form>
+        <Box component="form" noValidate autoComplete="off">
+            <Typography
+                variant="body2"
+                sx={{ mb: 0 }}
+                title="This file is stored on the server; you can edit it there."
+            >
+                Template Name (e.g. "Regular")
+            </Typography>
             <DialogRow>
                 {createFieldEditor(
-                    'Template Name (e,g, "Regular")',
+                    '',
                     "template_name"
                 )}
             </DialogRow>
             <DialogRow>
                 <React.Fragment>
-                    <Form.Label title="This file is stored on the server; you can edit it there.">
+                    <Typography
+                        variant="body2"
+                        sx={{ mb: 1 }}
+                        title="This file is stored on the server; you can edit it there."
+                    >
                         Template File
-                    </Form.Label>
-                    <Typeahead
+                    </Typography>
+                    <Autocomplete
                         id="file-name-input"
-                        ignoreDiacritics={true}
-                        placeholder="File name..."
-                        multiple
-                        selected={
-                            !letterTemplate.template_file
-                                ? []
-                                : [letterTemplate.template_file]
-                        }
                         options={availableTemplates.map((x) => x.template_file)}
-                        onChange={setTemplateFile}
-                        {
-                            // XXX For some reason the typeahead types seem to be incorrect here;
-                            // they disallow the `labelKey` attr, but it works just fine.
-                            // So, we trick typescript into allow the attr.
-                            ...({
-                                labelKey: (option: any) => `${option}`,
-                            } as any)
-                        }
+                        value={letterTemplate.template_file || ""}
+                        onChange={(_, value) => setTemplateFile(value ? [value] : [])}
+                        renderInput={(params) => (
+                            <TextField {...params} placeholder="File name..." />
+                        )}
+                        isOptionEqualToValue={(option, value) => option === value}
+                        freeSolo={false}
+                        disableClearable
                     />
                 </React.Fragment>
             </DialogRow>
-        </Form>
+        </Box>
     );
 }
 LetterTemplateEditor.propTypes = {

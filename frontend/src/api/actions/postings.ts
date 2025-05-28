@@ -84,7 +84,7 @@ export const fetchPostings = validatedApiDispatcher({
     },
 });
 
-export const fetchPosting = validatedApiDispatcher({
+export const fetchPosting = validatedApiDispatcher<RawPosting, [HasId]>({
     name: "fetchPosting",
     description: "Fetch posting",
     onErrorDispatch: (e) => fetchError(e.toString()),
@@ -108,7 +108,10 @@ function prepPostingForApi(posting: Partial<Posting>): Partial<RawPosting> {
     return ret;
 }
 
-export const upsertPosting = validatedApiDispatcher({
+export const upsertPosting = validatedApiDispatcher<
+    RawPosting,
+    [Partial<RawPosting> | Partial<Posting>]
+>({
     name: "upsertPosting",
     description: "Add/insert posting",
     onErrorDispatch: (e) => upsertError(e.toString()),
@@ -156,7 +159,7 @@ export const upsertPosting = validatedApiDispatcher({
         },
 });
 
-export const deletePosting = validatedApiDispatcher({
+export const deletePosting = validatedApiDispatcher<void, [HasId]>({
     name: "deletePosting",
     description: "Delete posting",
     onErrorDispatch: (e) => deleteError(e.toString()),
@@ -170,7 +173,10 @@ export const deletePosting = validatedApiDispatcher({
     },
 });
 
-export const fetchSurvey = validatedApiDispatcher({
+export const fetchSurvey = validatedApiDispatcher<
+    Promise<any>,
+    [HasId]
+>({
     name: "fetchSurvey",
     description: "Fetch the survey associated with a posting",
     onErrorDispatch: (e) => fetchError(e.toString()),
@@ -205,7 +211,10 @@ export const fetchPostingPositions = validatedApiDispatcher({
     },
 });
 
-export const fetchPostingPositionsForPosting = validatedApiDispatcher({
+export const fetchPostingPositionsForPosting = validatedApiDispatcher<
+    Promise<RawPostingPosition[]>,
+    [HasId]
+>({
     name: "fetchPostingPositionsForPosting",
     description: "Fetch posting_positions for a particular posting",
     onErrorDispatch: (e) => fetchError(e.toString()),
@@ -219,7 +228,7 @@ export const fetchPostingPositionsForPosting = validatedApiDispatcher({
     },
 });
 
-export const fetchPostingPosition = validatedApiDispatcher({
+export const fetchPostingPosition = validatedApiDispatcher<RawPostingPosition, [HasId]>({
     name: "fetchPostingPosition",
     description: "Fetch posting_position",
     onErrorDispatch: (e) => fetchError(e.toString()),
@@ -233,7 +242,13 @@ export const fetchPostingPosition = validatedApiDispatcher({
     },
 });
 
-export const upsertPostingPosition = validatedApiDispatcher({
+export const upsertPostingPosition = validatedApiDispatcher<
+    RawPostingPosition,
+    [
+        | RequireSome<RawPostingPosition, "position_id" | "posting_id">
+        | RequireSome<PostingPosition, "position" | "posting">
+    ]
+>({
     name: "upsertPostingPosition",
     description: "Add/insert posting_position",
     onErrorDispatch: (e) => upsertError(e.toString()),
@@ -255,7 +270,13 @@ export const upsertPostingPosition = validatedApiDispatcher({
         },
 });
 
-export const deletePostingPosition = validatedApiDispatcher({
+export const deletePostingPosition = validatedApiDispatcher<
+    void,
+    [
+        | RequireSome<RawPostingPosition, "position_id" | "posting_id">
+        | RequireSome<PostingPosition, "position" | "posting">
+    ]
+>({
     name: "deletePostingPosition",
     description: "Delete posting_position",
     onErrorDispatch: (e) => deleteError(e.toString()),
@@ -276,7 +297,10 @@ export const deletePostingPosition = validatedApiDispatcher({
         },
 });
 
-export const exportPosting = validatedApiDispatcher({
+export const exportPosting = validatedApiDispatcher<
+    File,
+    [number, (posting: Posting, exportFormat: ExportFormat) => File, ExportFormat?]
+>({
     name: "exportPosting",
     description: "Export a posting",
     onErrorDispatch: (e) => fetchError(e.toString()),

@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { AnyAction } from "redux";
+import { Action } from "redux";
 import { ThunkDispatch } from "redux-thunk";
 import { RootState } from "../rootReducer";
 
@@ -13,5 +13,5 @@ import { RootState } from "../rootReducer";
 export const useThunkDispatch = useDispatch as () => ThunkDispatch<
     RootState,
     void,
-    AnyAction
+    Action
 >;

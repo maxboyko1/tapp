@@ -1,36 +1,46 @@
-import { Button, Modal } from "react-bootstrap";
-import React from "react";
-import { AdvancedFilterTable } from "../../../components/filter-table/advanced-filter-table";
+import {
+    Alert,
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    IconButton,
+    Typography,
+} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+
+import { AdvancedColumnDef, AdvancedFilterTable } from "../../../components/advanced-filter-table";
 import { Ddah } from "../../../api/defs/types";
 import { compareString } from "../../../libs/utils";
-import { generateHeaderCell } from "../../../components/table-utils";
+import { generateHeaderCellProps } from "../../../components/table-utils";
 import { ddahIssues, getReadableStatus } from "../../../libs/ddah-utils";
 
-const ddahModalColumn = [
+const ddahModalColumn: AdvancedColumnDef<ConfirmationDdahRowData>[] = [
     {
-        Header: generateHeaderCell("Position"),
-        accessor: "position_code",
-        width: 200,
+        ...generateHeaderCellProps("Position"),
+        accessorKey: "position_code",
+        size: 200,
     },
     {
-        Header: generateHeaderCell("Last Name"),
-        accessor: "last_name",
-        maxWidth: 120,
+        ...generateHeaderCellProps("Last Name"),
+        accessorKey: "last_name",
+        maxSize: 120,
     },
     {
-        Header: generateHeaderCell("First Name"),
-        accessor: "first_name",
-        maxWidth: 120,
+        ...generateHeaderCellProps("First Name"),
+        accessorKey: "first_name",
+        maxSize: 120,
     },
     {
-        Header: generateHeaderCell("Status"),
-        accessor: "status",
-        maxWidth: 100,
+        ...generateHeaderCellProps("Status"),
+        accessorKey: "status",
+        maxSize: 100,
     },
     {
-        Header: generateHeaderCell("Issues"),
-        accessor: "issue",
-        width: 250,
+        ...generateHeaderCellProps("Issues"),
+        accessorKey: "issue",
+        size: 250,
     },
 ];
 
@@ -93,36 +103,40 @@ export function DdahConfirmationDialog(props: {
     data.sort(compareDDAH);
 
     return (
-        <Modal
-            show={visible}
-            onHide={() => {
-                setVisible(false);
-            }}
-            size={"lg"}
-        >
-            <Modal.Header closeButton>
-                <Modal.Title>{title}</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                <div className="mb-3 alert alert-info" role="alert">
-                    {body}
-                </div>
-                <div className="mb-3">
+        <Dialog open={visible} onClose={() => setVisible(false)} maxWidth="lg" fullWidth>
+            <DialogTitle sx={{ m: 0, p: 2 }}>
+                {title}
+                <IconButton
+                    aria-label="close"
+                    onClick={() => setVisible(false)}
+                    sx={{
+                        position: "absolute",
+                        right: 8,
+                        top: 8,
+                        color: (theme) => theme.palette.grey[500],
+                    }}
+                    size="large"
+                >
+                    <CloseIcon />
+                </IconButton>
+            </DialogTitle>
+            <DialogContent dividers>
+                <Alert severity="info" sx={{ mb: 3 }}>
+                    <Typography variant="body1">{body}</Typography>
+                </Alert>
+                <div style={{ marginBottom: 24 }}>
                     <AdvancedFilterTable
-                        // The ReactTable types are not smart enough to know that you can use a function
-                        // for Header, so we will opt out of the type system here.
-                        columns={ddahModalColumn as any}
+                        columns={ddahModalColumn}
                         data={data}
                         filterable={false}
                     />
                 </div>
-            </Modal.Body>
-            <Modal.Footer>
+            </DialogContent>
+            <DialogActions>
                 <Button
-                    onClick={() => {
-                        setVisible(false);
-                    }}
-                    variant="light"
+                    onClick={() => setVisible(false)}
+                    variant="contained"
+                    color="secondary"
                 >
                     Cancel
                 </Button>
@@ -131,10 +145,12 @@ export function DdahConfirmationDialog(props: {
                         callback();
                         setVisible(false);
                     }}
+                    variant="contained"
+                    color="primary"
                 >
                     {confirmation}
                 </Button>
-            </Modal.Footer>
-        </Modal>
+            </DialogActions>
+        </Dialog>
     );
 }

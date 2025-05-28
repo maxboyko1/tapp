@@ -1,24 +1,25 @@
 import React from "react";
-import { CopyToClipboard } from "react-copy-to-clipboard";
-import { Button, Container, Modal, Row, Alert } from "react-bootstrap";
 import { useSelector } from "react-redux";
-import { Cell, Column } from "react-table";
+import {
+    Box,
+    FormControlLabel,
+    Paper,
+    Switch,
+    Typography,
+} from "@mui/material";
+
 import {
     deletePostingPosition,
     positionsSelector,
-    upsertPosting,
     upsertPostingPosition,
 } from "../../../../api/actions";
-import { Posting, PostingPosition } from "../../../../api/defs/types";
-import { AdvancedFilterTable } from "../../../../components/filter-table/advanced-filter-table";
-import { generateHeaderCell } from "../../../../components/table-utils";
-import { arrayDiff } from "../../../../libs/utils";
+import { Posting } from "../../../../api/defs/types";
+import { AdvancedFilterTable, AdvancedColumnDef } from "../../../../components/advanced-filter-table";
+import { formatDate } from "../../../../libs/utils";
 import { useThunkDispatch } from "../../../../libs/thunk-dispatch";
-import "./style.css";
-import {
-    EditableCell,
-    EditableType,
-} from "../../../../components/editable-cell";
+import { generateNumberCell } from "../../../../components/table-utils";
+import { EditCustomQuestionsCell } from "../custom-questions-cell";
+import { isQuestionsFieldInValidFormat } from "../../../../components/custom-question-utils";
 
 interface PostingPositionRow {
     id: number;
@@ -31,62 +32,17 @@ interface PostingPositionRow {
     true_posting_position: boolean;
 }
 
-const emptyCustomQuestions = {
-    pages: [
-        {
-            name: "page1",
-        },
-    ],
-};
-
-/**
- * Validate JSON to be in the format expected for
- * extra posting questions.
- *
- * @param {string} json
- * @returns
- */
-function validateJson(json: string) {
-    try {
-        const parsed = JSON.parse(json);
-        if (Array.isArray(parsed?.pages)) {
-            return { valid: true, message: "" };
-        }
-        return {
-            valid: false,
-            message:
-                'Expected the root of the JSON object to be `{ "pages": [...] }`',
-        };
-    } catch (e: any) {
-        return {
-            valid: false,
-            message:
-                "The JSON data is not formatted correctly. (" + e.message + ")",
-        };
-    }
-}
-
 export function ConnectedPostingDetailsView({ posting }: { posting: Posting }) {
     const dispatch = useThunkDispatch();
-    const [customQuestions, setCustomQuestions] = React.useState(
-        JSON.stringify(
-            posting.custom_questions || emptyCustomQuestions,
-            null,
-            4
-        )
-    );
-    const [customQuestionsVisible, setCustomQuestionsVisible] =
-        React.useState(false);
-    const customQuestionsValid = validateJson(customQuestions);
     const posting_id = posting.id;
     const positions = useSelector(positionsSelector);
-    const { postingPositions, tableData, selected } = React.useMemo(() => {
+
+    // Build table data from backend
+    const tableData: PostingPositionRow[] = React.useMemo(() => {
         const postingPositions = posting.posting_positions;
-        // We want a row for every position; since we are only looking at a single
-        // posting, the position ids form a unique set of ids.
-        const tableData = positions.map((position): PostingPositionRow => {
+        return positions.map((position): PostingPositionRow => {
             const postingPosition = postingPositions.find(
-                (postingPosition) => postingPosition.position.id === position.id
+                (pp) => pp.position.id === position.id
             );
             const overrideData: Partial<PostingPositionRow> = {};
             if (postingPosition) {
@@ -106,262 +62,161 @@ export function ConnectedPostingDetailsView({ posting }: { posting: Posting }) {
                 ...overrideData,
             };
         });
-        const selected = tableData
-            .filter((row) => row.true_posting_position)
-            .map((row) => row.id);
-        return { postingPositions, tableData, selected };
     }, [posting_id, posting, positions]);
 
-    function generateCell(field: keyof PostingPositionRow, type: EditableType) {
-        return (props: Cell<PostingPositionRow>) => {
-            const row = props.row.original;
-            function upsert(partial: Partial<PostingPositionRow>) {
-                let newVal = partial[field];
-                return dispatch(
+    // Handler for toggling inclusion
+    const handleToggleIncluded = React.useCallback(
+        async (row: PostingPositionRow, value: boolean) => {
+            const position = positions.find((p) => p.id === row.position_id);
+            if (!position) return;
+
+            if (value) {
+                // Add to posting
+                await dispatch(
                     upsertPostingPosition({
-                        position_id: row.position_id,
-                        posting_id: row.posting_id,
-                        [field]: newVal,
+                        position,
+                        posting,
+                        hours: row.hours,
+                        num_positions: row.num_positions,
                     })
                 );
+            } else {
+                // Remove from posting
+                const postingPosition = posting.posting_positions.find(
+                    (pp) => pp.position.id === row.position_id
+                );
+                if (postingPosition) {
+                    await dispatch(deletePostingPosition(postingPosition));
+                }
             }
-            return (
-                <EditableCell
-                    field={field}
-                    upsert={upsert}
-                    type={type}
-                    editable={row.true_posting_position}
-                    {...props}
-                />
-            );
-        };
-    }
+        },
+        [dispatch, posting, positions]
+    );
 
-    const columns: Column<PostingPositionRow>[] = [
+    const columns: AdvancedColumnDef<PostingPositionRow>[] = [
         {
-            Header: generateHeaderCell("Position Code"),
-            accessor: "position_code",
+            header: "Included?",
+            accessorKey: "true_posting_position",
+            Cell: ({ row }) => (
+                <FormControlLabel
+                    control={
+                        <Switch
+                            checked={row.original.true_posting_position}
+                            onChange={(_, checked) => handleToggleIncluded(row.original, checked)}
+                            color="secondary"
+                        />
+                    }
+                    label=""
+                />
+            ),
+            size: 80,
         },
         {
-            Header: generateHeaderCell("Num Positions"),
-            accessor: "num_positions",
-            Cell: generateCell("num_positions", "number"),
+            header: "Position Code",
+            accessorKey: "position_code",
         },
         {
-            Header: generateHeaderCell("Hours per Assignment"),
-            accessor: "hours",
-            Cell: generateCell("hours", "number"),
+            header: "Num Positions",
+            accessorKey: "num_positions",
+            meta: { editable: true },
+            EditCell: generateNumberCell(),
+        },
+        {
+            header: "Hours per Assignment",
+            accessorKey: "hours",
+            meta: { editable: true },
+            EditCell: generateNumberCell(),
         },
     ];
 
-    const selectionChange = React.useCallback(
-        async (newSelection: number[]) => {
-            const added = arrayDiff(newSelection, selected);
-            const removed = arrayDiff(selected, newSelection);
-            const removedPostingPositions = postingPositions.filter(
-                (positionPosting) =>
-                    removed.includes(positionPosting.position.id)
-            );
-            const newPostingPositions = positions
-                .filter((position) => added.includes(position.id))
-                .map(
-                    (position): PostingPosition => ({
-                        position,
-                        posting,
-                        hours: position.hours_per_assignment,
-                        num_positions: position.desired_num_assignments,
-                    })
-                );
+    function handleEditRow(original: PostingPositionRow, values: Partial<PostingPositionRow>) {
+        if (!original.true_posting_position) return;
+        // Only update fields that are editable (num_positions, hours)
+        const update: Partial<PostingPositionRow> = {};
+        if ('num_positions' in values) update.num_positions = values.num_positions;
+        if ('hours' in values) update.hours = values.hours;
 
-            const promises = (
-                removedPostingPositions.map((postingPosition) =>
-                    dispatch(deletePostingPosition(postingPosition))
-                ) as any[]
-            ).concat(
-                newPostingPositions.map((postingPosition) =>
-                    dispatch(upsertPostingPosition(postingPosition))
-                )
-            );
-            try {
-                await Promise.all(promises);
-            } catch (e) {}
-        },
-        [selected, positions, postingPositions, posting, dispatch]
-    );
-
-    const updateCustomQuestions = React.useCallback(
-        async (customQuestions) => {
-            try {
-                await dispatch(
-                    upsertPosting({
-                        id: posting.id,
-                        custom_questions: JSON.parse(customQuestions),
-                    })
-                );
-            } catch (e) {}
-        },
-        [dispatch, posting]
-    );
-
-    function _upsertPosting(posting: Partial<Posting>) {
-        dispatch(upsertPosting(posting));
+        dispatch(
+            upsertPostingPosition({
+                position_id: original.position_id,
+                posting_id: original.posting_id,
+                ...update,
+            })
+        );
     }
 
     let numCustomQuestions = 0;
-    const pages = posting.custom_questions?.pages;
-    if (Array.isArray(pages)) {
-        for (const page of pages) {
-            numCustomQuestions +=
-                page?.elements?.length || page?.questions?.length || 0;
-        }
+    const elements = posting.custom_questions?.elements;
+    if (Array.isArray(elements)) {
+        numCustomQuestions = elements.length;
     }
 
     return (
-        <React.Fragment>
-            <table className="posting-details-view">
-                <tbody>
-                    <tr>
-                        <th>Name</th>
-                        <td>
-                            <EditableCell
-                                column={{ Header: "Posting Name" }}
-                                upsert={_upsertPosting}
-                                field="name"
-                                row={{ original: posting }}
-                                value={posting.name}
-                            />
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Open Date</th>
-                        <td>
-                            <EditableCell
-                                column={{ Header: "Open Date" }}
-                                upsert={_upsertPosting}
-                                field="open_date"
-                                row={{ original: posting }}
-                                value={posting.open_date || ""}
-                                type="date"
-                            />
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Close Date</th>
-                        <td>
-                            <EditableCell
-                                column={{ Header: "Close Date" }}
-                                upsert={_upsertPosting}
-                                field="close_date"
-                                row={{ original: posting }}
-                                value={posting.close_date || ""}
-                                type="date"
-                            />
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Intro Text</th>
-                        <td>
-                            <EditableCell
-                                column={{ Header: "Intro Text" }}
-                                upsert={_upsertPosting}
-                                field="intro_text"
-                                type="paragraph"
-                                row={{ original: posting }}
-                                value={posting.intro_text || ""}
-                            />
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <h4 className="mt-2">Positions</h4>
-            <p>
+        <Box sx={{ p: 2 }}>
+            <Typography variant="body2" sx={{ mb: 1 }}>
+                <strong>Posting Name:</strong> {posting.name || <em>Not set</em>}
+            </Typography>
+            <Typography variant="body2" sx={{ mb: 1 }}>
+                <strong>Open Date:</strong> {formatDate(posting.open_date ?? "")}
+            </Typography>
+            <Typography variant="body2" sx={{ mb: 1 }}>
+                <strong>Close Date:</strong> {formatDate(posting.close_date ?? "")}
+            </Typography>
+            <Typography variant="body2" sx={{ mb: 1 }}>
+                <strong>Intro Text:</strong> {posting.intro_text || <em>Not set</em>}
+            </Typography>
+
+            <Typography variant="subtitle2" sx={{ mt: 2 }} gutterBottom>
+                Posting Positions
+            </Typography>
+            <Typography variant="body2" sx={{ mb: 2 }}>
                 The selected positions below will be available when applicants
                 apply to this posting (You cannot edit <em>Num Position</em> or{" "}
                 <em>Hours per Assignment</em> until it is selected as part of
                 this posting.)
-            </p>
-            <AdvancedFilterTable
-                columns={columns}
-                data={tableData}
-                filterable={true}
-                selected={selected}
-                setSelected={selectionChange}
-            />
-            <h4>Custom Questions</h4>
-            <p>There are currently {numCustomQuestions} custom questions.</p>
-            <Button onClick={() => setCustomQuestionsVisible(true)}>
-                Edit Custom Questions
-            </Button>
-            <Modal
-                show={customQuestionsVisible}
-                onHide={() => setCustomQuestionsVisible(false)}
-                size="xl"
+            </Typography>
+            <Paper
+                variant="outlined"
+                sx={{
+                    mb: 2,
+                    p: 1,
+                    maxHeight: posting.posting_positions.length ? "46vh" : "41vh",
+                    overflow: "auto",
+                }}
             >
-                <Modal.Header closeButton>
-                    <Modal.Title>Edit Custom Questions</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Container>
-                        <Row>
-                            <p>
-                                To edit custom survey questions, please go to{" "}
-                                <a
-                                    href="https://surveyjs.io/create-survey"
-                                    target="_blank"
-                                    rel="noreferrer"
-                                >
-                                    surveyjs.io/create-survey
-                                </a>{" "}
-                                and click the <em>JSON Editor</em> tab. You may
-                                then copy and paste the text below into the JSON
-                                editor and switch to the{" "}
-                                <em>Survey Designer</em> tab. When you are done,
-                                switch back to the <em>JSON Editor</em> tab and
-                                copy-and-paste the JSON data below.
-                            </p>
-                        </Row>
-                        <Row className="mb-2">
-                            <CopyToClipboard text={customQuestions}>
-                                <Button>Copy Custom Questions</Button>
-                            </CopyToClipboard>
-                        </Row>
-                        <Row>
-                            <textarea
-                                style={{ width: "100%", minHeight: "20em" }}
-                                value={customQuestions}
-                                onChange={(e) =>
-                                    setCustomQuestions(e.target.value)
-                                }
-                            ></textarea>
-                        </Row>
-                        <Row>
-                            {!customQuestionsValid.valid && (
-                                <Alert variant="danger">
-                                    {customQuestionsValid.message}
-                                </Alert>
-                            )}
-                        </Row>
-                    </Container>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button
-                        onClick={() => setCustomQuestionsVisible(false)}
-                        variant="light"
-                    >
-                        Cancel
-                    </Button>
-                    <Button
-                        title="Save"
-                        disabled={!customQuestionsValid.valid}
-                        onClick={async () => {
-                            await updateCustomQuestions(customQuestions);
-                            setCustomQuestionsVisible(false);
-                        }}
-                    >
-                        Save
-                    </Button>
-                </Modal.Footer>
-            </Modal>
-        </React.Fragment>
+                <AdvancedFilterTable
+                    columns={columns}
+                    data={tableData}
+                    filterable={true}
+                    editable={true}
+                    onEditRow={handleEditRow}
+                    editBlocked={React.useCallback(
+                        (row: PostingPositionRow) =>
+                            row.true_posting_position
+                                ? false
+                                : "You can only edit info associated with included positions",
+                        []
+                    )}
+                />
+            </Paper>
+
+            <Typography variant="subtitle2" gutterBottom>
+                Custom Questions
+            </Typography>
+            {isQuestionsFieldInValidFormat(posting.custom_questions) ? (
+                <>
+                    <Typography variant="body2" sx={{ mb: 1 }}>
+                        There are currently {numCustomQuestions} custom questions for this posting.
+                    </Typography>
+                    <EditCustomQuestionsCell
+                        row={{ original: posting }}
+                    />
+                </>
+            ) : (
+                <Typography color="error">
+                    (Uneditable, questions in deprecated JSON format)
+                </Typography>
+            )}
+        </Box>
     );
 }

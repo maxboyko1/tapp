@@ -140,15 +140,13 @@ export const diffImport = {
                 const newVal = position[prop];
                 if (!isSame(oldVal, newVal)) {
                     ret.status = "modified";
-                    ret.changes[prop] = `"${oldVal}" → "${newVal}"`;
                     // Format dates and instructor lists differently
                     if (prop === "start_date" || prop === "end_date") {
                         ret.changes[prop] = `"${("" + oldVal).slice(
                             0,
                             10
                         )}" → "${("" + newVal).slice(0, 10)}"`;
-                    }
-                    if (prop === "instructors") {
+                    } else if (prop === "instructors") {
                         const oldInstructors =
                             diffImport.instructorsListFromField(
                                 oldVal as any[],
@@ -164,6 +162,38 @@ export const diffImport = {
                             .join("; ")} → ${newInstructors
                             .map((x) => `${x.last_name}, ${x.first_name}`)
                             .join("; ")}`;
+                    } else if (prop === "contract_template") {
+                        const getName = (val: any) => {
+                            if (val && typeof val === "object" && "template_name" in val) {
+                                return val.template_name;
+                            }
+                            if (typeof val === "string") {
+                                return val;
+                            }
+                            return "";
+                        };
+                        ret.changes[prop] = `${getName(oldVal)} → ${getName(newVal)}`;
+                    } else if (prop === "custom_questions") {
+                        const getNames = (val: any) => {
+                            if (
+                                val &&
+                                typeof val === "object" &&
+                                "elements" in val &&
+                                Array.isArray(val.elements)
+                            ) {
+                                return val.elements.map((q: any) => q.name).join(", ");
+                            }
+                            if (Array.isArray(val)) {
+                                return val.map((q: any) => (q && q.name ? q.name : String(q))).join(", ");
+                            }
+                            if (typeof val === "string") {
+                                return val;
+                            }
+                            return "";
+                        };
+                        ret.changes[prop] = `${getNames(oldVal)} → ${getNames(newVal)}`;
+                    } else {
+                        ret.changes[prop] = `"${oldVal}" → "${newVal}"`;
                     }
                 }
             }

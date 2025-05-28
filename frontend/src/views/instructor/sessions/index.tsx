@@ -1,9 +1,19 @@
 import React from "react";
 import { useSelector } from "react-redux";
+import {
+    Accordion,
+    AccordionDetails,
+    AccordionSummary,
+    List,
+    ListItem,
+    ListItemButton,
+    Typography,
+} from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { Link } from "react-router-dom";
 
 import { ContentArea } from "../../../components/layout";
 import { formatDate } from "../../../libs/utils";
-import { Accordion, Card, ListGroup, ListGroupItem } from "react-bootstrap";
 import {
     activeSessionSelector,
     activeUserSelector,
@@ -12,7 +22,6 @@ import {
     setActiveSession,
 } from "../../../api/actions";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
-import { NavLink } from "react-router-dom";
 
 export function InstructorSessionsView() {
     const activeSession = useSelector(activeSessionSelector);
@@ -33,80 +42,70 @@ export function InstructorSessionsView() {
     }, [allPositions, activeUser]);
 
     let heading = (
-        <div>
-            <h4 className="text-black">No session is currently selected</h4>
-        </div>
+        <Typography variant="h4" color="text.primary">
+            No session is currently selected
+        </Typography>
     );
     if (activeSession) {
         heading = (
-            <h4>
+            <Typography variant="h4">
                 The currently active session is{" "}
-                <span className="text-primary">
-                    {activeSession.name} ({formatDate(activeSession.start_date)}{" "}
-                    to {formatDate(activeSession.end_date)})
-                </span>
-            </h4>
+                <Typography component="span" color="primary" display="inline">
+                    {activeSession.name} ({formatDate(activeSession.start_date)} to {formatDate(activeSession.end_date)})
+                </Typography>
+            </Typography>
         );
     }
-
-    const displayPositions = positions.map((position) => (
-        <ListGroupItem key={position.position_code}>
-            <Card.Link as={NavLink} to={`/positions/${position.id}`}>
-                {position.position_code}
-                {position.position_title ? ` (${position.position_title})` : ""}
-            </Card.Link>
-        </ListGroupItem>
-    ));
 
     return (
         <div className="page-body">
             <ContentArea>
                 {heading}
-                <p>
+                <Typography component="p">
                     Below is a list of all sessions where you are listed as an
                     instructor. Select a session to see <i>positions</i>{" "}
                     (courses) that you are/were an instructor for.
-                </p>
+                </Typography>
                 {sessions.length === 0 ? (
-                    <h4>You are not listed as an instructor for any session</h4>
+                    <Typography variant="h4">
+                        You are not listed as an instructor for any session
+                    </Typography>
                 ) : null}
-                <Accordion>
-                    {sessions.map((session) => {
-                        const isActive = session.id === activeSession?.id;
-                        return (
-                            <Card
-                                key={session.id}
-                                bg={isActive ? "primary" : "light"}
-                                text={isActive ? "white" : "dark"}
-                            >
-                                <Card.Header
-                                    as="button"
-                                    className={`btn text-left ${
-                                        isActive ? "btn-primary " : "btn-light"
-                                    }`}
-                                    onClick={() => {
-                                        dispatch(setActiveSession(session));
-                                    }}
-                                >
-                                    {session.name} (
-                                    {formatDate(session.start_date)} to{" "}
-                                    {formatDate(session.end_date)})
-                                </Card.Header>
-                                {isActive ? (
-                                    <ListGroup className="mx-2 mb-2 text-dark">
-                                        {displayPositions.length > 0 ? (
-                                            displayPositions
-                                        ) : (
-                                            <ListGroupItem>
-                                                No Positions
-                                            </ListGroupItem>
-                                        )}
-                                    </ListGroup>
-                                ) : null}
-                            </Card>
-                        );
-                    })}
-                </Accordion>
+                {sessions.map((session) => {
+                    const isActive = session.id === activeSession?.id;
+                    const sessionPositions = positions.filter(
+                        (position) => position.session_id === session.id
+                    );
+                    return (
+                        <Accordion key={session.id} expanded={isActive} onChange={() => dispatch(setActiveSession(session))}>
+                            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                                <Typography variant="h6" color={isActive ? "primary" : "textPrimary"}>
+                                    {session.name} ({formatDate(session.start_date)} to {formatDate(session.end_date)})
+                                </Typography>
+                            </AccordionSummary>
+                            <AccordionDetails>
+                                <List>
+                                    {sessionPositions.length > 0 ? (
+                                        sessionPositions.map((position) => (
+                                            <ListItem key={position.id} disablePadding>
+                                                <ListItemButton component={Link} to={`/instructor/positions/${position.id}`}>
+                                                    <Typography>
+                                                        {position.position_code}
+                                                        {position.position_title ? ` (${position.position_title})` : ""}
+                                                    </Typography>
+                                                </ListItemButton>
+                                            </ListItem>
+                                        ))
+                                    ) : (
+                                        <ListItem>
+                                            <Typography>No Positions</Typography>
+                                        </ListItem>
+                                    )}
+                                </List>
+                            </AccordionDetails>
+                        </Accordion>
+                    )
+                })}
             </ContentArea>
         </div>
     );

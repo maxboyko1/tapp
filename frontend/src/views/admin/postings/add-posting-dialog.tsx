@@ -1,15 +1,24 @@
 import React from "react";
+import {
+    Alert,
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+} from "@mui/material";
+
 import { strip } from "../../../libs/utils";
 import { useSelector } from "react-redux";
 import { upsertPosting, postingsSelector } from "../../../api/actions";
-import { Modal, Button, Alert } from "react-bootstrap";
 import { Posting } from "../../../api/defs/types";
 import { PostingEditor } from "../../../components/forms/posting-editor";
+import { areAllQuestionsNonEmpty, emptyCustomQuestions } from "../../../components/custom-question-utils";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
 
 interface Conflict {
     delayShow: string;
-    immediateShow: JSX.Element | string;
+    immediateShow: React.JSX.Element | string;
 }
 
 function getConflicts(posting: Partial<Posting>, postings: Posting[] = []) {
@@ -33,6 +42,7 @@ const BLANK_POSTING = {
     open_date: "",
     close_date: "",
     intro_text: "",
+    custom_questions: emptyCustomQuestions
 };
 
 export function ConnectedAddPostingDialog({
@@ -64,33 +74,35 @@ export function ConnectedAddPostingDialog({
     const conflicts = getConflicts(newPosting, postings);
 
     return (
-        <Modal show={show} onHide={onHide}>
-            <Modal.Header closeButton>
-                <Modal.Title>Add Posting</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
+        <Dialog open={show} onClose={onHide} maxWidth="sm" fullWidth>
+            <DialogTitle>Add Posting</DialogTitle>
+            <DialogContent dividers>
                 <PostingEditor
                     posting={newPosting as Posting}
                     setPosting={setNewPosting as any}
                 />
                 {conflicts.immediateShow ? (
-                    <Alert variant="danger">{conflicts.immediateShow}</Alert>
+                    <Alert severity="error">{conflicts.immediateShow}</Alert>
                 ) : null}
-            </Modal.Body>
-            <Modal.Footer>
-                <Button onClick={onHide} variant="light">
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={onHide} variant="contained" color="secondary">
                     Cancel
                 </Button>
                 <Button
                     onClick={createInstructor}
                     title={conflicts.delayShow || "Create Session"}
                     disabled={
-                        !!conflicts.delayShow || !!conflicts.immediateShow
+                        !!conflicts.delayShow ||
+                        !!conflicts.immediateShow ||
+                        !areAllQuestionsNonEmpty(newPosting.custom_questions)
                     }
+                    variant="contained"
+                    color="primary"
                 >
                     Create Posting
                 </Button>
-            </Modal.Footer>
-        </Modal>
+            </DialogActions>
+        </Dialog>
     );
 }

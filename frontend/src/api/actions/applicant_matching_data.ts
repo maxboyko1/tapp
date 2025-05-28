@@ -66,7 +66,7 @@ function prepForApi(data: Partial<ApplicantMatchingDatum>) {
 }
 
 // dispatchers
-export const fetchApplicantMatchingData = validatedApiDispatcher({
+export const fetchApplicantMatchingData = validatedApiDispatcher<RawApplicantMatchingDatum[], []>({
     name: "fetchApplicantMatchingData",
     description: "Fetch applicant_matching_data",
     onErrorDispatch: (e) => fetchError(e.toString()),
@@ -91,7 +91,7 @@ export const fetchApplicantMatchingData = validatedApiDispatcher({
     },
 });
 
-export const fetchApplicantMatchingDatum = validatedApiDispatcher({
+export const fetchApplicantMatchingDatum = validatedApiDispatcher<RawApplicantMatchingDatum, [HasId]>({
     name: "fetchApplicantMatchingDatum",
     description: "Fetch applicant_matching_datum",
     onErrorDispatch: (e) => fetchError(e.toString()),
@@ -112,7 +112,10 @@ export const fetchApplicantMatchingDatum = validatedApiDispatcher({
     },
 });
 
-export const upsertApplicantMatchingDatum = validatedApiDispatcher({
+export const upsertApplicantMatchingDatum = validatedApiDispatcher<
+    RawApplicantMatchingDatum,
+    [Partial<ApplicantMatchingDatum>]
+>({
     name: "upsertApplicantMatchingDatum",
     description: "Add/insert applicant_matching_datum",
     onErrorDispatch: (e) => upsertError(e.toString()),
@@ -129,14 +132,19 @@ export const upsertApplicantMatchingDatum = validatedApiDispatcher({
         },
 });
 
-export const upsertApplicantMatchingData = validatedApiDispatcher({
+export const upsertApplicantMatchingData = validatedApiDispatcher<
+    RawApplicantMatchingDatum[],
+    [Partial<ApplicantMatchingDatum>[]]
+>({
     name: "upsertApplicantMatchingData",
     description: "Upsert applicant matching data",
     onErrorDispatch: (e) => fetchError(e.toString()),
     dispatcher:
         (applicantMatchingData: Partial<ApplicantMatchingDatum>[]) =>
         async (dispatch) => {
-            if (applicantMatchingData.length === 0) return;
+            if (applicantMatchingData.length === 0) {
+                return [];
+            }
             const dispatchers = applicantMatchingData.map(
                 (applicantMatchingDatum) =>
                     dispatch(
@@ -149,7 +157,10 @@ export const upsertApplicantMatchingData = validatedApiDispatcher({
         },
 });
 
-export const deleteApplicantMatchingDatum = validatedApiDispatcher({
+export const deleteApplicantMatchingDatum = validatedApiDispatcher<
+    void,
+    [Pick<ApplicantMatchingDatum, "applicant" | "session">]
+>({
     name: "deleteApplicantMatchingDatum",
     description: "Delete applicant_matching_datum",
     onErrorDispatch: (e) => deleteError(e.toString()),
@@ -235,7 +246,10 @@ export const applicantMatchingDataSelector = createSelector(
     }
 );
 
-export const exportApplicantMatchingData = validatedApiDispatcher({
+export const exportApplicantMatchingData = validatedApiDispatcher<
+    File,
+    [PrepareDataFunc<ApplicantMatchingDatum>, ExportFormat?]
+>({
     name: "exportApplicantMatchingData",
     description: "Export applicant matching data",
     onErrorDispatch: (e) => fetchError(e.toString()),

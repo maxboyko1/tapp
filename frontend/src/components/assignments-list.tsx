@@ -1,26 +1,43 @@
-import React from "react";
 import PropTypes from "prop-types";
+
 import { formatDate } from "../libs/utils";
 import { createDiffColumnsFromColumns } from "./diff-table";
-import { AdvancedFilterTable } from "./filter-table/advanced-filter-table";
+import { AdvancedFilterTable, AdvancedColumnDef } from "./advanced-filter-table";
 import { Assignment, MinimalAssignment } from "../api/defs/types";
-import { CellProps } from "react-table";
 import { DiffSpec } from "../libs/diffs";
 
-const DEFAULT_COLUMNS: any[] = [
-    { Header: "Last Name", accessor: "applicant.last_name" },
-    { Header: "First Name", accessor: "applicant.first_name" },
-    { Header: "Position Code", accessor: "position.position_code" },
-    { Header: "Hours", accessor: "hours", className: "number-cell" },
+const DEFAULT_COLUMNS: AdvancedColumnDef<Assignment>[] = [
     {
-        Header: "Start",
-        accessor: "start_date",
-        Cell: (row: CellProps<Assignment>) => formatDate(row.value) || "",
+        header: "Last Name",
+        accessorKey: "applicant.last_name"
     },
     {
-        Header: "End",
-        accessor: "end_date",
-        Cell: (row: CellProps<Assignment>) => formatDate(row.value) || "",
+        header: "First Name",
+        accessorKey: "applicant.first_name"
+    },
+    {
+        header: "Position Code",
+        accessorKey: "position.position_code"
+    },
+    {
+        header: "Hours",
+        accessorKey: "hours",
+    },
+    {
+        header: "Start",
+        accessorKey: "start_date",
+        Cell: ({ cell }) => {
+            const date = cell?.getValue?.();
+            return typeof date === "string" ? formatDate(date) : <></>;
+        },
+    },
+    {
+        header: "End",
+        accessorKey: "end_date",
+        Cell: ({ cell }) => {
+            const date = cell?.getValue?.();
+            return typeof date === "string" ? formatDate(date) : <></>;
+        },
     },
 ];
 

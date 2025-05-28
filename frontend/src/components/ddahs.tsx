@@ -1,39 +1,67 @@
 import React from "react";
+import {
+    Alert,
+    Autocomplete,
+    Box,
+    Button,
+    FormControl,
+    IconButton,
+    InputLabel,
+    MenuItem,
+    Select,
+    Stack,
+    TextField,
+    Typography,
+} from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
+import DeleteIcon from "@mui/icons-material/Delete";
+
 import { createDiffColumnsFromColumns } from "./diff-table";
 import { MinimalDdah, Ddah, Assignment, Duty } from "../api/defs/types";
 import { DiffSpec, ddahDutiesToString } from "../libs/diffs";
-import { Form, Button, Alert } from "react-bootstrap";
 import { DialogRow } from "./forms/common-controls";
-import { Typeahead } from "react-bootstrap-typeahead";
-import { FaPlus, FaTrash } from "react-icons/fa";
 import { stringToNativeType } from "../libs/urls";
-import { AdvancedFilterTable } from "./filter-table/advanced-filter-table";
+import { AdvancedColumnDef, AdvancedFilterTable } from "./advanced-filter-table";
 import { splitDutyDescription } from "../libs/ddah-utils";
 
-const DEFAULT_COLUMNS = [
+const DEFAULT_COLUMNS: AdvancedColumnDef<Ddah>[] = [
     {
-        Header: "Position",
-        accessor: "assignment.position.position_code",
-        maxWidth: 120,
+        header: "Position",
+        accessorKey: "assignment.position.position_code",
+        maxSize: 120,
     },
     {
-        Header: "Last Name",
-        accessor: "assignment.applicant.last_name",
-        maxWidth: 120,
+        header: "Last Name",
+        accessorKey: "assignment.applicant.last_name",
+        maxSize: 120,
     },
     {
-        Header: "First Name",
-        accessor: "assignment.applicant.first_name",
-        maxWidth: 120,
+        header: "First Name",
+        accessorKey: "assignment.applicant.first_name",
+        maxSize: 120,
     },
     {
-        Header: "Total Hours",
-        accessor: "total_hours",
-        maxWidth: 100,
-        className: "number-cell",
+        header: "Total Hours",
+        accessorKey: "total_hours",
+        maxSize: 100,
+        meta: {
+            className: "number-cell",
+        }
     },
-    { Header: "Duties", accessor: "duties" },
+    {
+        header: "Duties",
+        accessorKey: "duties"
+    },
 ];
+
+export type DutyCategory =
+    | "note"
+    | "prep"
+    | "training"
+    | "meeting"
+    | "contact"
+    | "marking"
+    | "other";
 
 /**
  * Display a DiffSpec array of positions and highlight the changes.
@@ -116,80 +144,82 @@ function DutyRow({
 }) {
     const { category, description } = splitDutyDescription(duty.description);
     return (
-        <DialogRow
-            icon={
-                <Button
+        <Stack direction="row" spacing={2} alignItems="flex-start" sx={{ mb: 2 }}>
+            <Box>
+                <IconButton
                     title="Remove duty"
                     onClick={() => removeDuty(duty)}
-                    variant="outline-info"
+                    color="info"
+                    size="small"
                 >
-                    <FaTrash />
-                </Button>
-            }
-            colStretch={[1, 2, 7]}
-        >
-            <>
-                <Form.Label>Hours</Form.Label>
+                    <DeleteIcon />
+                </IconButton>
+            </Box>
+            <Box sx={{ minWidth: 100 }}>
                 {category === "note" ? (
                     <div />
                 ) : (
-                    <Form.Control
+                    <TextField
+                        label="Hours"
                         type="number"
                         value={duty.hours}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                        onChange={(e) =>
                             upsertDuty({
                                 ...duty,
-                                hours: stringToNativeType(
-                                    e.target.value
-                                ) as any,
+                                hours: stringToNativeType(e.target.value) as any,
                             })
                         }
+                        size="small"
+                        fullWidth
                     />
                 )}
-            </>
-            <>
-                <Form.Label>Category</Form.Label>
-                <Form.Control
-                    title="Enter what category these duties fit into"
-                    as="select"
-                    value={category}
-                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-                        // A "note" does not have any hours associated with it.
-                        const dutyCopy = { ...duty };
-                        const newCategory = e.target.value;
-                        if (newCategory === "note") {
-                            dutyCopy.hours = 0;
-                        }
-                        return upsertDuty({
-                            ...dutyCopy,
-                            description: `${newCategory}:${description}`,
-                        });
-                    }}
-                >
-                    <option value="note">Note</option>
-                    <option value="meeting">Meetings</option>
-                    <option value="prep">Preparation</option>
-                    <option value="contact">Contact time</option>
-                    <option value="other">Other duties</option>
-                    <option value="marking">Marking/Grading</option>
-                    <option value="training">Training</option>
-                </Form.Control>
-            </>
-            <>
-                <Form.Label>Description</Form.Label>
-                <Form.Control
+            </Box>
+            <Box sx={{ minWidth: 180 }}>
+                <FormControl fullWidth size="small">
+                    <InputLabel id={`category-label-${duty.order}`}>Category</InputLabel>
+                    <Select
+                        labelId={`category-label-${duty.order}`}
+                        label="Category"
+                        value={category}
+                        onChange={(e) => {
+                            const newCategory = e.target.value;
+                            const dutyCopy = { ...duty };
+                            if (newCategory === "note") {
+                                dutyCopy.hours = 0;
+                            }
+                            upsertDuty({
+                                ...dutyCopy,
+                                description: `${newCategory}:${description}`,
+                            });
+                        }}
+                    >
+                        <MenuItem value="note">Note</MenuItem>
+                        <MenuItem value="meeting">Meetings</MenuItem>
+                        <MenuItem value="prep">Preparation</MenuItem>
+                        <MenuItem value="contact">Contact time</MenuItem>
+                        <MenuItem value="other">Other duties</MenuItem>
+                        <MenuItem value="marking">Marking/Grading</MenuItem>
+                        <MenuItem value="training">Training</MenuItem>
+                    </Select>
+                </FormControl>
+            </Box>
+            <Box sx={{ flex: 1 }}>
+                <TextField
+                    label="Description"
                     title="Enter a description of what these hours are allocated for"
-                    type="input"
+                    type="text"
                     value={description}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    onChange={(e) =>
                         upsertDuty({
                             ...duty,
                             description: `${category}:${e.target.value}`,
                         })
                     }
+                    size="small"
+                    fullWidth
                 />
-            </>
-        </DialogRow>
+            </Box>
+        </Stack>
     );
 }
 
@@ -217,32 +247,48 @@ export function DdahEditor(props: {
 
     // If the assignment is editable, we have a selector for the assignments,
     // otherwise it is rendered as fixed text.
-    let assignmentNode: React.ReactNode = ddah.assignment
-        ? ` ${ddah.assignment.position.position_code} for ${ddah.assignment.applicant.last_name}, ${ddah.assignment.applicant.first_name}`
-        : "No Assignment";
+    let assignmentNode: React.ReactNode = ddah.assignment ? (
+        <Typography variant="body2" component="span">
+            {ddah.assignment.position.position_code} for {ddah.assignment.applicant.last_name}, {ddah.assignment.applicant.first_name}
+        </Typography>
+    ) : (
+        <Typography variant="body2" component="span" color="text.secondary">
+            No Assignment
+        </Typography>
+    );
+    
+    const assignmentsWithLabel = assignments.map((assignment) => ({
+        ...assignment,
+        display_title: `${assignment.position.position_code} for ${assignment.applicant.last_name}, ${assignment.applicant.first_name}`,
+    }));
+
     if (editableAssignment) {
         assignmentNode = (
-            <Typeahead
-                id="position-input"
-                ignoreDiacritics={true}
-                placeholder="Assignment..."
-                multiple
-                labelKey={(option: Assignment) =>
-                    `${option.position.position_code} for ${option.applicant.first_name} ${option.applicant.last_name}`
+            <Autocomplete
+                id="assignment-input"
+                options={assignmentsWithLabel}
+                getOptionLabel={(option) => option.display_title}
+                value={
+                    ddah.assignment?.id != null
+                        ? assignmentsWithLabel.find(a => a.id === ddah.assignment!.id) || null
+                        : null
                 }
-                selected={ddah.assignment == null ? [] : [ddah.assignment]}
-                options={assignments}
-                onChange={setAssignment}
+                onChange={(_, value) => setAssignment(value ? [value] : [])}
+                renderInput={(params) => (
+                    <TextField {...params} placeholder="Assignment..." size="small" />
+                )}
+                isOptionEqualToValue={(option, value) => option.id === value.id}
             />
         );
     }
 
     let instructions = (
         <Button
-            variant="outline-info"
-            size="sm"
+            variant="outlined"
+            color="info"
+            size="small"
             onClick={() => setInstructionsVisible(true)}
-            className="float-right"
+            sx={{ float: "right" }}
         >
             Show Instructions
         </Button>
@@ -250,19 +296,18 @@ export function DdahEditor(props: {
     if (instructionsVisible) {
         instructions = (
             <Alert
-                variant="info"
+                severity="info"
                 onClose={() => setInstructionsVisible(false)}
-                dismissible
             >
-                <p>
+                <Typography variant="body2">
                     A DDAH describes all duties and the amount of time allocated
                     to each duty. A DDAH should also include a breakdown of when
                     assignments are expected to be due, how long it will take to
                     mark them, and the expected turnaround time. This
                     information should be included in the description of every{" "}
                     <em>Marking/Grading</em> duty.
-                </p>
-                <p>
+                </Typography>
+                <Typography variant="body2" sx={{ mt: 1 }}>
                     Teaching Assistants shall be granted a reasonable period of time
                     of no less than 4 business days (minimum of 96 hours) to grade
                     student coursework. TAs are not expected to grade on the weekends,
@@ -273,25 +318,29 @@ export function DdahEditor(props: {
                     is listed in the DDAH form, a Teaching Assistant will be required to
                     complete the assignment no less than two (2) weeks from the time
                     the supervisor informs the Teaching Assistant.
-                </p>
-                <p>
+                </Typography>
+                <Typography variant="body2" sx={{ mt: 1 }}>
                     In the 'Description Field' add details of when the assignments are
                     expected to be available, how long it will mark them, turnaround
                     time, and include any due dates.
-                </p>
-                <p>
-                    Sample Descriptions:<br/>
-                    "Midterm 1; 120 tests; 10 minutes per test; available on Oct 4;
-                    expected turnaround time 5 days."<br/>
-                    “Term Test 3 marking - available Oct 4, due Oct 11”<br/>
-                    “A3 Marking (Apr 8-15 grading period)”
-                </p>
-                <p className="mb-1">
+                </Typography>
+                <Typography variant="body2" sx={{ mt: 1 }}>
+                    Sample Descriptions:
+                </Typography>
+                <ul style={{ marginTop: 0, marginBottom: 0 }}>
+                    <li>
+                        "Midterm 1; 120 tests; 10 minutes per test; available on Oct 4;
+                        expected turnaround time 5 days."
+                    </li>
+                    <li>"Term Test 3 marking - available Oct 4, due Oct 11"</li>
+                    <li>"A3 Marking (Apr 8-15 grading period)"</li>
+                </ul>
+                <Typography variant="body2" sx={{ mt: 1 }}>
                     A <em>Note</em> provides information that doesn't correspond
                     to specific hours. Information that should be included as a{" "}
-                    <em>Note</em> include{" "}
-                </p>
-                <ul className="mb-0 mt-0">
+                    <em>Note</em> include:
+                </Typography>
+                <ul style={{ marginTop: 0, marginBottom: 0 }}>
                     <li>
                         The{" "}
                         <em>
@@ -344,14 +393,18 @@ export function DdahEditor(props: {
     return (
         <React.Fragment>
             {instructions}
-            <Form>
+            <Box component="form" noValidate autoComplete="off">
                 <DialogRow>
                     <React.Fragment>
-                        <Form.Label>Assignment</Form.Label>
+                        <Typography variant="h6" sx={{ mt: 1, mb: 1 }}>
+                            Assignment
+                        </Typography>
                         {assignmentNode}
                     </React.Fragment>
                 </DialogRow>
-                <h4>Duties</h4>
+                <Typography variant="h6" sx={{ mt: 2, mb: 1 }}>
+                    Duties
+                </Typography>
                 {duties.map((duty) => (
                     <DutyRow
                         duty={duty}
@@ -362,7 +415,8 @@ export function DdahEditor(props: {
                 ))}
                 <DialogRow>
                     <Button
-                        variant="outline-info"
+                        variant="outlined"
+                        color="info"
                         onClick={() =>
                             upsertDuty({
                                 description: "",
@@ -370,30 +424,28 @@ export function DdahEditor(props: {
                                 order: nextOrder,
                             })
                         }
+                        startIcon={<AddIcon />}
                     >
-                        <FaPlus className="add-duty-btn-icon" />
                         Add Duty
                     </Button>
                 </DialogRow>
-                <DialogRow>
-                    <>
-                        <span
-                            className={
-                                hoursMismatch ? "add-ddah-hours-mismatch" : ""
-                            }
+                <Box sx={{ mt: 2 }}>
+                    <Typography variant="body2">
+                        <Typography
+                            component="span"
+                            variant="body2"
+                            color={hoursMismatch ? "error" : "text.primary"}
+                            sx={{ fontWeight: hoursMismatch ? "bold" : "normal" }}
                         >
                             {totalHours}
-                        </span>{" "}
-                        of {ddah.assignment ? ddah.assignment.hours : "?"} hours
-                        allocated{" "}
+                        </Typography>{" "}
+                        of {ddah.assignment ? ddah.assignment.hours : "?"} hours allocated{" "}
                         {hoursMismatch
-                            ? `(${
-                                  (ddah.assignment?.hours || 0) - totalHours
-                              } unassigned)`
+                            ? `(${(ddah.assignment?.hours || 0) - totalHours} unassigned)`
                             : ""}
-                    </>
-                </DialogRow>
-            </Form>
+                    </Typography>
+                </Box>
+            </Box>
         </React.Fragment>
     );
 }

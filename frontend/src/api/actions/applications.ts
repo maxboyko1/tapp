@@ -45,7 +45,7 @@ function prepApplicationForApi(data: Partial<Application>) {
 }
 
 // dispatchers
-export const fetchApplications = validatedApiDispatcher({
+export const fetchApplications = validatedApiDispatcher<RawApplication[], []>({
     name: "fetchApplications",
     description: "Fetch applications",
     onErrorDispatch: (e) => fetchError(e.toString()),
@@ -70,7 +70,7 @@ export const fetchApplications = validatedApiDispatcher({
     },
 });
 
-export const fetchApplication = validatedApiDispatcher({
+export const fetchApplication = validatedApiDispatcher<RawApplication, [HasId]>({
     name: "fetchApplication",
     description: "Fetch application",
     onErrorDispatch: (e) => fetchError(e.toString()),
@@ -87,11 +87,11 @@ export const fetchApplication = validatedApiDispatcher({
             `/${role}/sessions/${activeSessionId}/applications/${payload.id}`
         )) as RawApplication;
         dispatch(fetchOneApplicationSuccess(data));
-        return data;
+    return data;
     },
 });
 
-export const upsertApplication = validatedApiDispatcher({
+export const upsertApplication = validatedApiDispatcher<RawApplication, [Partial<Application>]>({
     name: "upsertApplication",
     description: "Add/insert application",
     onErrorDispatch: (e) => upsertError(e.toString()),
@@ -114,7 +114,7 @@ export const upsertApplication = validatedApiDispatcher({
         },
 });
 
-export const deleteApplication = validatedApiDispatcher({
+export const deleteApplication = validatedApiDispatcher<void, [HasId]>({
     name: "deleteApplication",
     description: "Delete application",
     onErrorDispatch: (e) => deleteError(e.toString()),
@@ -135,7 +135,7 @@ export const deleteApplication = validatedApiDispatcher({
     },
 });
 
-export const exportApplications = validatedApiDispatcher({
+export const exportApplications = validatedApiDispatcher<Blob, [PrepareDataFunc<Application>, ExportFormat?]>({
     name: "exportApplications",
     description: "Export applications",
     onErrorDispatch: (e) => fetchError(e.toString()),

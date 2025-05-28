@@ -1,5 +1,7 @@
 import React from "react";
 import FileSaver from "file-saver";
+import { Alert } from "@mui/material";
+
 import {
     instructorsSelector,
     positionsSelector,
@@ -10,7 +12,6 @@ import {
 import { useSelector } from "react-redux";
 import { ExportActionButton } from "../../../components/export-button";
 import { ImportActionButton } from "../../../components/import-button";
-import { Alert } from "react-bootstrap";
 import {
     ExportFormat,
     normalizeImport,
@@ -25,6 +26,7 @@ import { positionSchema } from "../../../libs/schema";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
 import { MinimalPosition, Position } from "../../../api/defs/types";
 import type { DataFormat } from "../../../libs/import-export/normalize-import";
+import { isQuestionsJsonImportInValidFormat } from "../../../components/custom-question-utils";
 
 /**
  * Allows for the download of a file blob containing the exported instructors.
@@ -122,13 +124,89 @@ export function ConnectedImportPositionsAction({
             // normalize the data coming from the file
             let data = normalizeImport(fileContent, positionSchema);
             // `normalizeImport` only normalizes the column names and dates. We need to make sure the
-            // instructors are correct as well.
-            for (const item of data) {
-                item.instructors = diffImport
-                    .instructorsListFromField(item.instructors || [], {
-                        instructors,
-                    })
-                    .map((x) => x.utorid);
+            // instructors (and custom questions, if any) are correct as well.
+
+            // If spreadsheet, merge in original columns (so "question" columns are present)
+            let questionColumns: string[] = [];
+            if (fileContent.fileType === "spreadsheet") {
+                data = data.map((item, idx) => ({
+                    ...fileContent.data[idx],
+                    ...item,
+                }));
+                questionColumns = Array.from(
+                    new Set(
+                        fileContent.data
+                            .flatMap((row: Record<string, any>) => Object.keys(row))
+                            .filter((key: string) => /^question([_\s-]?\d*)?$/i.test(key.trim()))
+                    )
+                );
+            }
+
+            // Process each row
+            for (let idx = 0; idx < data.length; idx++) {
+                const item = data[idx];
+
+                // --- Instructors normalization ---
+                if (typeof item.instructors === "string") {
+                    item.instructors = item.instructors
+                        .split(";")
+                        .map((s) => s.trim())
+                        .filter(Boolean)
+                        .map((name) => {
+                            // Split "LastName, FirstName"
+                            const [last, first] = name.split(",").map((s) => s.trim());
+                            return { first_name: first || "", last_name: last || "" };
+                        });
+                }
+
+                if (
+                    Array.isArray(item.instructors) &&
+                    item.instructors.length > 0 &&
+                    typeof item.instructors[0] === "object"
+                ) {
+                    item.instructors = item.instructors
+                        .map((obj) => {
+                            const match = instructors.find(
+                                (inst) =>
+                                    inst.first_name === obj.first_name &&
+                                    inst.last_name === obj.last_name
+                            );
+                            return match ? match.utorid : null;
+                        })
+                        .filter(Boolean);
+                } else {
+                    item.instructors = diffImport
+                        .instructorsListFromField(item.instructors || [], {
+                            instructors,
+                        })
+                        .map((x) => x.utorid);
+                }
+
+                // --- Custom questions normalization ---
+                if (fileContent.fileType === "json") {
+                    if (Array.isArray(item.custom_questions)) {
+                        if (!isQuestionsJsonImportInValidFormat(JSON.stringify(item.custom_questions))) {
+                            throw new Error(
+                                `Invalid custom questions format for position ${item.position_code}, expected array of non-empty strings such as ["Who?", "What?", "Where?"]`
+                            );
+                        }
+                        item.custom_questions = {
+                            elements: item.custom_questions.map((name: string) => ({
+                                type: "comment",
+                                name,
+                            })),
+                        };
+                    }
+                } else {
+                    // Use the original spreadsheet row for question columns
+                    const originalRow = fileContent.data[idx] as Record<string, any>;
+                    const questions = questionColumns
+                        .map((key) => (key in originalRow ? originalRow[key] : ""))
+                        .filter((val) => typeof val === "string" && val.trim() !== "")
+                        .map((name) => ({ type: "comment", name: name.trim() }));
+
+                    item.custom_questions = { elements: questions };
+                }
             }
 
             // Compute which positions have been added/modified
@@ -179,7 +257,7 @@ const DialogContent = React.memo(function DialogContent({
 }) {
     let dialogContent = <p>No data loaded...</p>;
     if (processingError) {
-        dialogContent = <Alert variant="danger">{"" + processingError}</Alert>;
+        dialogContent = <Alert severity="error">{"" + processingError}</Alert>;
     } else if (diffed) {
         const newItems = diffed
             .filter((item) => item.status === "new")
@@ -190,7 +268,7 @@ const DialogContent = React.memo(function DialogContent({
 
         if (newItems.length === 0 && modifiedDiffSpec.length === 0) {
             dialogContent = (
-                <Alert variant="warning">
+                <Alert severity="warning">
                     No difference between imported positions and those already
                     on the system.
                 </Alert>
@@ -199,20 +277,16 @@ const DialogContent = React.memo(function DialogContent({
             dialogContent = (
                 <>
                     {newItems.length > 0 && (
-                        <Alert variant="primary">
-                            <span className="mb-1">
-                                The following positions will be{" "}
-                                <strong>added</strong>
-                            </span>
+                        <Alert severity="success">
+                            The following positions will be{" "}
+                            <strong>added</strong>
                             <PositionsList positions={newItems} />
                         </Alert>
                     )}
                     {modifiedDiffSpec.length > 0 && (
-                        <Alert variant="info">
-                            <span className="mb-1">
-                                The following positions will be{" "}
-                                <strong>modified</strong>
-                            </span>
+                        <Alert severity="info">
+                            The following positions will be{" "}
+                            <strong>modified</strong>
                             <PositionsDiffList
                                 modifiedPositions={modifiedDiffSpec}
                             />

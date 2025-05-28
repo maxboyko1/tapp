@@ -1,7 +1,26 @@
+import React from "react";
+import { useSelector } from "react-redux";
+import {
+    Box,
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    LinearProgress,
+    ListItemText,
+    ListSubheader,
+    Menu,
+    MenuItem,
+    Typography,
+} from "@mui/material";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+
 import { normalizeImport } from "../../libs/import-export";
 import {
     instructorsSelector,
     contractTemplatesSelector,
+    letterTemplatesSelector,
     upsertApplicant,
     upsertAssignment,
     upsertPosition,
@@ -19,6 +38,17 @@ import {
     upsertPosting,
     upsertPostingPosition,
     fetchPositions,
+    applicantsSelector,
+    fetchApplicants,
+    fetchUsers,
+    fetchApplications,
+    fetchInstructors,
+    fetchContractTemplates,
+    fetchLetterTemplates,
+    fetchAssignments,
+    assignmentsSelector,
+    instructorPreferencesSelector,
+    usersSelector,
 } from "../../api/actions";
 import { apiGET, apiPOST } from "../../libs/api-utils";
 import {
@@ -26,18 +56,15 @@ import {
     applicantSchema,
     assignmentSchema,
 } from "../../libs/schema";
-import React from "react";
-import { useSelector } from "react-redux";
-import { Button, Modal, ProgressBar, Dropdown } from "react-bootstrap";
 import { useThunkDispatch } from "../../libs/thunk-dispatch";
 import { prepareFull } from "../../libs/import-export";
 import {
-    Applicant,
     MinimalAssignment,
     MinimalPosition,
     Session,
 } from "../../api/defs/types";
 import { seedData } from "../../mock_data";
+import { fetchInstructorPreferences } from "../../api/actions/instructor_preferences";
 
 type PromiseOrVoidFunction = (...args: any[]) => Promise<any> | void;
 
@@ -55,7 +82,7 @@ export function SeedDataMenu({
     sessions?: Session[];
     fetchSessions: Function;
 }) {
-    const [dropdownVisible, setDropdownVisible] = React.useState(false);
+    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const [confirmDialogVisible, setConfirmDialogVisible] =
         React.useState(false);
     const [seedAction, _setSeedAction] = React.useState<PromiseOrVoidFunction>(
@@ -65,16 +92,44 @@ export function SeedDataMenu({
     const [stage, setStage] = React.useState("");
     const [progress, setProgress] = React.useState(0);
     const dispatch = useThunkDispatch();
-    const instructors = useSelector(instructorsSelector);
-    const contractTemplates = useSelector(contractTemplatesSelector);
-    const positions = useSelector(positionsSelector);
-    const targetSession = useSelector(activeSessionSelector);
-
-    let session: Session | null;
-    let applicants: Applicant[] = [];
-    let applications = useSelector(applicationsSelector);
     let count;
     let total;
+
+    // Redux selectors
+    const reduxApplicants = useSelector(applicantsSelector);
+    const reduxApplications = useSelector(applicationsSelector);
+    const reduxAssignments = useSelector(assignmentsSelector);
+    const reduxContractTemplates = useSelector(contractTemplatesSelector);
+    const reduxInstructorPreferences = useSelector(instructorPreferencesSelector);
+    const reduxInstructors = useSelector(instructorsSelector);
+    const reduxLetterTemplates = useSelector(letterTemplatesSelector);
+    const reduxPositions = useSelector(positionsSelector);
+    const reduxUsers = useSelector(usersSelector);
+    const targetSession = useSelector(activeSessionSelector);
+
+    // Local state for referenced entities
+    const [, setAssignments] = React.useState(reduxAssignments);
+    const [, setInstructorPreferences] = React.useState(reduxInstructorPreferences);
+    const [, setLetterTemplates] = React.useState(reduxLetterTemplates);
+    const [, setUsers] = React.useState(reduxUsers);
+    const [applicants, setApplicants] = React.useState(reduxApplicants);
+    const [applications, setApplications] = React.useState(reduxApplications);
+    const [contractTemplates, setContractTemplates] = React.useState(reduxContractTemplates);
+    const [currentSession, setCurrentSession] = React.useState<Session | null>(targetSession);
+    const [instructors, setInstructors] = React.useState(reduxInstructors);
+    const [positions, setPositions] = React.useState(reduxPositions);
+
+    // Keep local state in sync with Redux
+    React.useEffect(() => { setApplicants(reduxApplicants); }, [reduxApplicants]);
+    React.useEffect(() => { setApplications(reduxApplications); }, [reduxApplications]);
+    React.useEffect(() => { setAssignments(reduxAssignments); }, [reduxAssignments]);
+    React.useEffect(() => { setContractTemplates(reduxContractTemplates); }, [reduxContractTemplates]);
+    React.useEffect(() => { setCurrentSession(targetSession); }, [targetSession]);
+    React.useEffect(() => { setInstructorPreferences(reduxInstructorPreferences); }, [reduxInstructorPreferences]);
+    React.useEffect(() => { setInstructors(reduxInstructors); }, [reduxInstructors]);
+    React.useEffect(() => { setLetterTemplates(reduxLetterTemplates); }, [reduxLetterTemplates]);
+    React.useEffect(() => { setPositions(reduxPositions); }, [reduxPositions]);
+    React.useEffect(() => { setUsers(reduxUsers); }, [reduxUsers]);
 
     // If a function is passed to a `useSate` setter, it is evaluated.
     // Since we want to set the state to a function, we need to wrap the setter,
@@ -135,19 +190,11 @@ export function SeedDataMenu({
         matching: { name: "All Matching Data", action: seedMatching },
     };
 
-    React.useEffect(() => {
-        // Whenever the dropdown is open, fetch a list of all existing sessions.
-        // This would normally not be a good idea, but since this button is only
-        // used in debug mode, it's okay.
-        if (dropdownVisible) {
-            fetchSessions();
-        }
-    }, [dropdownVisible, fetchSessions]);
-
     async function seedSession() {
         setStage("Session");
         setProgress(0);
 
+        let newSession: Session;
         if (targetSession === null) {
             // create the mock session
             const mockSessionData = {
@@ -156,14 +203,13 @@ export function SeedDataMenu({
                 name: `Session ${new Date().toLocaleString()}`,
                 rate1: 50,
             };
-            session = await dispatch(upsertSession(mockSessionData));
+            newSession = await dispatch(upsertSession(mockSessionData));
         } else {
             // use the selected session
-            session = targetSession;
+            newSession = targetSession;
         }
-
-        await dispatch(setActiveSession(session));
-
+        await dispatch(setActiveSession(newSession));
+        setCurrentSession(newSession);
         setProgress(100);
     }
 
@@ -177,6 +223,7 @@ export function SeedDataMenu({
             count++;
             setProgress(Math.round((count / users.length) * 100));
         }
+        await dispatch(fetchUsers());
         setProgress(100);
     }
 
@@ -186,6 +233,7 @@ export function SeedDataMenu({
         for (const template of seedData.contractTemplates) {
             await dispatch(upsertContractTemplate(template));
         }
+        await dispatch(fetchContractTemplates());
         setProgress(100);
     }
 
@@ -195,6 +243,7 @@ export function SeedDataMenu({
         for (const template of seedData.letterTemplates) {
             await dispatch(upsertLetterTemplate(template));
         }
+        await dispatch(fetchLetterTemplates());
         setProgress(100);
     }
 
@@ -211,6 +260,7 @@ export function SeedDataMenu({
                 instructors.push(newInstructor);
             }
         }
+        await dispatch(fetchInstructors());
         setProgress(100);
     }
 
@@ -239,6 +289,8 @@ export function SeedDataMenu({
             count++;
             setProgress(Math.round((count / total) * 100));
         }
+        await dispatch(fetchPositions());
+        setProgress(100);
     }
 
     async function seedApplicants(limit = 1000) {
@@ -259,12 +311,14 @@ export function SeedDataMenu({
             count++;
             setProgress(Math.round((count / total) * 100));
         }
+        await dispatch(fetchApplicants());
+        setProgress(100);
     }
 
     async function seedAssignments(limit = 1000) {
         setStage("Assignments");
         setProgress(0);
-        if (!session) {
+        if (!currentSession) {
             throw new Error("Need a valid session to continue");
         }
         count = 0;
@@ -278,13 +332,13 @@ export function SeedDataMenu({
                 assignmentSchema
             ) as MinimalAssignment[]
         ).map((assignment) => {
-            if (!session) {
+            if (!currentSession) {
                 throw new Error("Need a valid session to continue");
             }
             return prepareFull.assignment(assignment, {
                 positions,
                 applicants,
-                session,
+                session: currentSession,
             });
         });
         for (const a of data.slice(0, limit)) {
@@ -292,13 +346,15 @@ export function SeedDataMenu({
             count++;
             setProgress(Math.round((count / total) * 100));
         }
+        await dispatch(fetchAssignments());
+        setProgress(100);
     }
 
     async function seedApplications(limit = 600) {
         setStage("Applications");
         setProgress(0);
 
-        if (!targetSession) {
+        if (!currentSession) {
             throw new Error("Need a valid session to continue");
         }
 
@@ -310,7 +366,7 @@ export function SeedDataMenu({
 
         // Get this session's posting token:
         const resp = await apiGET(
-            `/admin/sessions/${targetSession.id}/postings`
+            `/admin/sessions/${currentSession.id}/postings`
         );
 
         if (resp.length === 0) {
@@ -365,6 +421,7 @@ export function SeedDataMenu({
             })
         );
 
+        await dispatch(fetchApplications());
         setProgress(100);
     }
 
@@ -372,7 +429,7 @@ export function SeedDataMenu({
         setStage("Instructor Preferences");
         setProgress(0);
 
-        if (!targetSession) {
+        if (!currentSession) {
             throw new Error("Need a valid session to continue");
         }
 
@@ -417,6 +474,7 @@ export function SeedDataMenu({
             count++;
             setProgress(Math.round((count / total) * 100));
         }
+        await dispatch(fetchInstructorPreferences());
         setProgress(100);
     }
 
@@ -457,8 +515,9 @@ export function SeedDataMenu({
                 rate1: 50,
                 applications_visible_to_instructors: true,
             };
-            session = await dispatch(upsertSession(mockSessionData));
-            await dispatch(setActiveSession(session));
+            const newSession = await dispatch(upsertSession(mockSessionData));
+            await dispatch(setActiveSession(newSession));
+            setCurrentSession(newSession); // update local state
 
             await seedContractTemplate();
             await seedLetterTemplate();
@@ -535,60 +594,66 @@ export function SeedDataMenu({
             title="Load seed data. If a new session is not specified, the active session is used."
             className="mock-button"
         >
-            <Dropdown
-                onSelect={onSelectHandler}
-                onToggle={(desiredVisibility) =>
-                    setDropdownVisible(desiredVisibility)
-                }
-                show={dropdownVisible}
-                alignRight
+            <Button
+                variant="contained"
+                color="primary"
+                endIcon={<ArrowDropDownIcon />}
+                onClick={(e) => setAnchorEl(e.currentTarget)}
             >
-                <Dropdown.Toggle split variant="dark">
-                    Seed Data{" "}
-                </Dropdown.Toggle>
-                <Dropdown.Menu flip={true}>
-                    <Dropdown.Header>
-                        Load seed data into current session
-                    </Dropdown.Header>
-                    {Object.keys(seedActions).map((key: string) => (
-                        <Dropdown.Item key={key} eventKey={key}>
-                            {seedActions[key as keyof typeof seedActions].name}
-                        </Dropdown.Item>
-                    ))}
-                </Dropdown.Menu>
-            </Dropdown>
-
-            <Modal
-                show={confirmDialogVisible}
-                onHide={() => {
-                    setConfirmDialogVisible(false);
-                }}
-                size="lg"
+                Seed Data
+            </Button>
+            <Menu
+                anchorEl={anchorEl}
+                open={Boolean(anchorEl)}
+                onClose={() => setAnchorEl(null)}
             >
-                <Modal.Header closeButton>
-                    <Modal.Title>Loading Seed Data</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    {targetSession === null ? (
-                        "Are you sure to create a new session and load mock data?"
-                    ) : (
-                        <React.Fragment>
-                            Are you sure to load mock data into the session{" "}
-                            <b>{targetSession.name}</b>?
-                        </React.Fragment>
-                    )}
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button
-                        variant="secondary"
+                <ListSubheader>Load seed data into current session</ListSubheader>
+                {Object.keys(seedActions).map((key: string) => (
+                    <MenuItem
+                        key={key}
                         onClick={() => {
-                            setConfirmDialogVisible(false);
+                            onSelectHandler(key);
+                            setAnchorEl(null);
                         }}
+                    >
+                        <ListItemText>
+                            {seedActions[key as keyof typeof seedActions].name}
+                        </ListItemText>
+                    </MenuItem>
+                ))}
+            </Menu>
+
+            {/* Confirm Dialog */}
+            <Dialog
+                open={confirmDialogVisible}
+                onClose={() => setConfirmDialogVisible(false)}
+                maxWidth="sm"
+                fullWidth
+            >
+                <DialogTitle>Loading Seed Data</DialogTitle>
+                <DialogContent>
+                    <Typography>
+                        {currentSession === null ? (
+                            "Are you sure to create a new session and load mock data?"
+                        ) : (
+                            <>
+                                Are you sure to load mock data into the session{" "}
+                                <b>{currentSession.name}</b>?
+                            </>
+                        )}
+                    </Typography>
+                </DialogContent>
+                <DialogActions>
+                    <Button
+                        variant="contained"
+                        color="secondary"
+                        onClick={() => setConfirmDialogVisible(false)}
                     >
                         Cancel
                     </Button>
                     <Button
-                        variant="primary"
+                        variant="contained"
+                        color="primary"
                         onClick={async () => {
                             try {
                                 setConfirmDialogVisible(false);
@@ -603,28 +668,29 @@ export function SeedDataMenu({
                     >
                         Confirm
                     </Button>
-                </Modal.Footer>
-            </Modal>
+                </DialogActions>
+            </Dialog>
 
-            <Modal show={inProgress} size="lg">
-                <Modal.Header>
-                    <Modal.Title>{`Upserting mock ${stage}`}</Modal.Title>
-                </Modal.Header>
-
-                <Modal.Body
-                    style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                    }}
-                >
-                    <ProgressBar
-                        now={progress}
-                        label={`${progress}%`}
-                        style={{ minWidth: "90%" }}
-                    />
-                </Modal.Body>
-            </Modal>
+            {/* Progress Dialog */}
+            <Dialog open={inProgress} maxWidth="sm" fullWidth>
+                <DialogTitle>{`Upserting mock ${stage}`}</DialogTitle>
+                <DialogContent>
+                    <Box
+                        display="flex"
+                        flexDirection="column"
+                        alignItems="center"
+                        justifyContent="center"
+                        minHeight={100}
+                    >
+                        <LinearProgress
+                            variant="determinate"
+                            value={progress}
+                            sx={{ width: "90%", mb: 2 }}
+                        />
+                        <Typography>{progress}%</Typography>
+                    </Box>
+                </DialogContent>
+            </Dialog>
         </span>
     );
 }

@@ -1,24 +1,16 @@
 import React from "react";
+import { Menu } from "@mui/material";
+
 import { Position, Application } from "../../../../../../api/defs/types";
 import { ApplicantSummary } from "../../../types";
 import { GridItemDropdown } from "./dropdown";
 import { ApplicantPillLeft } from "./status-bar";
 import { ApplicantPillMiddle, ApplicantPillRight } from "./body";
-
 import {
-    ApplicantNoteModal,
+    ApplicantNoteDialog,
     AdjustHourModal,
     ApplicationDetailModal,
 } from "../../../match-actions";
-
-import { Dropdown } from "react-bootstrap";
-import DropdownToggle from "react-bootstrap/esm/DropdownToggle";
-import DropdownMenu from "react-bootstrap/esm/DropdownMenu";
-
-type CustomToggleProps = {
-    children?: React.ReactNode;
-    onClick?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {};
-};
 
 /**
  * An applicant pill that displays a short summary of all data associated with a specific applicant.
@@ -64,43 +56,50 @@ export function ConnectedApplicantPill({
         React.useState<Application | null>(null);
     const [showChangeHours, setShowChangeHours] = React.useState(false);
     const [showApplicantNote, setShowApplicantNote] = React.useState(false);
-    const boundApplicantButton = React.useMemo(
-        () =>
-            React.forwardRef(
-                (
-                    props: CustomToggleProps,
-                    ref: React.Ref<HTMLButtonElement>
-                ) => (
-                    <ApplicantPill
-                        ref={ref}
-                        onClick={(e) => {
-                            e.preventDefault();
-                            if (props.onClick) {
-                                props.onClick(e);
-                            }
-                        }}
-                        applicantSummary={applicantSummary}
-                        position={position}
-                    />
-                )
-            ),
-        [applicantSummary, position]
-    );
+
+    // Material UI menu state
+    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+    const open = Boolean(anchorEl);
+
+    const handleMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleMenuClose = () => {
+        setAnchorEl(null);
+    };
 
     return (
         <>
-            <Dropdown>
-                <DropdownToggle as={boundApplicantButton} />
-                <DropdownMenu>
+            <ApplicantPill
+                applicantSummary={applicantSummary}
+                position={position}
+                onClick={handleMenuOpen}
+            />
+            <Menu
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleMenuClose}
+                anchorOrigin={{
+                    vertical: "bottom",
+                    horizontal: "left",
+                }}
+                transformOrigin={{
+                    vertical: "top",
+                    horizontal: "left",
+                }}
+                slotProps={{ list: { sx: { p: 0 } } }} // Remove default padding if needed
+            >
+                <div style={{ padding: 0 }}>
                     <GridItemDropdown
                         position={position}
                         applicantSummary={applicantSummary}
                         setShownApplication={setShownApplication}
                         setShowChangeHours={setShowChangeHours}
                         setShowNote={setShowApplicantNote}
+                        onClose={handleMenuClose}
                     />
-                </DropdownMenu>
-            </Dropdown>
+                </div>
+            </Menu>
             <ApplicationDetailModal
                 application={shownApplication}
                 setShownApplication={setShownApplication}
@@ -111,7 +110,7 @@ export function ConnectedApplicantPill({
                 show={showChangeHours}
                 setShow={setShowChangeHours}
             />
-            <ApplicantNoteModal
+            <ApplicantNoteDialog
                 applicantSummary={applicantSummary}
                 show={showApplicantNote}
                 setShow={setShowApplicantNote}

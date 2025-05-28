@@ -1,5 +1,4 @@
-import React from "react";
-import { Redirect, Route, Switch } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import { AdminInstructorsView } from "../instructors";
 import { AdminSessionsView } from "../sessions";
 import { AdminPositionsView } from "../positions";
@@ -17,67 +16,67 @@ import { AdminAppointmentsView } from "../guarantees";
 
 export function AdminRoutes() {
     return (
-        <Switch>
-            <Route exact path="/">
-                <Redirect to="/assignments_and_positions/assignments" />
-            </Route>
-            <Route exact path="/tapp">
+        <Routes>
+            <Route path="/" element={
+                <Navigate to="/assignments_and_positions/assignments" />
+            }/>
+            <Route path="/tapp" element={
                 <Landing />
-            </Route>
-            <Route exact path="/session_setup">
-                <Redirect to="/session_setup/sessions" />
-            </Route>
-            <Route exact path="/session_setup/sessions">
+            }/>
+            <Route path="/session_setup" element={
+                <Navigate to="/session_setup/sessions" />
+            }/>
+            <Route path="/session_setup/sessions" element={
                 <AdminSessionsView />
-            </Route>
-            <Route exact path="/session_setup/contract_templates">
+            }/>
+            <Route path="/session_setup/contract_templates" element={
                 <AdminContractTemplatesView />
-            </Route>
-            <Route exact path="/session_setup/instructors">
+            }/>
+            <Route path="/session_setup/instructors" element={
                 <AdminInstructorsView />
-            </Route>
-            <Route exact path="/assignments_and_positions">
-                <Redirect to="/assignments_and_positions/assignments" />
-            </Route>
-            <Route exact path="/assignments_and_positions/positions">
+            }/>
+            <Route path="/assignments_and_positions" element={
+                <Navigate to="/assignments_and_positions/assignments" />
+            }/>
+            <Route path="/assignments_and_positions/positions" element={
                 <AdminPositionsView />
-            </Route>
-            <Route exact path="/assignments_and_positions/assignments">
+            }/>
+            <Route path="/assignments_and_positions/assignments" element={
                 <AdminAssignmentsView />
-            </Route>
-            <Route exact path="/assignments_and_positions/ddahs">
+            }/>
+            <Route path="/assignments_and_positions/ddahs" element={
                 <AdminDdahsView />
-            </Route>
-            <Route exact path="/applicants_and_applications">
-                <Redirect to="/applicants_and_applications/applicants" />
-            </Route>
-            <Route exact path="/applicants_and_applications/applicants">
+            }/>
+            <Route path="/applicants_and_applications" element={
+                <Navigate to="/applicants_and_applications/applicants" />
+            }/>
+            <Route path="/applicants_and_applications/applicants" element={
                 <AdminApplicantsView />
-            </Route>
-            <Route exact path="/applicants_and_applications/applications">
+            }/>
+            <Route path="/applicants_and_applications/applications" element={
                 <AdminApplicationsView />
-            </Route>
-            <Route exact path="/applicants_and_applications/appointments">
+            }/>
+            <Route path="/applicants_and_applications/appointments" element={
                 <AdminAppointmentsView />
-            </Route>
-            <Route exact path="/matching">
-                <Redirect to="/matching/matching" />
-            </Route>
-            <Route exact path="/matching/matching">
+            }/>
+            <Route path="/matching" element={
+                <Navigate to="/matching/matching" />
+            }/>
+            <Route path="/matching/matching" element={
                 <AdminMatchingView />
-            </Route>
-            <Route exact path="/postings">
-                <Redirect to="/postings/overview" />
-            </Route>
-            <Route exact path="/postings/overview">
+            }/>
+            <Route path="/postings" element={
+                <Navigate to="/postings/overview" />
+            }/>
+            <Route path="/postings/overview" element={
                 <PostingOverview />
-            </Route>
-            <Route exact path="/postings/:posting_id/details">
+            }/>
+            <Route path="/postings/:posting_id/details" element={
                 <PostingDetails />
-            </Route>
-            <Route exact path="/postings/:posting_id/preview">
+            }/>
+            <Route path="/postings/:posting_id/preview" element={
                 <PostingPreview />
-            </Route>
-        </Switch>
+            }/>
+        </Routes>
     );
 }

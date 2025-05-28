@@ -1,18 +1,17 @@
 import React from "react";
-import { Button } from "react-bootstrap";
-import {
-    FaCheck,
-    FaPlus,
-    FaRegCalendar,
-    FaSearch,
-} from "react-icons/fa";
 import { useSelector } from "react-redux";
+import { Button, Tooltip, Typography } from "@mui/material";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
+
 import { assignmentsSelector } from "../../../api/actions";
 import { ddahsSelector } from "../../../api/actions/ddahs";
-import { AdvancedFilterTable } from "../../../components/filter-table/advanced-filter-table";
-import { generateHeaderCell } from "../../../components/table-utils";
+import { AdvancedColumnDef, AdvancedFilterTable } from "../../../components/advanced-filter-table";
 import { ddahIssues, getReadableStatus } from "../../../libs/ddah-utils";
 import { formatDate } from "../../../libs/utils";
+import { generateHeaderCellProps } from "../../../components/table-utils";
 
 export interface RowData {
     id?: number;
@@ -37,16 +36,22 @@ export function IssuesCell({
     row,
 }: {
     row: { original: RowData };
-}): JSX.Element | null {
-    const original = row.original;
-    switch (original.issue_code) {
-        case "hours_mismatch":
-            return <div className="hours-mismatch-ddah">{original.issues}</div>;
-        case "missing":
-            return <div className="missing-ddah">{original.issues}</div>;
-        default:
-            return null;
-    }
+}): React.JSX.Element | null {
+    const { issue_code, issues } = row.original;
+    if (!issues) return null;
+    
+    const color =
+        issue_code === "hours_mismatch"
+         ? "warning.main"
+         : issue_code === "missing"
+         ? "error.main"
+         : "text.primary";
+    
+    return (
+        <Typography sx={{ color }}>
+            {issues}
+        </Typography>
+    );
 }
 
 /**
@@ -102,40 +107,35 @@ export function ConnectedDdahsTable({
         row,
     }: {
         row: { original: RowData };
-    }): JSX.Element | null {
+    }): React.JSX.Element | null {
         const original = row.original;
-        if (original.id != null) {
-            const ddah_id = original.id;
-            // We are a real DDAH, so we want to view
-            return (
-                <Button
-                    variant="light"
-                    size="sm"
-                    title={`View or Edit DDAH for ${original.first_name} ${original.last_name}`}
-                    className="py-0"
-                    onClick={() => {
-                        if (onView) {
-                            onView(ddah_id);
-                        }
-                    }}
-                >
-                    <FaSearch />
-                </Button>
-            );
-        }
+        const isExisting = original.id != null;
+        
         return (
             <Button
-                variant="light"
-                size="sm"
-                title={`Create DDAH for ${original.first_name} ${original.last_name}`}
-                className="py-0"
+                variant="outlined"
+                size="small"
+                title={
+                    isExisting
+                        ? `View or edit DDAH for ${original.first_name} ${original.last_name}`
+                        : `Create DDAH for ${original.first_name} ${original.last_name}`
+                }
                 onClick={() => {
-                    if (onCreate) {
-                        onCreate(original.assignment_id);
+                    if (isExisting) {
+                        onView?.(original.id as number);
+                    } else {
+                        onCreate?.(original.assignment_id);
                     }
                 }}
+                startIcon={
+                    isExisting ? (
+                        <SearchOutlinedIcon color="info" />
+                    ) : (
+                        <AddCircleOutlineIcon color="primary" />
+                    )
+                }
             >
-                <FaPlus />
+                {isExisting ? "View" : "Create"}
             </Button>
         );
     }
@@ -179,67 +179,62 @@ export function ConnectedDdahsTable({
         return 0;
     });
 
-    const columns = [
+    const columns: AdvancedColumnDef<RowData>[] = [
         {
-            Header: (
-                <div title="View or edit a DDAH">
-                    <FaRegCalendar />
-                </div>
+            header: "DDAH",
+            Header: () => (
+                <Tooltip title="View or edit a DDAH">
+                    <CalendarTodayOutlinedIcon color="primary" />
+                </Tooltip>
             ),
-            Cell: ViewOrCreateCell,
+            Cell: ({ row }) => <ViewOrCreateCell row={row} />,
             id: "add_or_edit",
-            maxWidth: 40,
-            resizable: false,
-            className: "details-col centered",
-        },
-        { Header: generateHeaderCell("Last Name"), accessor: "last_name" },
-        { Header: generateHeaderCell("First Name"), accessor: "first_name" },
-        {
-            Header: generateHeaderCell("DDAH Hours"),
-            accessor: "total_hours",
-            maxWidth: 120,
-            style: { textAlign: "right" },
+            maxSize: 40,
+            enableResizing: false,
+            muiTableBodyCellProps: {
+                sx: { textAlign: "center" }
+            }
         },
         {
-            Header: generateHeaderCell("Status"),
-            accessor: "status",
+            ...generateHeaderCellProps("Last Name"),
+            accessorKey: "last_name"
         },
         {
-            Header: generateHeaderCell("Emailed"),
-            accessor: "emailed_date",
-            Cell: ({
-                value,
-                row,
-            }: {
-                value: string;
-                row: { original: RowData };
-            }) => {
-                const data = row.original;
-                if (!data.id) {
-                    // In this case, the row doesn't correspond to an existing DDAH
-                    return null;
-                }
-                return (
-                    <React.Fragment>
-                        {value}
-                    </React.Fragment>
-                );
-            },
+            ...generateHeaderCellProps("First Name"),
+            accessorKey: "first_name"
         },
         {
-            Header: generateHeaderCell("Approved"),
-            accessor: "approved",
-            Cell: ({ value }: any) =>
-                value ? (
-                    <div className="accepted-ddah">
-                        <FaCheck />
-                    </div>
+            ...generateHeaderCellProps("DDAH Hours"),
+            accessorKey: "total_hours",
+            maxSize: 120,
+            muiTableBodyCellProps: {
+                sx: { textAlign: "right" }
+            }
+        },
+        {
+            ...generateHeaderCellProps("Status"),
+            accessorKey: "status",
+        },
+        {
+            ...generateHeaderCellProps("Emailed"),
+            accessorKey: "emailed_date",
+            Cell: ({ row, cell }) => {
+                const value = cell.getValue<string>();
+                return row.original.id ? <>{value}</> : null;
+            }
+        },
+        {
+            ...generateHeaderCellProps("Approved"),
+            accessorKey: "approved",
+            Cell: ({ cell }) =>
+                cell.getValue<boolean>() ? (
+                    <CheckCircleOutlineIcon color="success" />
                 ) : null,
         },
         {
-            Header: generateHeaderCell("Issues"),
-            accessor: "issues",
-            Cell: IssuesCell,
+            ...generateHeaderCellProps("Issues"),
+            accessorKey: "issues",
+            Cell: ({ row }) => <IssuesCell row={row} />,
         },
     ];
 

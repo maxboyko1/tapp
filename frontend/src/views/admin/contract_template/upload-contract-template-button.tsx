@@ -1,16 +1,20 @@
 import React from "react";
-import { ActionButton } from "../../../components/action-buttons";
-import { FaUpload } from "react-icons/fa";
-import { uploadContractTemplate } from "../../../api/actions";
 import {
-    Modal,
-    Row,
-    Col,
-    Container,
-    Form,
+    Box,
     Button,
-    Spinner,
-} from "react-bootstrap";
+    CircularProgress,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    IconButton,
+    Typography,
+} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import UploadIcon from "@mui/icons-material/Upload";
+
+import { ActionButton } from "../../../components/action-buttons";
+import { uploadContractTemplate } from "../../../api/actions";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
 
 export function ConnectedUploadContractTemplateAction({ disabled = false }) {
@@ -51,63 +55,68 @@ export function ConnectedUploadContractTemplateAction({ disabled = false }) {
     }
 
     // When a confirm operation is in progress, a spinner is displayed; otherwise
-    // it's hidden
     const spinner = inProgress ? (
-        <Spinner animation="border" size="sm" className="mr-1" />
+        <CircularProgress size={18} sx={{ mr: 1 }} />
     ) : null;
 
     return (
         <>
             <ActionButton
-                icon={FaUpload}
+                icon={<UploadIcon />}
                 onClick={() => setDialogOpen(true)}
                 disabled={disabled}
             >
                 Upload Contract Template
             </ActionButton>
-            <Modal
-                show={dialogOpen}
-                onHide={onCancel}
-                size="lg"
-                dialogClassName="wide-modal"
+            <Dialog
+                open={dialogOpen}
+                onClose={onCancel}
+                maxWidth="lg"
+                fullWidth
             >
-                <Modal.Header closeButton>
-                    <Modal.Title>Import From File</Modal.Title>
-                </Modal.Header>
-
-                <Modal.Body>
-                    <Container>
-                        <Row className="mb-3">
-                            <Col>
-                                <Form>
-                                    <Form.File
-                                        label={fileInputLabel}
-                                        onChange={_onFileChange}
-                                        custom
-                                    ></Form.File>
-                                </Form>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col>
-                                <p>
-                                    A template is an HTML file with special
-                                    substitution strings (words surrounded by{" "}
-                                    {"{{"} and {"}}"}) that will be replaced
-                                    with assignment-specific values when
-                                    rendered as a contract.
-                                </p>
-                            </Col>
-                        </Row>
-                    </Container>
-                </Modal.Body>
-
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={onCancel}>
+                <DialogTitle sx={{ m: 0, p: 2 }}>
+                    Upload Contract Template
+                    <IconButton
+                        aria-label="close"
+                        onClick={onCancel}
+                        sx={{
+                            position: "absolute",
+                            right: 8,
+                            top: 8,
+                            color: (theme) => theme.palette.grey[500],
+                        }}
+                        size="large"
+                    >
+                        <CloseIcon />
+                    </IconButton>
+                </DialogTitle>
+                <DialogContent dividers>
+                    <Box sx={{ mb: 3 }}>
+                        <Button
+                            variant="outlined"
+                            component="label"
+                            startIcon={<UploadIcon />}
+                            fullWidth
+                        >
+                            {fileInputLabel}
+                            <input
+                                type="file"
+                                hidden
+                                onChange={_onFileChange}
+                            />
+                        </Button>
+                    </Box>
+                    <Typography variant="body2" color="textSecondary">
+                        A template is an HTML file with special substitution strings (words surrounded by {"{{"} and {"}}"}) that will be replaced with assignment-specific values when rendered as a letter.
+                    </Typography>
+                </DialogContent>
+                <DialogActions>
+                    <Button variant="contained" color="secondary" onClick={onCancel}>
                         Cancel
                     </Button>
                     <Button
-                        variant="primary"
+                        variant="contained"
+                        color="primary"
                         disabled={!file}
                         title={
                             file
@@ -115,13 +124,12 @@ export function ConnectedUploadContractTemplateAction({ disabled = false }) {
                                 : "You must select a file to upload."
                         }
                         onClick={onConfirm}
+                        startIcon={spinner || <UploadIcon />}
                     >
-                        {spinner}
-                        <FaUpload className="mr-2" />
                         Upload
                     </Button>
-                </Modal.Footer>
-            </Modal>
+                </DialogActions>
+            </Dialog>
         </>
     );
 }

@@ -1,5 +1,9 @@
 import React from "react";
 import { useSelector } from "react-redux";
+import { Typography } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
+import TrashIcon from "@mui/icons-material/Delete";
+
 import { ConnectedAddSessionDialog } from "./add-session-dialog";
 import { activeSessionSelector } from "../../../api/actions";
 import { ConnectedSessionsList } from "../../../components/sessions";
@@ -9,7 +13,6 @@ import {
     ActionHeader,
 } from "../../../components/action-buttons";
 import { ContentArea } from "../../../components/layout";
-import { FaPlus, FaTrash } from "react-icons/fa";
 import { Session } from "../../../api/defs/types";
 
 export function AdminSessionsView() {
@@ -19,21 +22,28 @@ export function AdminSessionsView() {
     const activeSession = useSelector(activeSessionSelector) as Session | null;
 
     let activeSessionInfo = (
-        <>
-            There is currently <b className="text-primary">no active session</b>{" "}
-            selected. In order to setup contract/letter templates or create positions
-            and offers, you must select an active session.
-        </>
+        <Typography component="span">
+            There is currently{" "}
+            <Typography component="span" color="primary" fontWeight="bold">
+                no active session
+            </Typography>{" "}
+            selected. In order to setup contract/letter templates or create positions and offers, you must select an active session.
+        </Typography>
     );
+
     if (activeSession) {
         activeSessionInfo = (
-            <>
+            <Typography component="span">
                 The current active session is{" "}
-                <b className="text-primary">{activeSession.name}</b>. When
-                setting up contract/letter templates or creating positions and offers,
-                they will be attached to the <i>{activeSession.name}</i>{" "}
+                <Typography component="span" color="primary" fontWeight="bold">
+                    {activeSession.name}
+                </Typography>
+                . When setting up contract/letter templates or creating positions and offers, they will be attached to the{" "}
+                <Typography component="span" fontStyle="italic">
+                    {activeSession.name}
+                </Typography>{" "}
                 session.
-            </>
+            </Typography>
         );
     }
 
@@ -42,7 +52,7 @@ export function AdminSessionsView() {
             <ActionsList>
                 <ActionHeader>Available Actions</ActionHeader>
                 <ActionButton
-                    icon={<FaPlus />}
+                    icon={<AddIcon />}
                     onClick={() => {
                         setAddDialogVisible(true);
                     }}
@@ -50,7 +60,7 @@ export function AdminSessionsView() {
                     Add Session
                 </ActionButton>
                 <ActionButton
-                    icon={<FaTrash />}
+                    icon={<TrashIcon />}
                     onClick={() => setInDeleteMode(!inDeleteMode)}
                     active={inDeleteMode}
                 >
@@ -58,15 +68,17 @@ export function AdminSessionsView() {
                 </ActionButton>
             </ActionsList>
             <ContentArea>
-                {/*<TestTable columns={COLUMNS} data={DATA} />*/}
-                <h3>Session Management and Creation</h3>
-                <p>
-                    From this page, you can manage an existing session or create
-                    a new session.
-                </p>
-                <p>{activeSessionInfo}</p>
+                <Typography variant="h3" sx={{ mb: 2 }}>
+                    Session Management and Creation
+                </Typography>
+                <Typography component="p" sx={{ mb: 1 }}>
+                    From this page, you can manage an existing session or create a new session.
+                </Typography>
+                <Typography component="p" sx={{ mb: 2 }}>{activeSessionInfo}</Typography>
 
-                <h5>Existing Sessions</h5>
+                <Typography variant="h5" gutterBottom>
+                    Existing Sessions
+                </Typography>
                 <ConnectedAddSessionDialog
                     show={addDialogVisible}
                     onHide={() => {

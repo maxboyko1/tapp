@@ -34,7 +34,7 @@ const deleteOneApplicantSuccess = actionFactory<RawApplicant>(
 );
 
 // dispatchers
-export const fetchApplicants = validatedApiDispatcher({
+export const fetchApplicants = validatedApiDispatcher<RawApplicant[], []>({
     name: "fetchApplicants",
     description: "Fetch applicants",
     onErrorDispatch: (e) => fetchError(e.toString()),
@@ -58,7 +58,7 @@ export const fetchApplicants = validatedApiDispatcher({
     },
 });
 
-export const fetchApplicant = validatedApiDispatcher({
+export const fetchApplicant = validatedApiDispatcher<RawApplicant, [HasId]>({
     name: "fetchApplicant",
     description: "Fetch applicant",
     onErrorDispatch: (e) => fetchError(e.toString()),
@@ -72,7 +72,10 @@ export const fetchApplicant = validatedApiDispatcher({
     },
 });
 
-export const upsertApplicant = validatedApiDispatcher({
+export const upsertApplicant = validatedApiDispatcher<
+    RawApplicant,
+    [Partial<Applicant>, boolean?]
+>({
     name: "upsertApplicant",
     description: "Add/insert applicant",
     onErrorDispatch: (e) => upsertError(e.toString()),
@@ -101,7 +104,10 @@ export const upsertApplicant = validatedApiDispatcher({
         },
 });
 
-export const deleteApplicant = validatedApiDispatcher({
+export const deleteApplicant = validatedApiDispatcher<
+    RawApplicant,
+    [HasId]
+>({
     name: "deleteApplicant",
     description: "Delete applicant",
     onErrorDispatch: (e) => deleteError(e.toString()),
@@ -116,7 +122,10 @@ export const deleteApplicant = validatedApiDispatcher({
     },
 });
 
-export const exportApplicants = validatedApiDispatcher({
+export const exportApplicants = validatedApiDispatcher<
+    Blob,
+    [PrepareDataFunc<Applicant>, ExportFormat?]
+>({
     name: "exportApplicants",
     description: "Export applicants",
     onErrorDispatch: (e) => fetchError(e.toString()),
@@ -139,13 +148,16 @@ export const exportApplicants = validatedApiDispatcher({
         },
 });
 
-export const upsertApplicants = validatedApiDispatcher({
+export const upsertApplicants = validatedApiDispatcher<
+    RawApplicant[],
+    [Partial<Applicant>[]]
+>({
     name: "upsertApplicants",
     description: "Upsert applicants",
     onErrorDispatch: (e) => fetchError(e.toString()),
     dispatcher: (applicants: Partial<Applicant>[]) => async (dispatch) => {
         if (applicants.length === 0) {
-            return;
+            return [];
         }
         const dispatchers = applicants.map((applicant) =>
             dispatch(upsertApplicant(applicant))

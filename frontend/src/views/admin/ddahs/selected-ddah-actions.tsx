@@ -1,5 +1,8 @@
 import React from "react";
-import { FaCheck, FaMailBulk, FaTrash } from "react-icons/fa";
+import CheckIcon from "@mui/icons-material/Check";
+import DeleteIcon from "@mui/icons-material/Delete";
+import MarkEmailUnreadIcon from "@mui/icons-material/MarkEmailUnread";
+
 import { approveDdah, deleteDdah, emailDdah } from "../../../api/actions/ddahs";
 import { Ddah } from "../../../api/defs/types";
 import { ActionButton } from "../../../components/action-buttons";
@@ -33,7 +36,7 @@ export function EmailDdahsButtonWithDialog({
     return (
         <React.Fragment>
             <ActionButton
-                icon={FaMailBulk}
+                icon={<MarkEmailUnreadIcon />}
                 onClick={confirm}
                 disabled={selectedDdahs.length === 0}
                 title={"Email selected DDAHs"}
@@ -76,7 +79,7 @@ export function ApproveDdahsButtonWithDialog({
     return (
         <React.Fragment>
             <ActionButton
-                icon={FaCheck}
+                icon={<CheckIcon />}
                 onClick={confirmOfferCreate}
                 disabled={selectedDdahs.length === 0}
                 title={"Approve selected DDAHs"}
@@ -119,7 +122,7 @@ export function DeleteDdahsButtonWithDialog({
     return (
         <React.Fragment>
             <ActionButton
-                icon={FaTrash}
+                icon={<DeleteIcon />}
                 onClick={confirmOfferCreate}
                 disabled={selectedDdahs.length === 0}
                 title={"Delete selected DDAHs"}

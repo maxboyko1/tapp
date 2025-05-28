@@ -1,6 +1,18 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Modal, Alert, Button, Spinner } from "react-bootstrap";
+import {
+    Alert,
+    Button,
+    CircularProgress,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    IconButton,
+    Typography,
+} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+
 import { strip } from "../../../libs/utils";
 import {
     positionsSelector,
@@ -42,18 +54,21 @@ function getConflicts(
     );
     if (matchingAssignment) {
         ret.immediateShow = (
-            <p>
+            <Typography variant="body2" color="error">
                 Another assignment exists with{" "}
                 <b>
-                    applicant={(assignment as Assignment).applicant?.first_name}{" "}
+                    applicant={
+                        (assignment as Assignment).applicant?.first_name
+                    }{" "}
                     {(assignment as Assignment).applicant?.last_name}
                 </b>{" "}
                 and{" "}
                 <b>
-                    position=
-                    {(assignment as Assignment).position?.position_code}
+                    position={
+                        (assignment as Assignment).position?.position_code
+                    }
                 </b>
-            </p>
+            </Typography>
         );
     }
     return ret;
@@ -110,15 +125,28 @@ export function AddAssignmentDialog(props: {
     // When a confirm operation is in progress, a spinner is displayed; otherwise
     // it's hidden
     const spinner = inProgress ? (
-        <Spinner animation="border" size="sm" className="mr-1" />
+        <CircularProgress size={20} sx={{ mr: 1 }} />
     ) : null;
 
     return (
-        <Modal show={show} onHide={onHide}>
-            <Modal.Header closeButton>
-                <Modal.Title>Add Assignment</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
+        <Dialog open={show} onClose={onHide} maxWidth="sm" fullWidth>
+            <DialogTitle sx={{ m: 0, p: 2 }}>
+                Add Assignment
+                <IconButton
+                    aria-label="close"
+                    onClick={onHide}
+                    sx={{
+                        position: "absolute",
+                        right: 8,
+                        top: 8,
+                        color: (theme) => theme.palette.grey[500],
+                    }}
+                    size="large"
+                >
+                    <CloseIcon />
+                </IconButton>
+            </DialogTitle>
+            <DialogContent dividers>
                 <AssignmentEditor
                     positions={positions}
                     applicants={applicants}
@@ -126,25 +154,27 @@ export function AddAssignmentDialog(props: {
                     setAssignment={setNewAssignment}
                 />
                 {!inProgress && conflicts.immediateShow ? (
-                    <Alert variant="danger">{conflicts.immediateShow}</Alert>
+                    <Alert severity="error" sx={{ mt: 2 }}>
+                        {conflicts.immediateShow}
+                    </Alert>
                 ) : null}
-            </Modal.Body>
-            <Modal.Footer>
-                <Button onClick={onHide} variant="light">
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={onHide} variant="contained" color="secondary">
                     Cancel
                 </Button>
                 <Button
                     onClick={createAssignment}
-                    title={conflicts.delayShow || "Create Position"}
-                    disabled={
-                        !!conflicts.delayShow || !!conflicts.immediateShow
-                    }
+                    title={conflicts.delayShow || "Create Assignment"}
+                    disabled={!!conflicts.delayShow || !!conflicts.immediateShow}
+                    variant="contained"
+                    color="primary"
                 >
                     {spinner}
                     Create Assignment
                 </Button>
-            </Modal.Footer>
-        </Modal>
+            </DialogActions>
+        </Dialog>
     );
 }
 

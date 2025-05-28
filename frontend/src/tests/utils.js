@@ -1,5 +1,5 @@
 /* eslint-env node */
-import XLSX from "xlsx";
+import * as XLSX from "xlsx";
 import axios from "axios";
 import PropTypes from "prop-types";
 import { apiPropTypes } from "../api/defs/prop-types";

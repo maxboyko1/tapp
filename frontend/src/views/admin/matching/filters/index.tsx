@@ -1,5 +1,16 @@
 import React from "react";
-import { Modal, Button, Form } from "react-bootstrap";
+import {
+    Button,
+    Checkbox,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    FormControlLabel,
+    FormGroup,
+    FormLabel,
+    Stack,
+} from "@mui/material";
 import { FilterType, filterMap } from "./filters";
 
 export const defaultFilterList: Record<FilterType, any[]> = {
@@ -34,38 +45,32 @@ export function FilterModal({
     ];
 
     return (
-        <Modal
-            show={showFilters}
-            onHide={() => setShowFilters(false)}
-            size="xl"
-            dialogClassName="filter-modal"
+        <Dialog
+            open={showFilters}
+            onClose={() => setShowFilters(false)}
+            maxWidth="xl"
+            fullWidth
+            slotProps={{ paper: { className: "filter-modal" } }}
         >
-            <Modal.Header>
-                <Modal.Title>Filter Applicants</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                <Form className="filter-form">
-                    {filterTypeList.map((filterKey) => {
-                        return (
-                            <Form.Group className="mb-3" key={filterKey}>
-                                <Form.Label className="filter-section-title">
+            <DialogTitle>Filter Applicants</DialogTitle>
+            <DialogContent>
+                <form className="filter-form">
+                    <Stack spacing={3}>
+                        {filterTypeList.map((filterKey) => (
+                            <FormGroup key={filterKey} sx={{ mb: 3 }}>
+                                <FormLabel className="filter-section-title" sx={{ mb: 1 }}>
                                     {filterMap[filterKey].label}
-                                </Form.Label>
-                                {filterMap[filterKey].values.map(
-                                    (filterValue) => {
-                                        return (
-                                            <FilterCheckbox
-                                                key={filterValue.value}
-                                                filterType={filterKey}
-                                                filterItem={filterValue}
-                                                filterList={filterList}
-                                                setFilterList={setFilterList}
-                                            />
-                                        );
-                                    }
-                                )}
+                                </FormLabel>
+                                {filterMap[filterKey].values.map((filterValue) => (
+                                    <FilterCheckbox
+                                        key={filterValue.value}
+                                        filterType={filterKey}
+                                        filterItem={filterValue}
+                                        filterList={filterList}
+                                        setFilterList={setFilterList}
+                                    />
+                                ))}
                                 {filterMap[filterKey].hasOther && (
-                                    // Add a checkbox for any filter key that is allowed to have an "other" value
                                     <FilterCheckbox
                                         key={`${filterKey}-other`}
                                         filterType={filterKey}
@@ -77,44 +82,50 @@ export function FilterModal({
                                         setFilterList={setFilterList}
                                     />
                                 )}
-                                <Button
-                                    onClick={() => {
-                                        setFilterList({
-                                            ...filterList,
-                                            [filterKey]: []
-                                        });
-                                    }}
-                                >
-                                    Select All
-                                </Button>
-                                <Button
-                                    variant="light"
-                                    onClick={() => {
-                                        const filterKeyAllOptions = filterMap[filterKey].values.map(
-                                            filterOption => filterOption.value
-                                        );
-                                        if (filterMap[filterKey].hasOther) {
-                                            filterKeyAllOptions.push("other");
-                                        }
-                                        setFilterList({
-                                            ...filterList,
-                                            [filterKey]: filterKeyAllOptions
-                                        });
-                                    }}
-                                >
-                                    Deselect All
-                                </Button>
-                            </Form.Group>
-                        );
-                    })}
-                </Form>
-            </Modal.Body>
-            <Modal.Footer>
-                <Button onClick={() => setShowFilters(false)} variant="light">
+                                <Stack direction="row" spacing={1} sx={{ mt: 1 }}>
+                                    <Button
+                                        onClick={() => {
+                                            setFilterList({
+                                                ...filterList,
+                                                [filterKey]: [],
+                                            });
+                                        }}
+                                        variant="outlined"
+                                        size="small"
+                                    >
+                                        Select All
+                                    </Button>
+                                    <Button
+                                        variant="outlined"
+                                        color="secondary"
+                                        size="small"
+                                        onClick={() => {
+                                            const filterKeyAllOptions = filterMap[filterKey].values.map(
+                                                filterOption => filterOption.value
+                                            );
+                                            if (filterMap[filterKey].hasOther) {
+                                                filterKeyAllOptions.push("other");
+                                            }
+                                            setFilterList({
+                                                ...filterList,
+                                                [filterKey]: filterKeyAllOptions
+                                            });
+                                        }}
+                                    >
+                                        Deselect All
+                                    </Button>
+                                </Stack>
+                            </FormGroup>
+                        ))}
+                    </Stack>
+                </form>
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={() => setShowFilters(false)} variant="outlined" color="secondary">
                     Close
                 </Button>
-            </Modal.Footer>
-        </Modal>
+            </DialogActions>
+        </Dialog>
     );
 }
 
@@ -138,22 +149,24 @@ function FilterCheckbox({
     }, [filterList, filterItem.value, filterType]);
 
     return (
-        <Form.Check
-            type="checkbox"
+        <FormControlLabel
+            control={
+                <Checkbox
+                    checked={filterListIndex !== -1}
+                    onChange={() => {
+                        const newFilterList = { ...filterList };
+                        if (filterListIndex === -1) {
+                            // Add to filter list
+                            newFilterList[filterType].push(filterItem.value);
+                        } else {
+                            // Remove from filter list
+                            newFilterList[filterType].splice(filterListIndex, 1);
+                        }
+                        setFilterList(newFilterList);
+                    }}
+                />
+            }
             label={filterItem.label}
-            checked={filterListIndex === -1}
-            onChange={() => {
-                const newFilterList = { ...filterList };
-                if (filterListIndex === -1) {
-                    // Previously checked, now unchecked; need to add to filter list
-                    newFilterList[filterType].push(filterItem.value);
-                } else {
-                    // Remove the value from the filter list
-                    newFilterList[filterType].splice(filterListIndex, 1);
-                }
-
-                setFilterList(newFilterList);
-            }}
         />
     );
 }

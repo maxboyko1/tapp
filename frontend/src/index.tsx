@@ -1,12 +1,15 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux";
 import { HashRouter } from "react-router-dom";
 import { PersistGate } from "redux-persist/integration/react";
-import DynamicEntryRouter from "./dynamic-entry-router";
-import configureStore from "./store";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
-const { store, persistor } = configureStore();
+import DynamicEntryRouter from "./dynamic-entry-router";
+import { store, persistor } from "./store";
+import { themeOptions } from "./theme";
 
 // In production, we don't want to wrap the app in a dev frame,
 // but we do want to in development
@@ -33,19 +36,27 @@ if (process.env.REACT_APP_DEV_FEATURES) {
 }
 
 const render = (Component: React.ElementType) => {
-    return ReactDOM.render(
-        <HashRouter>
-            <Provider store={store}>
-                <PersistGate persistor={persistor}>
-                    <DevFrame>
-                        <div id="app-body">
-                            <Component />
-                        </div>
-                    </DevFrame>
-                </PersistGate>
-            </Provider>
-        </HashRouter>,
-        document.getElementById("root")
+    const container = document.getElementById("root");
+    if (!container) return;
+    const root = createRoot(container);
+    const theme = createTheme(themeOptions);
+
+    root.render(
+        <ThemeProvider theme={theme}>
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <HashRouter>
+                    <Provider store={store}>
+                        <PersistGate persistor={persistor}>
+                            <DevFrame>
+                                <div id="app-body">
+                                    <Component />
+                                </div>
+                            </DevFrame>
+                        </PersistGate>
+                    </Provider>
+                </HashRouter>
+            </LocalizationProvider>
+        </ThemeProvider>
     );
 };
 

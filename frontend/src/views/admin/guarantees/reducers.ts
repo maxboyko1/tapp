@@ -1,6 +1,6 @@
-import { SET_SELECTED_GUARANTEE_ROWS } from "./constants";
 import { createReducer } from "redux-create-reducer";
-export { guaranteeTableReducer };
+import { SET_SELECTED_GUARANTEE_ROWS } from "./constants";
+
 interface GuaranteeTableState {
     selectedApplicantMatchingDatumIds: number[];
 }
@@ -15,3 +15,5 @@ const guaranteeTableReducer = createReducer(initialState, {
         return { ...state, selectedApplicantMatchingDatumIds: action.payload };
     },
 });
+
+export { guaranteeTableReducer };

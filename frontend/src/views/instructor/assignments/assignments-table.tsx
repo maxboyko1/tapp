@@ -1,10 +1,12 @@
-import React, { useMemo } from "react";
+import { useMemo } from "react";
+import { Typography } from "@mui/material";
+
 import { StatusCell } from "../../admin/offertable";
 import { useSelector } from "react-redux";
 import { activePositionSelector } from "../store/actions";
 import { formatDate } from "../../../libs/utils";
 import { assignmentsSelector } from "../../../api/actions";
-import { AdvancedFilterTable } from "../../../components/filter-table/advanced-filter-table";
+import { AdvancedColumnDef, AdvancedFilterTable } from "../../../components/advanced-filter-table";
 import { Assignment } from "../../../api/defs/types";
 
 export function InstructorAssignmentsTable() {
@@ -19,34 +21,32 @@ export function InstructorAssignmentsTable() {
     );
 
     if (!activePosition) {
-        return <h4>No position currently selected</h4>;
+        return (
+            <Typography variant="h4" color="text.primary">
+                No position currently selected
+            </Typography>
+        );
     }
 
-    const columns = [
+    const columns: AdvancedColumnDef<Assignment>[] = [
         {
-            Header: "Last Name",
-            accessor: "applicant.last_name",
+            header: "Last Name",
+            accessorKey: "applicant.last_name",
         },
         {
-            Header: "First Name",
-            accessor: "applicant.first_name",
+            header: "First Name",
+            accessorKey: "applicant.first_name",
         },
         {
-            Header: "UTORid",
-            accessor: "applicant.utorid",
+            header: "UTORid",
+            accessorKey: "applicant.utorid",
         },
         {
-            Header: "Email",
-            accessor: "applicant.email",
-            Cell: ({
-                value,
-                row,
-            }: {
-                value: string;
-                row: { original: Assignment };
-            }) => {
-                const assignment = row.original;
-                const applicant = assignment.applicant;
+            header: "Email",
+            accessorKey: "applicant.email",
+            Cell: ({ cell }) => {
+                const value = cell.getValue<string>();
+                const applicant = cell.row.original.applicant;
                 return (
                     <a
                         href={encodeURI(
@@ -59,28 +59,37 @@ export function InstructorAssignmentsTable() {
             },
         },
         {
-            Header: "Hours",
-            accessor: "hours",
-            className: "number-cell",
-            maxWidth: 70,
+            header: "Hours",
+            accessorKey: "hours",
+            maxSize: 70,
+            meta: {
+                className: "number-cell",
+            }
         },
         {
-            Header: "Offer Status",
+            header: "Offer Status",
             id: "status",
             // We want items with no active offer to appear at the end of the list
             // when sorted, so we set their accessor to null (the accessor is used by react table
             // when sorting items).
-            accessor: (data: any) =>
+            accessorFn: (data: any) =>
                 data.active_offer_status === "No Contract"
                     ? null
                     : data.active_offer_status,
-            Cell: StatusCell,
+            Cell: ({ cell, row }) => (
+                <StatusCell
+                    value={cell.getValue() as Assignment["active_offer_status"]}
+                    row={row}
+                />
+            ),
         },
         {
-            Header: "Recent Activity",
-            accessor: "active_offer_recent_activity_date",
-            Cell: ({ value }: { value: string }) =>
-                value ? formatDate(value) : null,
+            header: "Recent Activity",
+            accessorKey: "active_offer_recent_activity_date",
+            Cell: ({ cell }) => {
+                const date = cell.getValue();
+                return typeof date === "string" ? formatDate(date) : <></>;
+            }
         },
     ];
 

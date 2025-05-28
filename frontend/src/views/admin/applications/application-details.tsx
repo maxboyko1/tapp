@@ -1,12 +1,31 @@
 import React from "react";
-import { Alert, Badge, Button, Modal } from "react-bootstrap";
-import { FaDownload } from "react-icons/fa";
-import { Application, Assignment, Match } from "../../../api/defs/types";
-import * as Survey from "survey-react";
-import "./application-details.css";
-import { formatDateTime } from "../../../libs/utils";
+import{
+    Alert,
+    Box,
+    Button,
+    Chip,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    IconButton,
+    Paper,
+    Stack,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableRow,
+} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import DownloadIcon from "@mui/icons-material/Download";
+import { Model } from "survey-core";
+import { Survey } from "survey-react-ui";
 import { useSelector } from "react-redux";
+
+import { Application, Assignment, Match } from "../../../api/defs/types";
 import { DisplayRating } from "../../../components/applicant-rating";
+import { formatDateTime, formatDownloadUrl } from "../../../libs/utils";
 import {
     activeSessionSelector,
     assignmentsSelector,
@@ -33,14 +52,14 @@ export function PreferencesLinkDialog({
     let warning = null;
     if (activeSession == null) {
         warning = (
-            <Alert variant="warning">
+            <Alert severity="warning">
                 A valid link can only be generated if a session is selected.
             </Alert>
         );
     }
     if (activeSession?.applications_visible_to_instructors === false) {
         warning = (
-            <Alert variant="warning">
+            <Alert severity="warning">
                 Instructors can only provide preferences when{" "}
                 <b>Applications Visible to Instructors</b>
                 is set to <b>True</b> via the <i>Sessions</i> page.
@@ -49,11 +68,24 @@ export function PreferencesLinkDialog({
     }
 
     return (
-        <Modal show={visible} onHide={onHide} size="lg">
-            <Modal.Header closeButton>
-                <Modal.Title>Instructor Preferences URL</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
+        <Dialog open={visible} onClose={onHide} maxWidth="lg" fullWidth>
+            <DialogTitle sx={{ m: 0, p: 2 }}>
+                Instructor Preferences URL
+                <IconButton
+                    aria-label="close"
+                    onClick={onHide}
+                    sx={{
+                        position: "absolute",
+                        right: 8,
+                        top: 8,
+                        color: (theme) => theme.palette.grey[500],
+                    }}
+                    size="large"
+                >
+                    <CloseIcon />
+                </IconButton>
+            </DialogTitle>
+            <DialogContent dividers>
                 {warning}
                 <p>
                     You can distribute the following link to allow instructors
@@ -64,8 +96,13 @@ export function PreferencesLinkDialog({
                 <p>
                     <a href={url.href}>{url.href}</a>
                 </p>
-            </Modal.Body>
-        </Modal>
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={onHide} variant="contained" color="secondary">
+                    Close
+                </Button>
+            </DialogActions>
+        </Dialog>
     );
 }
 
@@ -90,47 +127,56 @@ function removeHtmlQuestions(custom_questions: any) {
     return { ...custom_questions, pages: filteredPages };
 }
 
-const PREFERENCE_LEVEL_TO_VARIANT: Record<number | string, string> = {
-    3: "success",
-    2: "primary",
-    1: "warning",
-    "-1": "secondary",
+/**
+ * Create a SurveyJS Model to show with display mode.
+ */
+function createSurveyModel(jsonSurvey: any, data: any) {
+    const survey = new Model(jsonSurvey);
+    survey.showPreviewBeforeComplete = "showAnsweredQuestions";
+    survey.showQuestionNumbers = "off";
+    survey.questionsOnPageMode = "singlePage";
+    survey.mode = "display";
+    survey.data = data;
+    return survey;
+}
+
+const getPreferenceChipColor = (level: number) => {
+    switch (level) {
+        case 4: return "success";
+        case 3: return "primary";
+        case 2: return "secondary";
+        case 1: return "warning";
+        case 0: return "info";
+        case -1: return "error";
+        default: return "default";
+    }
 };
 
-const OFFER_STATUS_TO_VARIANT: Record<string, string> = {
-    accepted: "success",
-    rejected: "danger",
-    withdrawn: "danger",
+const getOfferStatusColor = (status: string) => {
+    switch (status) {
+        case "accepted": return "success";
+        case "rejected":
+        case "withdrawn": return "error";
+        default: return "warning";
+    }
 };
+
+function getPreferenceLevelLabel(level: number): string {
+    switch (level) {
+        case 4: return "First Choice";
+        case 3: return "Second Choice";
+        case 2: return "Third Choice";
+        case 1: return "Fourth Choice";
+        case 0: return "Willing";
+        default: return "";
+    }
+}
 
 export function ApplicationDetails({
     application,
 }: {
     application: Application;
 }) {
-    const survey = React.useMemo(() => {
-        const posting = application.posting || { custom_questions: {} };
-        if (!posting.custom_questions) {
-            return null;
-        }
-
-        Survey.StylesManager.applyTheme("bootstrap");
-        Survey.defaultBootstrapCss.navigationButton = "btn btn-primary";
-        const survey = new Survey.Model(
-            // HTML questions are informational for survey takers. We don't need them when viewing survey responses
-            removeHtmlQuestions(posting.custom_questions)
-        );
-        survey.showPreviewBeforeComplete = "showAnsweredQuestions";
-        survey.showQuestionNumbers = "off";
-        survey.questionsOnPageMode = "singlePage";
-        survey.mode = "display";
-
-        // The utorid is auto-filled when the user is actually taking a survey.
-        survey.data = application.custom_question_answers;
-
-        return survey;
-    }, [application]);
-
     const instructorPreferences = application.instructor_preferences;
     const assignments = useSelector(assignmentsSelector) as Assignment[];
     const applicantAssignments = React.useMemo(() => {
@@ -150,52 +196,52 @@ export function ApplicationDetails({
     }, [matches, application]);
 
     return (
-        <React.Fragment>
-            <table className="application-details-table">
-                <tbody>
-                    <tr>
-                        <th>First Name</th>
-                        <td>{application.applicant.first_name}</td>
-                    </tr>
-                    <tr>
-                        <th>Last Name</th>
-                        <td>{application.applicant.last_name}</td>
-                    </tr>
-                    <tr>
-                        <th>Email</th>
-                        <td>{application.applicant.email}</td>
-                    </tr>
-                    <tr>
-                        <th>UTORid</th>
-                        <td>{application.applicant.utorid}</td>
-                    </tr>
-                    <tr>
-                        <th>Student Number</th>
-                        <td>{application.applicant.student_number}</td>
-                    </tr>
-                    <tr>
-                        <th>Phone</th>
-                        <td>{application.applicant.phone}</td>
-                    </tr>
-                    <tr>
-                        <th>Department</th>
-                        <td>{application.department}</td>
-                    </tr>
-                    <tr>
-                        <th>Program</th>
-                        <td>{application.program}</td>
-                    </tr>
-                    <tr>
-                        <th>Year in Progress</th>
-                        <td>{application.yip}</td>
-                    </tr>
-                    <tr>
-                        <th>CV/LinkedIn</th>
-                        <td>{application.cv_link}</td>
-                    </tr>
-                    <tr>
-                        <th>Previous Experience</th>
-                        <td>
+        <TableContainer component={Paper}>
+            <Table size="small">
+                <TableBody>
+                    <TableRow>
+                        <TableCell sx={{ fontWeight: "bold", width: 180 }}>First Name</TableCell>
+                        <TableCell>{application.applicant.first_name}</TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell sx={{ fontWeight: "bold" }}>Last Name</TableCell>
+                        <TableCell>{application.applicant.last_name}</TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell sx={{ fontWeight: "bold" }}>Email</TableCell>
+                        <TableCell>{application.applicant.email}</TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell sx={{ fontWeight: "bold" }}>UTORid</TableCell>
+                        <TableCell>{application.applicant.utorid}</TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell sx={{ fontWeight: "bold" }}>Student Number</TableCell>
+                        <TableCell>{application.applicant.student_number}</TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell sx={{ fontWeight: "bold" }}>Phone</TableCell>
+                        <TableCell>{application.applicant.phone}</TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell sx={{ fontWeight: "bold" }}>Department</TableCell>
+                        <TableCell>{application.department}</TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell sx={{ fontWeight: "bold" }}>Program</TableCell>
+                        <TableCell>{application.program}</TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell sx={{ fontWeight: "bold" }}>Year in Progress</TableCell>
+                        <TableCell>{application.yip}</TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell sx={{ fontWeight: "bold" }}>CV/LinkedIn</TableCell>
+                        <TableCell>{application.cv_link}</TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell sx={{ fontWeight: "bold" }}>Previous Experience</TableCell>
+                        <TableCell>
                             {application.previous_department_ta != null
                                 ? application.previous_department_ta === true
                                     ? "TAed for department; "
@@ -209,17 +255,16 @@ export function ApplicationDetails({
                             {application.previous_experience_summary
                                 ? `Experience Summary: ${application.previous_experience_summary}`
                                 : null}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Positions Applied For</th>
-                        <td>
-                            <ul className="position-preferences-list">
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell sx={{ fontWeight: "bold" }}>Positions Applied For</TableCell>
+                        <TableCell>
+                            <Stack direction="row" flexWrap="wrap" gap={1}>
                                 {application.position_preferences
                                     .filter(
                                         (position_preference) =>
-                                            position_preference.preference_level !==
-                                            0
+                                            position_preference.preference_level !== 0
                                     )
                                     .sort((a, b) =>
                                         a.preference_level > b.preference_level
@@ -227,135 +272,146 @@ export function ApplicationDetails({
                                             : 1
                                     )
                                     .map((position_preference) => (
-                                        <Badge
-                                            as="li"
-                                            key={
-                                                position_preference.position
-                                                    .position_code
-                                            }
-                                            variant={
-                                                PREFERENCE_LEVEL_TO_VARIANT[
-                                                    position_preference
-                                                        .preference_level
-                                                ] || "info"
-                                            }
-                                        >
-                                            {
-                                                position_preference.position
-                                                    .position_code
-                                            }{" "}
-                                            (
-                                            {
-                                                position_preference.preference_level
-                                            }
-                                            )
-                                        </Badge>
+                                        <Chip
+                                            key={position_preference.position.position_code}
+                                            label={`${position_preference.position.position_code} (${position_preference.preference_level})`}
+                                            color={getPreferenceChipColor(position_preference.preference_level)}
+                                            size="small"
+                                            sx={{ mr: 1, mb: 1 }}
+                                        />
                                     ))}
-                            </ul>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Positions Assigned To</th>
-                        <td>
-                            <ul className="position-preferences-list">
+                            </Stack>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell sx={{ fontWeight: "bold" }}>Positions Assigned To</TableCell>
+                        <TableCell>
+                            <Stack direction="row" flexWrap="wrap" gap={1}>
                                 {applicantMatches.map((match) => (
-                                    <Badge
-                                        as="li"
+                                    <Chip
                                         key={match.position.position_code}
-                                        variant={"info"}
-                                    >
-                                        {match.position.position_code} (
-                                        {match.hours_assigned})
-                                    </Badge>
+                                        label={`${match.position.position_code} (${match.hours_assigned})`}
+                                        color="info"
+                                        variant="outlined"
+                                        size="small"
+                                        sx={{ mr: 1, mb: 1 }}
+                                    />
                                 ))}
                                 {applicantAssignments.map((assignment) => (
-                                    <Badge
-                                        as="li"
+                                    <Chip
                                         key={assignment.position.position_code}
-                                        variant={
-                                            OFFER_STATUS_TO_VARIANT[
-                                                assignment.active_offer_status ||
-                                                    ""
-                                            ] || "warning"
-                                        }
-                                    >
-                                        {assignment.position.position_code} (
-                                        {assignment.hours})
-                                    </Badge>
+                                        label={`${assignment.position.position_code} (${assignment.hours})`}
+                                        color={getOfferStatusColor(assignment.active_offer_status ?? "")}
+                                        variant="outlined"
+                                        size="small"
+                                        sx={{ mr: 1, mb: 1 }}
+                                    />
                                 ))}
-                            </ul>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Supporting Documents</th>
-                        <td>
-                            {application.documents.map((document) => (
-                                <Button
-                                    key={document.name}
-                                    href={`/public/files/${document.url_token}`}
-                                    title={`Download ${
-                                        document.name
-                                    } (${Math.round(document.size / 1024)} kb)`}
-                                    size="sm"
-                                    variant="light"
-                                    className="mr-2"
-                                >
-                                    <FaDownload className="mr-2" />
-                                    {document.name}
-                                </Button>
-                            ))}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Additional Comments</th>
-                        <td>{application.comments}</td>
-                    </tr>
-                    <tr>
-                        <th>Instructor Comments</th>
-                        <td>
-                            <ul className="instructor-preferences-list">
+                            </Stack>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell sx={{ fontWeight: "bold" }}>Supporting Documents</TableCell>
+                        <TableCell>
+                            <Stack direction="row" flexWrap="wrap" gap={1}>
+                                {application.documents.map((document) => (
+                                    <Button
+                                        key={document.name}
+                                        href={formatDownloadUrl(`/public/files/${document.url_token}`)}
+                                        title={`Download ${document.name} (${Math.round(document.size / 1024)} kb)`}
+                                        variant="outlined"
+                                        size="small"
+                                        sx={{ mr: 2, mb: 1, textTransform: "none" }}
+                                        target="_blank"
+                                        rel="noopener"
+                                    >
+                                        <DownloadIcon fontSize="inherit" sx={{ mr: 1 }} />
+                                        {document.name}
+                                    </Button>
+                                ))}
+                            </Stack>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell sx={{ fontWeight: "bold" }}>Additional Comments</TableCell>
+                        <TableCell>{application.comments}</TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell sx={{ fontWeight: "bold" }}>Instructor Comments</TableCell>
+                        <TableCell>
+                            <Stack direction="row" flexWrap="wrap" gap={1}>
                                 {instructorPreferences
                                     .filter(
                                         (pref) =>
-                                            !(
-                                                !pref.comment &&
-                                                pref.preference_level === 0
-                                            )
+                                            !(!pref.comment && pref.preference_level === 0)
                                     )
                                     .map((pref) => (
-                                        <li key={pref.position.position_code}>
-                                            <Badge variant="light">
-                                                {pref.position.position_code}{" "}
-                                                <DisplayRating
-                                                    rating={
-                                                        pref.preference_level
-                                                    }
-                                                />
-                                            </Badge>
-                                            {pref.comment ? (
-                                                <React.Fragment>
-                                                    ({pref.comment})
-                                                </React.Fragment>
-                                            ) : null}
-                                        </li>
+                                        <Chip
+                                            key={pref.position.position_code}
+                                            label={
+                                                <Box component="span" display="flex" alignItems="center" gap={1}>
+                                                    {pref.position.position_code}
+                                                    <DisplayRating rating={pref.preference_level} />
+                                                </Box>
+                                            }
+                                            color="default"
+                                            variant="outlined"
+                                            size="small"
+                                            sx={{ mr: 1, mb: 1 }}
+                                        />
                                     ))}
-                            </ul>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Submission Date</th>
-                        <td>{formatDateTime(application.submission_date)}</td>
-                    </tr>
+                            </Stack>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell sx={{ fontWeight: "bold" }}>Submission Date</TableCell>
+                        <TableCell>{formatDateTime(application.submission_date)}</TableCell>
+                    </TableRow>
                     {application.posting?.custom_questions && (
-                        <tr className="custom-questions-row">
-                            <th>Custom Questions</th>
-                            <td>
-                                {survey && <Survey.Survey model={survey} />}
-                            </td>
-                        </tr>
+                        <TableRow>
+                            <TableCell sx={{ fontWeight: "bold" }}>Posting Answers</TableCell>
+                            <TableCell>
+                                <Survey
+                                    model={createSurveyModel(
+                                        removeHtmlQuestions(application.posting.custom_questions),
+                                        application.custom_question_answers
+                                    )}
+                                />
+                            </TableCell>
+                        </TableRow>
                     )}
-                </tbody>
-            </table>
-        </React.Fragment>
+                    {application.position_preferences
+                        .filter(
+                            (pref) =>
+                                pref.preference_level > -1 &&
+                                Object.keys(pref.custom_question_answers || {}).length > 0
+                        )
+                        .sort((a, b) => b.preference_level - a.preference_level)
+                        .map((pref) => {
+                            const position = pref.position;
+                            const customQuestions = position.custom_questions;
+                            if (!customQuestions) return null;
+
+                            const filteredQuestions = removeHtmlQuestions(customQuestions);
+                            const positionSurvey = createSurveyModel(filteredQuestions, pref.custom_question_answers);
+
+                            return (
+                                <TableRow key={position.position_code}>
+                                    <TableCell sx={{ fontWeight: "bold" }}>
+                                        {position.position_code} Answers
+                                        {" "}
+                                        <span style={{ fontWeight: "normal", color: "#888" }}>
+                                            ({getPreferenceLevelLabel(pref.preference_level)})
+                                        </span>
+                                    </TableCell>
+                                    <TableCell>
+                                        <Survey model={positionSurvey} />
+                                    </TableCell>
+                                </TableRow>
+                            );
+                        })}
+                </TableBody>
+            </Table>
+        </TableContainer>
     );
 }

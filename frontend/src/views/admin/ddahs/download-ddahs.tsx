@@ -1,5 +1,6 @@
 import React from "react";
-import { FaDownload } from "react-icons/fa";
+import DownloadIcon from "@mui/icons-material/Download";
+
 import { Ddah } from "../../../api/defs/types";
 import { ActionButton } from "../../../components/action-buttons";
 import { DdahConfirmationDialog } from "./ddah-confirmation-dialog";
@@ -54,7 +55,7 @@ export function DownloadDdahs({ selectedDdahs }: { selectedDdahs: Ddah[] }) {
     return (
         <React.Fragment>
             <ActionButton
-                icon={FaDownload}
+                icon={<DownloadIcon />}
                 disabled={selectedDdahs.length === 0}
                 onClick={() => setShowConfirmation(true)}
                 title={"Download PDF copies of selected DDAHs"}

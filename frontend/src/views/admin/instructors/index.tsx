@@ -1,7 +1,10 @@
 import React from "react";
+import { Typography } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
+import TrashIcon from "@mui/icons-material/Delete";
+
 import { ConnectedInstructorsList } from "./editable-instructors-list";
 import { ConnectedAddInstructorDialog } from "./add-instructor-dialog";
-import { FaTrash, FaPlus } from "react-icons/fa";
 import {
     ConnectedImportInstructorAction,
     ConnectedExportInstructorsAction,
@@ -25,7 +28,7 @@ export function AdminInstructorsView() {
             <ActionsList>
                 <ActionHeader>Available Actions</ActionHeader>
                 <ActionButton
-                    icon={<FaPlus />}
+                    icon={<AddIcon />}
                     onClick={() => {
                         setAddDialogVisible(true);
                     }}
@@ -33,7 +36,7 @@ export function AdminInstructorsView() {
                     Add Instructor
                 </ActionButton>
                 <ActionButton
-                    icon={<FaTrash />}
+                    icon={<TrashIcon />}
                     onClick={() => setInDeleteMode(!inDeleteMode)}
                     active={inDeleteMode}
                 >
@@ -47,6 +50,9 @@ export function AdminInstructorsView() {
                 <ConnectedExportInstructorsAction />
             </ActionsList>
             <ContentArea>
+                <Typography variant="h3" sx={{ mb: 2 }}>
+                    Instructors
+                </Typography>
                 <ConnectedAddInstructorDialog
                     show={addDialogVisible}
                     onHide={() => {

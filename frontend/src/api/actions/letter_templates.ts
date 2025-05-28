@@ -41,7 +41,7 @@ const MissingActiveSessionError = new Error(
     "Cannot interact with Appointment Letter Templates without an active session"
 );
 // dispatchers
-export const fetchLetterTemplates = validatedApiDispatcher({
+export const fetchLetterTemplates = validatedApiDispatcher<RawLetterTemplate[], []>({
     name: "fetchLetterTemplates",
     description: "Fetch letter_templates",
     onErrorDispatch: (e) => fetchError(e.toString()),
@@ -64,7 +64,10 @@ export const fetchLetterTemplates = validatedApiDispatcher({
     },
 });
 
-export const upsertLetterTemplate = validatedApiDispatcher({
+export const upsertLetterTemplate = validatedApiDispatcher<
+    RawLetterTemplate,
+    [Partial<LetterTemplate>]
+>({
     name: "upsertLetterTemplate",
     description: "Add/insert letter_template",
     onErrorDispatch: (e) => upsertError(e.toString()),
@@ -85,7 +88,7 @@ export const upsertLetterTemplate = validatedApiDispatcher({
         },
 });
 
-export const deleteLetterTemplate = validatedApiDispatcher({
+export const deleteLetterTemplate = validatedApiDispatcher<RawLetterTemplate, [HasId]>({
     name: "deleteLetterTemplate",
     description: "Delete letter_template from a session",
     onErrorDispatch: (e) => deleteError(e.toString()),
@@ -119,7 +122,7 @@ export const fetchAllLetterTemplates = validatedApiDispatcher({
     },
 });
 
-export const previewLetterTemplate = validatedApiDispatcher({
+export const previewLetterTemplate = validatedApiDispatcher<string, [number]>({
     name: "previewLetterTemplate",
     description:
         "Preview the html content of a appointment letter template. No redux state is set by this call, but the contents of the template are returned.",
@@ -133,7 +136,7 @@ export const previewLetterTemplate = validatedApiDispatcher({
     },
 });
 
-export const downloadLetterTemplate = validatedApiDispatcher({
+export const downloadLetterTemplate = validatedApiDispatcher<File, [number]>({
     name: "downloadLetterTemplate",
     description:
         "Download the content of an appointment letter template. No redux state is set by this call, but a `File` object with the contents of the template is returned.",
@@ -155,7 +158,7 @@ export const downloadLetterTemplate = validatedApiDispatcher({
     },
 });
 
-export const uploadLetterTemplate = validatedApiDispatcher({
+export const uploadLetterTemplate = validatedApiDispatcher<LetterTemplate, [File]>({
     name: "uploadLetterTemplate",
     description: "Upload the `File` object as an appointment letter template",
     onErrorDispatch: (e) => fetchError(e.toString()),

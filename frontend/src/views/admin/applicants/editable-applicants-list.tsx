@@ -1,6 +1,15 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import {
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    Typography,
+} from "@mui/material";
+
+import {
     applicantsSelector,
     assignmentsSelector,
     deleteApplicant,
@@ -8,44 +17,8 @@ import {
 } from "../../../api/actions";
 import type { Applicant, Assignment } from "../../../api/defs/types";
 import { ApplicantsList } from "../../../components/applicants";
-import { FaLock, FaTimes, FaTrash } from "react-icons/fa";
-import { generateHeaderCell } from "../../../components/table-utils";
-import { Button, Modal } from "react-bootstrap";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
-import { EditableCell } from "../../../components/editable-cell";
-
-function ConfirmDeleteDialog(props: {
-    show: boolean;
-    onHide: () => void;
-    onDelete: () => void;
-    applicant: Applicant | null;
-}) {
-    const { show, onHide, onDelete, applicant } = props;
-    return (
-        <Modal show={show} onHide={onHide}>
-            <Modal.Header closeButton>
-                <Modal.Title>Delete Applicant</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                Are you sure you want to delete the applicant{" "}
-                <span className="text-info font-weight-bold">
-                    {applicant
-                        ? `${applicant.first_name} ${applicant.last_name}`
-                        : null}
-                </span>
-                ? This action cannot be undone.
-            </Modal.Body>
-            <Modal.Footer>
-                <Button onClick={onHide} variant="light">
-                    Cancel
-                </Button>
-                <Button onClick={onDelete} title="Delete Applicant">
-                    Delete
-                </Button>
-            </Modal.Footer>
-        </Modal>
-    );
-}
+import { AdvancedColumnDef } from "../../../components/advanced-filter-table";
 
 export function ConnectedApplicantsList({ inDeleteMode = false }) {
     const applicants = useSelector(applicantsSelector) as Applicant[];
@@ -53,105 +26,126 @@ export function ConnectedApplicantsList({ inDeleteMode = false }) {
     const [applicantToDelete, setApplicantToDelete] =
         React.useState<Applicant | null>(null);
     const dispatch = useThunkDispatch();
+    const [deleteDialogVisible, setDeleteDialogVisible] = React.useState(false);
 
-    const assignmentsHash: { [key: string]: boolean } = {};
-    for (const assignment of assignments) {
-        assignmentsHash[assignment.applicant.id] = true;
-    }
-
-    function _upsertApplicant(applicant: Partial<Applicant>) {
-        return dispatch(upsertApplicant(applicant));
-    }
-
-    // props.original contains the row data for this particular applicant
-    function CellDeleteButton({ row }: any) {
-        const applicant = row.original || row._original;
-        const disabled = assignmentsHash[applicant.id];
-        if (disabled) {
-            return (
-                <div className="delete-button-container">
-                    <FaLock
-                        className="delete-row-button disabled"
-                        title="This applicant has an associated assignment and so cannot be deleted."
-                    />
-                </div>
-            );
+    const assignmentsHash = React.useMemo(() => {
+        const hash: { [key: string]: boolean } = {};
+        for (const assignment of assignments) {
+            hash[assignment.applicant.id] = true;
         }
-        return (
-            <div className="delete-button-container">
-                <FaTimes
-                    className="delete-row-button"
-                    title={`Delete ${applicant.last_name}, ${applicant.first_name}`}
-                    onClick={() => {
-                        setApplicantToDelete(applicant);
-                    }}
-                />
-            </div>
-        );
-    }
+        return hash;
+    }, [assignments]);
 
-    function generateCell(field: string) {
-        return (props: any) => (
-            <EditableCell field={field} upsert={_upsertApplicant} {...props} />
-        );
-    }
+    const handleEditRow = React.useCallback(
+        (original: Applicant, values: Partial<Applicant>) => {
+            dispatch(upsertApplicant({ ...original, ...values }));
+        },
+        [dispatch]
+    );
 
-    const DEFAULT_COLUMNS = [
+    const handleDelete = React.useCallback(
+        (applicant: Applicant) => {
+            setApplicantToDelete(applicant);
+            setDeleteDialogVisible(true);
+        },
+        []
+    );
+
+    const columns: AdvancedColumnDef<Applicant>[] = React.useMemo(() => [
         {
-            Header: <FaTrash className="delete-row-column-header-icon" />,
-            Cell: CellDeleteButton,
-            id: "delete_col",
-            className: "delete-col",
-            show: inDeleteMode,
-            maxWidth: 32,
-            resizable: false,
+            header: "Last Name",
+            accessorKey: "last_name",
+            meta: { editable: true },
         },
         {
-            Header: generateHeaderCell("Last Name"),
-            accessor: "last_name",
-            Cell: generateCell("last_name"),
+            header: "First Name",
+            accessorKey: "first_name",
+            meta: { editable: true },
         },
         {
-            Header: generateHeaderCell("First Name"),
-            accessor: "first_name",
-            Cell: generateCell("first_name"),
+            header: "Email",
+            accessorKey: "email",
+            meta: { editable: true },
         },
         {
-            Header: generateHeaderCell("Email"),
-            accessor: "email",
-            Cell: generateCell("email"),
+            header: "UTORid",
+            accessorKey: "utorid",
+            meta: { editable: true },
         },
         {
-            Header: generateHeaderCell("UTORid"),
-            accessor: "utorid",
-            Cell: generateCell("utorid"),
+            header: "Student Number",
+            accessorKey: "student_number",
+            meta: { editable: true },
         },
         {
-            Header: generateHeaderCell("Student Number"),
-            accessor: "student_number",
-            Cell: generateCell("student_number"),
+            header: "Phone",
+            accessorKey: "phone",
+            meta: { editable: true },
         },
-        {
-            Header: generateHeaderCell("Phone"),
-            accessor: "phone",
-            Cell: generateCell("phone"),
-        },
-    ];
+    ], []);
 
     return (
         <React.Fragment>
-            <ApplicantsList applicants={applicants} columns={DEFAULT_COLUMNS} />
-            <ConfirmDeleteDialog
-                applicant={applicantToDelete}
-                show={!!applicantToDelete}
-                onHide={() => setApplicantToDelete(null)}
-                onDelete={async () => {
-                    if (applicantToDelete != null) {
-                        await dispatch(deleteApplicant(applicantToDelete));
-                        setApplicantToDelete(null);
-                    }
-                }}
+            <ApplicantsList
+                applicants={applicants}
+                columns={columns}
+                deleteable={inDeleteMode}
+                onDelete={handleDelete}
+                deleteBlocked={(applicant) => (
+                    assignmentsHash[applicant.id]
+                        ? "This applicant has an associated assignment and so cannot be deleted."
+                        : false
+                )}
+                editable={true}
+                onEditRow={handleEditRow}
             />
+            <Dialog
+                open={deleteDialogVisible}
+                onClose={() => {
+                    setDeleteDialogVisible(false);
+                    setApplicantToDelete(null);
+                }}
+            >
+                <DialogTitle>Confirm Deletion</DialogTitle>
+                <DialogContent>
+                    <Typography variant="body2">
+                        Are you sure you want to delete the applicant{" "}
+                        <Typography
+                            component="span"
+                            color="primary"
+                            fontWeight="bold"
+                            display="inline"
+                        >
+                            {applicantToDelete
+                                ? `${applicantToDelete.first_name} ${applicantToDelete.last_name}`
+                                : null}
+                        </Typography>
+                        ? This action cannot be undone.
+                    </Typography>
+                </DialogContent>
+                <DialogActions>
+                    <Button
+                        onClick={() => {
+                            setDeleteDialogVisible(false);
+                            setApplicantToDelete(null);
+                        }}
+                    >
+                        Cancel
+                    </Button>
+                    <Button
+                        color="error"
+                        onClick={async () => {
+                            if (applicantToDelete) {
+                                await dispatch(deleteApplicant(applicantToDelete));
+                                setDeleteDialogVisible(false);
+                                setApplicantToDelete(null);
+                            }
+                        }}
+                    >
+                        Delete
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </React.Fragment>
     );
 }

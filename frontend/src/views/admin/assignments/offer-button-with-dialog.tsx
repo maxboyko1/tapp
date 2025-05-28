@@ -1,15 +1,14 @@
 import React from "react";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import BlockIcon from "@mui/icons-material/Block";
+import CheckIcon from "@mui/icons-material/Check";
+import EmailIcon from "@mui/icons-material/Email";
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
+
 import { ActionButton } from "../../../components/action-buttons";
 import { OfferConfirmationDialog } from "./offer-confirmation-dialog";
 import { Assignment } from "../../../api/defs/types";
-import {
-    FaCheck,
-    FaUserPlus,
-    FaUserTimes,
-    FaEnvelope,
-    FaUserClock,
-    FaBan,
-} from "react-icons/fa";
 
 type ButtonWithDialogProps = {
     disabled?: boolean;
@@ -35,7 +34,7 @@ export function CreateOfferButtonWithDialog({
     return (
         <React.Fragment>
             <ActionButton
-                icon={<FaUserPlus />}
+                icon={<PersonAddIcon />}
                 onClick={confirmOfferCreate}
                 disabled={disabled}
             >
@@ -72,7 +71,7 @@ export function WithdrawOfferButtonWithDialog({
     return (
         <React.Fragment>
             <ActionButton
-                icon={<FaUserTimes />}
+                icon={<PersonRemoveIcon />}
                 onClick={confirmOfferWithdraw}
                 disabled={disabled}
             >
@@ -109,7 +108,7 @@ export function EmailOfferButtonWithDialog({
     return (
         <React.Fragment>
             <ActionButton
-                icon={<FaEnvelope />}
+                icon={<EmailIcon />}
                 onClick={confirmOfferEmail}
                 disabled={disabled}
             >
@@ -146,7 +145,7 @@ export function NagOfferButtonWithDialog({
     return (
         <React.Fragment>
             <ActionButton
-                icon={<FaUserClock />}
+                icon={<AccessTimeIcon />}
                 onClick={confirmOfferNag}
                 disabled={disabled}
             >
@@ -183,7 +182,7 @@ export function AcceptOfferButtonWithDialog({
     return (
         <React.Fragment>
             <ActionButton
-                icon={<FaCheck />}
+                icon={<CheckIcon />}
                 onClick={confirmOfferAccept}
                 disabled={disabled}
             >
@@ -220,7 +219,7 @@ export function RejectOfferButtonWithDialog({
     return (
         <React.Fragment>
             <ActionButton
-                icon={<FaBan />}
+                icon={<BlockIcon />}
                 onClick={confirmOfferReject}
                 disabled={disabled}
             >

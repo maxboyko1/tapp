@@ -49,7 +49,7 @@ export const fetchSessions = validatedApiDispatcher({
     },
 });
 
-export const fetchSession = validatedApiDispatcher({
+export const fetchSession = validatedApiDispatcher<RawSession, [HasId]>({
     name: "fetchSession",
     description: "Fetch session",
     onErrorDispatch: (e) => fetchError(e.toString()),
@@ -63,7 +63,10 @@ export const fetchSession = validatedApiDispatcher({
     },
 });
 
-export const upsertSession = validatedApiDispatcher({
+export const upsertSession = validatedApiDispatcher<
+    RawSession,
+    [Partial<RawSession>]
+>({
     name: "upsertSession",
     description: "Add/insert session",
     onErrorDispatch: (e) => upsertError(e.toString()),
@@ -78,7 +81,7 @@ export const upsertSession = validatedApiDispatcher({
     },
 });
 
-export const deleteSession = validatedApiDispatcher({
+export const deleteSession = validatedApiDispatcher<void, [Partial<Session>]>({
     name: "deleteSession",
     description: "Delete session",
     onErrorDispatch: (e) => deleteError(e.toString()),
@@ -99,37 +102,41 @@ export const deleteSession = validatedApiDispatcher({
  *
  * @param {object} payload - The session to set active
  */
-export const setActiveSession = validatedApiDispatcher({
+export const setActiveSession = validatedApiDispatcher<
+    void,
+    [Session | null, {skipInit?: boolean}?]
+>({
     name: "setActiveSession",
     description: "Set the active session",
     onErrorDispatch: (e) => apiError(e.toString()),
     dispatcher:
-        (payload: Session | null, options: { skipInit?: boolean } = {}) =>
-        async (dispatch, getState) => {
-            const { skipInit } = options;
-            const state = getState();
-            const currentActiveSession = activeSessionSelector(state);
-            if (currentActiveSession === payload) {
-                return;
-            }
-            // passing in null will unset the active session
-            if (payload == null) {
-                dispatch(setActiveSessionAction(null));
-                dispatch(clearSessionDependentData());
-                return;
-            }
-            if ((currentActiveSession || { id: null }).id === payload.id) {
-                return;
-            }
-            // If we made it here, the activeSession is changing.
-            dispatch(setActiveSessionAction(payload));
-            // Make sure all tasks we depend on get run
-            if (!skipInit) {
-                await dispatch(
-                    initFromStage("setActiveSession", { startAfterStage: true })
-                );
-            }
-        },
+        (payload: Session | null, options: { skipInit?: boolean } = {}) => {
+            return async (dispatch, getState) => {
+                const { skipInit } = options;
+                const state = getState();
+                const currentActiveSession = activeSessionSelector(state);
+                if (currentActiveSession === payload) {
+                    return;
+                }
+                // passing in null will unset the active session
+                if (payload == null) {
+                    dispatch(setActiveSessionAction(null));
+                    dispatch(clearSessionDependentData());
+                    return;
+                }
+                if ((currentActiveSession || { id: null }).id === payload.id) {
+                    return;
+                }
+                // If we made it here, the activeSession is changing.
+                dispatch(setActiveSessionAction(payload));
+                // Make sure all tasks we depend on get run
+                if (!skipInit) {
+                    await dispatch(
+                        initFromStage("setActiveSession", { startAfterStage: true })
+                    );
+                }
+            };
+        }
 });
 
 // selectors

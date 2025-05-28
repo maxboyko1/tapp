@@ -1,50 +1,21 @@
 import React from "react";
 import { useSelector } from "react-redux";
+import { MRT_Row } from "material-react-table";
+import { Button, Stack, Tooltip, Typography } from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
+
 import {
     assignmentsSelector,
     upsertApplicant,
     upsertAssignment,
 } from "../../../api/actions";
-import { EditableField } from "../../../components/edit-field-widgets";
 import { offerTableSelector, setSelectedRows } from "./actions";
-import { Button } from "react-bootstrap";
-import { FaSearch } from "react-icons/fa";
 import { formatDownloadUrl, capitalize, formatDate } from "../../../libs/utils";
-import { AdvancedFilterTable } from "../../../components/filter-table/advanced-filter-table";
+import { AdvancedFilterTable, AdvancedColumnDef } from "../../../components/advanced-filter-table";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
-import { CellProps } from "react-table";
 import { Applicant, Assignment } from "../../../api/defs/types";
 import { PropsForElement } from "../../../api/defs/types/react";
-
-/**
- * A cell that renders editable applicant information. This component is expected
- * to be passed an **Assignment**. It will read the applicant from the assignment.
- */
-export function ApplicantCell(
-    props: CellProps<Assignment> & {
-        field: keyof Applicant;
-        upsertApplicant: (applicant: Partial<Applicant>) => any;
-        editable: boolean;
-    }
-) {
-    const title = `Edit ${"" + props.column.Header}`;
-    const { upsertApplicant, field, editable } = props;
-    const applicant = props.row.original;
-    async function onChange(newVal: Applicant[typeof field]) {
-        const applicantId = applicant.applicant.id;
-        return await upsertApplicant({ id: applicantId, [field]: newVal });
-    }
-    return (
-        <EditableField
-            title={title}
-            value={props.value || ""}
-            onChange={onChange}
-            editable={editable}
-        >
-            {props.value}
-        </EditableField>
-    );
-}
+import { generateDateColumnProps, generateNumberCell } from "../../../components/table-utils";
 
 /**
  * Cell to show the status of a contract and offer a download button if a contract has been created.
@@ -53,71 +24,36 @@ export function ApplicantCell(
  * @param {*} { original }
  * @returns
  */
-export function StatusCell({ row }: CellProps<Assignment>) {
-    const original = row.original;
-    const formattedStatus = capitalize(original.active_offer_status || "");
-    const activeOfferUrlToken = original.active_offer_url_token;
-
-    let download = null;
-    if (activeOfferUrlToken) {
-        const url = `/public/contracts/${activeOfferUrlToken}.pdf`;
-        download = (
-            <Button
-                href={formatDownloadUrl(url)}
-                variant="light"
-                size="sm"
-                className="mr-2 py-0"
-                title="Download offer PDF"
-            >
-                <FaSearch />
-            </Button>
-        );
-    }
+export function StatusCell({
+    value,
+    row,
+}: {
+    value: Assignment["active_offer_status"];
+    row: MRT_Row<Assignment>;
+}) {
+    const formattedStatus = capitalize(value || "No Contract");
+    const activeOfferUrlToken = row.original.active_offer_url_token;
 
     return (
-        <>
-            {download}
-            {formattedStatus}
-        </>
-    );
-}
-
-/**
- * A cell that renders editable assignment information
- *
- * @param {*} props
- * @returns
- */
-export function AssignmentCell(
-    props: CellProps<Assignment> & {
-        field: keyof Assignment;
-        upsertAssignment: (applicant: Partial<Assignment>) => any;
-        editable: boolean;
-    }
-) {
-    const title = `Edit ${"" + props.column.Header}`;
-    const { upsertAssignment, field, editable = true } = props;
-    const assignment = props.row.original;
-    const active_offer_status = assignment.active_offer_status;
-    async function onChange(newVal: Assignment[typeof field]) {
-        const assignmentId = assignment.id;
-        return await upsertAssignment({ id: assignmentId, [field]: newVal });
-    }
-    return (
-        <EditableField
-            title={title}
-            value={props.value || ""}
-            onChange={onChange}
-            editable={
-                editable &&
-                (!active_offer_status ||
-                    ["provisional", "withdrawn", "No Contract"].includes(
-                        active_offer_status
-                    ))
-            }
-        >
-            {props.value}
-        </EditableField>
+        <Stack direction="row" spacing={1} alignItems="center">
+            {activeOfferUrlToken && (
+                <Tooltip title="Download offer PDF">
+                    <Button
+                        href={formatDownloadUrl(`/public/contracts/${activeOfferUrlToken}.pdf`)}
+                        variant="outlined"
+                        size="small"
+                        sx={{ minWidth: 0, padding: "2px 6px" }}
+                        target="_blank"
+                        rel="noopener"
+                    >
+                        <SearchIcon fontSize="small" />
+                    </Button>
+                </Tooltip>
+            )}
+            <Typography variant="body2">
+                {formattedStatus}
+            </Typography>
+        </Stack>
     );
 }
 
@@ -128,124 +64,189 @@ export function ConnectedOfferTable({
     PropsForElement<typeof AdvancedFilterTable>
 >) {
     const dispatch = useThunkDispatch();
-    const setSelected = React.useCallback(
-        (rows: number[]) => dispatch(setSelectedRows(rows)),
-        [dispatch]
-    );
     const selected = useSelector(offerTableSelector).selectedAssignmentIds;
+    const setSelected = React.useCallback(
+        (rows: number[]) => {
+            const filtered = rows.filter((id) => !isNaN(id));
+            if (
+                filtered.length !== selected.length ||
+                filtered.some((id, i) => id !== selected[i])
+            ) {
+                dispatch(setSelectedRows(filtered));
+            }
+        },
+        [dispatch, selected]
+    );
     const assignments = useSelector(assignmentsSelector);
     const data = React.useMemo(
         () =>
-            assignments.map((assignment) => {
-                const { active_offer_status, ...rest } = assignment;
-                return !active_offer_status
-                    ? { active_offer_status: "No Contract", ...rest }
-                    : assignment;
-            }),
+            assignments.map((assignment) =>
+                assignment.active_offer_status
+                    ? assignment
+                    : { ...assignment, active_offer_status: "No Contract" }
+            ),
         [assignments]
     );
 
-    // We want to minimize the re-render of the table. Since some bindings for columns
-    // are generated on-the-fly, memoize the result so we don't trigger unneeded re-renders.
-    const columns = React.useMemo(() => {
-        // Bind an `ApplicantCell` to a particular field
-        function generateApplicantCell(field: keyof Applicant) {
-            return (props: CellProps<Assignment>) => (
-                <ApplicantCell
-                    field={field}
-                    upsertApplicant={(applicant: Partial<Applicant>) =>
-                        dispatch(upsertApplicant(applicant))
-                    }
-                    editable={editable}
-                    {...props}
-                />
-            );
+    // Row editing is blocked for assignments that have an active offer
+    const editBlocked = React.useCallback((assignment: Assignment) => {
+        if (["pending", "rejected", "accepted"].includes(assignment.active_offer_status || "")) {
+            return `This assignment currently has an active offer. You must first withdraw the
+                existing offer before making a modification.`;
         }
+        return false;
+    }, []);
 
-        // Bind an `AssignmentCell` to a particular field
-        function generateAssignmentCell(field: keyof Assignment) {
-            return (props: CellProps<Assignment>) => (
-                <AssignmentCell
-                    field={field}
-                    upsertAssignment={(assignment: Partial<Assignment>) =>
-                        dispatch(upsertAssignment(assignment))
-                    }
-                    editable={editable}
-                    {...props}
-                />
-            );
-        }
+    const handleEditRow = React.useCallback(
+        async (original: Assignment, values: Partial<Assignment & { [key: string]: any }>) => {
+            // Split values into applicant and assignment updates
+            const applicantUpdates: Partial<Applicant> = {};
+            const assignmentUpdates: Partial<Assignment> = {};
 
+            Object.entries(values).forEach(([key, val]) => {
+                if (key.startsWith("applicant.")) {
+                    applicantUpdates[key.replace("applicant.", "") as keyof Applicant] = val as any;
+                } else {
+                    assignmentUpdates[key as keyof Assignment] = val as any;
+                }
+            });
+
+            if (Object.keys(applicantUpdates).length > 0) {
+                await dispatch(upsertApplicant({ ...original.applicant, ...applicantUpdates }));
+            }
+
+            if (Object.keys(assignmentUpdates).length > 0) {
+                // If start_date or end_date changed, update wage_chunks accordingly
+                let updatedAssignment = { ...original, ...assignmentUpdates };
+                if (
+                    assignmentUpdates.start_date !== undefined ||
+                    assignmentUpdates.end_date !== undefined
+                ) {
+                    const oldChunk = original.wage_chunks?.[0];
+                    updatedAssignment.wage_chunks = [
+                        {
+                            id: oldChunk?.id ?? 0,
+                            rate: oldChunk?.rate ?? 0,
+                            start_date: assignmentUpdates.start_date ?? original.start_date,
+                            end_date: assignmentUpdates.end_date ?? original.end_date,
+                            hours: assignmentUpdates.hours ?? original.hours,
+                        },
+                    ];
+                }
+                // Only send the fields the backend expects
+                const payload = {
+                    id: updatedAssignment.id,
+                    applicant_id: updatedAssignment.applicant.id,
+                    position_id: updatedAssignment.position.id,
+                    hours: updatedAssignment.hours,
+                    start_date: updatedAssignment.start_date,
+                    end_date: updatedAssignment.end_date,
+                    note: updatedAssignment.note,
+                    wage_chunks: updatedAssignment.wage_chunks,
+                };
+                await dispatch(upsertAssignment(payload));
+            }
+        },
+        [dispatch]
+    );
+
+    const columns: AdvancedColumnDef<Assignment>[] = React.useMemo(() => {
         return [
             {
-                Header: "Last Name",
-                accessor: "applicant.last_name",
-                Cell: generateApplicantCell("last_name"),
+                header: "Last Name",
+                accessorKey: "applicant.last_name",
+                meta: { editable: editable },
             },
             {
-                Header: "First Name",
-                accessor: "applicant.first_name",
-                Cell: generateApplicantCell("first_name"),
+                header: "First Name",
+                accessorKey: "applicant.first_name",
+                meta: { editable: editable },
             },
             {
-                Header: "Email",
-                accessor: "applicant.email",
-                Cell: generateApplicantCell("email"),
+                header: "Email",
+                accessorKey: "applicant.email",
+                meta: { editable: editable },
             },
             {
-                Header: "Student Number",
-                accessor: "applicant.student_number",
-                Cell: generateApplicantCell("student_number"),
+                header: "Student Number",
+                accessorKey: "applicant.student_number",
+                meta: { editable: editable },
             },
             {
-                Header: "Position",
-                accessor: "position.position_code",
+                header: "Position",
+                accessorKey: "position.position_code",
             },
             {
-                Header: "Hours",
-                accessor: "hours",
-                className: "number-cell",
-                maxWidth: 70,
-                Cell: generateAssignmentCell("hours"),
+                header: "Hours",
+                accessorKey: "hours",
+                meta: { editable: editable },
+                EditCell: generateNumberCell(),
             },
             {
-                Header: "Status",
+                header: "Start Date",
+                accessorKey: "start_date",
+                meta: { editable: editable },
+                maxSize: 120,
+                ...generateDateColumnProps(),
+            },
+            {
+                header: "End Date",
+                accessorKey: "end_date",
+                meta: { editable: editable },
+                maxSize: 120,
+                ...generateDateColumnProps(),
+            },
+            {
+                header: "Status",
                 id: "status",
                 // We want items with no active offer to appear at the end of the list
                 // when sorted, so we set their accessor to null (the accessor is used by react table
                 // when sorting items).
-                accessor: (dat: typeof data[number]) =>
+                accessorFn: (dat: typeof data[number]) =>
                     dat.active_offer_status === "No Contract"
                         ? null
                         : dat.active_offer_status,
-                Cell: StatusCell,
+                Cell: ({ cell, row }) => (
+                    <StatusCell
+                        value={cell.getValue() as Assignment["active_offer_status"]}
+                        row={row}
+                    />
+                ),
             },
             {
-                Header: "Date",
-                accessor: "active_offer_recent_activity_date",
-                Cell: ({ value }: CellProps<typeof data>) =>
-                    value ? formatDate(value) : null,
-                maxWidth: 120,
+                header: "Last Updated",
+                accessorKey: "active_offer_recent_activity_date",
+                Cell: ({ cell }) => {
+                    const date = cell.getValue();
+                    return typeof date === "string" ? formatDate(date) : <></>;
+                },
+                maxSize: 120,
             },
             {
-                Header: "Nag Count",
-                accessor: "active_offer_nag_count",
+                header: "Nag Count",
+                accessorKey: "active_offer_nag_count",
                 // If the nag-count is 0, we don't want to show it,
                 // so we return null in that case, which displays nothing.
-                Cell: ({ value }: CellProps<typeof data>) =>
-                    value ? value : null,
-                maxWidth: 30,
+                Cell: ({ cell }) => {
+                    const value = cell.getValue();
+                    return value ? <>{value}</> : null;
+                },
+                maxSize: 30,
             },
         ];
-    }, [dispatch, editable]);
+    }, [editable]);
 
     return (
         <AdvancedFilterTable
             filterable={true}
             columns={columns}
             data={data}
+            selectable={true}
             selected={selected}
             setSelected={setSelected}
+            editable={editable}
+            onEditRow={handleEditRow}
+            editBlocked={editBlocked}
             {...rest}
         />
     );
