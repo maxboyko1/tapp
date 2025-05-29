@@ -91,5 +91,3 @@ export function AdminDdahsView() {
         </div>
     );
 }
-
-export default AdminDdahsView;

@@ -98,4 +98,3 @@ function ConnectedPostingPreview() {
 }
 
 export { ConnectedPostingPreview as PostingPreview };
-export default ConnectedPostingPreview;

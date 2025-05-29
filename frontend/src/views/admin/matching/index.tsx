@@ -68,5 +68,3 @@ export function AdminMatchingView() {
         </div>
     );
 }
-
-export default AdminMatchingView;

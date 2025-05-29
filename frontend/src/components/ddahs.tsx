@@ -17,7 +17,7 @@ import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 import { createDiffColumnsFromColumns } from "./diff-table";
-import { MinimalDdah, Ddah, Assignment, Duty, Instructor } from "../api/defs/types";
+import { MinimalDdah, Ddah, Assignment, Duty } from "../api/defs/types";
 import { DiffSpec, ddahDutiesToString } from "../libs/diffs";
 import { DialogRow } from "./forms/common-controls";
 import { stringToNativeType } from "../libs/urls";

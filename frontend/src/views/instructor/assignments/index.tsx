@@ -59,5 +59,3 @@ export function InstructorAssignmentsView() {
         </div>
     );
 }
-
-export default InstructorAssignmentsView;

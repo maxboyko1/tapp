@@ -140,5 +140,3 @@ export function InstructorSessionsView() {
         </div>
     );
 }
-
-export default InstructorSessionsView;

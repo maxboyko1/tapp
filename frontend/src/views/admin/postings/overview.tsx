@@ -66,4 +66,3 @@ function ConnectedPostingOverview() {
 }
 
 export { ConnectedPostingOverview as PostingOverview };
-export default ConnectedPostingOverview;

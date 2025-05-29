@@ -100,5 +100,3 @@ export function AdminAssignmentsView() {
         </div>
     );
 }
-
-export default AdminAssignmentsView;
