@@ -27,16 +27,13 @@ class PostingService
         # Prepare all position data for choices and panels
         positions = assemble_position_data
 
-        # For checkboxes: full details in text
         checkbox_choices = positions.map do |pos|
             {
                 'value' => pos[:value],
-                'text' => pos[:text],
-                'title' => 'TEST'
+                'text' => pos[:text]
             }
         end
 
-        # For ranking: just code/title
         ranking_choices = positions.map do |pos|
             {
                 'value' => pos[:value],
@@ -44,6 +41,7 @@ class PostingService
             }
         end
 
+        # Preferences page, with opt-in checkboxes for positions, followed by ranking
         preferences_page = {
             'name' => 'preferences_page',
             'elements' => [
@@ -51,6 +49,7 @@ class PostingService
                     'type' => 'checkbox',
                     'name' => 'willing_positions',
                     'title' => 'Select all positions you are willing to TA.',
+                    'isRequired' => true,
                     'description' =>
                         'You may rank your selections in order of preference in the next question below. Duties, qualifications, etc for each of your selections will be shown on the next page, and each one may also have additional position-specific questions for you to answer.',
                     'choices' => checkbox_choices
@@ -58,6 +57,7 @@ class PostingService
                 {
                     'type' => 'ranking',
                     'name' => 'position_preferences',
+                    'isRequired' => true,
                     'title' => 'Rank your selected positions in order of preference, from highest to lowest.',
                     'description' => 'Any positions that are colour-coded the same here will be considered equivalent regarding your preference ranking.',
                     'choices' => ranking_choices,
@@ -107,7 +107,6 @@ class PostingService
         }
         fixed_survey['pages'] << position_questions_page
 
-        # Add comments page
         comments_page = {
             'name' => 'comments_page',
             'elements' => [
@@ -122,7 +121,10 @@ class PostingService
         }
         fixed_survey['pages'] << comments_page
 
-        # Update the survey title and description
+        fixed_survey['pages'].each do |page|
+            page['description'] = 'Your responses will be saved once you submit your application, you may return to edit and re-submit later if necessary.'
+        end
+
         fixed_survey['title'] = "#{@posting.name} (#{availability_description})"
         fixed_survey['description'] = @posting.intro_text
 
@@ -209,8 +211,7 @@ class PostingService
         all_ids = all_positions.map(&:last) # positions.id
 
         # Extract position preferences and willing positions
-        ranking_codes = answers[:position_preferences] || []
-        willing_codes = answers[:willing_positions] || []
+        ranking_codes = Array(answers[:position_preferences])
 
         # Extract position-specific custom question answers
         position_custom_answers = {}
@@ -256,7 +257,6 @@ class PostingService
 
         # Map codes to ids
         ranking_ids = ranking_codes.map { |code| code_to_id[code] }.compact
-        willing_ids = willing_codes.map { |code| code_to_id[code] }.compact
 
         # Compute preference levels
         preference_levels = {}
@@ -275,11 +275,8 @@ class PostingService
                 end
             preference_levels[position_id] = level
         end
-        # Positions in "Willing" category get 0
-        (willing_ids - ranking_ids).each { |position_id| preference_levels[position_id] = 0 }
         # All other positions get -1
-        (all_ids - willing_ids).each { |position_id| preference_levels[position_id] = -1 }
-        Rails.logger.info("process_answers: preference_levels=#{preference_levels.inspect}")
+        (all_ids - ranking_ids).each { |position_id| preference_levels[position_id] = -1 }
 
         # Build position_preferences_attributes for all positions
         position_preferences_attributes = all_ids.map do |position_id|
@@ -293,9 +290,8 @@ class PostingService
         end
 
         # Error if any ranked codes are not valid for this posting
-        invalid_codes = (ranking_codes + willing_codes).uniq - code_to_id.keys
+        invalid_codes = ranking_codes.uniq - code_to_id.keys
         unless invalid_codes.empty?
-            Rails.logger.error("process_answers: invalid_codes=#{invalid_codes.inspect}")
             raise StandardError,
                   "Cannot set preferences for the following positions: '#{
                     invalid_codes

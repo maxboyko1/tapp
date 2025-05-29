@@ -29,7 +29,8 @@ import {
 import { ActiveUserButton } from "./active-user-switch";
 import { SeedDataMenu } from "./load-mock-data";
 
-// --- MUI NavLink Tab ---
+import "./main.css";
+
 function MaterialUINavTab(props) {
     const location = useLocation();
     const selected = location.pathname === props.to;

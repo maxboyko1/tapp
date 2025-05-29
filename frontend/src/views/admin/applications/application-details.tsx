@@ -168,7 +168,7 @@ function getPreferenceLevelLabel(level: number): string {
         case 2: return "Third Choice";
         case 1: return "Fourth Choice";
         case 0: return "Willing";
-        default: return "";
+        default: return ""; // -1 case, means unwilling to TA
     }
 }
 
@@ -236,10 +236,6 @@ export function ApplicationDetails({
                         <TableCell>{application.yip}</TableCell>
                     </TableRow>
                     <TableRow>
-                        <TableCell sx={{ fontWeight: "bold" }}>CV/LinkedIn</TableCell>
-                        <TableCell>{application.cv_link}</TableCell>
-                    </TableRow>
-                    <TableRow>
                         <TableCell sx={{ fontWeight: "bold" }}>Previous Experience</TableCell>
                         <TableCell>
                             {application.previous_department_ta != null
@@ -262,10 +258,6 @@ export function ApplicationDetails({
                         <TableCell>
                             <Stack direction="row" flexWrap="wrap" gap={1}>
                                 {application.position_preferences
-                                    .filter(
-                                        (position_preference) =>
-                                            position_preference.preference_level !== 0
-                                    )
                                     .sort((a, b) =>
                                         a.preference_level > b.preference_level
                                             ? -1
@@ -292,7 +284,6 @@ export function ApplicationDetails({
                                         key={match.position.position_code}
                                         label={`${match.position.position_code} (${match.hours_assigned})`}
                                         color="info"
-                                        variant="outlined"
                                         size="small"
                                         sx={{ mr: 1, mb: 1 }}
                                     />
@@ -302,7 +293,6 @@ export function ApplicationDetails({
                                         key={assignment.position.position_code}
                                         label={`${assignment.position.position_code} (${assignment.hours})`}
                                         color={getOfferStatusColor(assignment.active_offer_status ?? "")}
-                                        variant="outlined"
                                         size="small"
                                         sx={{ mr: 1, mb: 1 }}
                                     />
@@ -355,7 +345,6 @@ export function ApplicationDetails({
                                                 </Box>
                                             }
                                             color="default"
-                                            variant="outlined"
                                             size="small"
                                             sx={{ mr: 1, mb: 1 }}
                                         />

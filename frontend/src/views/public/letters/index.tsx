@@ -228,3 +228,5 @@ export function LetterView() {
         </div>
     );
 }
+
+export default LetterView;

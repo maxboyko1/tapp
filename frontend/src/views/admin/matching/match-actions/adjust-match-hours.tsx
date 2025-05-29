@@ -45,14 +45,14 @@ export function AdjustHourModal({
                     fullWidth
                     defaultValue={applicantMatch.hours_assigned || 0}
                     onChange={(e) => setHoursAssigned(e.target.value)}
-                    inputProps={{ min: 0 }}
+                    slotProps={{ htmlInput: { min: 0 } }}
                     sx={{ mt: 1 }}
                 />
             </DialogContent>
             <DialogActions>
                 <Button
                     onClick={() => setShow(false)}
-                    variant="outlined"
+                    variant="contained"
                     color="secondary"
                 >
                     Close
@@ -68,7 +68,7 @@ export function AdjustHourModal({
                         );
                         setShow(false);
                     }}
-                    variant="outlined"
+                    variant="contained"
                     color="primary"
                 >
                     Save

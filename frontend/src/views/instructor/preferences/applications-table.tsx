@@ -127,14 +127,16 @@ export function InstructorApplicationsTable() {
         {
             header: "Your Rating",
             id: "instructor_preference",
+            size: 200,
             Cell: ({ row }) => <ConnectedRating application={row.original} />,
         },
         {
             header: "Application",
             id: "application",
+            size: 80,
             Cell: ({ row }) => (
                 <Button
-                    variant="outlined"
+                    variant="contained"
                     size="small"
                     onClick={() => setShownApplicationId(row.original.id) }
                     startIcon={<SearchIcon />}

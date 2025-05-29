@@ -14,6 +14,28 @@
     display: flex;
     flex-grow: 1;
     overflow: hidden;
+    height: 100%;
+}
+
+.matching-list-container {
+    min-width: 300px;
+    max-width: 400px;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    flex: 0 0 200px;
+    margin-right: 1em;
+    display: flex;
+    flex-direction: column;
+}
+
+.matching-applicant-container {
+    flex: 1 1 0;
+    min-width: 0;
+    height: 100%;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
 }
 
 .matching-applicant-area {
@@ -38,7 +60,7 @@
 }
 
 .change-icon {
-    color: red;
+    color: #dc4633;
     margin-right: 3px;
 }
 
@@ -70,7 +92,7 @@
 }
 
 .filter-button.active {
-    color: orange;
+    color: #ab1368;
 }
 
 .position-list {
@@ -120,23 +142,23 @@
 }
 
 .position-row.n\/a {
-    border-color: #ffA500;
+    border-color: #ab1368;
 }
 
 .position-row.empty {
-    border-color: #d70000;
+    border-color: #dc4633;
 }
 
 .position-row.under {
-    border-color: #ffcc16;
+    border-color: #f1c500;
 }
 
 .position-row.matched {
-    border-color: #00c12b;
+    border-color: #00a189;
 }
 
 .position-row.over {
-    border-color: #00e5f3;
+    border-color: #6fc7ea;
 }
 
 .position-row-background {
@@ -172,19 +194,19 @@
 }
 
 .progress.n\/a {
-    background-color: rgba(255, 166, 0, 0.25);
-}
-
-.progress.over {
-    background-color: rgba(0, 229, 243, 0.25);
-}
-
-.progress.matched {
-    background-color: rgba(0, 193, 43, 0.25);
+    background-color: rgba(171, 19, 104, 0.25);
 }
 
 .progress.under {
-    background-color: rgba(255, 204, 22, 0.25);
+    background-color: rgba(241, 197, 0, 0.25);
+}
+
+.progress.matched {
+    background-color: rgba(0, 161, 137, 0.25);
+}
+
+.progress.over {
+    background-color: rgba(111, 199, 234, 0.25);
 }
 
 #table-view {
@@ -210,7 +232,6 @@
     flex-grow: 1;
 }
 
-/* GRID VIEW */
 .grid-view-list {
     display: flex;
     flex-wrap: wrap;
@@ -265,19 +286,19 @@
 }
 
 .applicant-status-sidebar.empty {
-    background-color: #d70000;
+    background-color: #dc4633;
 }
 
 .applicant-status-sidebar.under {
-    background-color: #ffcc16;
+    background-color: #f1c500;
 }
 
 .applicant-status-sidebar.matched {
-    background-color: #00c12b;
+    background-color: #00a189;
 }
 
 .applicant-status-sidebar.over {
-    background-color: #00e5f3;
+    background-color: #6fc7ea;
 }
 
 .applicant-grid-main {
@@ -369,6 +390,7 @@
     display: flex;
     gap: 1px;
     flex-wrap: wrap;
+    margin-top: 10.5px;
 }
 
 .sort-dropdown-container > * > .dropdown-menu.show {

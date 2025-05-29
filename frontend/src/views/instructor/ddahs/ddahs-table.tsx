@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { Button, Tooltip, Typography } from "@mui/material";
+import { IconButton, Tooltip, Typography } from "@mui/material";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
@@ -44,11 +44,11 @@ export function IssuesCell({
         issue_code === "hours_mismatch"
          ? "warning.main"
          : issue_code === "missing"
-         ? "error.main"
+         ? "text.secondary"
          : "text.primary";
     
     return (
-        <Typography sx={{ color }}>
+        <Typography sx={{ color, fontStyle: "italic" }}>
             {issues}
         </Typography>
     );
@@ -110,33 +110,35 @@ export function ConnectedDdahsTable({
     }): React.JSX.Element | null {
         const original = row.original;
         const isExisting = original.id != null;
-        
+
+        const handleClick = () => {
+            if (isExisting) {
+                onView?.(original.id as number);
+            } else {
+                onCreate?.(original.assignment_id);
+            }
+        };
+
         return (
-            <Button
-                variant="outlined"
-                size="small"
+            <Tooltip
                 title={
                     isExisting
                         ? `View or edit DDAH for ${original.first_name} ${original.last_name}`
                         : `Create DDAH for ${original.first_name} ${original.last_name}`
                 }
-                onClick={() => {
-                    if (isExisting) {
-                        onView?.(original.id as number);
-                    } else {
-                        onCreate?.(original.assignment_id);
-                    }
-                }}
-                startIcon={
-                    isExisting ? (
-                        <SearchOutlinedIcon color="info" />
-                    ) : (
-                        <AddCircleOutlineIcon color="primary" />
-                    )
-                }
             >
-                {isExisting ? "View" : "Create"}
-            </Button>
+                <IconButton
+                    size="small"
+                    color={isExisting ? "info" : "primary"}
+                    onClick={handleClick}
+                >
+                    {isExisting ? (
+                        <SearchOutlinedIcon />
+                    ) : (
+                        <AddCircleOutlineIcon />
+                    )}
+                </IconButton>
+            </Tooltip>
         );
     }
 
@@ -189,11 +191,11 @@ export function ConnectedDdahsTable({
             ),
             Cell: ({ row }) => <ViewOrCreateCell row={row} />,
             id: "add_or_edit",
-            maxSize: 40,
+            size: 60,
             enableResizing: false,
-            muiTableBodyCellProps: {
-                sx: { textAlign: "center" }
-            }
+            // muiTableBodyCellProps: {
+            //     sx: { textAlign: "center" }
+            // }
         },
         {
             ...generateHeaderCellProps("Last Name"),
@@ -206,7 +208,7 @@ export function ConnectedDdahsTable({
         {
             ...generateHeaderCellProps("DDAH Hours"),
             accessorKey: "total_hours",
-            maxSize: 120,
+            size: 50,
             muiTableBodyCellProps: {
                 sx: { textAlign: "right" }
             }
@@ -214,10 +216,12 @@ export function ConnectedDdahsTable({
         {
             ...generateHeaderCellProps("Status"),
             accessorKey: "status",
+            size: 100,
         },
         {
             ...generateHeaderCellProps("Emailed"),
             accessorKey: "emailed_date",
+            size: 120,
             Cell: ({ row, cell }) => {
                 const value = cell.getValue<string>();
                 return row.original.id ? <>{value}</> : null;
@@ -226,6 +230,7 @@ export function ConnectedDdahsTable({
         {
             ...generateHeaderCellProps("Approved"),
             accessorKey: "approved",
+            size: 50,
             Cell: ({ cell }) =>
                 cell.getValue<boolean>() ? (
                     <CheckCircleOutlineIcon color="success" />
@@ -234,6 +239,7 @@ export function ConnectedDdahsTable({
         {
             ...generateHeaderCellProps("Issues"),
             accessorKey: "issues",
+            size: 250,
             Cell: ({ row }) => <IssuesCell row={row} />,
         },
     ];

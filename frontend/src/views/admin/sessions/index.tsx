@@ -92,3 +92,4 @@ export function AdminSessionsView() {
 }
 
 export { ConnectedAddSessionDialog };
+export default AdminSessionsView;

@@ -104,7 +104,7 @@ export function FinalizeChangesButton() {
                 <DialogActions>
                     <Button
                         onClick={() => setDialogVisible(false)}
-                        variant="outlined"
+                        variant="contained"
                         color="secondary"
                     >
                         Cancel

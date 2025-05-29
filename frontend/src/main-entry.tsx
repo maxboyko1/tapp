@@ -60,9 +60,11 @@ export default function ConnectedApp() {
     }
 
     return (
-        <React.Fragment>
-            {body}
-            <ConnectedNotifications />
-        </React.Fragment>
+        <div id="app-body">
+            <React.Fragment>
+                {body}
+                <ConnectedNotifications />
+            </React.Fragment>
+        </div>
     );
 }

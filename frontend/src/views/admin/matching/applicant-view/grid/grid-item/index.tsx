@@ -87,7 +87,7 @@ export function ConnectedApplicantPill({
                     vertical: "top",
                     horizontal: "left",
                 }}
-                slotProps={{ list: { sx: { p: 0 } } }} // Remove default padding if needed
+                slotProps={{ list: { sx: { p: 0 } } }}
             >
                 <div style={{ padding: 0 }}>
                     <GridItemDropdown

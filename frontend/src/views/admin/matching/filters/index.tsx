@@ -55,9 +55,19 @@ export function FilterModal({
             <DialogTitle>Filter Applicants</DialogTitle>
             <DialogContent>
                 <form className="filter-form">
-                    <Stack spacing={3}>
+                    <Stack direction="row" spacing={2} flexWrap="wrap">
                         {filterTypeList.map((filterKey) => (
-                            <FormGroup key={filterKey} sx={{ mb: 3 }}>
+                            <FormGroup
+                                key={filterKey}
+                                sx={{
+                                    mb: 3,
+                                    minWidth: 180,
+                                    maxWidth: 220,
+                                    border: "1px solid #eee",
+                                    borderRadius: 2,
+                                    padding: 2,
+                                }}
+                            >
                                 <FormLabel className="filter-section-title" sx={{ mb: 1 }}>
                                     {filterMap[filterKey].label}
                                 </FormLabel>
@@ -92,12 +102,13 @@ export function FilterModal({
                                         }}
                                         variant="outlined"
                                         size="small"
+                                        color="success"
                                     >
                                         Select All
                                     </Button>
                                     <Button
                                         variant="outlined"
-                                        color="secondary"
+                                        color="error"
                                         size="small"
                                         onClick={() => {
                                             const filterKeyAllOptions = filterMap[filterKey].values.map(
@@ -121,7 +132,7 @@ export function FilterModal({
                 </form>
             </DialogContent>
             <DialogActions>
-                <Button onClick={() => setShowFilters(false)} variant="outlined" color="secondary">
+                <Button onClick={() => setShowFilters(false)} variant="contained" color="secondary">
                     Close
                 </Button>
             </DialogActions>
@@ -152,7 +163,7 @@ function FilterCheckbox({
         <FormControlLabel
             control={
                 <Checkbox
-                    checked={filterListIndex !== -1}
+                    checked={filterListIndex === -1}
                     onChange={() => {
                         const newFilterList = { ...filterList };
                         if (filterListIndex === -1) {

@@ -50,3 +50,4 @@ function ConnectedLandingView() {
 }
 
 export { ConnectedLandingView as Landing };
+export default ConnectedLandingView;

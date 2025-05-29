@@ -1,36 +1,7 @@
-/* Expand/collapse for SurveyJS ranking item descriptions */
-.sv-ranking-item__description {
-    display: none;
-    font-size: 0.95em;
-    margin-top: 0.5em;
-    background: #f5f5f5;
-    border-radius: 4px;
-    padding: 0.5em 1em;
-    transition: max-height 0.2s;
-    cursor: pointer;
-}
-
-.sv-ranking-item.expanded .sv-ranking-item__description {
-    display: block;
-}
-.sv-ranking-item__expand-toggle {
-    color: black;
-    cursor: pointer;
-    font-size: 0.95em;
-    margin-left: 0.5em;
-    text-decoration: underline;
-}
-
-
-/* Preserve newlines in checkbox labels */
-.sv-checkbox-label {
-    white-space: pre-line;
-}
-
 /* Color coding for ranking items */
 .sv-ranking .sv-ranking-item:nth-child(1) {
     background: #e8f5e9 !important;
-    border-left: 6px solid #00a189
+    border-left: 6px solid #00a189;
 }
 .sv-ranking .sv-ranking-item:nth-child(2),
 .sv-ranking .sv-ranking-item:nth-child(3),
@@ -47,7 +18,7 @@
 .sv-ranking .sv-ranking-item:nth-child(8),
 .sv-ranking .sv-ranking-item:nth-child(9),
 .sv-ranking .sv-ranking-item:nth-child(10) {
-    background: #fffde7 !important; /* light yellow */
+    background: #fffde7 !important;
     border-left: 6px solid #f1c500;
 }
 /* The rest: grey */
@@ -55,11 +26,86 @@
     margin-bottom: 0.5em;
     border-radius: 6px;
     transition: background 0.2s;
-    background: #f0f0f0 !important; /* light grey */
-    border-left: 6px solid #b0b0b0; /* grey border */
+    background: #f0f0f0 !important;
+    border-left: 6px solid #b0b0b0;
 }
 
-/* Preserve newlines in checkbox labels */
-.sv-checkbox-label {
-    white-space: pre-line;
+/* Center the ranking items in the question panel */
+.sv-ranking {
+    padding-left: 2em !important;
+}
+
+/* Category labels for ranking items */
+.sv-ranking .sv-ranking-item:nth-child(1)::after {
+    content: "1st Choice";
+    margin-left: 1em;
+    font-weight: bold;
+    color: #00a189;
+    font-size: 0.95em;
+}
+
+.sv-ranking .sv-ranking-item:nth-child(2)::after,
+.sv-ranking .sv-ranking-item:nth-child(3)::after,
+.sv-ranking .sv-ranking-item:nth-child(4)::after {
+    content: "2nd Choice";
+    margin-left: 1em;
+    font-weight: bold;
+    color: #ab1368;
+    font-size: 0.95em;
+}
+
+.sv-ranking .sv-ranking-item:nth-child(5)::after,
+.sv-ranking .sv-ranking-item:nth-child(6)::after,
+.sv-ranking .sv-ranking-item:nth-child(7)::after {
+    content: "3rd Choice";
+    margin-left: 1em;
+    font-weight: bold;
+    color: #1976d2;
+    font-size: 0.95em;
+}
+
+.sv-ranking .sv-ranking-item:nth-child(8)::after,
+.sv-ranking .sv-ranking-item:nth-child(9)::after,
+.sv-ranking .sv-ranking-item:nth-child(10)::after {
+    content: "4th Choice";
+    margin-left: 1em;
+    font-weight: bold;
+    color: #f1c500;
+    font-size: 0.95em;
+}
+
+.sv-ranking .sv-ranking-item:nth-child(n+11)::after {
+    content: "Willing";
+    margin-left: 1em;
+    font-weight: bold;
+    color: #888;
+    font-size: 0.95em;
+}
+
+/* Hide the ranking icon for all ranking items */
+.sv-ranking .sv-ranking-item__icon,
+.sv-ranking .sd-ranking-item__icon,
+.sv-ranking-item__index,
+.sd-ranking-item__icon {
+    display: none !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Remove any left padding/margin from the ranking item itself */
+.sv-ranking .sv-ranking-item {
+    padding-left: 0 !important;
+    margin-left: 0 !important;
+}
+
+/* Hide the icon container for all ranking items */
+.sv-ranking .sv-ranking-item__icon-container,
+.sv-ranking .sd-ranking-item__icon-container {
+    width: 0 !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: block !important;
 }

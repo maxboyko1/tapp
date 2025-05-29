@@ -43,13 +43,23 @@ export function AdminMatchingView() {
     return (
         <div className="page-body matching">
             <div className="matching-body">
-                <PositionList
-                    selectedPositionId={selectedPositionId}
-                    positionSummaries={Object.values(positionSummaries)}
-                />
-                {selectedPositionSummary && (
-                    <ApplicantView positionSummary={selectedPositionSummary} />
-                )}
+                <div className="matching-list-container">
+                    <PositionList
+                        selectedPositionId={selectedPositionId}
+                        positionSummaries={Object.values(positionSummaries)}
+                    />
+                </div>
+                <div className="matching-applicant-container">
+                    {selectedPositionSummary ? (
+                        <ApplicantView positionSummary={selectedPositionSummary}/>
+                    ) : (
+                        <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", color: "#888" }}>
+                            {Object.values(positionSummaries).length === 0
+                                ? "Loading positions..."
+                                : "Select a position to view applicants."}
+                        </div>
+                    )}
+                </div>
             </div>
             <div className="matching-footer page-actions">
                 <div className="footer-button-separator" />
@@ -58,3 +68,5 @@ export function AdminMatchingView() {
         </div>
     );
 }
+
+export default AdminMatchingView;
