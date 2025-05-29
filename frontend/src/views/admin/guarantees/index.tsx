@@ -120,5 +120,3 @@ export function AdminAppointmentsView() {
         </div>
     );
 }
-
-export default AdminAppointmentsView;

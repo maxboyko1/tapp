@@ -221,5 +221,3 @@ export function DdahView() {
         </div>
     );
 }
-
-export default DdahView;

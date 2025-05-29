@@ -241,5 +241,3 @@ export function InstructorDdahsView() {
         </div>
     );
 }
-
-export default InstructorDdahsView;

@@ -203,4 +203,3 @@ function ConnectedPostingDetails() {
 }
 
 export { ConnectedPostingDetails as PostingDetails };
-export default ConnectedPostingDetails;

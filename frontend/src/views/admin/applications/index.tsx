@@ -60,5 +60,3 @@ export function AdminApplicationsView() {
         </div>
     );
 }
-
-export default AdminApplicationsView;

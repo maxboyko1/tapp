@@ -251,5 +251,3 @@ export function ContractView() {
         </div>
     );
 }
-
-export default ContractView;

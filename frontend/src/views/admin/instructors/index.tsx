@@ -68,4 +68,3 @@ export function AdminInstructorsView() {
 }
 
 export { ConnectedInstructorsList, ConnectedAddInstructorDialog };
-export default AdminInstructorsView;

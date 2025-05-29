@@ -307,5 +307,3 @@ export function PostingView() {
         </React.Fragment>
     );
 }
-
-export default PostingView;
