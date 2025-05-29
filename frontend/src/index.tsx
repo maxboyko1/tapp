@@ -48,9 +48,7 @@ const render = (Component: React.ElementType) => {
                     <Provider store={store}>
                         <PersistGate persistor={persistor}>
                             <DevFrame>
-                                <div id="app-body">
-                                    <Component />
-                                </div>
+                                <Component />
                             </DevFrame>
                         </PersistGate>
                     </Provider>

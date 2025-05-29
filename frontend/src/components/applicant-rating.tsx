@@ -21,7 +21,7 @@ const RATING_TO_BG_COLOR: Record<string, string> = {
     null: "grey.200",
     "-1": "error.main",
     "0": "grey.500",
-    "1": "primary.main",
+    "1": "secondary.main",
     "2": "success.main",
 };
 
@@ -150,21 +150,44 @@ export function ApplicantRatingAndComment({
         [setInstructorPreference, instructorPreference]
     );
     const [editDialogShow, setEditDialogShow] = React.useState(false);
+    const [draftComment, setDraftComment] = React.useState(comment || "");
+
+    // When opening the dialog, set the draft to the current comment
+    const handleOpenDialog = () => {
+        setDraftComment(comment || "");
+        setEditDialogShow(true);
+    };
+
+    const handleSaveComment = () => {
+        setComment(draftComment);
+        setEditDialogShow(false);
+    };
 
     let widget = null;
     if (compact) {
         widget = (
-            <React.Fragment>
-                <ApplicantRating rating={rating} onChange={setRating} />
-                <IconButton onClick={() => setEditDialogShow(true)} size="small">
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                {[2, 1, 0, -1].map((r) => (
+                    <Tooltip key={r} title={RATING_TO_DESCRIPTION[String(r)]}>
+                        <span>
+                            <DisplayRating
+                                rating={r}
+                                onClick={() => setRating(r)}
+                                aria-label={RATING_TO_DESCRIPTION[String(r)]}
+                                active={rating === r}
+                            />
+                        </span>
+                    </Tooltip>
+                ))}
+                <IconButton onClick={handleOpenDialog} size="small">
                     <CommentIcon fontSize="small" />
                 </IconButton>
                 {comment && (
-                    <Typography variant="caption" sx={{ ml: 1 }}>
+                    <Typography variant="caption" sx={{ ml: 1, color: "primary.main" }}>
                         {comment}
                     </Typography>
                 )}
-            </React.Fragment>
+            </Box>
         );
     } else {
         widget = (
@@ -228,14 +251,14 @@ export function ApplicantRatingAndComment({
                         fullWidth
                         multiline
                         minRows={3}
-                        value={comment || ""}
-                        onChange={(e) => setComment(e.target.value)}
+                        value={draftComment}
+                        onChange={(e) => setDraftComment(e.target.value)}
                     />
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={() => setEditDialogShow(false)}>Cancel</Button>
                     <Button
-                        onClick={() => setEditDialogShow(false)}
+                        onClick={handleSaveComment}
                         variant="contained"
                     >
                         Save
@@ -269,7 +292,7 @@ function LargeRatingButton({
         >
             <Box>
                 <DisplayRating rating={rating} />
-                <Typography variant="caption">
+                <Typography variant="caption" sx={{ ml: 1 }}>
                     {RATING_TO_DESCRIPTION["" + rating]}
                 </Typography>
             </Box>
@@ -278,13 +301,23 @@ function LargeRatingButton({
 }
 
 /**
- * Display the rating icon but not as a button.
+ * Display the rating icon.
  */
-export function DisplayRating({ rating }: { rating: number | null }) {
+export function DisplayRating({
+    rating,
+    onClick,
+    "aria-label": ariaLabel,
+    active = true,
+}: {
+    rating: number | null;
+    onClick?: () => void;
+    "aria-label"?: string;
+    active?: boolean;
+}) {
     const clampedRating =
         rating == null ? null : Math.max(Math.min(rating, 2), -1);
     const key = String(clampedRating);
-    const bgColor = RATING_TO_BG_COLOR[key] || "grey.200";;
+    const bgcolor = RATING_TO_BG_COLOR[key] || "grey.200";
     const symbol = {
         "-1": "-",
         "0": "?",
@@ -293,20 +326,41 @@ export function DisplayRating({ rating }: { rating: number | null }) {
     }[key] ?? "?";
 
     return (
-        <Box
+        <IconButton
+            size="small"
+            onClick={onClick}
+            aria-label={ariaLabel || `Rating ${symbol}`}
             sx={{
-                display: "inline-block",
-                px: 1,
-                py: 0.5,
+                p: 0,
                 borderRadius: 1,
-                bgColor: bgColor,
-                color: "white",
+                bgcolor: active ? bgcolor : "transparent",
+                color: active ? "white" : bgcolor,
+                border: active ? `2px solid ${bgcolor}` : `2px solid ${bgcolor}`,
+                opacity: active ? 1 : 0.5,
                 fontWeight: "bold",
-                textAlign: "center",
-                minWidth: 24,
+                minWidth: 20,
+                minHeight: 20,
+                width: 20,
+                height: 20,
+                "&:hover": {
+                    bgcolor,
+                    opacity: 0.85,
+                },
             }}
         >
-            {symbol}
-        </Box>
-    )
+            <Box
+                sx={{
+                    width: "100%",
+                    height: "100%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontWeight: "bold",
+                    fontSize: 12,
+                }}
+            >
+                {symbol}
+            </Box>
+        </IconButton>
+    );
 }

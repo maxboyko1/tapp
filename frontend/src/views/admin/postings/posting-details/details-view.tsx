@@ -180,7 +180,15 @@ export function ConnectedPostingDetailsView({ posting }: { posting: Posting }) {
                 sx={{
                     mb: 2,
                     p: 1,
-                    maxHeight: posting.posting_positions.length ? "46vh" : "41vh",
+                    // Need to fix the height on this table panel to leave space for the last element
+                    maxHeight: (() => {
+                        const isDev = !!process.env.REACT_APP_DEV_FEATURES;
+                        if (posting.posting_positions.length) {
+                            return isDev ? "46vh" : "53vh";
+                        } else {
+                            return isDev ? "41vh" : "48vh";
+                        }
+                    })(),
                     overflow: "auto",
                 }}
             >

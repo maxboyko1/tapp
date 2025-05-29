@@ -53,3 +53,5 @@ export function AdminContractTemplatesView() {
         </div>
     );
 }
+
+export default AdminContractTemplatesView;

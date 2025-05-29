@@ -39,13 +39,13 @@ export function InstructorAssignmentsView() {
                 <Typography variant="h4" color="text.primary" gutterBottom>
                     {formattedPositionName}
                 </Typography>
-                <Typography component="p">
+                <Typography variant="body1" sx={{ mb: 2 }}>
                     Below is a list of your TAs for{" "}
-                    <Typography component="span" color="primary" display="inline">
+                    <Typography component="span" color="primary" display="inline" sx={{ fontWeight: "bold" }}>
                         {formattedPositionName}
                     </Typography>{" "}
                     for the{" "}
-                    <Typography component="span" color="primary" display="inline">
+                    <Typography component="span" color="primary" display="inline" sx={{ fontWeight: "bold" }}>
                         {formattedSessionName}
                     </Typography>{" "}
                     session. TAs will only show up in this list if they have
@@ -59,3 +59,5 @@ export function InstructorAssignmentsView() {
         </div>
     );
 }
+
+export default InstructorAssignmentsView;

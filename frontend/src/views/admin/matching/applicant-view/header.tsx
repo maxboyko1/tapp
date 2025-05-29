@@ -48,9 +48,9 @@ export function ApplicantViewHeader({
                         variant="outlined"
                         placeholder="Filter by name/UTORid..."
                         onChange={(e) => setFilterString(e.target.value)}
-                        InputProps={{
+                        slotProps={{ input: {
                             sx: { minWidth: 250, mr: 2 },
-                        }}
+                        }}}
                     />
                 </div>
                 <ApplicantFilterButton
@@ -84,6 +84,7 @@ function DisplayToggle() {
             }}
             aria-label="view mode"
             size="small"
+            sx={{ mt: 0.5 }}
         >
             <ToggleButton
                 id="view-toggle-grid"

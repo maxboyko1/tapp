@@ -62,9 +62,6 @@ export function InstructorAssignmentsTable() {
             header: "Hours",
             accessorKey: "hours",
             maxSize: 70,
-            meta: {
-                className: "number-cell",
-            }
         },
         {
             header: "Offer Status",

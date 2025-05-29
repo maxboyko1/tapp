@@ -189,8 +189,6 @@ export function PostingView() {
         fetchSurvey();
     }, [url_token, setSurveyJson, setSurveyPrefilledData, setApplicationOpen]);
 
-    console.log("PostingView: surveyJson", surveyJson);
-
     const survey = React.useMemo(() => {
         if (!surveyJson) return null;
 
@@ -224,6 +222,8 @@ export function PostingView() {
         });
     }, [survey, setSurveyData, setSubmitDialogVisible, hasSubmitted]);
 
+    // Filter out items in the position preferences ranking question if they were not selected
+    // to be included as such in the prior checkbox question, i.e. the "Unwilling" category
     React.useEffect(() => {
         if (!survey) return;
         survey.onValueChanged.add((sender, options) => {
@@ -307,3 +307,5 @@ export function PostingView() {
         </React.Fragment>
     );
 }
+
+export default PostingView;

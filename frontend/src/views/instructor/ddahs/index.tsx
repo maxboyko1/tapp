@@ -158,14 +158,20 @@ export function InstructorDdahsView() {
                 <Typography variant="h4" gutterBottom>
                     <span>{formattedPositionName}</span>
                 </Typography>
-                <Typography component="p">
+                <Typography sx={{ mb: 1 }}>
                     Below is a list of your TAs for{" "}
-                    <span className="text-primary">{formattedPositionName}</span> for the{" "}
-                    <span className="text-primary">{formattedSessionName}</span> session. You can view, create, and edit DDAH forms for your
+                    <Typography component="span" color="primary" display="inline" sx={{ fontWeight: "bold" }}>
+                        {formattedPositionName}
+                    </Typography>{" "}
+                    for the{" "}
+                    <Typography component="span" color="primary" display="inline" sx={{ fontWeight: "bold" }}>
+                        {formattedSessionName}
+                    </Typography>{" "}
+                    session. You can view, create, and edit DDAH forms for your
                     TAs. After you create/edit a DDAH form, please save and close the file. The TA coordinator will review and send these files to the
                     students in the coming days.
                 </Typography>
-                <Typography component="p">
+                <Typography sx={{ mb: 2 }}>
                     The <i>Approved</i> column indicates whether the TA coordinator has reviewed and approved the DDAH. If you have
                     any questions about DDAHs and their requirements, please contact the TA coordinator at{" "}
                     <a href="mailto:tacoord@cs.toronto.edu">tacoord@cs.toronto.edu</a>.
@@ -235,3 +241,5 @@ export function InstructorDdahsView() {
         </div>
     );
 }
+
+export default InstructorDdahsView;

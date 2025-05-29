@@ -80,6 +80,7 @@ export function GridItemDropdown({
     return (
         <>
             <MenuItem
+                dense
                 onClick={() => {
                     setShownApplication(applicantSummary.application);
                     onClose();
@@ -88,6 +89,7 @@ export function GridItemDropdown({
                 <ListItemText>View application details</ListItemText>
             </MenuItem>
             <MenuItem
+                dense
                 onClick={() => {
                     setShowNote(true);
                     onClose();
@@ -98,6 +100,7 @@ export function GridItemDropdown({
 
             {matchStatus === "staged-assigned" && (
                 <MenuItem
+                    dense
                     onClick={() => {
                         setShowChangeHours(true);
                         onClose();
@@ -108,6 +111,7 @@ export function GridItemDropdown({
             )}
             {(canBeAssigned || matchStatus === "staged-assigned") && (
                 <MenuItem
+                    dense
                     onClick={() => {
                         _toggleAssigned();
                         onClose();
@@ -124,6 +128,7 @@ export function GridItemDropdown({
             )}
             {canBeStarred && (
                 <MenuItem
+                    dense
                     onClick={() => {
                         _toggleStarred();
                         onClose();
@@ -138,6 +143,7 @@ export function GridItemDropdown({
             {canBeHidden && (
                 <>
                     <MenuItem
+                        dense
                         onClick={() => {
                             _toggleHidden();
                             onClose();
@@ -149,6 +155,7 @@ export function GridItemDropdown({
                         </ListItemText>
                     </MenuItem>
                     <MenuItem
+                        dense
                         onClick={() => {
                             _toggleApplicantHidden();
                             onClose();

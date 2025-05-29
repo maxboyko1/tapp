@@ -66,7 +66,7 @@ export function ApplicantNoteDialog({
             <DialogActions>
                 <Button
                     onClick={() => setShow(false)}
-                    variant="outlined"
+                    variant="contained"
                     color="secondary"
                 >
                     Cancel

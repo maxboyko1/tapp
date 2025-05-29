@@ -79,3 +79,4 @@ export function AdminPositionsView() {
 }
 
 export { ConnectedAddPositionDialog, ConnectedPositionsList };
+export default AdminPositionsView;

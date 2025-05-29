@@ -1,46 +1,39 @@
 import React from "react";
 import {
     Alert,
+    Box,
     Button,
     CircularProgress,
     Dialog,
     DialogActions,
     DialogContent,
-    DialogTitle, 
+    DialogTitle,
+    Divider,
     IconButton,
+    List,
+    ListItem,
     Stack,
     TextField,
-    Typography
+    Typography,
+    Table,
+    TableBody,
+    TableCell,
+    TableRow,
 } from "@mui/material";
 import Add from "@mui/icons-material/Add";
 import CloseIcon from "@mui/icons-material/Close";
 import Delete from "@mui/icons-material/Delete";
 import Download from "@mui/icons-material/Download";
 import Edit from "@mui/icons-material/Edit";
-import Info from "@mui/icons-material/Info";
 import Save from "@mui/icons-material/Save";
 
 import type { Ddah, Duty } from "../../../api/defs/types";
 import { formatDate, formatDownloadUrl } from "../../../libs/utils";
 import { splitDutyDescription } from "./../../../libs/ddah-utils";
-import { DialogRow } from "../../../components/forms/common-controls";
 import { stringToNativeType } from "../../../libs/urls";
 import { DutyCategory } from "../../../components/ddahs";
 
 import "./style.css";
-
-export interface RowData {
-    id?: number;
-    position_code: string;
-    last_name: string;
-    first_name: string;
-    total_hours: number | null;
-    status: string | null;
-    recent_activity_date: string | null;
-    emailed_date: string | null;
-    issues: string | null;
-    issue_code: "hours_mismatch" | "missing" | null;
-}
 
 const categoryInformation: Record<
     DutyCategory,
@@ -160,97 +153,81 @@ function DutyItem({
 }) {
     if (onChange) {
         return (
-            <DialogRow
-                icon={
-                    onDelete ? (
-                        <Button
-                            title="Remove duty"
-                            onClick={() => onDelete(duty)}
-                            variant="outlined"
-                            color="info"
-                            size="small"
-                        >
-                            <Delete />
-                        </Button>
-                    ) : null
-                }
-                colStretch={[1, 7]}
+            <ListItem
+                disableGutters
+                sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 2,
+                    py: 1,
+                }}
             >
-                <>
-                    {category === "note" ? (
-                        <div />
-                    ) : (
-                        <>
-                            <TextField
-                                label="Hours"
-                                type="number"
-                                size="small"
-                                value={duty.hours}
-                                onChange={(
-                                    e: React.ChangeEvent<HTMLInputElement>
-                                ) =>
-                                    onChange(category, {
-                                        ...duty,
-                                        hours: stringToNativeType(
-                                            e.target.value
-                                        ) as any,
-                                    })
-                                }
-                                sx={{ mb: 1, mr: 2, width: 120 }}
-                                inputProps={{ min: 0 }}
-                            />
-                        </>
-                    )}
-                </>
-                <>
-                    {category === "note" ? (
-                        <TextField
-                            label="Note"
-                            title="Enter a note"
-                            type="text"
-                            size="small"
-                            value={duty.description}
-                            onChange={(
-                                e: React.ChangeEvent<HTMLInputElement>
-                            ) =>
-                                onChange(category, {
-                                    ...duty,
-                                    description: e.target.value,
-                                })
-                            }
-                            fullWidth
-                            sx={{ mb: 1 }}
-                        />
-                    ) : (
-                        <TextField
-                            label="Description"
-                            title="Enter a description of what these hours are allocated for"
-                            type="text"
-                            size="small"
-                            value={duty.description}
-                            onChange={(
-                                e: React.ChangeEvent<HTMLInputElement>
-                            ) =>
-                                onChange(category, {
-                                    ...duty,
-                                    description: e.target.value,
-                                })
-                            }
-                            fullWidth
-                            sx={{ mb: 1 }}
-                        />
-                    )}
-                </>
-            </DialogRow>
+                {category !== "note" && (
+                    <TextField
+                        label="Hours"
+                        type="number"
+                        size="small"
+                        value={duty.hours}
+                        onChange={(
+                            e: React.ChangeEvent<HTMLInputElement>
+                        ) =>
+                            onChange(category, {
+                                ...duty,
+                                hours: stringToNativeType(
+                                    e.target.value
+                                ) as any,
+                            })
+                        }
+                        sx={{ width: 100 }}
+                        slotProps={{ htmlInput: { min: 0 } }}
+                    />
+                )}
+                <TextField
+                    label={category === "note" ? "Note" : "Description"}
+                    title={
+                        category === "note"
+                            ? "Enter a note"
+                            : "Enter a description of what these hours are allocated for"
+                    }
+                    type="text"
+                    size="small"
+                    value={duty.description}
+                    onChange={(
+                        e: React.ChangeEvent<HTMLInputElement>
+                    ) =>
+                        onChange(category, {
+                            ...duty,
+                            description: e.target.value,
+                        })
+                    }
+                    fullWidth
+                    sx={{ flex: 1 }}
+                />
+                {onDelete && (
+                    <IconButton
+                        title="Remove duty"
+                        onClick={() => onDelete(duty)}
+                        color="info"
+                        size="small"
+                        sx={{ ml: 1 }}
+                    >
+                        <Delete />
+                    </IconButton>
+                )}
+            </ListItem>
         );
     }
     return (
-        <li className="duty">
-            {category !== "note" ? (
-                <span className="duty-hours">{duty.hours}</span>
-            ) : null}
-            <span className="duty-description">{duty.description}</span>
-        </li>
+        <ListItem disableGutters>
+            {category !== "note" && (
+                <Typography variant="body2" sx={{ minWidth: 40, fontWeight: "bold" }}>
+                    {duty.hours}
+                </Typography>
+            )}
+            <Typography variant="body2" sx={{ ml: 2 }}>
+                {duty.description}
+            </Typography>
+        </ListItem>
     );
 }
 
@@ -281,16 +258,12 @@ export function DdahPreviewModal({
     const [inProgress, setInProgress] = React.useState(false);
 
     React.useEffect(() => {
-        // Whenever the input DDAH changes, we want to reset the duties to
-        // its duties. This happens after a save/etc.
         if (ddah != null) {
             setDuties(receivedDuties);
         }
     }, [ddah, receivedDuties]);
 
     function onHide() {
-        // If the window gets hidden while we are editing, we want editing mode stop,
-        // and we want to reset the state.
         setEditing(false);
         setDuties(receivedDuties);
         _onHide();
@@ -301,7 +274,6 @@ export function DdahPreviewModal({
             if (duty.order !== newDuty.order) {
                 return duty;
             }
-            // The categories have been stripped from `newDuty`, so we need to put them back.
             newDuty = {
                 ...newDuty,
                 description: `${category}:${newDuty.description}`,
@@ -352,34 +324,39 @@ export function DdahPreviewModal({
         const position = assignment.position;
 
         ddahPreview = (
-            <div className="instructor-ddah-preview-container">
-                <table className="position-summary">
-                    <tbody>
-                        <tr>
-                            <th>TA:</th>
-                            <td>
+            <Box className="instructor-ddah-preview-container">
+                <Table size="small" sx={{ mb: 2, width: "auto" }}>
+                    <TableBody>
+                        <TableRow>
+                            <TableCell component="th" scope="row" sx={{ fontWeight: "bold" }}>
+                                TA:
+                            </TableCell>
+                            <TableCell>
                                 {applicant.first_name} {applicant.last_name}
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Position:</th>
-                            <td>
-                                {position.position_code} (
-                                {position.position_title})
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                <h4>Notes</h4>
+                            </TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableCell component="th" scope="row" sx={{ fontWeight: "bold" }}>
+                                Position:
+                            </TableCell>
+                            <TableCell>
+                                {position.position_code} ({position.position_title})
+                            </TableCell>
+                        </TableRow>
+                    </TableBody>
+                </Table>
+
+                <Typography variant="h6" sx={{ mt: 2, mb: 1 }}>
+                    Notes
+                </Typography>
                 {editing && (
-                    <Alert severity="info">
-                        <Info />
+                    <Alert severity="info" sx={{ mb: 2 }}>
                         {categoryInformation["note"].helpText}
                     </Alert>
                 )}
-                <ul>
+                <List dense>
                     <DutyList
-                        category={"note"}
+                        category="note"
                         duties={dutiesByCategory["note"] || []}
                         showEmptyDutyString={false}
                         onChange={onDutyChange}
@@ -387,8 +364,11 @@ export function DdahPreviewModal({
                         onNew={onDutyAdd}
                         editable={editing}
                     />
-                </ul>
-                <h4>Duties</h4>
+                </List>
+
+                <Typography variant="h6" sx={{ mt: 2, mb: 1 }}>
+                    Duties
+                </Typography>
                 {(
                     [
                         "meeting",
@@ -399,16 +379,20 @@ export function DdahPreviewModal({
                         "other",
                     ] as DutyCategory[]
                 ).map((category) => (
-                    <React.Fragment key={category}>
-                        <h6>{categoryInformation[category].title}</h6>
+                    <Box key={category} sx={{ mb: 2 }}>
+                        <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
+                            {categoryInformation[category].title}
+                        </Typography>
                         {editing && categoryInformation[category].helpText && (
-                            <Alert severity="info">
-                                <Info />
-                                {/* HTML helpText string set here is statically defined above and never edited so this should be safe */}
-                                <span dangerouslySetInnerHTML={{ __html: categoryInformation[category].helpText }}></span>
+                            <Alert severity="info" sx={{ mb: 1 }}>
+                                <span
+                                    dangerouslySetInnerHTML={{
+                                        __html: categoryInformation[category].helpText,
+                                    }}
+                                />
                             </Alert>
                         )}
-                        <ul>
+                        <List dense>
                             <DutyList
                                 category={category}
                                 duties={dutiesByCategory[category] || []}
@@ -417,44 +401,43 @@ export function DdahPreviewModal({
                                 onNew={onDutyAdd}
                                 editable={editing}
                             />
-                        </ul>
-                    </React.Fragment>
+                        </List>
+                    </Box>
                 ))}
-                <DialogRow>
-                    <>
-                        <Typography
-                            component="span"
-                            variant="body2"
-                            color={hoursMismatch ? "error" : "text.primary"}
-                            sx={{ fontWeight: hoursMismatch ? "bold" : "normal" }}
-                        >
-                            {totalHours}
-                        </Typography>{" "}
-                        of {ddah.assignment ? ddah.assignment.hours : "?"} hours
-                        allocated{" "}
-                        {hoursMismatch
-                            ? `(${
-                                  (ddah.assignment?.hours || 0) - totalHours
-                              } unassigned)`
-                            : ""}
-                    </>
-                </DialogRow>
-                <div className="signature-area">
-                    <div>
+
+                <Divider sx={{ my: 2 }} />
+
+                <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+                    <Typography
+                        component="span"
+                        variant="body2"
+                        color={hoursMismatch ? "error" : "text.primary"}
+                        sx={{ fontWeight: hoursMismatch ? "bold" : "normal", mr: 0.7 }}
+                    >
+                        {totalHours}
+                    </Typography>
+                    <Typography component="span" variant="body2" sx={{ mr: 1 }}>
+                        of {ddah.assignment ? ddah.assignment.hours : "?"} hours allocated
+                    </Typography>
+                    {hoursMismatch && (
+                        <Typography component="span" variant="body2" color="error">
+                            ({(ddah.assignment?.hours || 0) - totalHours} unassigned)
+                        </Typography>
+                    )}
+                </Box>
+
+                <Box className="signature-area" sx={{ mt: 2 }}>
+                    <Typography variant="body2">
                         Prepared
-                        {ddah.emailed_date
-                            ? ` on ${formatDate(ddah.emailed_date)}`
-                            : ""}
-                    </div>
-                    <div>
+                        {ddah.emailed_date ? ` on ${formatDate(ddah.emailed_date)}` : ""}
+                    </Typography>
+                    <Typography variant="body2">
                         {ddah.accepted_date
-                            ? `Acknowledged by ${applicant.first_name} ${
-                                  applicant.last_name
-                              } on ${formatDate(ddah.accepted_date)}`
+                            ? `Acknowledged by ${applicant.first_name} ${applicant.last_name} on ${formatDate(ddah.accepted_date)}`
                             : "Not yet acknowledged"}
-                    </div>
-                </div>
-            </div>
+                    </Typography>
+                </Box>
+            </Box>
         );
         url = `/public/ddahs/${ddah.url_token}.pdf`;
     }
@@ -465,16 +448,16 @@ export function DdahPreviewModal({
 
     let footer = (
         <>
-            <Button variant="outlined" color="secondary" onClick={() => onHide()}>
+            <Button variant="contained" color="secondary" onClick={() => onHide()}>
                 Close
             </Button>
-            <Button variant="outlined" color="info" onClick={() => setEditing(true)} startIcon={<Edit />}>
+            <Button variant="contained" color="info" onClick={() => setEditing(true)} startIcon={<Edit />}>
                 Edit
             </Button>
             {url && (
                 <Button
                     title="Download DDAH."
-                    variant="text"
+                    variant="contained"
                     color="primary"
                     href={formatDownloadUrl(url)}
                     startIcon={<Download />}
@@ -488,7 +471,7 @@ export function DdahPreviewModal({
         footer = (
             <>
                 <Button
-                    variant="outlined"
+                    variant="contained"
                     color="secondary"
                     onClick={() => {
                         setDuties(receivedDuties);
@@ -501,7 +484,7 @@ export function DdahPreviewModal({
                     Cancel
                 </Button>
                 <Button
-                    variant="outlined"
+                    variant="contained"
                     color="info"
                     onClick={async () => {
                         setInProgress(true);

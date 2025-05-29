@@ -11,28 +11,34 @@ import { validate } from "./validate";
  */
 function parseDate(str: string | number) {
     let date: Date | undefined;
-    
+
     if (typeof str === "number") {
         // Excel date to JS date
         const ms = Math.round((str - 25569) * 86400 * 1000);
         date = new Date(ms);
     } else {
-        // Try parsing with a few common formats
-        const formats = [
-            "yyyy-MM-dd",
-            "MM/dd/yyyy",
-            "dd/MM/yyyy",
-            "MMMM d, yyyy",
-            "MMM d, yyyy",
-            "yyyy/MM/dd",
-            "d MMM yyyy",
-        ];
+        // Try native Date parse (handles ISO and RFC formats)
+        const nativeDate = new Date(str);
+        if (isValid(nativeDate)) {
+            date = nativeDate;
+        } else {
+            // Try parsing with a few common formats
+            const formats = [
+                "yyyy-MM-dd",
+                "MM/dd/yyyy",
+                "dd/MM/yyyy",
+                "MMMM d, yyyy",
+                "MMM d, yyyy",
+                "yyyy/MM/dd",
+                "d MMM yyyy",
+            ];
 
-        for (const fmt of formats) {
-            const parsed = parse(str, fmt, new Date());
-            if (isValid(parsed)) {
-                date = parsed;
-                break;
+            for (const fmt of formats) {
+                const parsed = parse(str, fmt, new Date());
+                if (isValid(parsed)) {
+                    date = parsed;
+                    break;
+                }
             }
         }
 

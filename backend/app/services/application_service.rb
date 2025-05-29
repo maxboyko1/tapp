@@ -15,38 +15,64 @@ class ApplicationService
         data = {}
         return data if @application.blank?
 
-        # Grab the non-nil attributes from the application that we want to return.
-        # Some attributes, like `annotation`, are private, and shouldn't be returned.
-        application_data =
-            @application.attributes.slice(
-                'program',
-                'department',
-                'yip',
-                'previous_department_ta',
-                'previous_university_ta',
-                'previous_experience_summary',
-                'gpa',
-                'comments'
-            ).compact
+        # Top-level application fields
+        application_data = @application.attributes.slice(
+            'program',
+            'department',
+            'yip',
+            'previous_department_ta',
+            'previous_university_ta',
+            'previous_experience_summary',
+            'gpa',
+            'comments'
+        ).compact
         data.merge! application_data
 
-        # Custom question answers are stored as a JSON blob in the database. We unpack them if there are any
+        # 2. Custom question answers (posting-level)
         if @application.custom_question_answers
             data.merge! @application.custom_question_answers.except('utorid')
         end
 
-        # Position-preferences and position custom_question_answers must be reconstructed from the database.
-        position_preferences = {}
-        position_answers = {}
+        # 3. Position preferences and position-specific answers
+        willing_positions = []
+        willing_only_positions = []
+        ranked_positions = []
+
         position_preferences_subs.each do |preference|
-            position_preferences[preference['position_code']] = preference['preference_level']
-            if preference['custom_question_answers'].present?
-                # Re-nest under panel_{code} for SurveyJS
-                position_answers["panel_#{preference['position_code']}"] = preference['custom_question_answers']
+            code = preference['position_code']
+            pos_id = preference['position_id']
+            level = preference['preference_level'].to_i
+
+            # Willing if level >= 0
+            willing_positions << code if level >= 0
+
+            # Ranked if level > 0 (sort by level descending)
+            if level.positive?
+                ranked_positions << [code, level]
+            elsif level.zero?
+                willing_only_positions << code
+            end
+
+            # Position-specific custom question answers
+            next unless preference['custom_question_answers'].present?
+
+            preference['custom_question_answers'].each do |k, v|
+                data["#{pos_id}:#{k}"] = v
             end
         end
-        data[:position_preferences] = position_preferences
-        data.merge!(position_answers)
+
+        # Sort ranked_positions by level descending, then by code for stability
+        ranked_positions.sort_by! { |code, level| [-level, code] }
+        # Prefill ranking with ranked positions first, then willing-only positions
+        data[:willing_positions] = willing_positions
+        data[:position_preferences] = ranked_positions.map(&:first) + willing_only_positions
+
+        if @application.cv_link.present?
+            data['cv'] = [{
+                name: File.basename(@application.cv_link),
+                content: @application.cv_link
+            }]
+        end
 
         data.symbolize_keys!
     end
@@ -89,10 +115,11 @@ class ApplicationService
     def position_preferences_subs
         PositionPreference.joins(:position).where(
             id: application.position_preference_ids
-        ).pluck(:"positions.position_code", :preference_level, :custom_question_answers)
-            .map do |(position_code, preference_level, custom_question_answers)|
+        ).pluck(:"positions.position_code", :"positions.id", :preference_level, :custom_question_answers)
+            .map do |(position_code, position_id, preference_level, custom_question_answers)|
             {
                 position_code: position_code,
+                position_id: position_id,
                 preference_level: preference_level,
                 custom_question_answers: custom_question_answers
             }.stringify_keys

@@ -10,6 +10,7 @@ import {
     Typography,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { useTheme } from "@mui/material/styles";
 import { Link } from "react-router-dom";
 
 import { ContentArea } from "../../../components/layout";
@@ -24,6 +25,7 @@ import {
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
 
 export function InstructorSessionsView() {
+    const theme = useTheme();
     const activeSession = useSelector(activeSessionSelector);
     const sessions = useSelector(sessionsSelector);
     const dispatch = useThunkDispatch();
@@ -50,9 +52,9 @@ export function InstructorSessionsView() {
         heading = (
             <Typography variant="h4">
                 The currently active session is{" "}
-                <Typography component="span" color="primary" display="inline">
+                <span style={{ color: theme.palette.primary.main }}>
                     {activeSession.name} ({formatDate(activeSession.start_date)} to {formatDate(activeSession.end_date)})
-                </Typography>
+                </span>
             </Typography>
         );
     }
@@ -61,7 +63,7 @@ export function InstructorSessionsView() {
         <div className="page-body">
             <ContentArea>
                 {heading}
-                <Typography component="p">
+                <Typography sx={{ mt: 2, mb: 2 }}>
                     Below is a list of all sessions where you are listed as an
                     instructor. Select a session to see <i>positions</i>{" "}
                     (courses) that you are/were an instructor for.
@@ -77,9 +79,27 @@ export function InstructorSessionsView() {
                         (position) => position.session_id === session.id
                     );
                     return (
-                        <Accordion key={session.id} expanded={isActive} onChange={() => dispatch(setActiveSession(session))}>
-                            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                                <Typography variant="h6" color={isActive ? "primary" : "textPrimary"}>
+                        <Accordion
+                            key={session.id}
+                            expanded={isActive}
+                            onChange={() => dispatch(setActiveSession(session))}
+                            sx={{
+                                backgroundColor: theme.palette.secondary.light,
+                                boxShadow: 2,
+                                mb: 2,
+                                borderRadius: 2,
+                                '&:before': { display: 'none' },
+                            }}
+                        >
+                            <AccordionSummary
+                                expandIcon={<ExpandMoreIcon />}
+                                sx={{
+                                    backgroundColor: theme.palette.secondary.main,
+                                    color: theme.palette.secondary.contrastText,
+                                    borderRadius: 2,
+                                }}
+                            >
+                                <Typography variant="h6">
                                     {session.name} ({formatDate(session.start_date)} to {formatDate(session.end_date)})
                                 </Typography>
                             </AccordionSummary>
@@ -87,9 +107,19 @@ export function InstructorSessionsView() {
                                 <List>
                                     {sessionPositions.length > 0 ? (
                                         sessionPositions.map((position) => (
-                                            <ListItem key={position.id} disablePadding>
-                                                <ListItemButton component={Link} to={`/instructor/positions/${position.id}`}>
-                                                    <Typography>
+                                            <ListItem
+                                                key={position.id}
+                                                disablePadding
+                                                sx={{
+                                                    borderBottom: `1px solid ${theme.palette.divider}`,
+                                                    '&:last-child': { borderBottom: 'none' },
+                                                    '&:hover': {
+                                                        backgroundColor: theme.palette.action.hover,
+                                                    },
+                                                }}
+                                            >
+                                                <ListItemButton component={Link} to={`/positions/${position.id}/assignments`}>
+                                                    <Typography variant="subtitle1" color={theme.palette.secondary.contrastText}>
                                                         {position.position_code}
                                                         {position.position_title ? ` (${position.position_title})` : ""}
                                                     </Typography>
@@ -110,3 +140,5 @@ export function InstructorSessionsView() {
         </div>
     );
 }
+
+export default InstructorSessionsView;

@@ -23,7 +23,7 @@ import type {
 import { ApplicationsList } from "../../../components/applications";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
 import { ApplicationDetails } from "./application-details";
-import { formatDate, formatDateTime } from "../../../libs/utils";
+import { formatDate } from "../../../libs/utils";
 import { AdvancedColumnDef } from "../../../components/advanced-filter-table";
 
 export function ConnectedApplicationsList() {

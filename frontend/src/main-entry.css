@@ -4,6 +4,7 @@ body,
     height: 100%;
     width: 100%;
     overflow: hidden;
+    margin: 0;
 }
 
 .wide-modal {
@@ -19,7 +20,6 @@ body,
 }
 
 .view-container {
-    box-shadow: inset 0 70px 1px -70px #00356f38;
     flex-grow: 1;
     overflow: auto;
 }
@@ -27,6 +27,7 @@ body,
 .page-body {
     display: flex;
     flex-direction: row;
+    overflow: hidden;
     height: 100%;
 }
 
@@ -38,7 +39,6 @@ body,
     flex-grow: 1;
     background-color: white;
     padding: 1em;
-    box-shadow: inset 70px 70px 1px -70px #00356f38;
 }
 
 #app-body {

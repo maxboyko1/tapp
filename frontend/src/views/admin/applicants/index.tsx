@@ -58,3 +58,5 @@ export function AdminApplicantsView() {
         </div>
     );
 }
+
+export default AdminApplicantsView;

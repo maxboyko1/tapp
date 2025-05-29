@@ -133,7 +133,6 @@ export function generateSingleSelectColumnProps<RowType extends MRT_RowData, Val
                 renderValue={(selected) =>
                     selected ? (
                         <Chip
-                            variant="outlined"
                             color="primary"
                             label={getLabel(selected)}
                             size="small"
@@ -156,7 +155,6 @@ export function generateSingleSelectColumnProps<RowType extends MRT_RowData, Val
             cell: MRT_Cell<RowType, unknown>;
         }) => (
             <Chip
-                variant="outlined"
                 color="primary"
                 label={getLabel(cell.getValue() as ValueType)}
                 size="small"
@@ -200,7 +198,6 @@ export function generateMultiSelectColumnProps<RowType extends MRT_RowData, Valu
                     <Stack direction="row" gap={0.25} flexWrap="wrap">
                         {selected.map((opt, idx) => (
                             <Chip
-                                variant="outlined"
                                 color="primary"
                                 label={getLabel(opt)}
                                 size="small"
@@ -232,7 +229,6 @@ export function generateMultiSelectColumnProps<RowType extends MRT_RowData, Valu
                 <Stack direction="row" gap={0.25} flexWrap="wrap">
                     {values.map((opt: ValueType) => (
                         <Chip
-                            variant="outlined"
                             color="primary"
                             key={opt.id}
                             label={getLabel(opt)}
