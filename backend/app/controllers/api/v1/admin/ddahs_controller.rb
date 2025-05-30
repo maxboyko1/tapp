@@ -99,7 +99,7 @@ class Api::V1::Admin::DdahsController < ApplicationController
     def email
         find_ddah
 
-        # DdahMailer.email_ddah(@ddah).deliver_now!
+        DdahMailer.email_ddah(@ddah).deliver_now!
 
         unless @ddah.emailed_date
             @ddah.email

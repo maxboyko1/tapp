@@ -52,7 +52,7 @@ class Api::V1::Admin::ActiveConfirmationsController < ApplicationController
     def email
         return unless can_be_emailed
 
-        # ConfirmationMailer.email_letter(@confirmation).deliver_now!
+        ConfirmationMailer.email_letter(@confirmation).deliver_now!
 
         if @confirmation.provisional?
             # If the appointment has not been sent before, set status to pending
@@ -82,7 +82,7 @@ class Api::V1::Admin::ActiveConfirmationsController < ApplicationController
 
         @confirmation.nag_count += 1
         @confirmation.save!
-        # ConfirmationMailer.email_nag(@confirmation).deliver_now!
+        ConfirmationMailer.email_nag(@confirmation).deliver_now!
         render_success @confirmation
     end
 
