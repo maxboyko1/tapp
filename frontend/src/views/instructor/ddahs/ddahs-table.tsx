@@ -48,7 +48,7 @@ export function IssuesCell({
          : "text.primary";
     
     return (
-        <Typography sx={{ color, fontStyle: "italic" }}>
+        <Typography variant="body2" sx={{ color, fontStyle: "italic" }}>
             {issues}
         </Typography>
     );

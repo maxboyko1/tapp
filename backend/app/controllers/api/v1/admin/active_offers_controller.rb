@@ -51,7 +51,7 @@ class Api::V1::Admin::ActiveOffersController < ApplicationController
     def email
         return unless can_be_emailed
 
-        # OfferMailer.email_contract(@offer).deliver_now!
+        OfferMailer.email_contract(@offer).deliver_now!
 
         if @offer.provisional?
             # If the assignment has not been sent before, set status to pending
@@ -81,7 +81,7 @@ class Api::V1::Admin::ActiveOffersController < ApplicationController
 
         @offer.nag_count += 1
         @offer.save!
-        # OfferMailer.email_nag(@offer).deliver_now!
+        OfferMailer.email_nag(@offer).deliver_now!
         render_success @offer
     end
 
