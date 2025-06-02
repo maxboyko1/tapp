@@ -1,6 +1,14 @@
 import React from "react";
 import classNames from "classnames";
-import { ButtonBase } from "@mui/material";
+import {
+    Box,
+    ButtonBase,
+    Divider,
+    InputBase,
+    Paper,
+    Stack,
+    Typography,
+} from "@mui/material";
 
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
 import { round } from "../../../libs/utils";
@@ -38,17 +46,29 @@ export function PositionList({
     }, [filterString, positionSummaries]);
 
     return (
-        <div className="position-sidebar page-actions">
-            <div className="search-container position-search">
-                <input
+        <Paper className="position-sidebar page-actions" elevation={2}>
+            <Box className="search-container position-search">
+                <InputBase
                     className="form-control search-bar"
-                    type="text"
                     placeholder="Filter by position code..."
+                    value={filterString}
                     onChange={(e) => setFilterString(e.target.value)}
+                    size="small"
+                    sx={{
+                        fontSize: 14,
+                        px: 1,
+                        py: 0.5,
+                        background: "#f5f5f5",
+                        borderRadius: 1,
+                        width: "100%",
+                        height: 32,
+                    }}
+                    inputProps={{ "aria-label": "filter by position code" }}
                 />
-            </div>
-            <div className="position-list">
-                <div className="position-list-inner">
+            </Box>
+            <Divider sx={{ mb: 1 }} />
+            <Box className="position-list" sx={{ flex: 1, overflowY: "auto" }}>
+                <Stack className="position-list-inner" spacing={0.5}>
                     {filteredList.map((summary) => (
                         <PositionRow
                             positionSummary={summary}
@@ -58,9 +78,9 @@ export function PositionList({
                             key={summary.position.id}
                         />
                     ))}
-                </div>
-            </div>
-        </div>
+                </Stack>
+            </Box>
+        </Paper>
     );
 }
 
@@ -91,7 +111,6 @@ function PositionRow({
                 0
             );
         }
-
         return 0;
     }, [positionSummary, targetHours]);
 
@@ -107,31 +126,57 @@ function PositionRow({
                     setSelectedMatchingPosition(positionSummary.position.id)
                 )
             }
-            sx={{ width: "100%", textAlign: "left" }}
+            sx={{
+                width: "100%",
+                textAlign: "left",
+                borderRadius: 1,
+                px: 1,
+                py: 0.5,
+                bgcolor: focused ? "action.selected" : "background.paper",
+                boxShadow: focused ? 2 : 0,
+                transition: "background 0.2s",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "stretch",
+                minHeight: 32,
+            }}
         >
-            <div className="position-row-background">
-                <div
-                    style={{ width: `${progress}%` }}
-                    className={`progress ${positionSummary.filledStatus}`}
-                ></div>
-            </div>
-            <div className="position-row-info">
-                <span className="position-title">
+            <Box
+                className={classNames("progress", positionSummary.filledStatus)}
+                sx={{
+                    position: "absolute",
+                    left: 0,
+                    top: 0,
+                    bottom: 0,
+                    width: `${progress}%`,
+                    zIndex: 0,
+                    pointerEvents: "none",
+                }}
+            />
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                <Typography variant="subtitle2" sx={{ flex: 1, fontSize: 14 }}>
                     {positionSummary.position.position_code}
-                </span>
-                <span className="position-hours-filled">
+                </Typography>
+                <Typography variant="body2" color="text.secondary" sx={{ fontSize: 13 }}>
                     {positionSummary.hoursAssigned} / {targetHours} h
-                </span>
-                {focused && (
-                    <span className="position-row-detail">
-                        {positionSummary.applicantSummaries.length}{" "}
-                        applicant
-                        {positionSummary.applicantSummaries.length === 1
-                            ? ""
-                            : "s"}
-                    </span>
-                )}
-            </div>
+                </Typography>
+            </Box>
+            {focused && (
+                <Typography
+                    variant="caption"
+                    color="primary"
+                    sx={{
+                        mt: 0.5,
+                        fontSize: 12,
+                        position: "relative",
+                        zIndex: 1,
+                        alignSelf: "flex-start",
+                    }}
+                >
+                    {positionSummary.applicantSummaries.length} applicant
+                    {positionSummary.applicantSummaries.length === 1 ? "" : "s"}
+                </Typography>
+            )}
         </ButtonBase>
     );
 }

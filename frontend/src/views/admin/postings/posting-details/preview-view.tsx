@@ -1,7 +1,7 @@
 import React from "react";
-import { Alert, Paper } from "@mui/material";
+import { Alert } from "@mui/material";
 import { Model } from "survey-core";
-import { DoubleBorderLightPanelless } from "survey-core/themes";
+import { DoubleBorderLight } from "survey-core/themes";
 import { Survey } from "survey-react-ui";
 
 import { fetchSurvey } from "../../../../api/actions";
@@ -27,7 +27,7 @@ export function ConnectedPostingPreviewView({ posting }: { posting: Posting }) {
     }, [posting, dispatch]);
 
     const survey = new Model(jsonSurvey);
-    survey.applyTheme(DoubleBorderLightPanelless);
+    survey.applyTheme(DoubleBorderLight);
     // When we preview the survey, we want to see all the questions rather than a per-page view.
     survey.questionsOnPageMode = "singlePage";
     survey.onComplete.add((result) =>
@@ -40,22 +40,11 @@ export function ConnectedPostingPreviewView({ posting }: { posting: Posting }) {
     };
 
     return (
-        <Paper
-            elevation={2}
-            sx={{
-                p: 2,
-                maxHeight: "100vh",
-                overflow: "auto",
-                display: "flex",
-                flexDirection: "column",
-            }}
-        >
+        <React.Fragment>
             <Alert severity="info">
-                All pages of this survey are shown together. There will also be some dynamically
-                generated content near the end of the survey not shown here, this preview
-                shows only the fixed content.
+                All pages of this survey are shown together.
             </Alert>
             <Survey model={survey} />
-        </Paper>
+        </React.Fragment>
     );
 }
