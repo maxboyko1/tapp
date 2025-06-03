@@ -28,12 +28,12 @@ class ApplicationService
         ).compact
         data.merge! application_data
 
-        # 2. Custom question answers (posting-level)
+        # Custom question answers (posting-level)
         if @application.custom_question_answers
             data.merge! @application.custom_question_answers.except('utorid')
         end
 
-        # 3. Position preferences and position-specific answers
+        # Position preferences and position-specific answers
         willing_positions = []
         willing_only_positions = []
         ranked_positions = []
@@ -67,13 +67,6 @@ class ApplicationService
         data[:willing_positions] = willing_positions
         data[:position_preferences] = ranked_positions.map(&:first) + willing_only_positions
 
-        if @application.cv_link.present?
-            data['cv'] = [{
-                name: File.basename(@application.cv_link),
-                content: @application.cv_link
-            }]
-        end
-
         data.symbolize_keys!
     end
 
@@ -100,7 +93,6 @@ class ApplicationService
                 ].max.in_time_zone('Eastern Time (US & Canada)'),
             program: @application.program,
             department: @application.department,
-            cv_link: @application.cv_link,
             previous_department_ta: @application.previous_department_ta,
             previous_university_ta: @application.previous_university_ta,
             previous_experience_summary:

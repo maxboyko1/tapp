@@ -266,7 +266,7 @@ export function InstructorApplicationsTable() {
                 <DialogActions>
                     <Button
                         onClick={() => setShownApplicationId(null)}
-                        variant="outlined"
+                        variant="contained"
                         color="secondary"
                     >
                         Close

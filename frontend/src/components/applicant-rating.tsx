@@ -21,7 +21,7 @@ const RATING_TO_BG_COLOR: Record<string, string> = {
     null: "grey.200",
     "-1": "error.main",
     "0": "grey.500",
-    "1": "secondary.main",
+    "1": "info.main",
     "2": "success.main",
 };
 
@@ -179,9 +179,13 @@ export function ApplicantRatingAndComment({
                         </span>
                     </Tooltip>
                 ))}
-                <IconButton onClick={handleOpenDialog} size="small">
-                    <CommentIcon fontSize="small" />
-                </IconButton>
+                <Tooltip title="Edit Comment">
+                    <span>
+                        <IconButton onClick={handleOpenDialog} size="small">
+                            <CommentIcon fontSize="small" />
+                        </IconButton>
+                    </span>
+                </Tooltip>
                 {comment && (
                     <Typography variant="caption" sx={{ ml: 1, color: "primary.main" }}>
                         {comment}
@@ -228,10 +232,10 @@ export function ApplicantRatingAndComment({
         <Box
             className="applicant-rating-container"
             sx={{
-            display: "flex",
-            flexDirection: compact ? "row" : "column",
-            alignItems: compact ? "center" : "flex-start",
-            gap: 1,
+                display: "flex",
+                flexDirection: compact ? "row" : "column",
+                alignItems: compact ? "center" : "flex-start",
+                gap: 1,
             }}
         >
             {widget}
@@ -256,7 +260,13 @@ export function ApplicantRatingAndComment({
                     />
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={() => setEditDialogShow(false)}>Cancel</Button>
+                    <Button
+                        onClick={() => setEditDialogShow(false)}
+                        variant="contained"
+                        color="secondary"
+                    >
+                        Cancel
+                    </Button>
                     <Button
                         onClick={handleSaveComment}
                         variant="contained"

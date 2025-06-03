@@ -96,6 +96,7 @@ function DutyList({
             <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 2 }}>
                 <Button
                     title="Add Duty"
+                    color="info"
                     onClick={() => onNew && onNew(category)}
                     variant="outlined"
                     size="small"
@@ -346,11 +347,11 @@ export function DdahPreviewModal({
                     </TableBody>
                 </Table>
 
-                <Typography variant="h6" sx={{ mt: 2, mb: 1 }}>
+                <Typography variant="h5" sx={{ mt: 2, mb: 1 }}>
                     Notes
                 </Typography>
                 {editing && (
-                    <Alert severity="info" sx={{ mb: 2 }}>
+                    <Alert severity="info" sx={{ mb: 1 }}>
                         {categoryInformation["note"].helpText}
                     </Alert>
                 )}
@@ -366,7 +367,7 @@ export function DdahPreviewModal({
                     />
                 </List>
 
-                <Typography variant="h6" sx={{ mt: 2, mb: 1 }}>
+                <Typography variant="h5" sx={{ mt: 2, mb: 2 }}>
                     Duties
                 </Typography>
                 {(
@@ -386,6 +387,7 @@ export function DdahPreviewModal({
                         {editing && categoryInformation[category].helpText && (
                             <Alert severity="info" sx={{ mb: 1 }}>
                                 <span
+                                    // Should be safe to use here as this is static text, defined once above
                                     dangerouslySetInnerHTML={{
                                         __html: categoryInformation[category].helpText,
                                     }}

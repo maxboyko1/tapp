@@ -1,3 +1,4 @@
+import React from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { NavLink, Routes, Route, useLocation } from "react-router-dom";
@@ -11,8 +12,6 @@ import {
     Typography,
 } from "@mui/material";
 import { ErrorBoundary } from "react-error-boundary";
-import { ApiReferenceReact } from "@scalar/api-reference-react";
-import "@scalar/api-reference-react/style.css";
 
 import { ToggleMockApi } from "./mockAPI";
 import { mockApiRoutesAsSwaggerPaths } from "../../api/defs/doc-generation";
@@ -29,7 +28,10 @@ import {
 import { ActiveUserButton } from "./active-user-switch";
 import { SeedDataMenu } from "./load-mock-data";
 
+import "swagger-ui-react/swagger-ui.css";
 import "./main.css";
+
+const SwaggerUI = React.lazy(() => import("swagger-ui-react"));
 
 function MaterialUINavTab(props) {
     const location = useLocation();
@@ -130,14 +132,14 @@ function DevFrame(props) {
                 <Route
                     path="/api-docs"
                     element={
-                        <ApiReferenceReact
-                            configuration={{
-                                spec: {
-                                    content: swaggerData,
-                                    format: "object",
-                                },
-                            }}
-                        />
+                        <div style={{ flex: 1, overflow: "auto", height: "100%" }}>
+                            <React.Suspense fallback={<div>Loading...</div>}>
+                                <SwaggerUI
+                                    spec={swaggerData}
+                                    docExpansion="list"
+                                />
+                            </React.Suspense>
+                        </div>
                     }
                 />
                 <Route

@@ -68,7 +68,7 @@ class PostingService
         }
         fixed_survey['pages'] << preferences_page
 
-        # Add position-specific questions page (static panels, visible only if opted in)
+        # Add position-specific questions page
         position_questions_page = {
             'title' => 'Position-Specific Questions',
             'name' => 'position_questions_page',
