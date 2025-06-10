@@ -2,7 +2,9 @@ import React from "react";
 import FileSaver from "file-saver";
 import {
     Alert,
-    Divider,
+    List,
+    ListItem,
+    ListItemText,
     Typography,
 } from "@mui/material";
 
@@ -78,7 +80,7 @@ export function ConnectedImportPostingAction({
     setImportInProgress = null,
 }: {
     disabled: boolean;
-    setImportInProgress?: Function | null;
+    setImportInProgress?: ((state: boolean) => void) | null;
 }) {
     const dispatch = useThunkDispatch();
     const positions = useSelector(positionsSelector);
@@ -156,6 +158,7 @@ export function ConnectedImportPostingAction({
                     num_positions: row.num_positions,
                     hours: row.hours,
                 }));
+
                 // A spreadsheet contains information about exactly one posting. Most relevant fields are in
                 // the first row.
                 const postingData = data[0];
@@ -164,12 +167,19 @@ export function ConnectedImportPostingAction({
                 delete postingData.position_code;
                 postingData.posting_positions = postingPositions;
 
-                if (!isQuestionsJsonImportInValidFormat(postingData.custom_questions)) {
-                    throw new Error(
-                        `Invalid custom questions format in posting, expected array of non-empty strings such as ["Who?", "What?", "Where?"]`
-                    );
-                }
-                postingData.custom_questions = JSON.parse(postingData.custom_questions);
+                // Need to use the original first row from the spreadsheet file for question values
+                const originalFirstRow = fileContent.data[0];
+
+                // Find all question columns (case-insensitive, allow "question", "question_1", etc.)
+                const questionColumns = Object.keys(originalFirstRow)
+                    .filter((key) => /^question([_\s-]?\d*)?$/i.test(key.trim()));
+
+                const questions = questionColumns
+                    .map((key) => originalFirstRow[key])
+                    .filter((val) => typeof val === "string" && val.trim() !== "")
+                    .map((name) => ({ type: "comment", name: name.trim() }));
+
+                postingData.custom_questions = { elements: questions };
                 data = [postingData];
             }
 
@@ -240,34 +250,38 @@ const DialogContent = React.memo(function DialogContent({
                     </Alert>
                     {newPostings.map((posting) => (
                         <React.Fragment key={posting.name}>
-                            <Typography>
+                            <Typography variant="body2">
                                 <b>Name:</b> {posting.name}
                             </Typography>
-                            <Typography>
+                            <Typography variant="body2">
                                 <b>Open Date:</b> {posting.open_date}
                             </Typography>
-                            <Typography>
+                            <Typography variant="body2">
                                 <b>Close Date:</b> {posting.close_date}
                             </Typography>
-                            <Typography>
+                            <Typography variant="body2">
                                 <b>Intro Text:</b> {posting.intro_text}
                             </Typography>
-                            <Typography>
-                                <b>Custom Questions:</b> {JSON.stringify(posting.custom_questions)}
+                            <Typography variant="body2">
+                                <b>Custom Questions:</b>{" "}
+                                {Array.isArray(posting?.custom_questions)
+                                    ? posting.custom_questions.join(", ")
+                                    : posting?.custom_questions?.elements
+                                        ? posting.custom_questions.elements.map((q: any) => q.name).join(", ")
+                                        : "(None)"}
                             </Typography>
-                            <Typography variant="h6" sx={{ mt: 2 }}>
+                            <Typography variant="subtitle2" sx={{ mt: 2 }}>
                                 Posting Positions
                             </Typography>
-                            <ul>
+                            <List dense>
                                 {posting.posting_positions.map((postingPosition) => (
-                                    <li key={postingPosition.position.position_code}>
-                                        {postingPosition.position.position_code} (
-                                        {postingPosition.num_positions || "?"} positions at{" "}
-                                        {postingPosition.hours || "?"} hours)
-                                    </li>
+                                    <ListItem key={postingPosition.position.position_code}>
+                                        <ListItemText
+                                            primary={`${postingPosition.position.position_code} (${postingPosition.num_positions || "?"} positions at ${postingPosition.hours || "?"} hours)`}
+                                        />
+                                    </ListItem>
                                 ))}
-                            </ul>
-                            <Divider sx={{ my: 2 }} />
+                            </List>
                         </React.Fragment>
                     ))}
                 </React.Fragment>

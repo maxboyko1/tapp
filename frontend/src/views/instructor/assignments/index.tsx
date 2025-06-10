@@ -1,5 +1,7 @@
+import React from "react";
 import { useSelector } from "react-redux";
 import { Typography } from "@mui/material";
+
 import { ActionsList, ActionHeader } from "../../../components/action-buttons";
 import { ContentArea } from "../../../components/layout";
 import { InstructorAssignmentsTable } from "./assignments-table";
@@ -8,7 +10,7 @@ import { activeSessionSelector } from "../../../api/actions";
 import { formatDate } from "../../../libs/utils";
 import { ConnectedExportAssignmentsAction } from "./import-export";
 
-export function InstructorAssignmentsView() {
+export default function InstructorAssignmentsView() {
     const activeSession = useSelector(activeSessionSelector);
     const activePosition = useSelector(activePositionSelector);
 

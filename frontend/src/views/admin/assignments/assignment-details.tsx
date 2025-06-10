@@ -58,7 +58,7 @@ function OfferHistoryDetails({ offers }: { offers: Offer[] }) {
             </TableHead>
             <TableBody>
                 {(offers || []).map((offer, i) => {
-                    const url = `/public/contracts/${offer.url_token}.pdf`;
+                    const url = `/external/contracts/${offer.url_token}.pdf`;
                     return (
                         <TableRow key={i}>
                             <TableCell>
@@ -163,7 +163,7 @@ export function ConnectedAssignmentDetails({
     }, [assignmentId, dispatch, assignmentNotFound, wageChunksNotFound]);
 
     if (!assignment) {
-        return <Typography>No Assignment found with ID "{assignmentId}"</Typography>;
+        return <Typography>No Assignment found with ID &quot;{assignmentId}&quot;</Typography>;
     }
 
     return (
@@ -228,7 +228,7 @@ export function ConnectedViewAssignmentDetailsAction() {
     const assignments = useSelector(assignmentsSelector);
     const { selectedAssignmentIds } = useSelector<
         any,
-        { selectedAssignmentIds: Number[] }
+        { selectedAssignmentIds: number[] }
     >(offerTableSelector);
     const selectedAssignments = assignments.filter((assignment) =>
         selectedAssignmentIds.includes(assignment.id)
@@ -251,7 +251,7 @@ export function ConnectedViewAssignmentDetailsAction() {
     );
     if (selectedAssignments.length > 0) {
         assignmentDetails = selectedAssignments.map((assignment, i) => {
-            let split = i === 0 ? null : <hr />;
+            const split = i === 0 ? null : <hr />;
             return (
                 <React.Fragment key={i}>
                     {split}

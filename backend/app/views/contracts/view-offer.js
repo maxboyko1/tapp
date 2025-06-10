@@ -61,7 +61,7 @@ function submitDecision() {
         return;
     }
     postHelper(
-        "/public/contracts/" + URL_TOKEN + "/" + data.decision,
+        "/external/contracts/" + URL_TOKEN + "/" + data.decision,
         data,
         function() {
             window.location.reload(true);

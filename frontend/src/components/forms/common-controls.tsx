@@ -76,7 +76,7 @@ export function fieldEditorFactory<T>(
         let coerceFunc = (x: any) => x;
         // Function that is called on the value before it is passed to the `<input />`
         // element
-        let valueFunc = (x: any) => x || "";
+        const valueFunc = (x: any) => x || "";
 
         // depending on the type we want to coerce values appropriately
         switch (type) {
@@ -90,7 +90,8 @@ export function fieldEditorFactory<T>(
                 break;
         }
 
-        const { size, color, ...safeInputAttrs } = inputAttrs;
+        // Need to extract size and color here to avoid them being silently overwritten in the slotProps below
+        const { size, color, ...safeInputAttrs } = inputAttrs; // eslint-disable-line @typescript-eslint/no-unused-vars
 
         if (type === "date") {
             return (

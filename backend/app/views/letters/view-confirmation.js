@@ -61,7 +61,7 @@ function submitDecision() {
         return;
     }
     postHelper(
-        "/public/letters/" + URL_TOKEN + "/" + data.decision,
+        "/external/letters/" + URL_TOKEN + "/" + data.decision,
         data,
         function() {
             window.location.reload(true);

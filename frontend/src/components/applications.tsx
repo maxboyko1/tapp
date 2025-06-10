@@ -1,3 +1,4 @@
+import React from "react";
 import PropTypes from "prop-types";
 import { AdvancedColumnDef, AdvancedFilterTable } from "./advanced-filter-table";
 import { Application } from "../api/defs/types";

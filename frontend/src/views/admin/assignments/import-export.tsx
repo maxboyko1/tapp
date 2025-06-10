@@ -41,7 +41,7 @@ export function ConnectedExportAssignmentsAction({
     setExportInProgress = null,
 }: {
     disabled: boolean;
-    setExportInProgress: Function | null;
+    setExportInProgress: ((state: boolean) => void) | null;
 }) {
     const dispatch = useThunkDispatch();
     const session = useSelector(activeSessionSelector);
@@ -120,7 +120,7 @@ export function ConnectedImportAssignmentsAction({
     setImportInProgress = null,
 }: {
     disabled: boolean;
-    setImportInProgress: Function | null;
+    setImportInProgress: ((state: boolean) => void) | null;
 }) {
     const dispatch = useThunkDispatch();
     const assignments = useSelector(assignmentsSelector);
@@ -163,9 +163,9 @@ export function ConnectedImportAssignmentsAction({
             setProcessingError(null);
 
             // normalize the data coming from the file
-            let data = normalizeImport(
-                fileContent,
-                assignmentSchema
+            const data = normalizeImport(
+                  fileContent,
+                  assignmentSchema
             ) as MinimalAssignment[];
             // If data is coming from a spreadsheet, we need to make sure the
             // `hours` field is coerced to a number

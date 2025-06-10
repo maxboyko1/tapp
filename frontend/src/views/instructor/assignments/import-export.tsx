@@ -127,32 +127,37 @@ function spreadsheetOutputForInstructorAssignments(position: Position, applicati
                 // of every question field we see across all the applications here, all of which will become
                 // columns in the eventual spreadsheet
                 const customQuestionFieldsSet: Set<string> = new Set();
-                const assignmentsWithAnswersObj = assignmentsWithApplication.map((assignment) => ({
-                    ...assignment,
-                    answers: (() => {
-                        const answers = assignment.application?.custom_question_answers;
-                        if (answers && typeof answers === 'object' && !Array.isArray(answers)) {
-                            const formattedAnswers: { [key: string]: CellType } = {};
+                const assignmentsWithAnswersObj = assignmentsWithApplication.map((assignment) => {
+                    const answers = assignment.application?.custom_question_answers as
+                        { [key: string]: any } | undefined;
+                    const formattedAnswers: { [key: string]: CellType } = {};
+                    let priorAssignments: string[] = [];
 
-                            Object.keys(answers).forEach((field) => {
-                                // Add any new custom question fields to the overall set
-                                if (field !== "utorid") {
-                                    customQuestionFieldsSet.add(field);
-                                }
-                                // Stringify any array or boolean values in the answers
-                                const value = (answers as { [key: string]: any })[field];
-                                if (Array.isArray(value) || typeof value == 'boolean') {
-                                    formattedAnswers[field] = value.toString();
-                                } else {
-                                    formattedAnswers[field] = value;
-                                }
-                            });
+                    if (answers && typeof answers === 'object' && !Array.isArray(answers)) {
+                        Object.keys(answers).forEach((field) => {
+                            if (field === "prior_assignments") {
+                                // Save prior_assignments separately and do not add to customQuestionFieldsSet
+                                priorAssignments = Array.isArray(answers[field]) ? answers[field] : [];
+                                return;
+                            }
+                            if (field !== "utorid") {
+                                customQuestionFieldsSet.add(field);
+                            }
+                            const value = (answers as { [key: string]: any })[field];
+                            if (Array.isArray(value) || typeof value == 'boolean') {
+                                formattedAnswers[field] = value.toString();
+                            } else {
+                                formattedAnswers[field] = value;
+                            }
+                        });
+                    }
 
-                            return formattedAnswers;
-                        }
-                        return {};
-                    })(),
-                }));
+                    return {
+                        ...assignment,
+                        answers: formattedAnswers,
+                        priorAssignments,
+                    };
+                });
                 
                 // Sort overall list of custom question field names alphabetically, i.e. the order in
                 // which they will appear in the spreadsheet
@@ -171,8 +176,11 @@ function spreadsheetOutputForInstructorAssignments(position: Position, applicati
                     past_ta_for_course: (() => {
                         const matches = position.position_code.match(/\b[a-zA-Z]{3}\d{3,4}/);
                         const posCodeAbbr = matches ? matches[0] : null;
-                        const summary = assignment.application?.previous_experience_summary; 
-                        return (posCodeAbbr && summary && summary.includes(posCodeAbbr)) ? "Yes" : "";
+                        return (posCodeAbbr &&
+                            assignment.priorAssignments &&
+                            assignment.priorAssignments.some((s) => s.includes(posCodeAbbr)))
+                            ? "Yes"
+                            : "";
                     })(),
                     ...customQuestionFields.reduce((acc: { [key: string]: CellType }, field) => {
                         acc[field] = assignment.answers[field];

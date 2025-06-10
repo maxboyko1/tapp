@@ -371,7 +371,7 @@ export const prepareFull: PrepareFull = {
             url_token: "",
             posting_positions: [],
         } as unknown as Posting;
-        let postingPositions: PostingPosition[] =
+        const postingPositions: PostingPosition[] =
             minPosting.posting_positions.map((minPostingPosition) => {
                 const position = positions.find(
                     (position) =>

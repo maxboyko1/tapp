@@ -1,5 +1,11 @@
 import { ThemeOptions } from '@mui/material/styles';
 
+/**
+ * Material UI uses a ThemeOptions object like this to allow for standardization
+ * of styling throughout the app, in this instance we have fixed a few specific
+ * colour options for the app's general color palette, as well as typography
+ * options for font, font size and relative header sizes.
+ */
 export const themeOptions: ThemeOptions = {
     palette: {
         primary: {

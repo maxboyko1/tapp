@@ -20,7 +20,7 @@ import { activeSessionSelector } from "../../../api/actions";
 import { MissingActiveSessionWarning } from "../../../components/sessions";
 import { ConnectedPositionDetailsDialog } from "./position-details-dialog";
 
-export function AdminPositionsView() {
+export default function AdminPositionsView() {
     const [addDialogVisible, setAddDialogVisible] = React.useState(false);
     const [inDeleteMode, setInDeleteMode] = React.useState(false);
     const activeSession = useSelector(activeSessionSelector);

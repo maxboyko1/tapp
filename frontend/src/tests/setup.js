@@ -1,6 +1,3 @@
-/**
- * @jest-environment node
- */
 import { apiGET, expect } from "./utils";
 import { recursiveDeleteProp } from "../api/mockAPI/utils";
 
@@ -565,13 +562,13 @@ async function seedDatabaseForInstructors(
     // Cleanup
     for (const assignment of seeded.assignments) {
         if (assignment._temp_id) {
-            const { temp_id, ...cleanAssignment } = assignment;
+            const { temp_id: _temp_id, ...cleanAssignment } = assignment;
             Object.assign(assignment, cleanAssignment);
         }
     }
 
     for (const ddah of seeded.ddahs) {
-        const { temp_id, ...cleanDdah } = ddah;
+        const { temp_id: _temp_id, ...cleanDdah } = ddah;
         Object.assign(ddah, cleanDdah);
     }
 }

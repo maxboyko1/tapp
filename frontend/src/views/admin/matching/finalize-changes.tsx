@@ -66,7 +66,7 @@ export function FinalizeChangesButton() {
             return;
         }
 
-        finalizeAssignments().then((r) => setDialogVisible(false));
+        finalizeAssignments().then(() => setDialogVisible(false));
     }
 
     return (

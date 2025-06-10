@@ -1,3 +1,4 @@
+import React from "react";
 import { useSelector } from "react-redux";
 import { Typography } from "@mui/material";
 import { activeSessionSelector } from "../../../api/actions";
@@ -5,7 +6,7 @@ import { ConnectedActiveSessionDisplay } from "../../common/header-components";
 import { ContentArea } from "../../../components/layout";
 import { Session } from "../../../api/defs/types";
 
-function ConnectedLandingView() {
+export default function ConnectedLandingView() {
     const activeSession = useSelector(activeSessionSelector) as Session | null;
 
     let activeSessionInfo = (
@@ -48,5 +49,3 @@ function ConnectedLandingView() {
         </div>
     );
 }
-
-export { ConnectedLandingView as Landing };

@@ -74,6 +74,10 @@ class Api::V1::Admin::PositionsController < ApplicationController
                 :instructor_ids
             ).permit!
 
+        # Moving forward, custom_questions for a position will be imported in the format of
+        # an ["An", "Array", "Like", "This"], from which we make a JSON object using the helper
+        # below. Support for the old import-via-hash format is included here for completeness,
+        # though the UI for working with this format has now been removed.
         if filtered_params[:custom_questions].is_a?(Array)
             filtered_params[:custom_questions] =
                 make_questions_json_from_array(filtered_params[:custom_questions])

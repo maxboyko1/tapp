@@ -11,6 +11,7 @@ import {
     DialogContent,
     DialogTitle,
     IconButton,
+    Stack,
     Typography,
 } from "@mui/material";
 
@@ -109,11 +110,11 @@ export function InstructorApplicationsTable() {
         return (
             <ApplicantRatingAndComment
                 instructorPreference={instructorPreference}
-                setInstructorPreference={(newPref: InstructorPreference) =>
+                setInstructorPreference={(newPref) =>
                     setInstructorPreference({
                         ...applicationAndPosition,
                         ...newPref,
-                    })
+                    } as InstructorPreference)
                 }
                 {...rest}
             />
@@ -136,7 +137,7 @@ export function InstructorApplicationsTable() {
             size: 80,
             Cell: ({ row }) => (
                 <Button
-                    variant="contained"
+                    variant="outlined"
                     size="small"
                     onClick={() => setShownApplicationId(row.original.id) }
                     startIcon={<SearchIcon />}
@@ -186,7 +187,7 @@ export function InstructorApplicationsTable() {
             size: 60,
         },
         {
-            ...generateHeaderCellProps("Experience"),
+            ...generateHeaderCellProps("Experience Summary"),
             accessorKey: "previous_experience_summary",
         },
         {
@@ -197,22 +198,21 @@ export function InstructorApplicationsTable() {
                 const assignments: Assignment[] =
                     assignmentsByApplicantId[row.original.applicant.id] || [];
                 return (
-                    <ul style={{ paddingLeft: 16, margin: 0 }}>
+                    <Stack direction="row" gap={0.25} flexWrap="wrap">
                         {assignments.map((assignment) => (
-                            <li key={assignment.position.position_code}>
-                                <Chip
-                                    label={`${assignment.position.position_code} (${assignment.hours})`}
-                                    color={
-                                        OFFER_STATUS_TO_VARIANT[
-                                            assignment.active_offer_status || ''
-                                        ] || 'warning'
-                                    }
-                                    size="small"
-                                    sx={{ mr: 0.5, mb: 0.5 }}
-                                />
-                            </li>
+                            <Chip
+                                label={`${assignment.position.position_code} (${assignment.hours})`}
+                                variant="outlined"
+                                color={
+                                    OFFER_STATUS_TO_VARIANT[
+                                        assignment.active_offer_status || ''
+                                    ] || 'warning'
+                                }
+                                key={assignment.id}
+                                size="small"
+                            />
                         ))}
-                    </ul>
+                    </Stack>
                 );
             },
         },

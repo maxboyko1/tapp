@@ -25,6 +25,7 @@ import {
 import { setSelectedRows as setSelectedDdahs } from "../../admin/ddah-table/actions";
 import { formatDate } from "../../../libs/utils";
 import { InstructorImportDdahsAction } from "./import";
+import { normalizeDdahFields } from "./ddah-editor";
 
 export function ConnectedDownloadPositionDdahTemplatesAction({
     disabled = false,
@@ -82,7 +83,7 @@ export function ConnectedDownloadPositionDdahTemplatesAction({
     );
 }
 
-export function InstructorDdahsView() {
+export default function InstructorDdahsView() {
     const activeSession = useSelector(activeSessionSelector);
     const ddahs = useSelector(ddahsSelector);
     const assignments = useSelector(assignmentsSelector);
@@ -219,8 +220,9 @@ export function InstructorDdahsView() {
                     ddah={previewDdah}
                     show={previewVisible}
                     onHide={() => setPreviewVisible(false)}
-                    onEdit={async (newDdah: Ddah) => {
-                        await dispatch(upsertDdah(newDdah));
+                    onEdit={async (newDdah) => {
+                        if (!newDdah) return;
+                        await dispatch(upsertDdah(normalizeDdahFields(newDdah)));
                     }}
                 />
                 <DdahPreviewModal
@@ -228,9 +230,10 @@ export function InstructorDdahsView() {
                     show={newDialogVisible}
                     forceEditMode={true}
                     onHide={() => setNewDialogVisible(false)}
-                    onEdit={async (newDdah: Ddah) => {
+                    onEdit={async (newDdah) => {
+                        if (!newDdah) return;
                         const returnedDdah = await dispatch(
-                            upsertDdah(newDdah)
+                            upsertDdah(normalizeDdahFields(newDdah))
                         );
                         setPreviewDdahId(returnedDdah.id);
                         setNewDialogVisible(false);

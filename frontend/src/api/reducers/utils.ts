@@ -107,6 +107,10 @@ export function createBasicReducerObject<T extends HasIdField>(
     };
 }
 
+/**
+ * Same as above, extended with a FETCH_ALL action in the event we need these
+ * two distinct multi-fetch actions
+ */
 export function createAdvancedReducerObject<T extends HasIdField>(
     FETCH_ALL: string,
     FETCH_MANY: string,
@@ -209,8 +213,7 @@ function _localStoreSelector<T>(
             localState = localState[dir];
         }
         return localState;
-    } catch (e: any) {
-        // eslint-disable-next-line
+    } catch {
         console.error(
             "Searching",
             state,
@@ -260,7 +263,7 @@ export function createLocalStoreSelector<T>(_storePath: _StorePath) {
 export function combineReducers<T extends TaggedReducersMapObject<S>, S>(
     model: T
 ) {
-    const pushToPathCallbacks: Function[] = [];
+    const pushToPathCallbacks: Array<(dir: string) => void> = [];
     // recursively call all `pushToPath` functions.
     // They have been stored in `pushToPathCallbacks`
     function pushToPath(dir: string) {

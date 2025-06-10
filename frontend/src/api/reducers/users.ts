@@ -8,7 +8,7 @@ import { createReducer } from "./utils";
 
 export interface UsersState {
     users: User[];
-    active_user: ActiveUser | {};
+    active_user: ActiveUser | object;
     active_role: UserRole | null;
 }
 

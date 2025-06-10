@@ -75,7 +75,7 @@ export function AddAppointmentDialog(props: {
     applicants: Applicant[];
     activeSession: Session | null;
     letterTemplates: LetterTemplate[];
-    upsertApplicantMatchingDatum: Function;
+    upsertApplicantMatchingDatum: (datum: Partial<ApplicantMatchingDatum>) => void;
 }) {
     const {
         show,

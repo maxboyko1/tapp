@@ -99,6 +99,9 @@ export function formatDateTime<T extends string | null | undefined>(
     return date.toLocaleString("en-CA") as T;
 }
 
+/**
+ * Map specific offer/confirmation statuses to predefined display colors.
+ */
 export function getStatusColor(status: string | null, theme: any) {
     switch (status) {
         case "provisional":
@@ -116,6 +119,10 @@ export function getStatusColor(status: string | null, theme: any) {
     }
 }
 
+/**
+ * Attempt to parse a local date string of the form YYYY-MM-DD and return
+ * a Date object if successful, or null if the string is invalid. 
+ */
 export function parseLocalDate(dateStr?: string | null): Date | null {
     if (!dateStr) return null;
     const match = dateStr.match(/^(\d{4})-(\d{2})-(\d{2})/);
@@ -135,9 +142,8 @@ export function parseLocalDate(dateStr?: string | null): Date | null {
  */
 let formatDownloadUrl = (url: string) => url;
 
-if (process.env.REACT_APP_DEV_FEATURES) {
+if (import.meta.env.VITE_DEV_FEATURES) {
     formatDownloadUrl = (url: string) => {
-        // In development mode, we need to fetch from backend port 3000
         return `http://localhost:3000${url}`;
     };
 }

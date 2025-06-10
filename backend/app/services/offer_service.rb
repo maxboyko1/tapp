@@ -24,7 +24,7 @@ class OfferService
             # to avoid issues with Shibboleth authentication
             # See details in routes.rb
             url:
-                "#{Rails.application.config.base_url}/hash/public/contracts/#{
+                "#{Rails.application.config.base_url}/hash/external/contracts/#{
                     @offer.url_token
                 }",
             nag_count: @offer.nag_count,

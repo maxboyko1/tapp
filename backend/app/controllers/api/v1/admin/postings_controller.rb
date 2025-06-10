@@ -92,6 +92,11 @@ class Api::V1::Admin::PostingsController < ApplicationController
                 :custom_questions,
                 :availability
             ).permit!
+
+        # Moving forward, custom_questions for a posting will be imported in the format of
+        # an ["An", "Array", "Like", "This"], from which we make a JSON object using the helper
+        # below. Support for the old import-via-hash format is included here for completeness,
+        # though the UI for working with this format has now been removed.
         if filtered_params[:custom_questions].is_a?(Array)
             filtered_params[:custom_questions] =
                 make_questions_json_from_array(filtered_params[:custom_questions])
@@ -99,6 +104,7 @@ class Api::V1::Admin::PostingsController < ApplicationController
             filtered_params[:custom_questions] =
                 filtered_params[:custom_questions].to_hash.deep_stringify_keys
         end
+
         filtered_params
     end
 

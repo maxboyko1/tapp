@@ -21,6 +21,7 @@ import {
     ApplicantMatchingDatum,
     LetterTemplate,
 } from "../api/defs/types";
+import { getCustomQuestionNamesAsArrayStr, isQuestionsFieldInValidFormat } from "../components/custom-question-utils";
 import {
     prepareMinimal,
     prepareFull,
@@ -174,6 +175,8 @@ export const diffImport = {
                         };
                         ret.changes[prop] = `${getName(oldVal)} → ${getName(newVal)}`;
                     } else if (prop === "custom_questions") {
+                        console.log("Custom questions old", oldVal);
+                        console.log("Custom questions new", newVal);
                         const getNames = (val: any) => {
                             if (
                                 val &&
@@ -559,6 +562,23 @@ function hashAssignment(assignment: MinimalAssignment | Assignment): string {
 }
 
 /**
+ * Convert date string to UTC timestamp format for comparison.
+ * @param dateStr - A date string that may or may not have a timezone
+ * @returns 
+ */
+function parseDateStringAsUTC(dateStr: string): Date {
+    // If the string looks like an ISO string but has no timezone, treat as UTC
+    if (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?$/.test(dateStr)) {
+        return new Date(dateStr + "Z");
+    }
+    // If the string ends with a timezone offset like -05 or +02, normalize to -05:00 or +02:00
+    if (/([+-]\d{2})$/.test(dateStr)) {
+        dateStr = dateStr.replace(/([+-]\d{2})$/, "$1:00");
+    }
+    return new Date(dateStr);
+}
+
+/**
  * Compare two objects and determine if they are the same. In this check,
  * `null`, `undefined`, and `""` are counted as the same as each other (but
  * they are distinct from `0`). This is used for detecting diffs from spreadsheets
@@ -569,6 +589,7 @@ function hashAssignment(assignment: MinimalAssignment | Assignment): string {
  * @returns {boolean}
  */
 function isSame(obj1: any, obj2: any): boolean {
+    // console.log("Comparing", obj1, "and", obj2);
     if (obj1 === obj2) {
         return true;
     }
@@ -591,6 +612,26 @@ function isSame(obj1: any, obj2: any): boolean {
     // they can't be equal. After this check, neither object is falsy.
     if ((!obj1 && obj2) || (obj1 && !obj2)) {
         return false;
+    }
+
+    // If both objects look like date strings, convert them both to UTC timestamps then compare
+    if (
+        typeof obj1 === "string" &&
+        typeof obj2 === "string" &&
+        /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/.test(obj1) &&
+        /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/.test(obj2)
+    ) {
+        const date1 = parseDateStringAsUTC(obj1);
+        const date2 = parseDateStringAsUTC(obj2);
+        if (!isNaN(date1.getTime()) && !isNaN(date2.getTime())) {
+            return date1.getTime() === date2.getTime();
+        }
+    }
+
+    // Custom questions can be compared as arrays of strings, but we need to convert the ones
+    // being imported from JSON blob format to that first
+    if (isQuestionsFieldInValidFormat(obj2)) {
+        obj2 = JSON.parse(getCustomQuestionNamesAsArrayStr(obj2));
     }
 
     if (Array.isArray(obj1) && Array.isArray(obj2)) {

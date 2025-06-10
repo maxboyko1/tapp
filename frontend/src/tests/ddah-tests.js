@@ -1,6 +1,3 @@
-/**
- * @jest-environment node
- */
 import { it, expect, beforeAll, addSession } from "./utils";
 import { databaseSeeder } from "./setup";
 import axios from "axios";
@@ -274,13 +271,13 @@ export function ddahTests(api) {
 
         // Sign the DDAH
         resp = await apiPOST(
-            `/public/ddahs/${ddah.url_token}/accept`,
+            `/external/ddahs/${ddah.url_token}/accept`,
             { signature: "My Sig" },
             true
         );
 
         expect(resp).toHaveStatus("success");
-        // Get the signed DDAH since it is not returned from public route
+        // Get the signed DDAH since it is not returned from external route
         resp = await apiGET(`/admin/assignments/${newAssignment.id}/ddah`);
         expect(resp).toHaveStatus("success");
         let signedDdah = resp.payload;
@@ -498,7 +495,7 @@ export function ddahsEmailAndDownloadTests(api) {
     it("can download html and pdf versions of a ddah", async () => {
         const ddahHtml = (
             await axios.get(
-                `${BACKEND_BASE_URL}/public/ddahs/${ddah.url_token}`
+                `${BACKEND_BASE_URL}/external/ddahs/${ddah.url_token}`
             )
         ).data;
 
@@ -507,7 +504,7 @@ export function ddahsEmailAndDownloadTests(api) {
         // Get the PDF version
         const ddahPdf = (
             await axios.get(
-                `${BACKEND_BASE_URL}/public/ddahs/${ddah.url_token}.pdf`
+                `${BACKEND_BASE_URL}/external/ddahs/${ddah.url_token}.pdf`
             )
         ).data;
         // All PDF files start with the text "%PDF"
@@ -522,7 +519,7 @@ export function ddahsEmailAndDownloadTests(api) {
     });
 
     // For this test, it is sufficient to only check the HTML version,
-    // which can be downloaded by leaving off the `.pdf` suffix from the public route.
+    // which can be downloaded by leaving off the `.pdf` suffix from the external route.
     it("Downloaded ddah includes all duties (from all categories)", async () => {
         const ddahWithAllDutyTypes = {
             // Sometimes the order of instructors displayed is different
@@ -573,7 +570,7 @@ export function ddahsEmailAndDownloadTests(api) {
 
         const ddahHtml = (
             await axios.get(
-                `${BACKEND_BASE_URL}/public/ddahs/${resp.payload.url_token}`
+                `${BACKEND_BASE_URL}/external/ddahs/${resp.payload.url_token}`
             )
         ).data;
 

@@ -33,7 +33,8 @@ class ApplicationService
             data.merge! @application.custom_question_answers.except('utorid')
         end
 
-        # Position preferences and position-specific answers
+        # Position preferences and position-specific answers, which the user may have
+        # filled out previously for any positions ranked >= 0 in preference
         willing_positions = []
         willing_only_positions = []
         ranked_positions = []
@@ -56,6 +57,10 @@ class ApplicationService
             # Position-specific custom question answers
             next unless preference['custom_question_answers'].present?
 
+            # In the survey prefill data, each answer to a custom question is stored
+            # in a format like "1:Who are you?": "Myself", the actual question name
+            # is prefixed with the position ID, to account for possible duplicate
+            # question names across different positions.
             preference['custom_question_answers'].each do |k, v|
                 data["#{pos_id}:#{k}"] = v
             end
@@ -70,7 +75,7 @@ class ApplicationService
         data.symbolize_keys!
     end
 
-    # Generate JSON subsitutisions that can be used in a liquit template
+    # Generate JSON substitutions that can be used in a liquit template
     def subs
         {
             email: @applicant.email,

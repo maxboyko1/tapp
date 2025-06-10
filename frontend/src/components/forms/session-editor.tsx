@@ -1,3 +1,4 @@
+import React from "react";
 import { Box } from "@mui/material";
 import { fieldEditorFactory, DialogRow } from "./common-controls";
 import { Session } from "../../api/defs/types";

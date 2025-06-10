@@ -13,7 +13,7 @@ import { Assignment } from "../../../api/defs/types";
 type ButtonWithDialogProps = {
     disabled?: boolean;
     selectedAssignments: Assignment[];
-    callback: Function;
+    callback: () => Promise<any> | void;
 };
 
 export function CreateOfferButtonWithDialog({

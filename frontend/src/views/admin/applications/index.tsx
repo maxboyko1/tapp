@@ -15,7 +15,7 @@ import { activeSessionSelector, fetchPostings } from "../../../api/actions";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
 import { PreferencesLinkDialog } from "./application-details";
 
-export function AdminApplicationsView() {
+export default function AdminApplicationsView() {
     const activeSession = useSelector(activeSessionSelector);
     const dispatch = useThunkDispatch();
     const [getLinkDialogVisible, setGetLinkDialogVisible] =
@@ -41,7 +41,7 @@ export function AdminApplicationsView() {
                     onClick={() => setGetLinkDialogVisible(true)}
                     icon={<LinkIcon />}
                 >
-                    Instructors' Link
+                    Instructors&apos; Link
                 </ActionButton>
 
                 <ActionHeader>Import/Export</ActionHeader>

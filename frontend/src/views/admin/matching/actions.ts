@@ -377,7 +377,7 @@ export const positionSummariesByIdSelector = createSelector(
                 hoursAssigned += getHoursAssigned(applicantSummary, position);
             }
 
-            let filledStatus: FillStatus = getFilledStatus(targetHours, hoursAssigned);
+            const filledStatus: FillStatus = getFilledStatus(targetHours, hoursAssigned);
 
             ret[position.id] = {
                 position: position,

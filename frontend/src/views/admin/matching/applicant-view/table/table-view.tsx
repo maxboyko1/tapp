@@ -193,7 +193,7 @@ function formatAssignedCourses(
     position: Position
 ) {
     return applicantSummary.matches
-        .map((match) => {
+        .map(() => {
             const applicantMatch = getApplicantMatchForPosition(
                 applicantSummary,
                 position

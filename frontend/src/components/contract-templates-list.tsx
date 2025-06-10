@@ -1,3 +1,4 @@
+import React from "react";
 import { AdvancedFilterTable, AdvancedColumnDef } from "./advanced-filter-table";
 import { ContractTemplate } from "../api/defs/types";
 

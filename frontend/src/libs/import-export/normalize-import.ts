@@ -96,7 +96,7 @@ export function normalizeImport(
     if (dataWrapper.fileType === "spreadsheet") {
         // `data` should be an array of objects indexed by column name.
         // E.g., [{"First Name": "Joe", "Last Name": "Smith"}, ...]
-        let data = dataWrapper.data;
+        const data = dataWrapper.data;
 
         const rowMapper = new SpreadsheetRowMapper(schema);
 

@@ -2,11 +2,11 @@
 
 # `ApplicationControler` is set to always return JSON. In this controller we want to return
 # html and pdf, so we subclass ActionController directly
-class Public::DdahsController < ActionController::Base
+class External::DdahsController < ActionController::Base
     include Response
     include TransactionHandler
 
-    # /public/ddahs/<id>
+    # /external/ddahs/<id>
     def show
         return unless valid_ddah?(url_token: show_params[:id])
 
@@ -25,7 +25,7 @@ class Public::DdahsController < ActionController::Base
         render(inline: rendered)
     end
 
-    # /public/ddahs/<ddah_id>/accept
+    # /external/ddahs/<ddah_id>/accept
     def accept
         return unless valid_ddah?(url_token: params[:ddah_id])
 
@@ -43,7 +43,7 @@ class Public::DdahsController < ActionController::Base
         render_success {}
     end
 
-    # /public/ddahs/<ddah_id>/details
+    # /external/ddahs/<ddah_id>/details
     def details
         return unless valid_ddah?(url_token: params[:ddah_id])
 
@@ -65,7 +65,7 @@ class Public::DdahsController < ActionController::Base
         )
     end
 
-    # /public/ddahs/<ddah_id>/view
+    # /external/ddahs/<ddah_id>/view
     def view
         return unless valid_ddah?(url_token: params[:ddah_id])
 

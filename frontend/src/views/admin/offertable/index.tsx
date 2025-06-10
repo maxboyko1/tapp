@@ -39,7 +39,7 @@ export function StatusCell({
             {activeOfferUrlToken && (
                 <Tooltip title="Download offer PDF">
                     <Button
-                        href={formatDownloadUrl(`/public/contracts/${activeOfferUrlToken}.pdf`)}
+                        href={formatDownloadUrl(`/external/contracts/${activeOfferUrlToken}.pdf`)}
                         variant="outlined"
                         size="small"
                         sx={{ minWidth: 0, padding: "2px 6px" }}
@@ -117,7 +117,7 @@ export function ConnectedOfferTable({
 
             if (Object.keys(assignmentUpdates).length > 0) {
                 // If start_date or end_date changed, update wage_chunks accordingly
-                let updatedAssignment = { ...original, ...assignmentUpdates };
+                const updatedAssignment = { ...original, ...assignmentUpdates };
                 if (
                     assignmentUpdates.start_date !== undefined ||
                     assignmentUpdates.end_date !== undefined

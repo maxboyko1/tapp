@@ -76,7 +76,7 @@ export function ConnectedDdahsTable({
 }) {
     const allAssignments = useSelector(assignmentsSelector);
     const allDdahs = useSelector(ddahsSelector);
-    let ddahs = allDdahs.filter(
+    const ddahs = allDdahs.filter(
         (ddah) => ddah.assignment.position.id === position_id
     );
     const assignments = allAssignments.filter(

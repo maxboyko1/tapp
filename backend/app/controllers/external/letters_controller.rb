@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-class Public::LettersController < ActionController::Base
+class External::LettersController < ActionController::Base
     include Response
     include TransactionHandler
 
-    # /public/letters/<id>
+    # /external/letters/<id>
     def show
         return unless valid_confirmation?(url_token: show_params[:id])
 
@@ -20,7 +20,7 @@ class Public::LettersController < ActionController::Base
         render(inline: rendered)
     end
 
-    # /public/letters/<letter_id>/accept
+    # /external/letters/<letter_id>/accept
     def accept
         return unless valid_confirmation?(url_token: params[:letter_id])
 
@@ -39,7 +39,7 @@ class Public::LettersController < ActionController::Base
         render_success {}
     end
 
-    # /public/letters/<letter_id>/reject
+    # /external/letters/<letter_id>/reject
     def reject
         return unless valid_confirmation?(url_token: params[:letter_id])
 
@@ -57,7 +57,7 @@ class Public::LettersController < ActionController::Base
         render_success {}
     end
 
-    # /public/letters/<letter_id>/view
+    # /external/letters/<letter_id>/view
     def view
         return unless valid_confirmation?(url_token: params[:letter_id])
 
@@ -78,7 +78,7 @@ class Public::LettersController < ActionController::Base
         render(inline: template.render(confirmation_substitutions.merge(header_subs)))
     end
 
-    # /public/letters/<letter_id>/details
+    # /external/letters/<letter_id>/details
     def details
         return unless valid_confirmation?(url_token: params[:letter_id])
 

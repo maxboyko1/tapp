@@ -59,7 +59,7 @@ export function ContractTemplateEditor(props: {
                 sx={{ mb: 0 }}
                 title="This file is stored on the server; you can edit it there."
             >
-                Template Name (e.g. "OTO" "Invigilate")
+                Template Name (e.g. &quot;OTO&quot; &quot;Invigilate&quot;)
             </Typography>
             <DialogRow>
                 {createFieldEditor(

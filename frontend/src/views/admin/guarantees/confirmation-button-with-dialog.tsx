@@ -13,7 +13,7 @@ import { ApplicantMatchingDatum } from "../../../api/defs/types";
 type ButtonWithDialogProps = {
     disabled?: boolean;
     selectedApplicantMatchingData: ApplicantMatchingDatum[];
-    callback: Function;
+    callback: () => Promise<any> | void;
 };
 
 export function CreateConfirmationButtonWithDialog({

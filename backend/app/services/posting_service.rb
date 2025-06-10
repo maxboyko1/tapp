@@ -26,22 +26,9 @@ class PostingService
 
         # Prepare all position data for choices and panels
         positions = assemble_position_data
+        choices = positions.map { |pos| { 'value' => pos[:value], 'text' => pos[:text] } }
 
-        checkbox_choices = positions.map do |pos|
-            {
-                'value' => pos[:value],
-                'text' => pos[:text]
-            }
-        end
-
-        ranking_choices = positions.map do |pos|
-            {
-                'value' => pos[:value],
-                'text' => pos[:text]
-            }
-        end
-
-        # Preferences page, with opt-in checkboxes for positions, followed by ranking
+        # Preferences page, with opt-in checkboxes for positions, followed by ranking of those checked
         preferences_page = {
             'name' => 'preferences_page',
             'elements' => [
@@ -52,7 +39,7 @@ class PostingService
                     'isRequired' => true,
                     'description' =>
                         'You may rank your selections in order of preference in the next question below. Duties, qualifications, etc for each of your selections will be shown on the next page, and each one may also have additional position-specific questions for you to answer.',
-                    'choices' => checkbox_choices
+                    'choices' => choices
                 },
                 {
                     'type' => 'ranking',
@@ -60,7 +47,7 @@ class PostingService
                     'isRequired' => true,
                     'title' => 'Rank your selected positions in order of preference, from highest to lowest.',
                     'description' => 'Any positions that are colour-coded the same here will be considered equivalent regarding your preference ranking.',
-                    'choices' => ranking_choices,
+                    'choices' => choices,
                     'visibleIf' => '{willing_positions.length} > 0'
                 }
             ],
@@ -69,41 +56,70 @@ class PostingService
         fixed_survey['pages'] << preferences_page
 
         # Add position-specific questions page
+        position_panels = positions.map do |pos|
+            custom_elements =
+                if pos[:custom_questions].present? && pos[:custom_questions]['elements'].present?
+                    pos[:custom_questions]['elements'].map do |el|
+                        el = el.deep_dup
+                        el['name'] = "#{pos[:id]}:#{el['name']}"
+                        el['title'] = el['title'] || el['name'].split(':', 2).last
+                        el
+                    end
+                else
+                    [
+                        {
+                            'type' => 'html',
+                            'name' => "no_questions_#{pos[:value]}",
+                            'html' => '<i>No questions for this position.</i>'
+                        }
+                    ]
+                end
+            {
+                'type' => 'panel',
+                'name' => "panel_#{pos[:value]}",
+                'title' => pos[:text].to_s,
+                'visibleIf' => "{willing_positions} contains '#{pos[:value]}'",
+                'elements' => [
+                    {
+                        'type' => 'html',
+                        'name' => "desc_#{pos[:value]}",
+                        'html' => "<b>Hours per assignment:</b> #{pos[:hours_per_assignment]}<br/><br/><b>Duties:</b> #{pos[:duties].to_s.gsub("\n", "<br/>")}<br/><br/><b>Qualifications:</b> #{pos[:qualifications].to_s.gsub("\n", "<br/>")}"
+                    }
+                ] + custom_elements
+            }
+        end
+
+        # This placeholder_panel logic is a workaround for a quirk of Survey.js that removes the
+        # entire page from the survey if its elements field is empty, which is not really what we
+        # want, we would rather show a message like this saying that no positions were selected.
+        # However, because the prior page's willing_positions question is required, an applicant
+        # filling out the survey should never actually see this placeholder panel on this page,
+        # and so it is only visible for TAPP admins in the Posting -> Preview view.
+        placeholder_panel = {
+            'type' => 'panel',
+            'name' => 'no_positions_checked_panel',
+            'title' => '(No Positions Selected)',
+            'visibleIf' => '{willing_positions.length} == 0',
+            'elements' => [
+                {
+                    'type' => 'html',
+                    'name' => 'no_positions_placeholder',
+                    'html' => 'No positions have been checked for inclusion on the prior page.'
+                }
+            ]
+        }
+
+        if positions.any?
+            position_panels.unshift(placeholder_panel)
+        else
+            # If there are no positions at all, show the placeholder panel without visibleIf
+            position_panels << placeholder_panel.except('visibleIf')
+        end
+
         position_questions_page = {
             'title' => 'Position-Specific Questions',
             'name' => 'position_questions_page',
-            'elements' => positions.map do |pos|
-                custom_elements =
-                    if pos[:custom_questions].present? && pos[:custom_questions]['elements'].present?
-                        pos[:custom_questions]['elements'].map do |el|
-                            el = el.deep_dup
-                            el['name'] = "#{pos[:id]}:#{el['name']}"
-                            el['title'] = el['title'] || el['name'].split(':', 2).last
-                            el
-                        end
-                    else
-                        [
-                            {
-                                'type' => 'html',
-                                'name' => "no_questions_#{pos[:value]}",
-                                'html' => '<i>No questions for this position.</i>'
-                            }
-                        ]
-                    end
-                {
-                    'type' => 'panel',
-                    'name' => "panel_#{pos[:value]}",
-                    'title' => pos[:text].to_s,
-                    'visibleIf' => "{willing_positions} contains '#{pos[:value]}'",
-                    'elements' => [
-                        {
-                            'type' => 'html',
-                            'name' => "desc_#{pos[:value]}",
-                            'html' => "<b>Hours per assignment:</b> #{pos[:hours_per_assignment]}<br/><b>Duties:</b> #{pos[:duties].to_s.gsub("\n", "<br/>")}<br/><b>Qualifications:</b> #{pos[:qualifications].to_s.gsub("\n", "<br/>")}"
-                        }
-                    ] + custom_elements
-                }
-            end
+            'elements' => position_panels
         }
         fixed_survey['pages'] << position_questions_page
 
@@ -157,25 +173,17 @@ class PostingService
         else
             # Find out if they have previous contracts in the database.
             # This will tell us information about whether the applicant has been previously employed
-            offer_history =
-                Assignment.joins(:applicant, :offers, :position).where(
-                    applicant: applicant, "offers.status": 'accepted'
-                ).order("offers.position_start_date": :ASC).pluck(
-                    :"positions.position_code",
-                    :"offers.hours",
-                    :"offers.position_start_date",
-                    :"offers.position_end_date"
-                )
+            offer_history = assemble_offer_history(applicant)
             unless offer_history.blank?
                 data[:previous_department_ta] = true
                 data[:previous_university_ta] = true
                 data[:previous_experience_summary] =
                     offer_history
-                        .map do |(course, hours, start_date, end_date)|
-                        "#{course} (#{hours} hours) from #{
-                            start_date.strftime('%b %Y')
-                        } to #{end_date.strftime('%b %Y')}"
-                    end.join '; '
+                        .map do |(course, _session_name, hours, start_date, end_date)|
+                            "#{course} (#{hours} hours) from #{
+                                start_date.strftime('%b %Y')
+                            } to #{end_date.strftime('%b %Y')}"
+                        end.join '; '
             end
 
             # Some information rarely changes from application to application.
@@ -210,10 +218,11 @@ class PostingService
         code_to_id = all_positions.to_h # code => positions.id
         all_ids = all_positions.map(&:last) # positions.id
 
-        # Extract position preferences and willing positions
+        # Extract position preferences
         ranking_codes = Array(answers[:position_preferences])
 
-        # Extract position-specific custom question answers
+        # Extract position-specific custom question answers, extracting the position ID prefix
+        # to differentiate questions associated with different positions
         position_custom_answers = {}
         all_ids.each do |position_id|
             answers_for_id = answers.select { |k, _| k.to_s.start_with?("#{position_id}:") }
@@ -224,7 +233,8 @@ class PostingService
             position_custom_answers[position_id] = cleaned unless cleaned.empty?
         end
 
-        # Clean up posting answers json by removing position preferences and willing positions
+        # Clean up posting answers json by removing position_preferences and willing_positions,
+        # so we don't have this redundant info stored in the custom_question_answers later
         answers.delete(:willing_positions)
         answers.delete(:position_preferences)
         all_ids.each do |position_id|
@@ -245,6 +255,15 @@ class PostingService
             :previous_department_ta, :previous_university_ta, :program
         )
 
+        # Build prior_assignments from the applicant's offer history
+        @applicant = Applicant.find_or_initialize_by(utorid: utorid)
+        applicant = @applicant
+        offer_history = assemble_offer_history(applicant)
+        prior_assignments = offer_history.map do |(course, session_name, *_rest)|
+            "#{course} (#{session_name})"
+        end
+        rest[:prior_assignments] = prior_assignments unless prior_assignments.empty?
+
         # Year in progress computed backwards from the date
         if rest[:program_start]
             start_of_fall = Date.today.beginning_of_year + 9.months
@@ -255,7 +274,7 @@ class PostingService
         application_attributes[:session] = @posting.session
         application_attributes[:posting] = @posting
 
-        # Map codes to ids
+        # Retrieve all IDs for positions we are assigning preference levels for
         ranking_ids = ranking_codes.map { |code| code_to_id[code] }.compact
 
         # Compute preference levels
@@ -275,10 +294,10 @@ class PostingService
                 end
             preference_levels[position_id] = level
         end
-        # All other positions get -1
+        # All other unselected, unranked positions get -1
         (all_ids - ranking_ids).each { |position_id| preference_levels[position_id] = -1 }
 
-        # Build position_preferences_attributes for all positions
+        # Build position preference attributes for all positions
         position_preferences_attributes = all_ids.map do |position_id|
             {
                 position_id: position_id,
@@ -302,12 +321,11 @@ class PostingService
         @file_upload_answers = rest
         rest = @file_upload_answers.slice!(*file_upload_questions.map(&:to_sym))
 
-        # Find if there's an existing applicant and associated application.
-        @applicant = Applicant.find_or_initialize_by(utorid: utorid)
+        # Find if this applicant has an existing associated application.
         application = @applicant.applications.find_by(posting: @posting)
         application_attributes[:id] = application.id if application
 
-        # As a fallback, store anything else remaining as posting-level custom question answers
+        # Store anything else remaining as posting-level custom question answers
         rest.keys.grep(/^panel_/).each { |k| rest.delete(k) }
         application_attributes[:custom_question_answers] = rest
 
@@ -354,6 +372,20 @@ class PostingService
                 @posting.open_date.strftime('%b %d, %Y')
             } to #{@posting.close_date.strftime('%b %d, %Y')}"
         end
+    end
+
+    def assemble_offer_history(applicant)
+        Assignment.joins(:applicant, :offers, position: :session)
+            .where(applicant: applicant, "offers.status": 'accepted')
+            .where.not(positions: { session_id: @posting.session.id }) # Exclude current session
+            .order("offers.position_start_date": :ASC)
+            .pluck(
+                'positions.position_code',
+                'sessions.name',
+                'offers.hours',
+                'offers.position_start_date',
+                'offers.position_end_date'
+            )
     end
 
     # We need to use the `posting_positions` to create

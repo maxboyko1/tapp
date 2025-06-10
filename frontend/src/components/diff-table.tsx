@@ -1,3 +1,4 @@
+import React from "react";
 import { MRT_Cell, MRT_ColumnDef } from "material-react-table";
 import { DiffSpec } from "../libs/diffs";
 
@@ -12,7 +13,7 @@ export function createDiffCell<T extends object>({
     accessorKey,
     Cell,
 }: { accessorKey: string; Cell?: any }) {
-    const accessors = String(accessorKey).split(".");
+    const accessors = accessorKey.split(".");
     function get(obj: any) {
         let ret = obj;
         for (const key of accessors) {
@@ -60,7 +61,7 @@ export function createDiffCell<T extends object>({
 }
 
 /**
- * Take a react table column specification and convert it to a specification for a diff table.
+ * Take a material-react-table column specification and convert it to a specification for a diff table.
  *
  * @param {*} columns
  * @returns
@@ -69,31 +70,31 @@ export function createDiffColumnsFromColumns<T extends object>(
     columns: (MRT_ColumnDef<T> & { accessorKey?: string })[]
 ): MRT_ColumnDef<DiffSpec<any, T>>[] {
     return columns.map((column) => {
+        // Diff tables in import dialogs are display-only and should not be editable, individual
+        // rows should not be deletable etc, so instead of passing all props from the original
+        // column definitions to the diff table column definitions, we explicitly extract the
+        // properties we want for the diff table and pass only those, to avoid inheriting any
+        // sort of unwanted interactive behavior from the standard column defintions
         const {
             accessorKey,
             header,
             size,
             minSize,
             maxSize,
-            enableSorting,
-            enableColumnFilter,
+            enableResizing,
             Cell,
-            meta,
-            // add any other display-only props you use
         } = column;
 
         const safeAccessorKey = String(accessorKey);
 
         return {
-            id: accessorKey,
+            id: safeAccessorKey,
             accessorKey,
             header,
             size,
             minSize,
             maxSize,
-            enableSorting,
-            enableColumnFilter,
-            meta,
+            enableResizing,
             Cell: createDiffCell({ accessorKey: safeAccessorKey, Cell }),
         };
     });

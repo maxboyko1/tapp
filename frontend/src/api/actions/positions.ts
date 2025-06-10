@@ -245,6 +245,11 @@ const _allPositionsSelector = createSelector(
     (state) => state._allData
 );
 
+/**
+ * Same as above, but this one is for retrieving all positions across all sessions,
+ * which we use in the instructor session select view to find all sessions that an
+ * instructor has taught courses for.
+ */
 export const allPositionsSelector = createSelector(
     [_allPositionsSelector, instructorsSelector, contractTemplatesSelector],
     (positions, instructors, contractTemplates) => {

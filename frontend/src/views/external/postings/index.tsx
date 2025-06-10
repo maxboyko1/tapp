@@ -153,7 +153,7 @@ function ConfirmDialog({
     );
 }
 
-export function PostingView() {
+export default function PostingView() {
     const params = useParams<{ url_token?: string }>();
     const url_token = params?.url_token;
     const [surveyJson, setSurveyJson] = React.useState<any>(null);
@@ -168,6 +168,7 @@ export function PostingView() {
     );
     const [applicationOpen, setApplicationOpen] = React.useState(true);
 
+    // Fetch the survey JSON and prefilled data from the backend
     React.useEffect(() => {
         if (url_token == null) {
             return;
@@ -178,7 +179,7 @@ export function PostingView() {
                     survey: any;
                     prefilled_data: any;
                     open_status: boolean;
-                } = await apiGET(`/public/postings/${url_token}`, true);
+                } = await apiGET(`/external/postings/${url_token}`, true);
                 setSurveyJson(details.survey);
                 setSurveyPrefilledData(details.prefilled_data);
                 setApplicationOpen(details.open_status);
@@ -189,6 +190,10 @@ export function PostingView() {
         fetchSurvey();
     }, [url_token, setSurveyJson, setSurveyPrefilledData, setApplicationOpen]);
 
+    console.log("PostingView: surveyJson", surveyJson);
+    console.log("PostingView: surveyPrefilledData", surveyPrefilledData);
+
+    // Render the survey model using the retrieved survey JSON and prefilled data
     const survey = React.useMemo(() => {
         if (!surveyJson) return null;
 
@@ -209,6 +214,7 @@ export function PostingView() {
         return survey;
     }, [surveyJson, surveyData, surveyPrefilledData, hasSubmitted]);
 
+    // Show survey submit confirmation dialog on completion
     React.useEffect(() => {
         if (!survey) return;
         // We only want to add this callback once when the survey is initialized
@@ -262,12 +268,13 @@ export function PostingView() {
         );
     }
 
+    // Handle survey results submission back to the backend for processing
     async function confirmClicked() {
         console.log("Submitting data", surveyData);
         try {
             setWaiting(true);
             await apiPOST(
-                `/public/postings/${url_token}/submit`,
+                `/external/postings/${url_token}/submit`,
                 { answers: surveyData },
                 true
             );

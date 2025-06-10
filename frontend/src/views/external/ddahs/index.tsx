@@ -10,10 +10,10 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { useParams } from "react-router-dom";
-import { RawOffer } from "../../../api/defs/types";
+import { RawDdahDetails } from "../../../api/defs/types";
 import { apiGET, apiPOST } from "../../../libs/api-utils";
 
-import "./view-offer.css";
+import "./view-ddah.css";
 
 function capitalize(text: string) {
     return text
@@ -22,13 +22,11 @@ function capitalize(text: string) {
         .join(" ");
 }
 
-export function ContractView() {
+export default function DdahView() {
     const params = useParams<{ url_token?: string }>();
     const url_token = params?.url_token;
-    const [offer, setOffer] = React.useState<RawOffer | null>(null);
-    const [decision, setDecision] = React.useState<"accept" | "reject" | null>(
-        null
-    );
+    const [ddah, setDdah] = React.useState<RawDdahDetails | null>(null);
+    const [decision, setDecision] = React.useState<"accept" | null>(null);
     const [signature, setSignature] = React.useState("");
     const [confirmationDialogVisible, setConfirmationDialogVisible] =
         React.useState(false);
@@ -36,37 +34,35 @@ export function ContractView() {
 
     // If the offer's status has been set to accepted/rejected/withdrawn,
     // no further interaction with the offer is permitted.
-    const frozen = ["accepted", "rejected", "withdrawn"].includes(
-        offer?.status || ""
-    );
+    const frozen = ["acknowledged"].includes(ddah?.status || "");
 
     React.useEffect(() => {
         async function fetchOffer() {
             try {
-                const details: RawOffer | null = await apiGET(
-                    `/public/contracts/${url_token}/details`,
+                const details: RawDdahDetails | null = await apiGET(
+                    `/external/ddahs/${url_token}/details`,
                     true
                 );
-                setOffer(details);
+                setDdah(details);
             } catch (e) {
                 console.warn(e);
             }
         }
         fetchOffer();
-    }, [setOffer, url_token]);
+    }, [setDdah, url_token]);
 
     async function submitDecision() {
         if (decision == null) {
             throw new Error("Cannot submit a `null` decision");
         }
         const data = { decision, signature: signature || null };
-        await apiPOST(`/public/contracts/${url_token}/${decision}`, data, true);
+        await apiPOST(`/external/ddahs/${url_token}/${decision}`, data, true);
     }
     async function confirmClicked() {
         setWaiting(true);
         await submitDecision();
         setWaiting(false);
-        // @ts-ignore
+        // @ts-expect-error deprecated but necessary for legacy browser support
         window.location.reload(true);
     }
 
@@ -74,24 +70,27 @@ export function ContractView() {
         return <React.Fragment>Unknown URL token.</React.Fragment>;
     }
 
-    if (offer == null) {
+    if (ddah == null) {
         return <React.Fragment>Loading...</React.Fragment>;
     }
 
-    const position_code = offer.position_code;
-    const status = offer.status;
+    const position_code = ddah.position_code;
+    const status = ddah.status;
 
     return (
         <div className="contract-page">
             <div className="header">
-                <h1>Offer of Teaching Assistantship for {position_code}</h1>
+                <h1>
+                    Description of Duties and Allocation of Hours for{" "}
+                    {position_code}
+                </h1>
             </div>
             <div className="content">
                 <div className="decision">
                     <h3>
                         <Button
                             component="a"
-                            href={`/public/contracts/${url_token}.pdf`}
+                            href={`/external/ddahs/${url_token}.pdf`}
                             target="_blank"
                             rel="noopener"
                             variant="contained"
@@ -108,8 +107,11 @@ export function ContractView() {
                     </h1>
                     <form id="decision">
                         <h3>
-                            I hereby accept the Teaching Assistantship position
-                            offered:
+                            Please acknowledge receipt of this Description of
+                            Duties and Allocation of Hours form below. If there
+                            are any issues with your described duties or you
+                            need further clarification, please contact your
+                            course supervisor(s).
                         </h3>
                         <div className="decision-container">
                             <input
@@ -121,37 +123,13 @@ export function ContractView() {
                                 name="decision"
                                 disabled={frozen}
                             />
-                            <label htmlFor="radio-accept">Accept</label>
-                            <input
-                                checked={decision === "reject"}
-                                onChange={() => setDecision("reject")}
-                                type="radio"
-                                value="reject"
-                                id="radio-reject"
-                                name="decision"
-                                disabled={frozen}
-                            />
-                            <label htmlFor="radio-reject">Reject</label>
+                            <label htmlFor="radio-accept">Acknowledge</label>
                             <div className="signature">
                                 <div>
                                     <label htmlFor="signature_name">
                                         <p>
-                                            I confirm that I will be registered
-                                            as a University of Toronto student
-                                            or PDF on the date that this
-                                            appointment begins. I understand
-                                            that if I should cease to be
-                                            registered as a University of
-                                            Toronto student or PDF during the
-                                            period of this appointment, for any
-                                            reason other than convocation, I
-                                            must immediately notify my
-                                            supervisor, and my appointment may
-                                            be terminated.
-                                        </p>
-                                        <p>
-                                            To accept this contract, type your
-                                            initials:
+                                            To confirm your acknowledgement,
+                                            please type your name below.
                                         </p>
                                     </label>
                                     <input
@@ -189,20 +167,12 @@ export function ContractView() {
                             </Button>
                         </div>
                     </form>
-                    <div className="admonishment">
-                        <p>
-                            <b>Important:</b> In order to arrange payroll, if
-                            this is your first TA-ship or your SIN number has
-                            been changed since your last TA-ship, you must
-                            supply the department office with appropriate
-                            documentation.
-                        </p>
-                    </div>
+                    <div className="admonishment"></div>
                 </div>
                 <div className="contract-view">
                     <iframe
                         title="Contract"
-                        src={`/public/contracts/${url_token}`}
+                        src={`/external/ddahs/${url_token}`}
                     ></iframe>
                 </div>
             </div>
@@ -213,7 +183,7 @@ export function ContractView() {
                 fullWidth
             >
                 <DialogTitle sx={{ m: 0, p: 2 }}>
-                    {capitalize(decision || "")} Offer
+                    Acknowledge DDAH
                     <IconButton
                         aria-label="close"
                         onClick={() => setConfirmationDialogVisible(false)}
@@ -229,7 +199,7 @@ export function ContractView() {
                     </IconButton>
                 </DialogTitle>
                 <DialogContent dividers>
-                    Are you sure you want to <b>{decision}</b> the TA-ship for this offer?
+                    Are you sure you want to <b>acknowledge</b> the DDAH?
                 </DialogContent>
                 <DialogActions>
                     <Button
@@ -244,7 +214,7 @@ export function ContractView() {
                         disabled={waiting}
                         startIcon={waiting ? <CircularProgress size={18} /> : null}
                     >
-                        {capitalize(decision || "")} Offer
+                        Acknowledge DDAH
                     </Button>
                 </DialogActions>
             </Dialog>

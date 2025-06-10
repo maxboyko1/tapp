@@ -88,7 +88,7 @@ export const approveDdah = validatedApiDispatcher<RawDdah, [HasId]>({
     onErrorDispatch: (e) => upsertError(e.toString()),
     dispatcher: (payload: HasId) => async (dispatch, getState) => {
         const role = activeRoleSelector(getState());
-        let data = (await apiPOST(
+        const data = (await apiPOST(
             `/${role}/ddahs/${payload.id}/approve`
         )) as RawDdah;
         dispatch(approveOneDdahSuccess(data));
@@ -106,7 +106,7 @@ export const emailDdah = validatedApiDispatcher<RawDdah, [HasId]>({
     onErrorDispatch: (e) => upsertError(e.toString()),
     dispatcher: (payload: HasId) => async (dispatch, getState) => {
         const role = activeRoleSelector(getState());
-        let data = (await apiPOST(
+        const data = (await apiPOST(
             `/${role}/ddahs/${payload.id}/email`
         )) as RawDdah;
         dispatch(emailOneDdahSuccess(data));
@@ -124,7 +124,7 @@ export const upsertDdah = validatedApiDispatcher<RawDdah, [Partial<Ddah>]>({
     onErrorDispatch: (e) => upsertError(e.toString()),
     dispatcher: (payload: Partial<Ddah>) => async (dispatch, getState) => {
         const role = activeRoleSelector(getState());
-        let data = (await apiPOST(
+        const data = (await apiPOST(
             `/${role}/ddahs`,
             prepForApi(payload)
         )) as RawDdah;

@@ -1,5 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
+import { Paper } from "@mui/material";
+
 import { activeSessionSelector, fetchPostings } from "../../../api/actions";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
 import {
@@ -12,7 +14,7 @@ import { ApplicantView } from "./applicant-view";
 import { FinalizeChangesButton } from "./finalize-changes";
 import "./styles.css";
 
-export function AdminMatchingView() {
+export default function AdminMatchingView() {
     const activeSession = useSelector(activeSessionSelector);
     const dispatch = useThunkDispatch();
 
@@ -43,23 +45,21 @@ export function AdminMatchingView() {
     return (
         <div className="page-body matching">
             <div className="matching-body">
-                <div className="matching-list-container">
+                <Paper elevation={2} sx={{ mr: 1 }}>
                     <PositionList
                         selectedPositionId={selectedPositionId}
                         positionSummaries={Object.values(positionSummaries)}
                     />
-                </div>
-                <div className="matching-applicant-container">
-                    {selectedPositionSummary ? (
-                        <ApplicantView positionSummary={selectedPositionSummary}/>
-                    ) : (
-                        <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", color: "#888" }}>
-                            {Object.values(positionSummaries).length === 0
-                                ? "Loading positions..."
-                                : "Select a position to view applicants."}
-                        </div>
-                    )}
-                </div>
+                </Paper>
+                {selectedPositionSummary ? (
+                    <ApplicantView positionSummary={selectedPositionSummary} />
+                ) : (
+                    <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", color: "#888" }}>
+                        {Object.values(positionSummaries).length === 0
+                            ? "Loading positions..."
+                            : "Select a position to view applicants."}
+                    </div>
+                )}
             </div>
             <div className="matching-footer page-actions">
                 <div className="footer-button-separator" />

@@ -51,7 +51,7 @@ class DdahMailer < ActionMailer::Base
         # to avoid issues with Shibboleth authentication
         # See details in routes.rb
         @url =
-            "#{Rails.application.config.base_url}/hash/public/ddahs/#{
+            "#{Rails.application.config.base_url}/hash/external/ddahs/#{
                 ddah.url_token
             }"
 

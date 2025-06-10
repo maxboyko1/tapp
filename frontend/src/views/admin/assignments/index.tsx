@@ -26,7 +26,7 @@ import {
 import { offerTableSelector } from "../offertable/actions";
 import { Assignment } from "../../../api/defs/types";
 
-export function AdminAssignmentsView() {
+export default function AdminAssignmentsView() {
     const [addDialogVisible, setAddDialogVisible] = React.useState(false);
     const activeSession = useSelector(activeSessionSelector);
     // While data is being imported, updating the react table takes a long time,

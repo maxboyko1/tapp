@@ -62,9 +62,9 @@ export function ActiveSessionDisplay(props: {
                 <FilterableMenu
                     items={sessions as (HasId & { name: string })[]}
                     activeItemId={activeSessionId}
-                    clearFilter={!Boolean(anchorEl)}
                     anchorEl={anchorEl}
-                    open={Boolean(anchorEl)}
+                    clearFilter={!anchorEl}
+                    open={!!anchorEl}
                     onClose={handleMenuClose}
                     onSelect={handleSelect as any}
                 />

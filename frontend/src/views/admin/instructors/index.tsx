@@ -16,7 +16,7 @@ import {
 } from "../../../components/action-buttons";
 import { ContentArea } from "../../../components/layout";
 
-export function AdminInstructorsView() {
+export default function AdminInstructorsView() {
     const [addDialogVisible, setAddDialogVisible] = React.useState(false);
     const [inDeleteMode, setInDeleteMode] = React.useState(false);
     // While data is being imported, updating the react table takes a long time,

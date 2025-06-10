@@ -1,3 +1,4 @@
+import React from "react";
 import {
     Autocomplete,
     Chip,
@@ -18,11 +19,11 @@ import { HasId } from "../api/defs/types";
 import { AdvancedColumnDef } from "./advanced-filter-table";
 
 /**
- * Generates a header cell for a Material-UI table with a tooltip on hover.
+ * Generates a special header cell for an AdvancedFilterTable, with help text on hover.
  * 
- * @param name The visible header text
- * @param title Optional tooltip text (defaults to `name`)
- * @returns A function that renders the header cell
+ * @param name The standard header text
+ * @param title Optional help text (defaults to `name`)
+ * @returns header cell properties for the column definitions
  */
 export function generateHeaderCellProps(name: string, title?: string) {
     return {
@@ -45,7 +46,11 @@ export function generateHeaderCellProps(name: string, title?: string) {
     }
 }
 
-export function generateDateColumnProps<T extends MRT_RowData = MRT_RowData>() {
+/**
+ * Generate properties for an editable date column in an AdvancedFilterTable, defining the
+ * content of the cell when in edit mode (EditCell) or standard display mode (Cell).
+ */
+export function generateDateColumnProps<T extends MRT_RowData>() {
     return {
         EditCell: ({
             value,
@@ -57,7 +62,6 @@ export function generateDateColumnProps<T extends MRT_RowData = MRT_RowData>() {
             <DatePicker
                 value={parseLocalDate(value)}
                 onChange={date => {
-                    // Format as YYYY-MM-DD for storage
                     onChange(date ? format(date, "yyyy-MM-dd") : "");
                 }}
                 slotProps={{
@@ -72,10 +76,9 @@ export function generateDateColumnProps<T extends MRT_RowData = MRT_RowData>() {
         Cell: (props: {
             cell: MRT_Cell<T, unknown>;
         }) => {
-            let value = props.cell.getValue() as string | undefined;
+            const value = props.cell.getValue() as string | undefined;
             if (!value || typeof value !== "string") return "";
 
-            // Always extract YYYY-MM-DD and parse as local date
             const match = value.match(/^(\d{4})-(\d{2})-(\d{2})/);
             if (!match) return value;
             const [, year, month, day ] = match;
@@ -85,6 +88,9 @@ export function generateDateColumnProps<T extends MRT_RowData = MRT_RowData>() {
     };
 }
 
+/**
+ * Helper function to define an editable number cell in an AdvancedFilterTable.
+ */
 export function generateNumberCell() {
     return function NumberEditCell({ value, onChange }: { value: any; onChange: (val: any) => void }) {
         return (
@@ -100,6 +106,10 @@ export function generateNumberCell() {
     };
 }
 
+/**
+ * Generate properties for an editable column in an AdvancedFilterTable that needs to allow the 
+ * user to select a single option from a given list of options in a dropdown menu.
+ */
 export function generateSingleSelectColumnProps<RowType extends MRT_RowData, ValueType extends HasId>({
     options,
     getLabel,
@@ -134,6 +144,7 @@ export function generateSingleSelectColumnProps<RowType extends MRT_RowData, Val
                     selected ? (
                         <Chip
                             color="primary"
+                            variant="outlined"
                             label={getLabel(selected)}
                             size="small"
                         />
@@ -156,6 +167,7 @@ export function generateSingleSelectColumnProps<RowType extends MRT_RowData, Val
         }) => (
             <Chip
                 color="primary"
+                variant="outlined"
                 label={getLabel(cell.getValue() as ValueType)}
                 size="small"
             />
@@ -163,6 +175,10 @@ export function generateSingleSelectColumnProps<RowType extends MRT_RowData, Val
     };
 }
 
+/**
+ * Generate properties for an editable column in an AdvancedFilterTable that needs to allow the 
+ * user to select (possibly) multiple options from a given list of options in a dropdown menu.
+ */
 export function generateMultiSelectColumnProps<RowType extends MRT_RowData, ValueType extends HasId>({
     options,
     getLabel,
@@ -197,8 +213,11 @@ export function generateMultiSelectColumnProps<RowType extends MRT_RowData, Valu
                 renderValue={(selected, getTagProps) => (
                     <Stack direction="row" gap={0.25} flexWrap="wrap">
                         {selected.map((opt, idx) => (
+                            // ESLint thinks we need to define a key for this Chip, but getTagProps covers that
+                            // eslint-disable-next-line react/jsx-key
                             <Chip
                                 color="primary"
+                                variant="outlined"
                                 label={getLabel(opt)}
                                 size="small"
                                 {...getTagProps({ index: idx })}
@@ -230,6 +249,7 @@ export function generateMultiSelectColumnProps<RowType extends MRT_RowData, Valu
                     {values.map((opt: ValueType) => (
                         <Chip
                             color="primary"
+                            variant="outlined"
                             key={opt.id}
                             label={getLabel(opt)}
                             size="small"

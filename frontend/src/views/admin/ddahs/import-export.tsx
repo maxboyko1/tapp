@@ -46,7 +46,7 @@ export function ConnectedExportDdahsAction({ disabled = false }) {
         null
     );
 
-    const { selectedDdahIds } = useSelector<any, { selectedDdahIds: Number[] }>(
+    const { selectedDdahIds } = useSelector<any, { selectedDdahIds: number[] }>(
         ddahTableSelector
     );
 
@@ -94,7 +94,7 @@ export function ConnectedImportDdahsAction({
     setImportInProgress = null,
 }: {
     disabled: boolean;
-    setImportInProgress?: Function | null;
+    setImportInProgress?: ((state: boolean) => void) | null;
 }) {
     const dispatch = useThunkDispatch();
     const ddahs = useSelector<any, Ddah[]>(ddahsSelector);

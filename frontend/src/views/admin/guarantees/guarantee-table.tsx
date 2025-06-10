@@ -40,7 +40,7 @@ export function StatusCell({
                 <Tooltip title="Download letter PDF">
                     <Button
                         href={formatDownloadUrl(
-                            `/public/letters/${activeConfirmationUrlToken}.pdf`
+                            `/external/letters/${activeConfirmationUrlToken}.pdf`
                         )}
                         variant="outlined"
                         size="small"

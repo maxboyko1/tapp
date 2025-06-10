@@ -29,7 +29,7 @@ import {
 } from "./selected-ddah-actions";
 import { DownloadDdahs } from "./download-ddahs";
 
-export function AdminDdahsView() {
+export default function AdminDdahsView() {
     const [addDialogVisible, setAddDialogVisible] = React.useState(false);
     // While data is being imported, updating the react table takes a long time,
     // so we use this variable to hide the react table during import.

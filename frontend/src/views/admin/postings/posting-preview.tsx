@@ -17,7 +17,7 @@ import { useThunkDispatch } from "../../../libs/thunk-dispatch";
 import { useParams } from "react-router";
 import { ConnectedPostingPreviewView } from "./posting-details/preview-view";
 
-function ConnectedPostingPreview() {
+export default function ConnectedPostingPreview() {
     const activeSession = useSelector(activeSessionSelector) as Session | null;
     const postings = useSelector(postingsSelector);
     const dispatch = useThunkDispatch();
@@ -44,7 +44,10 @@ function ConnectedPostingPreview() {
                     setPostingIsForDifferentSession(false);
                 }
                 await dispatch(fetchPostingPositionsForPosting(posting));
-            } catch (e) {}
+            } catch (e) {
+                // eslint-disable-next-line no-console
+                console.error(e);
+            }
         }
 
         if (activeSession && posting_id != null) {
@@ -96,5 +99,3 @@ function ConnectedPostingPreview() {
         </div>
     );
 }
-
-export { ConnectedPostingPreview as PostingPreview };

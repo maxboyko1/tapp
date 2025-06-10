@@ -29,7 +29,7 @@ import { DownloadConfirmationPdfs } from "./download-confirmations";
 import { guaranteeTableSelector } from "./actions";
 import { ApplicantMatchingDatum } from "../../../api/defs/types";
 
-export function AdminAppointmentsView() {
+export default function AdminAppointmentsView() {
     const [addDialogVisible, setAddDialogVisible] = React.useState(false);
     const [addLetterDialogVisible, setAddLetterDialogVisible] = React.useState(false);
     const activeSession = useSelector(activeSessionSelector);

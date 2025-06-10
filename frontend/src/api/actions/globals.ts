@@ -37,9 +37,9 @@ export const setGlobalsInUrl = validatedApiDispatcher({
 
         // If we have globals to store, push them onto the url
         if (window.history.pushState && ("" + searchParams).length > 0) {
-            let newUrl = new URL("" + window.location);
+            const newUrl = new URL("" + window.location);
             newUrl.search = "?" + searchParams;
-            let url = "" + newUrl;
+            const url = "" + newUrl;
             if ("" + url !== "" + window.location) {
                 window.history.pushState({ path: url }, "", url);
             }
