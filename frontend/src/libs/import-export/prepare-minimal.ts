@@ -30,7 +30,7 @@ import {
     ApplicantMatchingDatum,
     MinimalApplicantMatchingDatum,
 } from "../../api/defs/types";
-import { formatCustomQuestionsForExport } from "../../components/custom-question-utils";
+import { getCustomQuestionNamesAsArrayStr } from "../../components/custom-question-utils";
 
 /**
  * Determine whether `wageChunks` can be derived from `session`. E.g.,
@@ -39,14 +39,14 @@ import { formatCustomQuestionsForExport } from "../../components/custom-question
  * @param {*} wageChunks
  * @param {*} position
  * @param {*} session
- * @param {Number} assignmentHours
+ * @param {number} assignmentHours
  * @returns {boolean}
  */
 function wageChunksMatchPositionAndSession(
     wageChunks: WageChunk[],
     position: Position,
     session: Session,
-    assignmentHours: Number
+    assignmentHours: number
 ): boolean {
     if (!session || !Array.isArray(wageChunks)) {
         return true;
@@ -156,11 +156,11 @@ export const prepareMinimal = {
         };
     },
     position: function (position: Position): MinimalPosition {
-        let customQuestionsString = formatCustomQuestionsForExport(position.custom_questions);
+        const customQuestionsString = getCustomQuestionNamesAsArrayStr(position.custom_questions);
         let customQuestions;
         try {
             customQuestions = customQuestionsString ? JSON.parse(customQuestionsString) : [];
-        } catch (e) {
+        } catch {
             customQuestions = [];
         }
         return {
@@ -183,12 +183,19 @@ export const prepareMinimal = {
         };
     },
     posting: function (posting: Posting): MinimalPosting {
+        const customQuestionsString = getCustomQuestionNamesAsArrayStr(posting.custom_questions);
+        let customQuestions;
+        try {
+            customQuestions = customQuestionsString ? JSON.parse(customQuestionsString) : [];
+        } catch {
+            customQuestions = [];
+        }
         return {
             name: posting.name,
             open_date: posting.open_date,
             close_date: posting.close_date,
             intro_text: posting.intro_text,
-            custom_questions: JSON.parse(formatCustomQuestionsForExport(posting.custom_questions)),
+            custom_questions: customQuestions,
             posting_positions: posting.posting_positions.map(
                 prepareMinimal.postingPosition
             ),

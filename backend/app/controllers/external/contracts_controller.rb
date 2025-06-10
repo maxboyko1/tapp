@@ -2,11 +2,11 @@
 
 # `ApplicationControler` is set to always return JSON. In this controller we want to return
 # html and pdf, so we subclass ActionController directly
-class Public::ContractsController < ActionController::Base
+class External::ContractsController < ActionController::Base
     include Response
     include TransactionHandler
 
-    # /public/contracts/<id>
+    # /external/contracts/<id>
     def show
         return unless valid_offer?(url_token: show_params[:id])
 
@@ -22,7 +22,7 @@ class Public::ContractsController < ActionController::Base
         render(inline: rendered)
     end
 
-    # /public/contracts/<contract_id>/accept
+    # /external/contracts/<contract_id>/accept
     def accept
         return unless valid_offer?(url_token: params[:contract_id])
 
@@ -41,7 +41,7 @@ class Public::ContractsController < ActionController::Base
         render_success {}
     end
 
-    # /public/contracts/<contract_id>/reject
+    # /external/contracts/<contract_id>/reject
     def reject
         return unless valid_offer?(url_token: params[:contract_id])
 
@@ -59,7 +59,7 @@ class Public::ContractsController < ActionController::Base
         render_success {}
     end
 
-    # /public/contracts/<contract_id>/view
+    # /external/contracts/<contract_id>/view
     def view
         return unless valid_offer?(url_token: params[:contract_id])
 
@@ -80,7 +80,7 @@ class Public::ContractsController < ActionController::Base
         render(inline: template.render(offer_substitutions.merge(header_subs)))
     end
 
-    # /public/contracts/<contract_id>/details
+    # /external/contracts/<contract_id>/details
     def details
         return unless valid_offer?(url_token: params[:contract_id])
 

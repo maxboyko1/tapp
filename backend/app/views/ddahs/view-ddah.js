@@ -56,7 +56,7 @@ function submitDecision() {
         return;
     }
     postHelper(
-        "/public/ddahs/" + URL_TOKEN + "/" + data.decision,
+        "/external/ddahs/" + URL_TOKEN + "/" + data.decision,
         data,
         function() {
             window.location.reload(true);

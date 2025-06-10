@@ -245,8 +245,7 @@ export class MockAPIController {
      * @param {string} prop
      * @memberof MockAPIController
      */
-    // eslint-disable-next-line no-unused-vars
-    validateProp(prop, value, id) {
+    validateProp(_prop, _value, _id) {
         return true;
     }
     /**

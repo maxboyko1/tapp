@@ -38,7 +38,7 @@ export function ApplicantRating({
     onChange,
 }: {
     rating: number | null;
-    onChange?: Function;
+    onChange?: (rating: number) => void;
 }) {
     const clampedRating =
         rating == null ? null : Math.max(Math.min(rating, 2), -1);
@@ -117,7 +117,7 @@ export function ApplicantRatingAndComment({
     compact = true,
 }: {
     instructorPreference: InstructorPreference | null;
-    setInstructorPreference?: Function;
+    setInstructorPreference?: (pref: Partial<InstructorPreference> | InstructorPreference) => void | Promise<any>;
     compact?: boolean;
 }) {
     const rating = instructorPreference?.preference_level ?? null;
@@ -129,7 +129,7 @@ export function ApplicantRatingAndComment({
                     ...(instructorPreference || {}),
                     preference_level:
                         rating === instructorPreference?.preference_level
-                            ? null
+                            ? undefined
                             : rating,
                 });
             }
@@ -139,7 +139,7 @@ export function ApplicantRatingAndComment({
     const setComment = React.useCallback(
         (comment: string | null) => {
             const trimmedComment =
-                comment != null ? comment.trim() || null : null;
+                comment != null ? comment.trim() : undefined;
             if (setInstructorPreference) {
                 return setInstructorPreference({
                     ...(instructorPreference || {}),

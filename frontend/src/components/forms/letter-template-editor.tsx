@@ -59,7 +59,7 @@ export function LetterTemplateEditor(props: {
                 sx={{ mb: 0 }}
                 title="This file is stored on the server; you can edit it there."
             >
-                Template Name (e.g. "Regular")
+                Template Name (e.g. &quot;Regular&quot;)
             </Typography>
             <DialogRow>
                 {createFieldEditor(

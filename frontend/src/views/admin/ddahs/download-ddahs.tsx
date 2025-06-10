@@ -15,7 +15,7 @@ import FileSaver from "file-saver";
  */
 function ddahUrl(ddah: Ddah) {
     const url = new URL(window.location.origin);
-    url.pathname = `/public/ddahs/${ddah.url_token}.pdf`;
+    url.pathname = `/external/ddahs/${ddah.url_token}.pdf`;
     return url.href;
 }
 

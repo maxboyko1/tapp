@@ -2,10 +2,10 @@
 
 # `ApplicationControler` is set to always return JSON. In this controller we want to return
 # html and pdf, so we subclass ActionController directly
-class Public::FilesController < ActionController::Base
+class External::FilesController < ActionController::Base
     include Response
 
-    # /public/files/<id>
+    # /external/files/<id>
     def show
         blob = ActiveStorage::Blob.find_by!(key: show_params[:id])
 

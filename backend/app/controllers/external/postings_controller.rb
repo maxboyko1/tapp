@@ -2,11 +2,11 @@
 
 # `ApplicationControler` is set to always return JSON. In this controller we want to return
 # html and pdf, so we subclass ActionController directly
-class Public::PostingsController < ActionController::Base
+class External::PostingsController < ActionController::Base
     include Response
     include TransactionHandler
 
-    # /public/postings/<id>
+    # /external/postings/<id>
     def show
         return unless valid_posting?(url_token: show_params[:id])
 
@@ -22,7 +22,7 @@ class Public::PostingsController < ActionController::Base
         )
     end
 
-    # /public/postings/<id>/submit
+    # /external/postings/<id>/submit
     def submit
         return unless valid_posting?(url_token: submit_params[:posting_id])
 

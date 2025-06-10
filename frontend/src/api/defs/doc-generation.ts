@@ -35,7 +35,7 @@ function createCallChain(chain: CallAtom[] = [], prop: string, args?: any[]) {
  * @param {*} [callChain=[]]
  * @returns
  */
-function propTypesProxy<T extends object | Function>(
+function propTypesProxy<T extends object | ((...args: any[]) => any)>(
     innerObj: T,
     callChain: CallAtom[] = []
 ) {
@@ -350,7 +350,7 @@ export interface RouteParams {
 }
 
 interface DocumentCallbackArgs {
-    func: Function;
+    func: (...args: any[]) => any;
     summary: string;
     posts?: any;
     returns?: any;

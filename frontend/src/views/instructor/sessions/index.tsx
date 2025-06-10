@@ -24,7 +24,7 @@ import {
 } from "../../../api/actions";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
 
-export function InstructorSessionsView() {
+export default function InstructorSessionsView() {
     const theme = useTheme();
     const activeSession = useSelector(activeSessionSelector);
     const sessions = useSelector(sessionsSelector);

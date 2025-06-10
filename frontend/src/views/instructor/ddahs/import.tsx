@@ -119,7 +119,7 @@ function DdahsList({ ddahs }: { ddahs: Omit<Ddah, "id">[] }) {
     return (
         <ul>
             {ddahs.map(({ assignment: { applicant }, duties }, i) => (
-                <li>
+                <li key={applicant.id}>
                     DDAH for {applicant.first_name} {applicant.last_name} (
                     {applicant.utorid})
                     <ul className="instructor-ddah-import-new-ddah-duties-list">
@@ -163,7 +163,7 @@ export function InstructorImportDdahsAction({
     setImportInProgress = null,
 }: {
     disabled: boolean;
-    setImportInProgress?: Function | null;
+    setImportInProgress?: ((state: boolean) => void) | null;
 }) {
     const dispatch = useThunkDispatch();
     const ddahs = useSelector(ddahsSelector);

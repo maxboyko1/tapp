@@ -50,9 +50,9 @@ export function ImportDialog({
     label = DEFAULT_LABEL,
 }: ImportButtonProps & {
     dialogOpen: boolean;
-    onCancel: Function;
+    onCancel: () => void;
     onClose: (...args: any[]) => void;
-    setInProgress: Function;
+    setInProgress: (state: boolean) => void;
     label?: string;
 }) {
     const [fileInputLabel, setFileInputLabel] = React.useState(label);
@@ -63,7 +63,7 @@ export function ImportDialog({
     );
     const [inProgress, _setInProgress] = React.useState(false);
 
-    let formElement = null;
+    const formElement = null;
 
     const withLabelReset = (actionHandler: typeof onCancel) => () => {
         setFileInputLabel(DEFAULT_LABEL);
@@ -269,7 +269,7 @@ export function ImportButton({
     dialogContent,
     onConfirm,
     setInProgress,
-}: ImportButtonProps & { setInProgress: Function; disabled?: boolean }) {
+}: ImportButtonProps & { setInProgress: (state: boolean) => void; disabled?: boolean }) {
     const [dialogOpen, setDialogOpen] = useState(false);
 
     /**
@@ -325,7 +325,7 @@ export function ImportActionButton({
     onConfirm,
     setInProgress,
     disabled = false,
-}: ImportButtonProps & { setInProgress: Function; disabled?: boolean }) {
+}: ImportButtonProps & { setInProgress: (state: boolean) => void; disabled?: boolean }) {
     const [dialogOpen, setDialogOpen] = useState(false);
 
     /**

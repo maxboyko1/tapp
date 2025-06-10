@@ -13,7 +13,7 @@ import { useSelector } from "react-redux";
 import { upsertPosting, postingsSelector } from "../../../api/actions";
 import { Posting } from "../../../api/defs/types";
 import { PostingEditor } from "../../../components/forms/posting-editor";
-import { areAllQuestionsNonEmpty, emptyCustomQuestions } from "../../../components/custom-question-utils";
+import { areAllQuestionsValid, emptyCustomQuestions } from "../../../components/custom-question-utils";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
 
 interface Conflict {
@@ -95,7 +95,7 @@ export function ConnectedAddPostingDialog({
                     disabled={
                         !!conflicts.delayShow ||
                         !!conflicts.immediateShow ||
-                        !areAllQuestionsNonEmpty(newPosting.custom_questions)
+                        !areAllQuestionsValid(newPosting.custom_questions)
                     }
                     variant="contained"
                     color="primary"

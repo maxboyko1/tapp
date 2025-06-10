@@ -1,4 +1,6 @@
-import { PublicRoutes } from "./views/public/routes";
+import React from "react";
+import { ExternalRoutes } from "./views/external/routes";
+import "./external-entry.css";
 
 /**
  * This is the entry point for public routes. Most components are not loaded
@@ -8,5 +10,5 @@ import { PublicRoutes } from "./views/public/routes";
  * @returns
  */
 export default function ConnectedApp() {
-    return <PublicRoutes />;
+    return <ExternalRoutes />;
 }

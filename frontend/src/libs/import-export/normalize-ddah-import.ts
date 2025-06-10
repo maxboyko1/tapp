@@ -24,7 +24,7 @@ export function normalizeDdahImports(
     log = true,
     positionCodeOverride?: string
 ): MinimalDdah[] {
-    let ret: MinimalDdah[] = [];
+    const ret: MinimalDdah[] = [];
 
     if (data.fileType === "json") {
         let unwrapped: MinimalDdah[] = data.data;

@@ -102,7 +102,7 @@ const DEFAULT_APPLICANT = {
  */
 export function ApplicantEditor(props: {
     applicant: Partial<Applicant>;
-    setApplicant: Function;
+    setApplicant: (applicant: Partial<Applicant>) => void;
 }) {
     const { applicant: applicantProps, setApplicant } = props;
     const applicant = { ...DEFAULT_APPLICANT, ...applicantProps };
@@ -123,7 +123,7 @@ export function ApplicantEditor(props: {
     }
 
     /**
-     * Create a MaterialUI form component that updates the specified attr
+     * Create a MaterialUI form component that updates the specified text attribute
      * of `position`
      *
      * @param {string} title - Label text of the form control

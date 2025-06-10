@@ -13,7 +13,7 @@ import { GuaranteeConfirmDialog } from "./guarantee-confirm-dialog";
  */
 function confirmationUrl(applicantMatchingDatum: ApplicantMatchingDatum) {
     const url = new URL(window.location.origin);
-    url.pathname = `/public/letters/${applicantMatchingDatum.active_confirmation_url_token}.pdf`;
+    url.pathname = `/external/letters/${applicantMatchingDatum.active_confirmation_url_token}.pdf`;
     return url.href;
 }
 

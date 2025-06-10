@@ -17,7 +17,7 @@ import { ConnectedAddPostingDialog } from "./add-posting-dialog";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
 import { ConnectedImportPostingAction } from "./import-export";
 
-function ConnectedPostingOverview() {
+export default function ConnectedPostingOverview() {
     const [addDialogVisible, setAddDialogVisible] = React.useState(false);
     const activeSession = useSelector(activeSessionSelector) as Session | null;
     const dispatch = useThunkDispatch();
@@ -64,5 +64,3 @@ function ConnectedPostingOverview() {
         </div>
     );
 }
-
-export { ConnectedPostingOverview as PostingOverview };

@@ -18,11 +18,15 @@ import { useThunkDispatch } from "../../../libs/thunk-dispatch";
 import { upsertPosting } from "../../../api/actions";
 import { CustomQuestions, Posting } from "../../../api/defs/types";
 import { 
-    areAllQuestionsNonEmpty,
+    areAllQuestionsValid,
     isQuestionsFieldInValidFormat,
     emptyCustomQuestions
 } from "../../../components/custom-question-utils";
 
+/**
+ * Popup dialog component for editing custom questions, consisting of a variable
+ * number of multiline text fields, each individually editable or removable. 
+ */
 function EditCustomQuestionsDialog({
     posting,
     open,
@@ -44,7 +48,7 @@ function EditCustomQuestionsDialog({
     };
 
     const handleSave = async () => {
-        if (areAllQuestionsNonEmpty(fieldVal)) {
+        if (areAllQuestionsValid(fieldVal)) {
             setInProgress(true);
             try {
                 await onChange(fieldVal, value);
@@ -115,7 +119,7 @@ function EditCustomQuestionsDialog({
                 <Button
                     onClick={handleSave}
                     variant="contained"
-                    disabled={!areAllQuestionsNonEmpty(fieldVal) || inProgress}
+                    disabled={!areAllQuestionsValid(fieldVal) || inProgress}
                     startIcon={inProgress ? <CircularProgress size={16} /> : null}
                 >
                     Save

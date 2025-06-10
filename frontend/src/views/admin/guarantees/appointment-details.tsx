@@ -65,7 +65,7 @@ function ConfirmationHistoryDetails({ confirmations }: { confirmations: Confirma
             </TableHead>
             <TableBody>
                 {(confirmations || []).map((confirmation, i) => {
-                    const url = `/public/letters/${confirmation.url_token}.pdf`;
+                    const url = `/external/letters/${confirmation.url_token}.pdf`;
                     return (
                         <TableRow key={i}>
                             <TableCell>
@@ -139,7 +139,7 @@ export function ConnectedApplicantMatchingDatumDetails({
     }, [applicantMatchingDatumId, dispatch, applicantMatchingDatumNotFound]);
 
     if (!applicantMatchingDatum) {
-        return <Typography>No Appointment found with ID "{applicantMatchingDatumId}"</Typography>;
+        return <Typography>No Appointment found with ID &quot;{applicantMatchingDatumId}&quot;</Typography>;
     }
 
     return (
@@ -220,7 +220,7 @@ export function ConnectedViewApplicantMatchingDatumDetailsAction() {
     const applicantMatchingData = useSelector(applicantMatchingDataSelector);
     const { selectedApplicantMatchingDatumIds } = useSelector<
         any,
-        { selectedApplicantMatchingDatumIds: Number[] }
+        { selectedApplicantMatchingDatumIds: number[] }
     >(guaranteeTableSelector);
     const selectedApplicantMatchingData = applicantMatchingData.filter((applicantMatchingDatum) =>
         selectedApplicantMatchingDatumIds.includes(applicantMatchingDatum.id)
@@ -234,7 +234,7 @@ export function ConnectedViewApplicantMatchingDatumDetailsAction() {
     );
     if (selectedApplicantMatchingData.length > 0) {
         applicantMatchingDatumDetails = selectedApplicantMatchingData.map((applicantMatchingDatum, i) => {
-            let split = i === 0 ? null : <hr />;
+            const split = i === 0 ? null : <hr />;
             return (
                 <React.Fragment key={i}>
                     {split}

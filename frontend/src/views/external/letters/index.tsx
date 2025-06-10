@@ -22,7 +22,7 @@ function capitalize(text: string) {
         .join(" ");
 }
 
-export function LetterView() {
+export default function LetterView() {
     const params = useParams<{ url_token?: string }>();
     const url_token = params?.url_token;
     const [confirmation, setConfirmation] = React.useState<RawConfirmation | null>(null);
@@ -44,7 +44,7 @@ export function LetterView() {
         async function fetchConfirmation() {
             try {
                 const details: RawConfirmation | null = await apiGET(
-                    `/public/letters/${url_token}/details`,
+                    `/external/letters/${url_token}/details`,
                     true
                 );
                 setConfirmation(details);
@@ -60,13 +60,13 @@ export function LetterView() {
             throw new Error("Cannot submit a `null` decision");
         }
         const data = { decision, signature: signature || null };
-        await apiPOST(`/public/letters/${url_token}/${decision}`, data, true);
+        await apiPOST(`/external/letters/${url_token}/${decision}`, data, true);
     }
     async function confirmClicked() {
         setWaiting(true);
         await submitDecision();
         setWaiting(false);
-        // @ts-ignore
+        // @ts-expect-error deprecated but necessary for legacy browser support
         window.location.reload(true);
     }
 
@@ -90,7 +90,7 @@ export function LetterView() {
                     <h3>
                         <Button
                             component="a"
-                            href={`/public/letters/${url_token}.pdf`}
+                            href={`/external/letters/${url_token}.pdf`}
                             target="_blank"
                             rel="noopener"
                             variant="contained"
@@ -178,7 +178,7 @@ export function LetterView() {
                 <div className="letter-view">
                     <iframe
                         title="Letter"
-                        src={`/public/letters/${url_token}`}
+                        src={`/external/letters/${url_token}`}
                     ></iframe>
                 </div>
             </div>

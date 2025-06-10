@@ -80,7 +80,7 @@ export function ConnectedImportPositionsAction({
     setImportInProgress = null,
 }: {
     disabled: boolean;
-    setImportInProgress?: Function | null;
+    setImportInProgress?: ((state: boolean) => void) | null;
 }) {
     const dispatch = useThunkDispatch();
     const positions = useSelector(positionsSelector);
@@ -146,7 +146,7 @@ export function ConnectedImportPositionsAction({
             for (let idx = 0; idx < data.length; idx++) {
                 const item = data[idx];
 
-                // --- Instructors normalization ---
+                // Instructors normalization
                 if (typeof item.instructors === "string") {
                     item.instructors = item.instructors
                         .split(";")
@@ -182,7 +182,7 @@ export function ConnectedImportPositionsAction({
                         .map((x) => x.utorid);
                 }
 
-                // --- Custom questions normalization ---
+                // Custom questions handling
                 if (fileContent.fileType === "json") {
                     if (Array.isArray(item.custom_questions)) {
                         if (!isQuestionsJsonImportInValidFormat(JSON.stringify(item.custom_questions))) {

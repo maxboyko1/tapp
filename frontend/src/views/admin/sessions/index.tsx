@@ -15,7 +15,7 @@ import {
 import { ContentArea } from "../../../components/layout";
 import { Session } from "../../../api/defs/types";
 
-export function AdminSessionsView() {
+export default function AdminSessionsView() {
     const [addDialogVisible, setAddDialogVisible] = React.useState(false);
     const [inDeleteMode, setInDeleteMode] = React.useState(false);
 

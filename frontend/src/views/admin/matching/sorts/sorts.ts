@@ -21,8 +21,14 @@ export type SortType =
     | "First Name"
     | "Last Name";
 
+type SortFunction = (
+    applicantSummaries: ApplicantSummary[],
+    asc?: boolean,
+    position?: Position | null
+) => void;
+
 // A mapping of sort names to their sorting functions
-export const sortMap: Record<SortType, Function> = {
+export const sortMap: Record<SortType, SortFunction> = {
     Program: sortByProgram,
     Department: sortByDepartment,
     "Year in Progress": sortByYip,
@@ -53,17 +59,9 @@ export function applySorts(
     const ret: ApplicantSummary[] = [...applicantSummaries];
 
     // Apply each sort in the opposite order they appear in sortList
-    let reversedList = [...sortList].reverse();
+    const reversedList = [...sortList].reverse();
     for (const sortItem of reversedList) {
-        // Handle special sort cases where we need to know position info
-        if (
-            sortItem["name"] === "TA Preference" ||
-            sortItem["name"] === "Instructor Preference"
-        ) {
-            sortMap[sortItem["name"]](ret, sortItem["asc"], position);
-        } else {
-            sortMap[sortItem["name"]](ret, sortItem["asc"]);
-        }
+        sortMap[sortItem["name"]](ret, sortItem["asc"], position);
     }
 
     return ret;
@@ -75,7 +73,7 @@ function flipIfDescending(val: number, asc: boolean) {
 }
 
 // Sorting functions -- all of these do in-place sorting
-function sortByFirstName(applicantSummaries: ApplicantSummary[], asc = true) {
+function sortByFirstName(applicantSummaries: ApplicantSummary[], asc = true, _position?: Position | null) {
     applicantSummaries.sort((a, b) => {
         return `${a.applicantMatchingDatum.applicant.first_name}, ${a.applicantMatchingDatum.applicant.last_name}`.toLowerCase() <=
             `${b.applicantMatchingDatum.applicant.first_name}, ${b.applicantMatchingDatum.applicant.last_name}`.toLowerCase()
@@ -84,7 +82,7 @@ function sortByFirstName(applicantSummaries: ApplicantSummary[], asc = true) {
     });
 }
 
-function sortByLastName(applicantSummaries: ApplicantSummary[], asc = true) {
+function sortByLastName(applicantSummaries: ApplicantSummary[], asc = true, _position?: Position | null) {
     applicantSummaries.sort((a, b) => {
         return `${a.applicantMatchingDatum.applicant.last_name}, ${a.applicantMatchingDatum.applicant.first_name}`.toLowerCase() <=
             `${b.applicantMatchingDatum.applicant.last_name}, ${b.applicantMatchingDatum.applicant.first_name}`.toLowerCase()
@@ -93,7 +91,7 @@ function sortByLastName(applicantSummaries: ApplicantSummary[], asc = true) {
     });
 }
 
-function sortByProgram(applicantSummaries: ApplicantSummary[], asc = true) {
+function sortByProgram(applicantSummaries: ApplicantSummary[], asc = true, _position?: Position | null) {
     const priority = ["U", "PD", "MScAC", "M", "P"];
     applicantSummaries.sort((a, b) => {
         // Empty entries are treated as lowest priority
@@ -125,7 +123,7 @@ function sortByProgram(applicantSummaries: ApplicantSummary[], asc = true) {
     });
 }
 
-function sortByGpa(applicantSummaries: ApplicantSummary[], asc = true) {
+function sortByGpa(applicantSummaries: ApplicantSummary[], asc = true, _position?: Position | null) {
     applicantSummaries.sort((a, b) => {
         if (!a.application?.gpa) {
             return flipIfDescending(-1, asc);
@@ -145,7 +143,7 @@ function sortByGpa(applicantSummaries: ApplicantSummary[], asc = true) {
     });
 }
 
-function sortByYip(applicantSummaries: ApplicantSummary[], asc = true) {
+function sortByYip(applicantSummaries: ApplicantSummary[], asc = true, _position?: Position | null) {
     applicantSummaries.sort((a, b) => {
         if (!a.application?.yip) {
             return flipIfDescending(-1, asc);
@@ -165,7 +163,7 @@ function sortByYip(applicantSummaries: ApplicantSummary[], asc = true) {
     });
 }
 
-function sortByDepartment(applicantSummaries: ApplicantSummary[], asc = true) {
+function sortByDepartment(applicantSummaries: ApplicantSummary[], asc = true, _position?: Position | null) {
     applicantSummaries.sort((a, b) => {
         if (!a.application?.department) {
             return flipIfDescending(-1, asc);
@@ -188,7 +186,7 @@ function sortByDepartment(applicantSummaries: ApplicantSummary[], asc = true) {
 function sortByApplicantPref(
     applicantSummaries: ApplicantSummary[],
     asc = true,
-    currPosition: Position | null
+    currPosition?: Position | null
 ) {
     applicantSummaries.sort((a, b) => {
         if (!currPosition) {
@@ -219,7 +217,7 @@ function sortByApplicantPref(
 function sortByInstructorRating(
     applicantSummaries: ApplicantSummary[],
     asc = true,
-    currPosition: Position | null
+    currPosition?: Position | null
 ) {
     applicantSummaries.sort((a, b) => {
         if (!currPosition) {
@@ -265,7 +263,8 @@ function sortByInstructorRating(
 
 function sortByTotalHoursAssigned(
     applicantSummaries: ApplicantSummary[],
-    asc = true
+    asc = true,
+    _position?: Position | null
 ) {
     applicantSummaries.sort((a, b) => {
         if (!a.matches) {
@@ -288,7 +287,8 @@ function sortByTotalHoursAssigned(
 
 function sortByTotalHoursOwed(
     applicantSummaries: ApplicantSummary[],
-    asc = true
+    asc = true,
+    _position?: Position | null
 ) {
     applicantSummaries.sort((a, b) => {
         const aHours = a.applicantMatchingDatum.min_hours_owed || 0;
@@ -306,7 +306,8 @@ function sortByTotalHoursOwed(
 
 function sortByRemainingHoursOwed(
     applicantSummaries: ApplicantSummary[],
-    asc = true
+    asc = true,
+    _position?: Position | null
 ) {
     applicantSummaries.sort((a, b) => {
         const aHoursOwed = a.applicantMatchingDatum.min_hours_owed || 0;
@@ -317,14 +318,14 @@ function sortByRemainingHoursOwed(
             return 0;
         }
 
-        let aHoursRemaining =
-            aHoursOwed -
-            (a.applicantMatchingDatum.prev_hours_fulfilled || 0) -
-            (a.totalHoursAssigned || 0);
-        let bHoursRemaining =
-            bHoursOwed -
-            (b.applicantMatchingDatum.prev_hours_fulfilled || 0) -
-            (b.totalHoursAssigned || 0);
+        const aHoursRemaining =
+              aHoursOwed -
+              (a.applicantMatchingDatum.prev_hours_fulfilled || 0) -
+              (a.totalHoursAssigned || 0);
+        const bHoursRemaining =
+              bHoursOwed -
+              (b.applicantMatchingDatum.prev_hours_fulfilled || 0) -
+              (b.totalHoursAssigned || 0);
 
         if (aHoursRemaining === bHoursRemaining) {
             return 0;

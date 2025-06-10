@@ -49,7 +49,6 @@ const DEFAULT_COLUMNS: AdvancedColumnDef<Position>[] = [
                     <React.Fragment>
                         {value.map((instructor: Instructor) => (
                             <Chip
-                                variant="outlined"
                                 color="primary"
                                 label={`${instructor.first_name} ${instructor.last_name}`}
                                 key={instructor.id}

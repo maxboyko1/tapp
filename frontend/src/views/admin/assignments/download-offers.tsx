@@ -13,7 +13,7 @@ import { OfferConfirmationDialog } from "./offer-confirmation-dialog";
  */
 function offerUrl(assignment: Assignment) {
     const url = new URL(window.location.origin);
-    url.pathname = `/public/contracts/${assignment.active_offer_url_token}.pdf`;
+    url.pathname = `/external/contracts/${assignment.active_offer_url_token}.pdf`;
     return url.href;
 }
 

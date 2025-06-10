@@ -28,10 +28,10 @@ import {
 import { ActiveUserButton } from "./active-user-switch";
 import { SeedDataMenu } from "./load-mock-data";
 
-import "swagger-ui-react/swagger-ui.css";
 import "./main.css";
 
-const SwaggerUI = React.lazy(() => import("swagger-ui-react"));
+// Lazy load RapiDoc API documentation generator, we don't need it all the time
+const RapiDoc = React.lazy(() => import("./rapidoc"));
 
 function MaterialUINavTab(props) {
     const location = useLocation();
@@ -132,12 +132,9 @@ function DevFrame(props) {
                 <Route
                     path="/api-docs"
                     element={
-                        <div style={{ flex: 1, overflow: "auto", height: "100%" }}>
+                        <div style={{ flex: 1, overflow: "auto", height: "100%", margin: 0, padding: 0 }}>
                             <React.Suspense fallback={<div>Loading...</div>}>
-                                <SwaggerUI
-                                    spec={swaggerData}
-                                    docExpansion="list"
-                                />
+                                <RapiDoc spec={swaggerData} />
                             </React.Suspense>
                         </div>
                     }

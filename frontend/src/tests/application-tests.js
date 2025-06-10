@@ -2,6 +2,7 @@ import {
     it,
     beforeAll,
     checkPropTypes,
+    describe,
     postingPropTypes,
     surveyPropTypes,
     expect,
@@ -116,10 +117,10 @@ export function applicationsTests({ apiGET, apiPOST }) {
         Object.assign(postingDataForPPTests, respPostingData);
     }, 30000);
 
-    // These tests set data through the `/public/postings` route,
+    // These tests set data through the `/external/postings` route,
     // but read data through the `/api/v1/admin` route.
-    describe("Public route tests", () => {
-        it("Get survey.js posting data through public route", async () => {
+    describe("External route tests", () => {
+        it("Get survey.js posting data through external route", async () => {
             // Make sure the user has admin permissions before this post request
             // Make a new posting and update <posting> to include the id of the posting
             const respPostingData = await addPosting(postingData, session);
@@ -131,7 +132,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
 
             // Read survey.js posting data
             let resp = await apiGET(
-                `/public/postings/${postingData.url_token}`,
+                `/external/postings/${postingData.url_token}`,
                 true
             );
             expect(resp).toHaveStatus("success");
@@ -145,7 +146,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
 
             // Read survey.js posting data
             let resp = await apiGET(
-                `/public/postings/${postingData.url_token}`,
+                `/external/postings/${postingData.url_token}`,
                 true
             );
             expect(resp).toHaveStatus("success");
@@ -168,7 +169,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
             await restoreDefaultUser();
         });
 
-        it("Can submit survey.js data via the public postings route", async () => {
+        it("Can submit survey.js data via the external postings route", async () => {
             // Create a new posting
             let resp = await apiPOST(
                 `/admin/sessions/${session.id}/postings`,
@@ -223,7 +224,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
 
             // Submit survey.js data
             resp = await apiPOST(
-                `/public/postings/${postingData.url_token}/submit`,
+                `/external/postings/${postingData.url_token}/submit`,
                 surveyData,
                 true
             );
@@ -252,7 +253,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
             };
 
             let resp = await apiPOST(
-                `/public/postings/${postingData.url_token}/submit`,
+                `/external/postings/${postingData.url_token}/submit`,
                 application,
                 true
             );
@@ -275,7 +276,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
 
             // Read survey.js posting data
             resp = await apiGET(
-                `/public/postings/${postingData.url_token}`,
+                `/external/postings/${postingData.url_token}`,
                 true
             );
             expect(resp).toHaveStatus("success");
@@ -307,7 +308,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
                 };
 
                 let resp = await apiPOST(
-                    `/public/postings/${postingDataForPPTests.url_token}/submit`,
+                    `/external/postings/${postingDataForPPTests.url_token}/submit`,
                     applicationExistentPP,
                     true
                 );
@@ -325,7 +326,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
                 };
 
                 resp = await apiPOST(
-                    `/public/postings/${postingDataForPPTests.url_token}/submit`,
+                    `/external/postings/${postingDataForPPTests.url_token}/submit`,
                     applicationNonExistentPP,
                     true
                 );
@@ -358,7 +359,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
                 },
             };
             resp = await apiPOST(
-                `/public/postings/${postingDataForPPTests.url_token}/submit`,
+                `/external/postings/${postingDataForPPTests.url_token}/submit`,
                 applicationWithIncorrectPPType,
                 true
             );
@@ -372,7 +373,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
 
             // Submit an empty object
             let resp = await apiPOST(
-                `/public/postings/${postingDataForPPTests.url_token}/submit`,
+                `/external/postings/${postingDataForPPTests.url_token}/submit`,
                 {},
                 true
             );
@@ -386,7 +387,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
                 },
             };
             resp = await apiPOST(
-                `/public/postings/${postingDataForPPTests.url_token}/submit`,
+                `/external/postings/${postingDataForPPTests.url_token}/submit`,
                 noAnswersApplication,
                 true
             );
@@ -426,7 +427,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
                     },
                 };
                 resp = await apiPOST(
-                    `/public/postings/${postingData.url_token}/submit`,
+                    `/external/postings/${postingData.url_token}/submit`,
                     firstApplication,
                     true
                 );
@@ -479,7 +480,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
                     },
                 };
                 resp = await apiPOST(
-                    `/public/postings/${postingData.url_token}/submit`,
+                    `/external/postings/${postingData.url_token}/submit`,
                     surveyjsSubmission,
                     true
                 );

@@ -139,8 +139,8 @@ function DutyRow({
     upsertDuty,
 }: {
     duty: Duty;
-    removeDuty: Function;
-    upsertDuty: Function;
+    removeDuty: (duty: Duty) => void;
+    upsertDuty: (duty: Duty) => void;
 }) {
     const { category, description } = splitDutyDescription(duty.description);
     return (
@@ -232,7 +232,7 @@ function DutyRow({
  */
 export function DdahEditor(props: {
     ddah: PartialDdah;
-    setDdah: Function;
+    setDdah: (ddah: PartialDdah) => void;
     assignments?: Assignment[];
     editableAssignment?: boolean;
 }) {
@@ -320,7 +320,7 @@ export function DdahEditor(props: {
                     the supervisor informs the Teaching Assistant.
                 </Typography>
                 <Typography variant="body2" sx={{ mt: 1 }}>
-                    In the 'Description Field' add details of when the assignments are
+                    In the &apos;Description Field&apos; add details of when the assignments are
                     expected to be available, how long it will mark them, turnaround
                     time, and include any due dates.
                 </Typography>
@@ -329,14 +329,14 @@ export function DdahEditor(props: {
                 </Typography>
                 <ul style={{ marginTop: 0, marginBottom: 0 }}>
                     <li>
-                        "Midterm 1; 120 tests; 10 minutes per test; available on Oct 4;
-                        expected turnaround time 5 days."
+                        &quot;Midterm 1; 120 tests; 10 minutes per test; available on Oct 4;
+                        expected turnaround time 5 days.&quot;
                     </li>
-                    <li>"Term Test 3 marking - available Oct 4, due Oct 11"</li>
-                    <li>"A3 Marking (Apr 8-15 grading period)"</li>
+                    <li>&quot;Term Test 3 marking - available Oct 4, due Oct 11&quot;</li>
+                    <li>&quot;A3 Marking (Apr 8-15 grading period)&quot;</li>
                 </ul>
                 <Typography variant="body2" sx={{ mt: 1 }}>
-                    A <em>Note</em> provides information that doesn't correspond
+                    A <em>Note</em> provides information that doesn&apos;t correspond
                     to specific hours. Information that should be included as a{" "}
                     <em>Note</em> include:
                 </Typography>
@@ -380,13 +380,13 @@ export function DdahEditor(props: {
     }
 
     function upsertDuty(duty: Duty) {
-        let newDuties = duties.filter((x) => x.order !== duty.order);
+        const newDuties = duties.filter((x) => x.order !== duty.order);
         newDuties.push(duty);
         setDdah({ ...ddah, duties: newDuties });
     }
 
     function removeDuty(duty: Duty) {
-        let newDuties = duties.filter((x) => x.order !== duty.order);
+        const newDuties = duties.filter((x) => x.order !== duty.order);
         setDdah({ ...ddah, duties: newDuties });
     }
 

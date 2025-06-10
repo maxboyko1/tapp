@@ -5,6 +5,7 @@ body,
     width: 100%;
     overflow: hidden;
     margin: 0;
+    padding: 0;
 }
 
 .wide-modal {
@@ -88,9 +89,6 @@ body,
     font-size: smaller;
     color: var(--gray);
 }
-/*.offer-history-details-table tbody tr:first-child .status {
-    background-color: green;
-}*/
 
 .confirmation-history-details-table th,
 .confirmation-history-details-table td {

@@ -20,7 +20,7 @@ export function matchByUtoridOrName<T extends Person>(
     name: string,
     people: T[]
 ): T {
-    let match = people.find((x) => x.utorid === name);
+    const match = people.find((x) => x.utorid === name);
     if (match) {
         // We found an exact match by UTORid
         return match;
@@ -34,14 +34,14 @@ export function matchByUtoridOrName<T extends Person>(
     }
 
     const fuzzySet = FuzzySet(Object.keys(nameHash));
-    let fuzzyMatch: [number, string][] | string = (fuzzySet.get as any)(
+    const fuzzyMatch: [number, string][] | string = (fuzzySet.get as any)(
         name,
         null,
         0.7
     );
     if (fuzzyMatch) {
         // If we get an array as a result, it will be of the form [[<%match>, <value matched>]]
-        let matchedKey = Array.isArray(fuzzyMatch)
+        const matchedKey = Array.isArray(fuzzyMatch)
             ? fuzzyMatch[0][1]
             : fuzzyMatch;
         return nameHash[matchedKey];

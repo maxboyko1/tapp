@@ -20,7 +20,10 @@ export function ConnectedPostingPreviewView({ posting }: { posting: Posting }) {
             try {
                 const json = await dispatch(fetchSurvey(posting));
                 setJsonSurvey(json);
-            } catch (e) {}
+            } catch (e) {
+                // eslint-disable-next-line no-console
+                console.error(e);
+            }
         }
 
         fetchResources();

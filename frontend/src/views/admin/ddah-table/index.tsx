@@ -138,7 +138,7 @@ export function PreviewCell({
     onClick = () => {},
 }: {
     row: { original: RowData };
-    onClick: Function;
+    onClick: (id: number) => void;
 }): React.JSX.Element | null {
     const original = row.original;
     if (original.id == null) {
@@ -148,7 +148,11 @@ export function PreviewCell({
         <Tooltip title="Preview DDAH">
             <IconButton
                 size="small"
-                onClick={() => onClick(original.id)}
+                onClick={() => {
+                    if (original.id != null) {
+                        onClick(original.id);
+                    }
+                }}
                 sx={{ mr: 1, py: 0 }}
             >
                 <SearchIcon fontSize="small" />
@@ -167,14 +171,14 @@ export function DdahPreviewModal({
     ddah: Ddah | null;
     show: boolean;
     onHide?: (...params: any[]) => void;
-    onApprove?: Function;
-    onEdit?: Function;
+    onApprove?: (ddah: Ddah | null) => void;
+    onEdit?: (ddah: Ddah | null) => void;
 }): React.ReactElement {
     let ddahPreview: React.ReactElement | string = "No DDAH to preview";
     let url: string | null = null;
     if (ddah != null) {
         ddahPreview = <DdahPreview ddah={ddah} />;
-        url = `/public/ddahs/${ddah.url_token}.pdf`;
+        url = `/external/ddahs/${ddah.url_token}.pdf`;
     }
     return (
         <Dialog open={show} onClose={onHide} maxWidth="lg" fullWidth>
@@ -376,7 +380,7 @@ export function ConnectedDdahEditorModal({
         <DdahEditor
             ddah={newDdah as Ddah}
             editableAssignment={false}
-            setDdah={setNewDdah}
+            setDdah={(partialDdah) => setNewDdah((prev) => ({ ...prev, ...partialDdah } as Ddah))}
         />
     ) : (
         "No DDAH Specified"
@@ -436,7 +440,7 @@ function getFormattedInstructorNameList(instructors: Instructor[]): string {
             type: "conjunction",
         });
         return formatter.format(names);
-    } catch (e) {
+    } catch {
         return names.join(", ");
     }
 }
@@ -448,7 +452,7 @@ function getFormattedInstructorNameList(instructors: Instructor[]): string {
  * @returns
  */
 export function ConnectedDdahsTable() {
-    let ddahs = useSelector(ddahsSelector) as Ddah[];
+    const ddahs = useSelector(ddahsSelector) as Ddah[];
     const assignments = useSelector(assignmentsSelector) as Assignment[];
     const selected = useSelector(ddahTableSelector).selectedDdahIds;
     const dispatch = useThunkDispatch();

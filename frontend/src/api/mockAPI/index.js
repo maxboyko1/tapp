@@ -15,7 +15,7 @@ import { activeUserRoutes, User } from "./active_user";
 import { ddahsRoutes } from "./ddahs";
 import { reportingTagRoutes } from "./reportingTags";
 import { postingRoutes } from "./postings";
-import { publicRoutes } from "./public-routes";
+import { externalRoutes } from "./external-routes";
 import { applicantMatchingDataRoutes } from "./applicant_matching_data";
 import { matchesRoutes } from "./matches";
 
@@ -44,7 +44,7 @@ export class MockAPI {
         debugRoutes.get,
         activeUserRoutes.get,
         postingRoutes.get,
-        publicRoutes.get,
+        externalRoutes.get,
         applicantMatchingDataRoutes.get,
         matchesRoutes.get,
         {
@@ -70,7 +70,7 @@ export class MockAPI {
         debugRoutes.post,
         activeUserRoutes.post,
         postingRoutes.post,
-        publicRoutes.post,
+        externalRoutes.post,
         applicantMatchingDataRoutes.post,
         matchesRoutes.post
     );

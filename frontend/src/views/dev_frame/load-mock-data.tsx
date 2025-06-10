@@ -75,13 +75,7 @@ const ident = () => {};
  * instructors, and upsert positions, applicants, and assignments from mock data
  * JSON files in order.
  */
-export function SeedDataMenu({
-    sessions = [],
-    fetchSessions = ident,
-}: {
-    sessions?: Session[];
-    fetchSessions: Function;
-}) {
+export function SeedDataMenu() {
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const [confirmDialogVisible, setConfirmDialogVisible] =
         React.useState(false);
@@ -359,7 +353,7 @@ export function SeedDataMenu({
         }
 
         let count = 0;
-        let total = seedData.applications.length;
+        const total = seedData.applications.length;
 
         // Keep track of the original active user so we can swap back
         const initialUser = await dispatch(fetchActiveUser());
@@ -374,7 +368,7 @@ export function SeedDataMenu({
         }
 
         // Seeded applications are directed at the first posting of the active session
-        let url_token = resp[0].url_token;
+        const url_token = resp[0].url_token;
 
         for (const application of seedData.applications.slice(0, limit)) {
             const currUser = {
@@ -405,7 +399,7 @@ export function SeedDataMenu({
             };
 
             await apiPOST(
-                `/public/postings/${url_token}/submit`,
+                `/external/postings/${url_token}/submit`,
                 { answers: newApp },
                 true
             );
@@ -434,7 +428,7 @@ export function SeedDataMenu({
         }
 
         let count = 0;
-        let total = seedData.applications.length;
+        const total = seedData.applications.length;
 
         for (const application of seedData.applications.slice(0, limit)) {
             if (application.instructor_preferences) {

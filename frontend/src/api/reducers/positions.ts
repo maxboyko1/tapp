@@ -17,7 +17,7 @@ const initialState: PositionState = {
     _allData: [],
 };
 
-// basicReducers is an object whose keys are FETCH_SESSIONS_SUCCESS, etc,
+// reducers is an object whose keys are FETCH_POSITIONS_SUCCESS, etc,
 // and values are the corresponding reducer functions
 const reducers = createAdvancedReducerObject<RawPosition>(
     FETCH_ALL_POSITIONS_SUCCESS,

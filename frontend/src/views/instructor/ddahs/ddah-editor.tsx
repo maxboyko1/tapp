@@ -232,6 +232,21 @@ function DutyItem({
     );
 }
 
+export function normalizeDdahFields(ddah: Omit<Ddah, "id">): Omit<Ddah, "id"> {
+    return {
+        ...ddah,
+        approved_date: ddah.approved_date ?? null,
+        accepted_date: ddah.accepted_date ?? null,
+        revised_date: ddah.revised_date ?? null,
+        emailed_date: ddah.emailed_date ?? null,
+        signature: ddah.signature ?? null,
+        url_token: ddah.url_token ?? "",
+        total_hours: ddah.total_hours ?? 0,
+        assignment: ddah.assignment!,
+        status: ddah.status ?? null,
+    };
+}
+
 export function DdahPreviewModal({
     ddah,
     show,
@@ -241,8 +256,8 @@ export function DdahPreviewModal({
 }: {
     ddah: Omit<Ddah, "id"> | null;
     show: boolean;
-    onHide?: Function;
-    onEdit?: Function;
+    onHide?: () => void;
+    onEdit?: (ddah: Omit<Ddah, "id"> | null) => Promise<void> | void;
     forceEditMode?: boolean;
 }): React.ReactElement {
     let ddahPreview: React.ReactElement | string = "No DDAH to preview";
@@ -441,7 +456,7 @@ export function DdahPreviewModal({
                 </Box>
             </Box>
         );
-        url = `/public/ddahs/${ddah.url_token}.pdf`;
+        url = `/external/ddahs/${ddah.url_token}.pdf`;
     }
 
     const spinner = inProgress ? (
@@ -490,7 +505,7 @@ export function DdahPreviewModal({
                     color="info"
                     onClick={async () => {
                         setInProgress(true);
-                        await onEdit({ ...ddah, duties });
+                        await onEdit(normalizeDdahFields({ ...ddah, duties } as Omit<Ddah, "id">));
                         setInProgress(false);
                         setEditing(false);
                     }}

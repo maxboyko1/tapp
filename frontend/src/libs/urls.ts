@@ -16,7 +16,7 @@ function stringToNativeType(s: string) {
     }
     try {
         return JSON.parse(s);
-    } catch (e) {
+    } catch {
         return s;
     }
 }

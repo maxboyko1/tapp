@@ -1,6 +1,3 @@
-/**
- * @jest-environment node
- */
 import PropTypes from "prop-types";
 import {
     it,

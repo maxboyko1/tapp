@@ -14,7 +14,7 @@ import PropTypes from "prop-types";
  * @param {component} props.listRenderer
  * @param {function(list[object], string): list[object]} props.filterFunc
  */
-export function FilteredList<T, R = {}>(
+export function FilteredList<T, R = object>(
     props: {
         data: T[];
         filterFunc: (dat: T[], query: string) => T[];
@@ -25,7 +25,7 @@ export function FilteredList<T, R = {}>(
     const Renderer = listRenderer;
     const [query, setQuery] = useState("");
 
-    let filteredData = filterFunc(data, query);
+    const filteredData = filterFunc(data, query);
 
     return (
         <div>

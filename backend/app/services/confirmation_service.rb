@@ -24,7 +24,7 @@ class ConfirmationService
             # to avoid issues with Shibboleth authentication
             # See details in routes.rb
             url:
-                "#{Rails.application.config.base_url}/hash/public/letters/#{
+                "#{Rails.application.config.base_url}/hash/external/letters/#{
                     @confirmation.url_token
                 }",
             nag_count: @confirmation.nag_count,

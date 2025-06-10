@@ -1,3 +1,4 @@
+import React from "react";
 import {
     Alert,
     Button,
@@ -65,8 +66,8 @@ function compareDDAH(d1: ConfirmationDdahRowData, d2: ConfirmationDdahRowData) {
 export function DdahConfirmationDialog(props: {
     selectedDdahs: Ddah[];
     visible: boolean;
-    setVisible: Function;
-    callback: Function;
+    setVisible: (visible: boolean) => void;
+    callback: () => void;
     title: string;
     body: string;
     confirmation: string;

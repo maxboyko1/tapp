@@ -9,7 +9,7 @@ import {
     Posting,
     WageChunk,
 } from "../../api/defs/types";
-import { isQuestionsFieldInValidFormat, formatCustomQuestionsForExport } from "../../components/custom-question-utils";
+import { isQuestionsFieldInValidFormat } from "../../components/custom-question-utils";
 import { spreadsheetUndefinedToNull } from "../import-export/undefinedToNull";
 import { prepareMinimal } from "./prepare-minimal";
 
@@ -46,7 +46,7 @@ function flattenDuties(ddah: Ddah) {
 function formatDateForSpreadsheet(date: string | number | null | undefined) {
     try {
         return date && new Date(date).toJSON().slice(0, 10);
-    } catch (e) {
+    } catch {
         return "";
     }
 }
@@ -225,7 +225,7 @@ export const prepareSpreadsheet = {
                         .map(
                             (document) =>
                                 new URL(
-                                    `${baseUrl}/public/files/${document.url_token}`
+                                    `${baseUrl}/external/files/${document.url_token}`
                                 ).href
                         )
                         .join(" "),
@@ -324,37 +324,55 @@ export const prepareSpreadsheet = {
         // Most of the information about the posting is exported in the first row of the spreadsheet.
         // However, the PostingPositions take many rows. In the additional rows we fill cells with
         // `null` so that they show up empty in the spreadsheet.
+        let questionHeaders: string[] = [];
+        let questionValues: string[] = [];
+        if (isQuestionsFieldInValidFormat(posting.custom_questions)) {
+            const questions = posting.custom_questions?.elements.map(q => q.name) ?? [];
+            questionHeaders = Array.from({ length: questions.length }, () => "question");
+            questionValues = questions;
+        } else {
+            // Invalid format: put error message in first question column, rest blank
+            questionHeaders = ["custom_questions"];
+            questionValues = ["Unsupported questions format"];
+        }
+
         const firstItems = [
             posting.name,
             posting.open_date,
             posting.close_date,
         ];
+        const emptyFirstItems = [null, null, null];
+
+        // Standard headers
+        const baseHeaders = [
+            "Name",
+            "Open Date",
+            "Close Date",
+            "Position Code",
+            "Num Positions",
+            "Hours per Assignment",
+            "Intro Text",
+        ];
         const lastItems = [
             posting.intro_text,
-            formatCustomQuestionsForExport(posting.custom_questions),
         ];
-        const emptyFirstItems = [null, null, null];
-        const emptyLastItems = [null, null];
+        const emptyLastItems = [null];
+
+        // Compose the header row
+        const headers = [
+            ...baseHeaders,
+            ...questionHeaders,
+        ];
+
         return spreadsheetUndefinedToNull(
-            (
-                [
-                    [
-                        "Name",
-                        "Open Date",
-                        "Close Date",
-                        "Position Code",
-                        "Num Positions",
-                        "Hours per Assignment",
-                        "Intro Text",
-                        "Custom Questions",
-                    ],
-                ] as CellType[][]
-            ).concat(
-                Array.from(
+            [
+                headers,
+                ...Array.from(
                     { length: Math.max(posting.posting_positions.length, 1) },
                     (_, i) => {
                         const first = i === 0 ? firstItems : emptyFirstItems;
                         const last = i === 0 ? lastItems : emptyLastItems;
+                        const questions = i === 0 ? questionValues : questionHeaders.map(() => null);
                         const postingPosition = posting.posting_positions[i];
 
                         return [
@@ -363,10 +381,11 @@ export const prepareSpreadsheet = {
                             postingPosition?.num_positions,
                             postingPosition?.hours,
                             ...last,
+                            ...questions,
                         ];
                     }
                 )
-            )
+            ]
         );
     },
     ddah: function prepareDdahsSpreadsheet(ddahs: Ddah[]) {

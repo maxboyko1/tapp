@@ -38,7 +38,7 @@ export function ConnectedImportAppointmentsAction({
     setImportInProgress = null
 }: {
     disabled: boolean;
-    setImportInProgress: Function | null;
+    setImportInProgress: ((state: boolean) => void) | null;
 }) {
     const dispatch = useThunkDispatch();
     const applicantMatchingData = useSelector(applicantMatchingDataSelector);
@@ -174,7 +174,7 @@ export function ConnectedExportAppointmentsAction({
     setExportInProgress = null
 }: {
     disabled: boolean;
-    setExportInProgress: Function | null;
+    setExportInProgress: ((state: boolean) => void) | null;
 }) {
     const dispatch = useThunkDispatch();
     const [exportType, setExportType] = React.useState<ExportFormat | null>(

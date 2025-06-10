@@ -56,7 +56,7 @@ export default function ConnectedApp() {
         );
     }
     if (activeRole === "ta") {
-        body = <div>"Viewing as TA"</div>;
+        body = <div>&quot;Viewing as TA&quot;</div>;
     }
 
     return (

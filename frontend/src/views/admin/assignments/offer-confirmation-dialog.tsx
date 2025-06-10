@@ -65,8 +65,8 @@ function compareAssignment(a1: Assignment, a2: Assignment) {
 export function OfferConfirmationDialog(props: {
     data: Assignment[];
     visible: boolean;
-    setVisible: Function;
-    callback: Function;
+    setVisible: (visible: boolean) => void;
+    callback: () => Promise<any> | void;
     title: string;
     body: string;
     confirmation: string;

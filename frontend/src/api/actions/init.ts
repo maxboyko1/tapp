@@ -1,3 +1,6 @@
+import { Action } from "redux";
+import { ThunkAction } from "redux-thunk";
+
 import {
     setActiveSession,
     fetchSessions,
@@ -21,9 +24,7 @@ import { fetchPositions, fetchPositionsSuccess } from "./positions";
 import { setGlobals, globalsSelector } from "./globals";
 import { parseURLSearchString } from "../../libs/urls";
 import { fetchDdahs } from "./ddahs";
-import { ThunkAction } from "redux-thunk";
 import { RootState } from "../../rootReducer";
-import { Action } from "redux";
 import {
     fetchInstructorPreferences,
     fetchInstructorPreferencesSuccess,
@@ -60,7 +61,7 @@ function toggleMockApi(enableMockAPI: boolean) {
     // in production, ToggleMockApi is a no-op. In development, it actually
     // does something.
     /* eslint-disable */
-    if (enableMockAPI != null && process.env.REACT_APP_DEV_FEATURES) {
+    if (enableMockAPI != null && import.meta.env.VITE_DEV_FEATURES) {
         const mock = require("../mockAPI");
         const mockAPI = mock.mockAPI;
 

@@ -17,7 +17,7 @@ import {
     contractTemplatesSelector,
 } from "../../../api/actions";
 import { PositionEditor } from "../../../components/forms/position-editor";
-import { areAllQuestionsNonEmpty, emptyCustomQuestions } from "../../../components/custom-question-utils";
+import { areAllQuestionsValid, emptyCustomQuestions } from "../../../components/custom-question-utils";
 import {
     ContractTemplate,
     Instructor,
@@ -56,7 +56,7 @@ export function AddPositionDialog(props: {
     show: boolean;
     onHide: (...args: any[]) => any;
     positions: Position[];
-    upsertPosition: Function;
+    upsertPosition: (position: Partial<Position>) => void;
     instructors: Instructor[];
     contractTemplates: ContractTemplate[];
 }) {
@@ -133,7 +133,7 @@ export function AddPositionDialog(props: {
                     disabled={
                         !!conflicts.delayShow ||
                         !!conflicts.immediateShow ||
-                        !areAllQuestionsNonEmpty(newPosition.custom_questions)
+                        !areAllQuestionsValid(newPosition.custom_questions)
                     }
                     variant="contained"
                     color="primary"

@@ -10,10 +10,10 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { useParams } from "react-router-dom";
-import { RawDdahDetails } from "../../../api/defs/types";
+import { RawOffer } from "../../../api/defs/types";
 import { apiGET, apiPOST } from "../../../libs/api-utils";
 
-import "./view-ddah.css";
+import "./view-offer.css";
 
 function capitalize(text: string) {
     return text
@@ -22,11 +22,13 @@ function capitalize(text: string) {
         .join(" ");
 }
 
-export function DdahView() {
+export default function ContractView() {
     const params = useParams<{ url_token?: string }>();
     const url_token = params?.url_token;
-    const [ddah, setDdah] = React.useState<RawDdahDetails | null>(null);
-    const [decision, setDecision] = React.useState<"accept" | null>(null);
+    const [offer, setOffer] = React.useState<RawOffer | null>(null);
+    const [decision, setDecision] = React.useState<"accept" | "reject" | null>(
+        null
+    );
     const [signature, setSignature] = React.useState("");
     const [confirmationDialogVisible, setConfirmationDialogVisible] =
         React.useState(false);
@@ -34,35 +36,37 @@ export function DdahView() {
 
     // If the offer's status has been set to accepted/rejected/withdrawn,
     // no further interaction with the offer is permitted.
-    const frozen = ["acknowledged"].includes(ddah?.status || "");
+    const frozen = ["accepted", "rejected", "withdrawn"].includes(
+        offer?.status || ""
+    );
 
     React.useEffect(() => {
         async function fetchOffer() {
             try {
-                const details: RawDdahDetails | null = await apiGET(
-                    `/public/ddahs/${url_token}/details`,
+                const details: RawOffer | null = await apiGET(
+                    `/external/contracts/${url_token}/details`,
                     true
                 );
-                setDdah(details);
+                setOffer(details);
             } catch (e) {
                 console.warn(e);
             }
         }
         fetchOffer();
-    }, [setDdah, url_token]);
+    }, [setOffer, url_token]);
 
     async function submitDecision() {
         if (decision == null) {
             throw new Error("Cannot submit a `null` decision");
         }
         const data = { decision, signature: signature || null };
-        await apiPOST(`/public/ddahs/${url_token}/${decision}`, data, true);
+        await apiPOST(`/external/contracts/${url_token}/${decision}`, data, true);
     }
     async function confirmClicked() {
         setWaiting(true);
         await submitDecision();
         setWaiting(false);
-        // @ts-ignore
+        // @ts-expect-error deprecated but necessary for legacy browser support
         window.location.reload(true);
     }
 
@@ -70,27 +74,24 @@ export function DdahView() {
         return <React.Fragment>Unknown URL token.</React.Fragment>;
     }
 
-    if (ddah == null) {
+    if (offer == null) {
         return <React.Fragment>Loading...</React.Fragment>;
     }
 
-    const position_code = ddah.position_code;
-    const status = ddah.status;
+    const position_code = offer.position_code;
+    const status = offer.status;
 
     return (
         <div className="contract-page">
             <div className="header">
-                <h1>
-                    Description of Duties and Allocation of Hours for{" "}
-                    {position_code}
-                </h1>
+                <h1>Offer of Teaching Assistantship for {position_code}</h1>
             </div>
             <div className="content">
                 <div className="decision">
                     <h3>
                         <Button
                             component="a"
-                            href={`/public/ddahs/${url_token}.pdf`}
+                            href={`/external/contracts/${url_token}.pdf`}
                             target="_blank"
                             rel="noopener"
                             variant="contained"
@@ -107,11 +108,8 @@ export function DdahView() {
                     </h1>
                     <form id="decision">
                         <h3>
-                            Please acknowledge receipt of this Description of
-                            Duties and Allocation of Hours form below. If there
-                            are any issues with your described duties or you
-                            need further clarification, please contact your
-                            course supervisor(s).
+                            I hereby accept the Teaching Assistantship position
+                            offered:
                         </h3>
                         <div className="decision-container">
                             <input
@@ -123,13 +121,37 @@ export function DdahView() {
                                 name="decision"
                                 disabled={frozen}
                             />
-                            <label htmlFor="radio-accept">Acknowledge</label>
+                            <label htmlFor="radio-accept">Accept</label>
+                            <input
+                                checked={decision === "reject"}
+                                onChange={() => setDecision("reject")}
+                                type="radio"
+                                value="reject"
+                                id="radio-reject"
+                                name="decision"
+                                disabled={frozen}
+                            />
+                            <label htmlFor="radio-reject">Reject</label>
                             <div className="signature">
                                 <div>
                                     <label htmlFor="signature_name">
                                         <p>
-                                            To confirm your acknowledgement,
-                                            please type your name below.
+                                            I confirm that I will be registered
+                                            as a University of Toronto student
+                                            or PDF on the date that this
+                                            appointment begins. I understand
+                                            that if I should cease to be
+                                            registered as a University of
+                                            Toronto student or PDF during the
+                                            period of this appointment, for any
+                                            reason other than convocation, I
+                                            must immediately notify my
+                                            supervisor, and my appointment may
+                                            be terminated.
+                                        </p>
+                                        <p>
+                                            To accept this contract, type your
+                                            initials:
                                         </p>
                                     </label>
                                     <input
@@ -167,12 +189,20 @@ export function DdahView() {
                             </Button>
                         </div>
                     </form>
-                    <div className="admonishment"></div>
+                    <div className="admonishment">
+                        <p>
+                            <b>Important:</b> In order to arrange payroll, if
+                            this is your first TA-ship or your SIN number has
+                            been changed since your last TA-ship, you must
+                            supply the department office with appropriate
+                            documentation.
+                        </p>
+                    </div>
                 </div>
                 <div className="contract-view">
                     <iframe
                         title="Contract"
-                        src={`/public/ddahs/${url_token}`}
+                        src={`/external/contracts/${url_token}`}
                     ></iframe>
                 </div>
             </div>
@@ -183,7 +213,7 @@ export function DdahView() {
                 fullWidth
             >
                 <DialogTitle sx={{ m: 0, p: 2 }}>
-                    Acknowledge DDAH
+                    {capitalize(decision || "")} Offer
                     <IconButton
                         aria-label="close"
                         onClick={() => setConfirmationDialogVisible(false)}
@@ -199,7 +229,7 @@ export function DdahView() {
                     </IconButton>
                 </DialogTitle>
                 <DialogContent dividers>
-                    Are you sure you want to <b>acknowledge</b> the DDAH?
+                    Are you sure you want to <b>{decision}</b> the TA-ship for this offer?
                 </DialogContent>
                 <DialogActions>
                     <Button
@@ -214,7 +244,7 @@ export function DdahView() {
                         disabled={waiting}
                         startIcon={waiting ? <CircularProgress size={18} /> : null}
                     >
-                        Acknowledge DDAH
+                        {capitalize(decision || "")} Offer
                     </Button>
                 </DialogActions>
             </Dialog>

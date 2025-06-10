@@ -70,7 +70,7 @@ class Api::V1::DebugController < ApplicationController
                 path = route.path.spec.to_s
 
                 # skip over any /rails specific routes
-                if !path.start_with?('/api/') && !path.start_with?('/public')
+                if !path.start_with?('/api/') && !path.start_with?('/external')
                     next
                 end
 

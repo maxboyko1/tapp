@@ -31,25 +31,16 @@ const applicantMatchingDatumModalColumn: AdvancedColumnDef<ApplicantMatchingDatu
     {
         header: "Minimum Hours Owed",
         accessorKey: "min_hours_owed",
-        meta: {
-            className: "number-cell",
-        },
         maxSize: 70,
     },
     {
         header: "Maximum Hours Owed",
         accessorKey: "max_hours_owed",
-        meta: {
-            className: "number-cell",
-        },
         maxSize: 70,
     },
     {
         header: "Hours Previously Fulfilled",
         accessorKey: "prev_hours_fulfilled",
-        meta: {
-            className: "number-cell",
-        },
         maxSize: 70,
     },
     {
@@ -76,8 +67,8 @@ function compareAppointment(a1: ApplicantMatchingDatum, a2: ApplicantMatchingDat
 export function GuaranteeConfirmDialog(props: {
     data: ApplicantMatchingDatum[];
     visible: boolean;
-    setVisible: Function;
-    callback: Function;
+    setVisible: (visible: boolean) => void;
+    callback: () => Promise<any> | void;
     title: string;
     body: string;
     confirm: string;

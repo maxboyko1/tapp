@@ -304,7 +304,10 @@ Rails
             end
         end
 
-        namespace :public, format: false do
+        # Changed name of this namespace from `public` to `external`, because the Vite build
+        # system automatically treats routes with `public` in them as ones for static assets,
+        # so we changed the name to avoid potential conflicts.
+        namespace :external, format: false do
             # setting format to `nil` makes :format an optional url param
             resources :contracts, only: %i[show], format: nil do
                 get :view, format: false, to: 'contracts#view'

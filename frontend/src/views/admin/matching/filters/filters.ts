@@ -9,11 +9,17 @@ export type FilterType =
     | "status"
     | "hourFulfillment";
 
+type FilterFunc = (
+    applicantSummaries: ApplicantSummary[],
+    excludeValues: any[],
+    position?: Position
+) => ApplicantSummary[];
+
 export const filterMap: Record<
     FilterType,
     {
         label: string;
-        func: Function;
+        func: FilterFunc;
         values: { label: string; value: any }[];
         hasOther: boolean;
     }
@@ -107,7 +113,8 @@ export function applyFilters(
         } else {
             filteredList = filterMap[key as FilterType].func(
                 filteredList,
-                filterList[key as FilterType]
+                filterList[key as FilterType],
+                undefined
             );
         }
     }
@@ -133,7 +140,8 @@ function checkIsOther(filterType: FilterType, value: any) {
  */
 function filterByProgram(
     applicantSummaries: ApplicantSummary[],
-    excludeValues: string[]
+    excludeValues: string[],
+    _position?: Position
 ) {
     if (excludeValues.length === 0) {
         return applicantSummaries;
@@ -161,7 +169,8 @@ function filterByProgram(
  */
 function filterByDept(
     applicantSummaries: ApplicantSummary[],
-    excludeValues: string[]
+    excludeValues: string[],
+    _position?: Position
 ) {
     if (excludeValues.length === 0) {
         return applicantSummaries;
@@ -190,7 +199,7 @@ function filterByDept(
 function filterByTaPref(
     applicantSummaries: ApplicantSummary[],
     excludeValues: any[],
-    position: Position
+    position?: Position
 ) {
     if (
         applicantSummaries.length === 0 ||
@@ -231,7 +240,7 @@ function filterByTaPref(
 function filterByPositionStatus(
     applicantSummaries: ApplicantSummary[],
     excludeValues: string[],
-    position: Position
+    position?: Position
 ) {
     if (
         applicantSummaries.length === 0 ||
@@ -252,7 +261,8 @@ function filterByPositionStatus(
  */
 function filterByHourFulfillment(
     applicantSummaries: ApplicantSummary[],
-    excludeValues: string[]
+    excludeValues: string[],
+    _position?: Position
 ) {
     if (applicantSummaries.length === 0 || excludeValues.length === 0) {
         return applicantSummaries;

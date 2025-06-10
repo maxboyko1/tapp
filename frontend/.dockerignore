@@ -2,3 +2,4 @@
 .dockerignore
 log/*
 tmp/*
+node_modules

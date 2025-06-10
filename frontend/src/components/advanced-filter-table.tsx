@@ -19,6 +19,10 @@ import EditIcon from "@mui/icons-material/Edit";
 import LockIcon from "@mui/icons-material/Lock";
 import SaveIcon from "@mui/icons-material/Save";
 
+/**
+ * Extension of standard material-react-table column definitions for AdvancedFilterTable for defining
+ * custom cell "editing mode" behaviour, according to the data type and contents of the cell.
+ */
 export type AdvancedColumnDef<T extends MRT_RowData> = MRT_ColumnDef<T> & {
     EditCell?: (props: {
         value: any;
@@ -28,14 +32,11 @@ export type AdvancedColumnDef<T extends MRT_RowData> = MRT_ColumnDef<T> & {
 };
 
 /**
- * A MaterialReacttable that can be filtered and sorted. If a `setSelected`
- * function is passed in, checkboxes will be shown next to each row[[]]
- * with a non-null id and the user can select specific rows. If `filterable`
- * is true, a filter bar will appear.
- *
- * Note: `selected` is a list of ids (the `id` property on members of the `data` array).
- * Rows matching something in `selected` will be highlighted. This property can be used
- * without passing the `setSelected` function.
+ * A MaterialReactTable that (optionally) supports filtering, row selection, as well as individual
+ * row editing or deletion. Includes props for handler functions setSelected, onDelete and onEditRow
+ * for defining row selection, deletion and editing behaviour respectively, each of which may be 
+ * blocked for any specific row for whatever reason as defined by the isRowSelectable, deleteBlocked
+ * and editBlocked props respectively, optionally providing the user with help text in this case.
  */
 export function AdvancedFilterTable({
     columns,
@@ -44,7 +45,7 @@ export function AdvancedFilterTable({
     selectable = false,
     selected = [],
     setSelected,
-    isRowSelectable = (row) => true,
+    isRowSelectable = (_row) => true,
     deleteable = false,
     onDelete,
     deleteBlocked,
@@ -134,7 +135,7 @@ export function AdvancedFilterTable({
                             row,
                         });
                     }
-                    // Default to text input
+                    // Otherwise, default to text input
                     return (
                         <TextField
                             value={editValues[accessorKey] ?? cell.getValue()}
@@ -164,7 +165,6 @@ export function AdvancedFilterTable({
                 columns={enhancedColumns}
                 data={data}
                 enableEditing={editable}
-                editingMode="cell"
                 enableRowSelection={selectable ? (row) => isRowSelectable(row.original) : false}
                 enableGlobalFilter={filterable}
                 enableColumnResizing
@@ -239,7 +239,7 @@ export function AdvancedFilterTable({
                                     </span>
                                 </Tooltip>
                             )
-                        };
+                        }
                         if (editingRowId === row.id) {
                             return (
                                 <>
@@ -286,7 +286,7 @@ export function AdvancedFilterTable({
             {selectable && selectedStringIds.length > 0 && selectedStringIds.some((id) => !data.find((row) => String(row.id) === id)) && (
                 <Alert severity="warning" sx={{ mt: 2 }}>
                     <Typography>
-                        Some selected rows are not visible in the current view.
+                        Some selected rows are not currently visible.
                     </Typography>
                 </Alert>
             )}

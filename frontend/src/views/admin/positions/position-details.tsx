@@ -1,5 +1,4 @@
-
-import React from "react"
+import React from "react";
 import { useSelector } from "react-redux";
 import {
     Autocomplete,
@@ -144,6 +143,8 @@ function EditableCell({
                     renderValue={(selected: any[] = [], getTagProps) => (
                         <Stack direction="row" gap={0.25} flexWrap="wrap">
                             {selected.map((opt: any, idx: number) => (
+                                // ESLint thinks we need to define a key for this, but getTagProps covers that
+                                // eslint-disable-next-line react/jsx-key
                                 <Chip
                                     color="primary"
                                     label={

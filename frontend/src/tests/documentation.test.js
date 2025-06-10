@@ -1,6 +1,3 @@
-/**
- * @jest-environment node
- */
 /* eslint-env node */
 import { describe, it, expect, apiGET } from "./utils";
 

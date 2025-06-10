@@ -15,7 +15,7 @@ import { useSelector } from "react-redux";
 import { activeSessionSelector } from "../../../api/actions";
 import { MissingActiveSessionWarning } from "../../../components/sessions";
 
-export function AdminContractTemplatesView() {
+export default function AdminContractTemplatesView() {
     const [addDialogVisible, setAddDialogVisible] = React.useState(false);
     const activeSession = useSelector(activeSessionSelector);
     return (

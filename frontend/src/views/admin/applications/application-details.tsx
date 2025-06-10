@@ -32,6 +32,8 @@ import {
     matchesSelector,
 } from "../../../api/actions";
 
+import "survey-core/survey-core.css";
+
 interface SurveyJsPage {
     name: string;
     elements: { name: string; type: string }[];
@@ -128,7 +130,7 @@ function removeHtmlQuestions(custom_questions: any) {
 }
 
 /**
- * Create a SurveyJS Model to show with display mode.
+ * Create a SurveyJS Model to show in display mode.
  */
 function createSurveyModel(jsonSurvey: any, data: any) {
     const survey = new Model(jsonSurvey);
@@ -140,28 +142,28 @@ function createSurveyModel(jsonSurvey: any, data: any) {
     return survey;
 }
 
-const getPreferenceChipColor = (level: number) => {
+/**
+ * Map applicant preference levels to specific colors for display.
+ * @param level Preference level from -1 to 4.
+ */
+function getApplicantPreferenceChipColor(level: number) {
     switch (level) {
         case 4: return "success";
         case 3: return "primary";
         case 2: return "secondary";
-        case 1: return "warning";
-        case 0: return "info";
+        case 1: return "info";
+        case 0: return "warning";
         case -1: return "error";
         default: return "default";
     }
-};
+}
 
-const getOfferStatusColor = (status: string) => {
-    switch (status) {
-        case "accepted": return "success";
-        case "rejected":
-        case "withdrawn": return "error";
-        default: return "warning";
-    }
-};
-
-function getPreferenceLevelLabel(level: number): string {
+/**
+ * Map applicant preference levels to human-readable labels.
+ * @param level preference level from -1 to 4.
+ * @returns 
+ */
+function getApplicantPreferenceLevelLabel(level: number): string {
     switch (level) {
         case 4: return "First Choice";
         case 3: return "Second Choice";
@@ -169,6 +171,33 @@ function getPreferenceLevelLabel(level: number): string {
         case 1: return "Fourth Choice";
         case 0: return "Willing";
         default: return ""; // -1 case, means unwilling to TA
+    }
+}
+
+/**
+ * Map offer statuses to specific colors for display. 
+ * @param status
+ */
+function getOfferStatusColor(status: string) {
+    switch (status) {
+        case "accepted": return "success";
+        case "rejected":
+        case "withdrawn": return "error";
+        default: return "warning";
+    }
+}
+
+/**
+ * Map instructor preference levels to specific colors for display.
+ * @param level preference level from -1 to 2.
+ * @returns 
+ */
+function getInstructorPreferenceChipColor(level: number) {
+    switch (level) {
+        case 2: return "success";
+        case 1: return "info";
+        case 0: return "default";
+        default: return "error"; // -1, not suitable 
     }
 }
 
@@ -194,6 +223,9 @@ export function ApplicationDetails({
                 match.applicant === application.applicant && match.assigned
         );
     }, [matches, application]);
+
+    const priorAssignments: string[] =
+        (application.custom_question_answers as { prior_assignments?: string[] })?.prior_assignments ?? [];
 
     return (
         <TableContainer component={Paper}>
@@ -236,7 +268,7 @@ export function ApplicationDetails({
                         <TableCell>{application.yip}</TableCell>
                     </TableRow>
                     <TableRow>
-                        <TableCell sx={{ fontWeight: "bold" }}>Previous Experience</TableCell>
+                        <TableCell sx={{ fontWeight: "bold" }}>Experience Overview</TableCell>
                         <TableCell>
                             {application.previous_department_ta != null
                                 ? application.previous_department_ta === true
@@ -254,6 +286,50 @@ export function ApplicationDetails({
                         </TableCell>
                     </TableRow>
                     <TableRow>
+                        <TableCell sx={{ fontWeight: "bold" }}>Prior Assignments</TableCell>
+                        <TableCell>
+                            <Stack direction="row" flexWrap="wrap" gap={1}>
+                                {priorAssignments.map((assignment, idx) => (
+                                    <Chip
+                                        key={assignment + idx}
+                                        label={assignment}
+                                        color="primary"
+                                        variant="outlined"
+                                        size="small"
+                                        sx={{ mr: 1, mb: 1 }}
+                                    />
+                                ))}
+                            </Stack>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell sx={{ fontWeight: "bold" }}>Current Assignments</TableCell>
+                        <TableCell>
+                            <Stack direction="row" flexWrap="wrap" gap={1}>
+                                {applicantMatches.map((match) => (
+                                    <Chip
+                                        key={match.position.position_code}
+                                        label={`${match.position.position_code} (${match.hours_assigned})`}
+                                        color="info"
+                                        variant="outlined"
+                                        size="small"
+                                        sx={{ mr: 1, mb: 1 }}
+                                    />
+                                ))}
+                                {applicantAssignments.map((assignment) => (
+                                    <Chip
+                                        key={assignment.position.position_code}
+                                        label={`${assignment.position.position_code} (${assignment.hours})`}
+                                        color={getOfferStatusColor(assignment.active_offer_status ?? "")}
+                                        variant="outlined"
+                                        size="small"
+                                        sx={{ mr: 1, mb: 1 }}
+                                    />
+                                ))}
+                            </Stack>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
                         <TableCell sx={{ fontWeight: "bold" }}>Positions Applied For</TableCell>
                         <TableCell>
                             <Stack direction="row" flexWrap="wrap" gap={1}>
@@ -267,7 +343,7 @@ export function ApplicationDetails({
                                         <Chip
                                             key={position_preference.position.position_code}
                                             label={`${position_preference.position.position_code} (${position_preference.preference_level})`}
-                                            color={getPreferenceChipColor(position_preference.preference_level)}
+                                            color={getApplicantPreferenceChipColor(position_preference.preference_level)}
                                             size="small"
                                             sx={{ mr: 1, mb: 1 }}
                                         />
@@ -276,38 +352,13 @@ export function ApplicationDetails({
                         </TableCell>
                     </TableRow>
                     <TableRow>
-                        <TableCell sx={{ fontWeight: "bold" }}>Positions Assigned To</TableCell>
-                        <TableCell>
-                            <Stack direction="row" flexWrap="wrap" gap={1}>
-                                {applicantMatches.map((match) => (
-                                    <Chip
-                                        key={match.position.position_code}
-                                        label={`${match.position.position_code} (${match.hours_assigned})`}
-                                        color="info"
-                                        size="small"
-                                        sx={{ mr: 1, mb: 1 }}
-                                    />
-                                ))}
-                                {applicantAssignments.map((assignment) => (
-                                    <Chip
-                                        key={assignment.position.position_code}
-                                        label={`${assignment.position.position_code} (${assignment.hours})`}
-                                        color={getOfferStatusColor(assignment.active_offer_status ?? "")}
-                                        size="small"
-                                        sx={{ mr: 1, mb: 1 }}
-                                    />
-                                ))}
-                            </Stack>
-                        </TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell sx={{ fontWeight: "bold" }}>Supporting Documents</TableCell>
+                        <TableCell sx={{ fontWeight: "bold" }}>CV/Transcript(s)</TableCell>
                         <TableCell>
                             <Stack direction="row" flexWrap="wrap" gap={1}>
                                 {application.documents.map((document) => (
                                     <Button
                                         key={document.name}
-                                        href={formatDownloadUrl(`/public/files/${document.url_token}`)}
+                                        href={formatDownloadUrl(`/external/files/${document.url_token}`)}
                                         title={`Download ${document.name} (${Math.round(document.size / 1024)} kb)`}
                                         variant="outlined"
                                         size="small"
@@ -344,9 +395,8 @@ export function ApplicationDetails({
                                                     <DisplayRating rating={pref.preference_level} />
                                                 </Box>
                                             }
-                                            color="default"
+                                            color={getInstructorPreferenceChipColor(pref.preference_level)}
                                             size="small"
-                                            sx={{ mr: 1, mb: 1 }}
                                         />
                                     ))}
                             </Stack>
@@ -356,9 +406,10 @@ export function ApplicationDetails({
                         <TableCell sx={{ fontWeight: "bold" }}>Submission Date</TableCell>
                         <TableCell>{formatDateTime(application.submission_date)}</TableCell>
                     </TableRow>
+                    {/* Display posting-specific question answers as survey results */}
                     {application.posting?.custom_questions && (
                         <TableRow>
-                            <TableCell sx={{ fontWeight: "bold" }}>Posting Answers</TableCell>
+                            <TableCell sx={{ fontWeight: "bold" }}>Posting-Specific Answers</TableCell>
                             <TableCell>
                                 <Survey
                                     model={createSurveyModel(
@@ -369,6 +420,8 @@ export function ApplicationDetails({
                             </TableCell>
                         </TableRow>
                     )}
+                    {/* Display position-specific question answers as individual survey results,
+                      * in descending order of applicant-specified prefrence levels */}
                     {application.position_preferences
                         .filter(
                             (pref) =>
@@ -390,7 +443,7 @@ export function ApplicationDetails({
                                         {position.position_code} Answers
                                         {" "}
                                         <span style={{ fontWeight: "normal", color: "#888" }}>
-                                            ({getPreferenceLevelLabel(pref.preference_level)})
+                                            ({getApplicantPreferenceLevelLabel(pref.preference_level)})
                                         </span>
                                     </TableCell>
                                     <TableCell>

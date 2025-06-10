@@ -1,71 +1,71 @@
 import { documentCallback, wrappedPropTypes } from "../defs/doc-generation";
 
-export const publicRoutes = {
+export const externalRoutes = {
     get: {
-        "/public/ddahs/:token": documentCallback({
+        "/external/ddahs/:token": documentCallback({
             func: () => {
                 throw new Error("Not implemented in Mock API");
             },
             summary: "Get the contents of ddah as `html` or `pdf`",
             returns: wrappedPropTypes.any,
         }),
-        "/public/ddahs/:token/view": documentCallback({
+        "/external/ddahs/:token/view": documentCallback({
             func: () => {
                 throw new Error("Not implemented in Mock API");
             },
             summary: "View a ddah with an accept dialog",
             returns: wrappedPropTypes.any,
         }),
-        "/public/ddahs/:token/details": documentCallback({
+        "/external/ddahs/:token/details": documentCallback({
             func: () => {
                 throw new Error("Not implemented in Mock API");
             },
             summary: "Get JSON information about a DDAH",
             returns: wrappedPropTypes.any,
         }),
-        "/public/contracts/:token": documentCallback({
+        "/external/contracts/:token": documentCallback({
             func: () => {
                 throw new Error("Not implemented in Mock API");
             },
             summary: "Get an offer as `html` or `pdf`",
             returns: wrappedPropTypes.any,
         }),
-        "/public/contracts/:token/view": documentCallback({
+        "/external/contracts/:token/view": documentCallback({
             func: () => {
                 throw new Error("Not implemented in Mock API");
             },
             summary: "View an offer with an accept dialog",
             returns: wrappedPropTypes.any,
         }),
-        "/public/contracts/:token/details": documentCallback({
+        "/external/contracts/:token/details": documentCallback({
             func: () => {
                 throw new Error("Not implemented in Mock API");
             },
             summary: "Get a JSON object with all the details about the offer",
             returns: wrappedPropTypes.any,
         }),
-        "/public/letters/:token": documentCallback({
+        "/external/letters/:token": documentCallback({
             func: () => {
                 throw new Error("Not implemented in Mock API");
             },
             summary: "Get an appointment confirmation as `html` or `pdf`",
             returns: wrappedPropTypes.any,
         }),
-        "/public/letters/:token/view": documentCallback({
+        "/external/letters/:token/view": documentCallback({
             func: () => {
                 throw new Error("Not implemented in Mock API");
             },
             summary: "View an appointment confirmation with an accept dialog",
             returns: wrappedPropTypes.any,
         }),
-        "/public/letters/:token/details": documentCallback({
+        "/external/letters/:token/details": documentCallback({
             func: () => {
                 throw new Error("Not implemented in Mock API");
             },
             summary: "Get a JSON object with all the details about the appointment confirmation",
             returns: wrappedPropTypes.any,
         }),
-        "/public/postings/:token": documentCallback({
+        "/external/postings/:token": documentCallback({
             func: () => {
                 throw new Error("Not implemented in Mock API");
             },
@@ -73,7 +73,7 @@ export const publicRoutes = {
                 "Get a JSON object with the survey_js data for the posting",
             returns: wrappedPropTypes.any,
         }),
-        "/public/files/:token": documentCallback({
+        "/external/files/:token": documentCallback({
             func: () => {
                 throw new Error("Not implemented in Mock API");
             },
@@ -82,42 +82,42 @@ export const publicRoutes = {
         }),
     },
     post: {
-        "/public/ddahs/:token/accept": documentCallback({
+        "/external/ddahs/:token/accept": documentCallback({
             func: () => {
                 throw new Error("Not implemented in Mock API");
             },
             summary: "Set a ddah as accepted",
             returns: wrappedPropTypes.any,
         }),
-        "/public/contracts/:token/accept": documentCallback({
+        "/external/contracts/:token/accept": documentCallback({
             func: () => {
                 throw new Error("Not implemented in Mock API");
             },
             summary: "Accept an offer",
             returns: wrappedPropTypes.any,
         }),
-        "/public/contracts/:token/reject": documentCallback({
+        "/external/contracts/:token/reject": documentCallback({
             func: () => {
                 throw new Error("Not implemented in Mock API");
             },
             summary: "Reject an offer",
             returns: wrappedPropTypes.any,
         }),
-        "/public/letters/:token/accept": documentCallback({
+        "/external/letters/:token/accept": documentCallback({
             func: () => {
                 throw new Error("Not implemented in Mock API");
             },
             summary: "Accept an appointment confirmation",
             returns: wrappedPropTypes.any,
         }),
-        "/public/letters/:token/reject": documentCallback({
+        "/external/letters/:token/reject": documentCallback({
             func: () => {
                 throw new Error("Not implemented in Mock API");
             },
             summary: "Reject an appointment confirmation",
             returns: wrappedPropTypes.any,
         }),
-        "/public/postings/:token/submit": documentCallback({
+        "/external/postings/:token/submit": documentCallback({
             func: () => {
                 throw new Error("Not implemented in Mock API");
             },

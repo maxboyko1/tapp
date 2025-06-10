@@ -206,7 +206,6 @@ interface DispatcherParams<RetType, ArgType extends unknown[]> {
  */
 export function validatedApiDispatcher<RetType, ArgType extends unknown[]>({
     dispatcher,
-    name,
     description,
     onErrorDispatch,
 }: DispatcherParams<RetType, ArgType>

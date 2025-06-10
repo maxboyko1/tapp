@@ -602,7 +602,7 @@ export function offerDownloadTests(api) {
 
         const offerHtml = (
             await axios.get(
-                `${BACKEND_BASE_URL}/public/contracts/${newOffer.url_token}`
+                `${BACKEND_BASE_URL}/external/contracts/${newOffer.url_token}`
             )
         ).data;
 
@@ -614,7 +614,7 @@ export function offerDownloadTests(api) {
         // Get the PDF version
         const offerPdf = (
             await axios.get(
-                `${BACKEND_BASE_URL}/public/contracts/${newOffer.url_token}.pdf`
+                `${BACKEND_BASE_URL}/external/contracts/${newOffer.url_token}.pdf`
             )
         ).data;
         // All PDF files start with the text "%PDF"

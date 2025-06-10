@@ -43,12 +43,12 @@ function PostingLinkDialog({
     onHide: (...args: any[]) => void;
 }) {
     let urlString: string;
-    if (process.env.REACT_APP_DEV_FEATURES) {
+    if (import.meta.env.VITE_DEV_FEATURES) {
         // In development mode, use hash routing as a string
-        urlString = `${window.location.origin}/#/public/postings/${posting.url_token}`;
+        urlString = `${window.location.origin}/#/external/postings/${posting.url_token}`;
     } else {
         // In production, use the /hash route
-        urlString = `${window.location.origin}/hash/public/postings/${posting.url_token}`;
+        urlString = `${window.location.origin}/hash/external/postings/${posting.url_token}`;
     }
 
     let warning = null;
@@ -97,7 +97,7 @@ function PostingLinkDialog({
     );
 }
 
-function ConnectedPostingDetails() {
+export default function ConnectedPostingDetails() {
     const activeSession = useSelector(activeSessionSelector) as Session | null;
     const postings = useSelector(postingsSelector);
     const dispatch = useThunkDispatch();
@@ -125,7 +125,10 @@ function ConnectedPostingDetails() {
                     setPostingIsForDifferentSession(false);
                 }
                 await dispatch(fetchPostingPositionsForPosting(posting));
-            } catch (e) {}
+            } catch (e) {
+                // eslint-disable-next-line no-console
+                console.error(e);
+            }
         }
 
         if (activeSession && posting_id != null) {
@@ -201,5 +204,3 @@ function ConnectedPostingDetails() {
         </div>
     );
 }
-
-export { ConnectedPostingDetails as PostingDetails };

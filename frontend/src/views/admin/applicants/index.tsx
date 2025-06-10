@@ -16,7 +16,7 @@ import {
 } from "../../../components/action-buttons";
 import { ContentArea } from "../../../components/layout";
 
-export function AdminApplicantsView() {
+export default function AdminApplicantsView() {
     const [addDialogVisible, setAddDialogVisible] = React.useState(false);
     const [inDeleteMode, setInDeleteMode] = React.useState(false);
     return (
