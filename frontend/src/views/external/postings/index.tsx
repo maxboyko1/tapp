@@ -190,9 +190,6 @@ export default function PostingView() {
         fetchSurvey();
     }, [url_token, setSurveyJson, setSurveyPrefilledData, setApplicationOpen]);
 
-    console.log("PostingView: surveyJson", surveyJson);
-    console.log("PostingView: surveyPrefilledData", surveyPrefilledData);
-
     // Render the survey model using the retrieved survey JSON and prefilled data
     const survey = React.useMemo(() => {
         if (!surveyJson) return null;

@@ -221,7 +221,7 @@ export function ConnectedPostingDetailsView({ posting }: { posting: Posting }) {
                     />
                 </>
             ) : (
-                <Typography color="error">
+                <Typography variant="body2" color="error">
                     (Uneditable, questions in deprecated JSON format)
                 </Typography>
             )}
