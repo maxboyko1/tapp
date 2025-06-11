@@ -55,7 +55,7 @@ export function ApplicationDetailModal({
             <DialogActions>
                 <Button
                     onClick={() => setShownApplication(null)}
-                    variant="outlined"
+                    variant="contained"
                     color="secondary"
                 >
                     Close

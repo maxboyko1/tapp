@@ -107,7 +107,7 @@ function EditCustomQuestionsDialog({
                         </Button>
                     </Box>
                 ) : (
-                    <Typography color="error">
+                    <Typography variant="body2" color="error">
                         (Uneditable, questions in deprecated JSON format)
                     </Typography>
                 )}
@@ -195,7 +195,7 @@ export function EditCustomQuestionsCell({
                     />
                 </>
             ) : (
-                <Typography color="error">
+                <Typography variant="body2" color="error">
                     (Uneditable, questions in deprecated JSON format)
                 </Typography>
             )}
