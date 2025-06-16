@@ -89,6 +89,14 @@ export function ContractTemplateEditor(props: {
                         isOptionEqualToValue={(option, value) => option === value}
                         freeSolo={false}
                         disableClearable
+                        slotProps={{
+                            paper: {
+                                sx: (theme) => ({
+                                    backgroundColor: theme.palette.primary.main,
+                                    color: theme.palette.primary.contrastText,
+                                })
+                            }
+                        }}
                     />
                 </React.Fragment>
             </DialogRow>

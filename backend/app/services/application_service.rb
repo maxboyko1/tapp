@@ -20,9 +20,6 @@ class ApplicationService
             'program',
             'department',
             'yip',
-            'previous_department_ta',
-            'previous_university_ta',
-            'previous_experience_summary',
             'gpa',
             'comments'
         ).compact
@@ -98,10 +95,6 @@ class ApplicationService
                 ].max.in_time_zone('Eastern Time (US & Canada)'),
             program: @application.program,
             department: @application.department,
-            previous_department_ta: @application.previous_department_ta,
-            previous_university_ta: @application.previous_university_ta,
-            previous_experience_summary:
-                @application.previous_experience_summary,
             comments: @application.comments
         }
     end

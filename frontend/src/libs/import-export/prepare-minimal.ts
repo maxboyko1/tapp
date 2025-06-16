@@ -289,10 +289,6 @@ export const prepareMinimal = {
             program: application.program,
             yip: application.yip,
             cv_link: application.cv_link,
-            previous_experience_summary:
-                application.previous_experience_summary,
-            previous_department_ta: application.previous_department_ta,
-            previous_university_ta: application.previous_university_ta,
             documents: application.documents,
             custom_question_answers: application.custom_question_answers,
             posting: application.posting?.name || null,

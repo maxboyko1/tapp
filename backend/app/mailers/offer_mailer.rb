@@ -6,6 +6,11 @@ class OfferMailer < ActionMailer::Base
     def email_contract(offer)
         populate_vars offer
 
+        unless ENV['ENABLE_EMAILING'].to_s.downcase == 'true'
+            logger.warn "ENABLE_EMAILING is not true; skipping email to \"#{@email}\""
+            return
+        end
+
         debug_message = "Emailing #{@position_code} Offer to \"#{@email}\""
         logger.warn debug_message
 
@@ -30,6 +35,11 @@ class OfferMailer < ActionMailer::Base
 
     def email_nag(offer)
         populate_vars offer
+
+        unless ENV['ENABLE_EMAILING'].to_s.downcase == 'true'
+            logger.warn "ENABLE_EMAILING is not true; skipping email to \"#{@email}\""
+            return
+        end
 
         debug_message = "Emailing #{@position_code} Offer Nag to \"#{@email}\""
         logger.warn debug_message

@@ -6,6 +6,11 @@ class PostingMailer < ActionMailer::Base
     def email_application_confirmation(application)
         populate_vars application
 
+        unless ENV['ENABLE_EMAILING'].to_s.downcase == 'true'
+            logger.warn "ENABLE_EMAILING is not true; skipping email to \"#{@email}\""
+            return
+        end
+
         debug_message = "Emailing application confirmation to \"#{@email}\""
         logger.warn debug_message
 

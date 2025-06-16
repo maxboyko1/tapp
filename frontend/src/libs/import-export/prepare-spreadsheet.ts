@@ -219,7 +219,6 @@ export const prepareSpreadsheet = {
                                 JSON.stringify(pref.custom_question_answers) : null;
                             return `${posCode}:${prefLevel}:${customAnswers}`;
                         }).join("; "),
-                    application.previous_experience_summary,
                     application.comments,
                     application.documents
                         .map(

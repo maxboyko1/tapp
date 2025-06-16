@@ -44,12 +44,9 @@ export interface RawApplication extends HasId {
     comments: string | null;
     program: string | null;
     department: string | null;
-    previous_experience_summary: string | null;
     cv_link: string | null;
     yip: number | null;
     gpa: number | null;
-    previous_department_ta: boolean | null;
-    previous_university_ta: boolean | null;
     custom_question_answers: unknown | null;
     annotation: string | null;
     documents: {

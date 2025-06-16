@@ -5,6 +5,12 @@ class DdahMailer < ActionMailer::Base
 
     def email_ddah(ddah)
         generate_vars(ddah)
+
+        unless ENV['ENABLE_EMAILING'].to_s.downcase == 'true'
+            logger.warn "ENABLE_EMAILING is not true; skipping email to \"#{@email}\""
+            return
+        end
+
         debug_message =
             "Emailing #{@position_code} DDAH to \"#{@email}\" and CCing #{
                 @instructor_emails

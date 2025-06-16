@@ -171,21 +171,6 @@ class PostingService
                 ApplicationService.new application: existing_application
             data.merge! application_service.prefilled_data
         else
-            # Find out if they have previous contracts in the database.
-            # This will tell us information about whether the applicant has been previously employed
-            offer_history = assemble_offer_history(applicant)
-            unless offer_history.blank?
-                data[:previous_department_ta] = true
-                data[:previous_university_ta] = true
-                data[:previous_experience_summary] =
-                    offer_history
-                        .map do |(course, _session_name, hours, start_date, end_date)|
-                            "#{course} (#{hours} hours) from #{
-                                start_date.strftime('%b %Y')
-                            } to #{end_date.strftime('%b %Y')}"
-                        end.join '; '
-            end
-
             # Some information rarely changes from application to application.
             # For example, the program of study/department/program start.
             # We retrieve this information from the most recently completed application
@@ -251,8 +236,7 @@ class PostingService
         # Extract application info
         application_attributes = rest
         rest = application_attributes.slice!(
-            :comments, :department, :gpa, :cv_link, :previous_experience_summary,
-            :previous_department_ta, :previous_university_ta, :program
+            :comments, :department, :gpa, :cv_link, :program
         )
 
         # Build prior_assignments from the applicant's offer history

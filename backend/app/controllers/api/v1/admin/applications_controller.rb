@@ -29,13 +29,10 @@ class Api::V1::Admin::ApplicationsController < ApplicationController
             :session_id,
             :program,
             :department,
-            :previous_experience_summary,
             :yip,
             :annotation,
             :gpa,
             :cv_link,
-            :previous_department_ta,
-            :previous_university_ta,
             :custom_question_answers
         )
     end
