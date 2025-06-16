@@ -15,6 +15,7 @@ import {
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { Theme } from "@mui/material/styles";
 
 import { createDiffColumnsFromColumns } from "./diff-table";
 import { MinimalDdah, Ddah, Assignment, Duty } from "../api/defs/types";
@@ -192,6 +193,14 @@ function DutyRow({
                                 description: `${newCategory}:${description}`,
                             });
                         }}
+                        MenuProps={{
+                            PaperProps: {
+                                sx: (theme: Theme) => ({
+                                    backgroundColor: theme.palette.primary.main,
+                                    color: theme.palette.primary.contrastText,
+                                }),
+                            },
+                        }}
                     >
                         <MenuItem value="note">Note</MenuItem>
                         <MenuItem value="meeting">Meetings</MenuItem>
@@ -278,6 +287,14 @@ export function DdahEditor(props: {
                     <TextField {...params} placeholder="Assignment..." size="small" />
                 )}
                 isOptionEqualToValue={(option, value) => option.id === value.id}
+                slotProps={{
+                    paper: {
+                        sx: (theme) => ({
+                            backgroundColor: theme.palette.primary.main,
+                            color: theme.palette.primary.contrastText,
+                        })
+                    }
+                }}
             />
         );
     }

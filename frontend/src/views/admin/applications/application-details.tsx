@@ -19,6 +19,7 @@ import{
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import DownloadIcon from "@mui/icons-material/Download";
+import { alpha, useTheme, Theme } from "@mui/material/styles";
 import { Model } from "survey-core";
 import { Survey } from "survey-react-ui";
 import { useSelector } from "react-redux";
@@ -38,6 +39,15 @@ interface SurveyJsPage {
     name: string;
     elements: { name: string; type: string }[];
 }
+
+// For fields in the table we are extracting from custom_question_answers
+type CustomQuestionAnswers = {
+    completed_degrees?: string;
+    previous_non_dcs_ta?: string;
+    previous_industry_work?: string;
+    research_interests?: string;
+    prior_assignments?: string[];
+};
 
 export function PreferencesLinkDialog({
     visible,
@@ -143,24 +153,29 @@ function createSurveyModel(jsonSurvey: any, data: any) {
 }
 
 /**
- * Map applicant preference levels to specific colors for display.
- * @param level Preference level from -1 to 4.
+ * Map applicant preference levels to human-readable labels.
+ * @param level preference level from 0 to 4.
+ * @returns 
  */
-function getApplicantPreferenceChipColor(level: number) {
+function getApplicantPreferenceChipStyle(theme: Theme, level: number) {
     switch (level) {
-        case 4: return "success";
-        case 3: return "primary";
-        case 2: return "secondary";
-        case 1: return "info";
-        case 0: return "warning";
-        case -1: return "error";
-        default: return "default";
+        case 4:
+            return { backgroundColor: alpha(theme.palette.success.main, 0.8), color: "#fff" };
+        case 3:
+            return { backgroundColor: alpha(theme.palette.success.main, 0.25), color: theme.palette.success.main };
+        case 2:
+            return { backgroundColor: alpha(theme.palette.secondary.main, 0.8), color: "#fff" };
+        case 1:
+            return { backgroundColor: alpha(theme.palette.secondary.main, 0.25), color: theme.palette.secondary.main };
+        case 0:
+            return { backgroundColor: theme.palette.warning.main, color: "#fff" };
+        default:
+            return {};
     }
 }
-
 /**
  * Map applicant preference levels to human-readable labels.
- * @param level preference level from -1 to 4.
+ * @param level preference level from 0 to 4.
  * @returns 
  */
 function getApplicantPreferenceLevelLabel(level: number): string {
@@ -170,7 +185,7 @@ function getApplicantPreferenceLevelLabel(level: number): string {
         case 2: return "Third Choice";
         case 1: return "Fourth Choice";
         case 0: return "Willing";
-        default: return ""; // -1 case, means unwilling to TA
+        default: return ""; // -1 case, should not reach
     }
 }
 
@@ -206,6 +221,8 @@ export function ApplicationDetails({
 }: {
     application: Application;
 }) {
+    const theme = useTheme();
+
     const instructorPreferences = application.instructor_preferences;
     const assignments = useSelector(assignmentsSelector) as Assignment[];
     const applicantAssignments = React.useMemo(() => {
@@ -224,8 +241,7 @@ export function ApplicationDetails({
         );
     }, [matches, application]);
 
-    const priorAssignments: string[] =
-        (application.custom_question_answers as { prior_assignments?: string[] })?.prior_assignments ?? [];
+    const customAnswers = application.custom_question_answers as CustomQuestionAnswers;
 
     return (
         <TableContainer component={Paper}>
@@ -270,26 +286,47 @@ export function ApplicationDetails({
                     <TableRow>
                         <TableCell sx={{ fontWeight: "bold" }}>Experience Overview</TableCell>
                         <TableCell>
-                            {application.previous_department_ta != null
-                                ? application.previous_department_ta === true
-                                    ? "TAed for department; "
-                                    : "Has not TAed for department; "
-                                : null}
-                            {application.previous_university_ta != null
-                                ? application.previous_university_ta === true
-                                    ? "TAed for university; "
-                                    : "Has not TAed at this university; "
-                                : null}
-                            {application.previous_experience_summary
-                                ? `Experience Summary: ${application.previous_experience_summary}`
-                                : null}
+                            <Stack spacing={1}>
+                                {customAnswers.completed_degrees && (
+                                    <div>
+                                        <span style={{ fontStyle: "italic" }}>
+                                            Completed Degrees:
+                                        </span>{" "}
+                                        {customAnswers.completed_degrees}
+                                    </div>
+                                )}
+                                {customAnswers.previous_non_dcs_ta && (
+                                    <div>
+                                        <span style={{ fontStyle: "italic" }}>
+                                            Non-DCS TA Experience:
+                                        </span>{" "}
+                                        {customAnswers.previous_non_dcs_ta}
+                                    </div>
+                                )}
+                                {customAnswers.previous_industry_work && (
+                                    <div>
+                                        <span style={{ fontStyle: "italic" }}>
+                                            Industry Work:
+                                        </span>{" "}
+                                        {customAnswers.previous_industry_work}
+                                    </div>
+                                )}
+                                {customAnswers.research_interests && (
+                                    <div>
+                                        <span style={{ fontStyle: "italic" }}>
+                                            Research Interests:
+                                        </span>{" "}
+                                        {customAnswers.research_interests}
+                                    </div>
+                                )}
+                            </Stack>
                         </TableCell>
                     </TableRow>
                     <TableRow>
                         <TableCell sx={{ fontWeight: "bold" }}>Prior Assignments</TableCell>
                         <TableCell>
                             <Stack direction="row" flexWrap="wrap" gap={1}>
-                                {priorAssignments.map((assignment, idx) => (
+                                {customAnswers.prior_assignments?.map((assignment, idx) => (
                                     <Chip
                                         key={assignment + idx}
                                         label={assignment}
@@ -334,6 +371,7 @@ export function ApplicationDetails({
                         <TableCell>
                             <Stack direction="row" flexWrap="wrap" gap={1}>
                                 {application.position_preferences
+                                    .filter((a) => a.preference_level !== -1)
                                     .sort((a, b) =>
                                         a.preference_level > b.preference_level
                                             ? -1
@@ -343,9 +381,8 @@ export function ApplicationDetails({
                                         <Chip
                                             key={position_preference.position.position_code}
                                             label={`${position_preference.position.position_code} (${position_preference.preference_level})`}
-                                            color={getApplicantPreferenceChipColor(position_preference.preference_level)}
                                             size="small"
-                                            sx={{ mr: 1, mb: 1 }}
+                                            sx={{ mr: 1, mb: 1, ...getApplicantPreferenceChipStyle(theme, position_preference.preference_level) }}
                                         />
                                     ))}
                             </Stack>
@@ -382,10 +419,6 @@ export function ApplicationDetails({
                         <TableCell>
                             <Stack direction="row" flexWrap="wrap" gap={1}>
                                 {instructorPreferences
-                                    .filter(
-                                        (pref) =>
-                                            !(!pref.comment && pref.preference_level === 0)
-                                    )
                                     .map((pref) => (
                                         <Chip
                                             key={pref.position.position_code}

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2025_04_20_200528) do
+ActiveRecord::Schema.define(version: 2025_06_13_144542) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -86,9 +86,6 @@ ActiveRecord::Schema.define(version: 2025_04_20_200528) do
     t.string "department"
     t.integer "yip"
     t.string "annotation"
-    t.boolean "previous_department_ta"
-    t.boolean "previous_university_ta"
-    t.text "previous_experience_summary"
     t.float "gpa"
     t.json "custom_question_answers"
     t.bigint "posting_id"

@@ -210,11 +210,8 @@ export function applicationsTests({ apiGET, apiPOST }) {
                     program: "M",
                     program_start: "2017-09-05",
                     department: "cs",
-                    previous_university_ta: true,
                     some_entry: false,
-                    previous_department_ta: true,
                     previous_other_university_ta: false,
-                    previous_experience_summary: "some previous experience",
                     position_preferences: {
                         [position.position_code]: 3,
                     },
@@ -246,8 +243,6 @@ export function applicationsTests({ apiGET, apiPOST }) {
                 program: "P",
                 program_start: "2021-06-21",
                 department: "cs",
-                previous_university_ta: false,
-                previous_department_ta: false,
                 previous_other_university_ta: false,
                 comments: "My comments",
             };
@@ -264,10 +259,6 @@ export function applicationsTests({ apiGET, apiPOST }) {
                 program: submittedData.program,
                 department: submittedData.department,
                 yip: submittedData.yip,
-                previous_department_ta: submittedData.previous_department_ta,
-                previous_university_ta: submittedData.previous_university_ta,
-                previous_experience_summary:
-                    submittedData.previous_experience_summary,
                 gpa: submittedData.gpa,
                 comments: submittedData.comments,
             };

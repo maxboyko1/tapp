@@ -6,6 +6,11 @@ class ConfirmationMailer < ActionMailer::Base
     def email_letter(confirmation)
         populate_vars confirmation
 
+        unless ENV['ENABLE_EMAILING'].to_s.downcase == 'true'
+            logger.warn "ENABLE_EMAILING is not true; skipping email to \"#{@email}\""
+            return
+        end
+
         debug_message = "Emailing Appointment Confirmation Letter to \"#{@email}\""
         logger.warn debug_message
 
@@ -30,6 +35,11 @@ class ConfirmationMailer < ActionMailer::Base
 
     def email_nag(confirmation)
         populate_vars confirmation
+
+        unless ENV['ENABLE_EMAILING'].to_s.downcase == 'true'
+            logger.warn "ENABLE_EMAILING is not true; skipping email to \"#{@email}\""
+            return
+        end
 
         debug_message = "Emailing Appointment Confimation Nag to \"#{@email}\""
         logger.warn debug_message

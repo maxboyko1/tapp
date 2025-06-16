@@ -187,10 +187,6 @@ export function InstructorApplicationsTable() {
             size: 60,
         },
         {
-            ...generateHeaderCellProps("Experience Summary"),
-            accessorKey: "previous_experience_summary",
-        },
-        {
             header: "Assignment(s)",
             id: "assignments",
             size: 300,

@@ -258,6 +258,14 @@ export function AssignmentEditor(props: {
                         )}
                         disabled={lockPositionAndApplicant}
                         isOptionEqualToValue={(option, value) => option.id === value.id}
+                        slotProps={{
+                            paper: {
+                                sx: (theme) => ({
+                                    backgroundColor: theme.palette.primary.main,
+                                    color: theme.palette.primary.contrastText,
+                                })
+                            }
+                        }}
                     />
                 </React.Fragment>
                 <React.Fragment>
@@ -282,6 +290,14 @@ export function AssignmentEditor(props: {
                         )}
                         disabled={lockPositionAndApplicant}
                         isOptionEqualToValue={(option, value) => option.id === value.id}
+                        slotProps={{
+                            paper: {
+                                sx: (theme) => ({
+                                    backgroundColor: theme.palette.primary.main,
+                                    color: theme.palette.primary.contrastText,
+                                })
+                            }
+                        }}
                     />
                 </React.Fragment>
             </DialogRow>

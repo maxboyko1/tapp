@@ -190,16 +190,16 @@
                 },
                 {
                     "type": "comment",
-                    "name": "previous_experience_summary",
-                    "title": "Please briefly summarize your teaching experience, if any.",
+                    "name": "previous_non_dcs_ta",
+                    "title": "Please briefly summarize any additional TA experience outside of the Department of Computer Science St. George campus. If you were a Course Instructor in the Department of Computer Science, St. George campus, please include those experiences in your response.",
                     "isRequired": false,
-                    "description": "Prioritize teaching experience at U of T, but also include teaching experience at other universities, if applicable.",
+                    "description": "Prioritize additional TAships (not DCS work) or CI experience at U of T.  You may also include TA or course instructor experience at other universities, if applicable.  Our system has been updated to include TA work completed in our Department since Fall 2022.",
                     "maxLength": 1500
                 },
                 {
                     "type": "comment",
-                    "name": "previous_cs_ta",
-                    "title": "Please briefly summarize your work experience relevant to TAships within CS, if any.",
+                    "name": "previous_industry_work",
+                    "title": "Please briefly summarize your industry-related work experience relevant to TAships within CS, if any.",
                     "isRequired": false,
                     "maxLength": 1500
                 },

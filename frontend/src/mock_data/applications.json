@@ -9,8 +9,6 @@
         "program": "U",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "STA148H1S",
@@ -36,8 +34,6 @@
         "program": "P",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC390H1S",
@@ -68,8 +64,6 @@
         "program": "M",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [],
         "program_start": "2021-01-01"
@@ -84,8 +78,6 @@
         "program": "P",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA566H1F",
@@ -112,8 +104,6 @@
         "program": "M",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "MAT172H1S",
@@ -149,8 +139,6 @@
         "program": "P",
         "department": "engr",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "MAT235H1S",
@@ -179,8 +167,6 @@
         "program": "P",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "STA882H1S"
@@ -209,8 +195,6 @@
         "program": "M",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [],
         "program_start": "2021-01-01"
@@ -225,8 +209,6 @@
         "program": "U",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC829H1S",
@@ -263,8 +245,6 @@
         "program": "U",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "MAT575H1S",
@@ -296,8 +276,6 @@
         "program": "U",
         "department": "biophys",
         "yip": 1,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "STA382",
@@ -331,8 +309,6 @@
         "program": "P",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC960H1S",
@@ -370,8 +346,6 @@
         "program": "U",
         "department": "phys",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC486H1F"
@@ -396,8 +370,6 @@
         "program": "M",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA382"
@@ -414,8 +386,6 @@
         "program": "P",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA448H1S",
@@ -445,8 +415,6 @@
         "program": "P",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "MAT969H1S",
@@ -476,8 +444,6 @@
         "program": "M",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC288H1F",
@@ -515,8 +481,6 @@
         "program": "M",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "MAT361H1S",
@@ -552,8 +516,6 @@
         "program": "P",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "MAT280",
@@ -582,8 +544,6 @@
         "program": "P",
         "department": "astro",
         "yip": 2,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC941H1S",
@@ -612,8 +572,6 @@
         "program": "U",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC299",
@@ -644,8 +602,6 @@
         "program": "M",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "MAT209H1S",
@@ -679,8 +635,6 @@
         "program": "P",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC151H1S",
@@ -711,8 +665,6 @@
         "program": "P",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "MAT172H1S",
@@ -740,8 +692,6 @@
         "program": "M",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "MAT910H1S",
@@ -774,8 +724,6 @@
         "program": "P",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [],
         "program_start": "2020-01-01"
@@ -790,8 +738,6 @@
         "program": "U",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "STA882H1S",
@@ -829,8 +775,6 @@
         "program": "P",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [],
         "program_start": "2021-01-01"
@@ -845,8 +789,6 @@
         "program": "U",
         "department": "chem",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC839",
@@ -874,8 +816,6 @@
         "program": "M",
         "department": "biophys",
         "yip": 2,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC502",
@@ -902,8 +842,6 @@
         "program": "U",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA566H1F",
@@ -936,8 +874,6 @@
         "program": "M",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC876H1S",
@@ -970,8 +906,6 @@
         "program": "U",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC211H1S"
@@ -1001,8 +935,6 @@
         "program": "P",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC390H1S",
@@ -1031,8 +963,6 @@
         "program": "P",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC311",
@@ -1061,8 +991,6 @@
         "program": "M",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC329H1S"
@@ -1079,8 +1007,6 @@
         "program": "P",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC829H1S",
@@ -1112,8 +1038,6 @@
         "program": "U",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "STA456",
@@ -1145,8 +1069,6 @@
         "program": "U",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA566H1F",
@@ -1172,8 +1094,6 @@
         "program": "M",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "MAT172H1S",
@@ -1205,8 +1125,6 @@
         "program": "M",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC365",
@@ -1238,8 +1156,6 @@
         "program": "M",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "MAT403",
@@ -1266,8 +1182,6 @@
         "program": "M",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA485H1S",
@@ -1298,8 +1212,6 @@
         "program": "P",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA148H1S",
@@ -1335,8 +1247,6 @@
         "program": "P",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC211H1S",
@@ -1365,8 +1275,6 @@
         "program": "U",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA167H1F",
@@ -1394,8 +1302,6 @@
         "program": "U",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [],
         "program_start": "2020-01-01",
@@ -1411,8 +1317,6 @@
         "program": "M",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [],
         "program_start": "2018-01-01"
@@ -1427,8 +1331,6 @@
         "program": "M",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC135H1S",
@@ -1459,8 +1361,6 @@
         "program": "M",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC573",
@@ -1488,8 +1388,6 @@
         "program": "M",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC573",
@@ -1518,8 +1416,6 @@
         "program": "P",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [],
         "program_start": "2019-01-01"
@@ -1534,8 +1430,6 @@
         "program": "P",
         "department": "engr",
         "yip": 2,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC573",
@@ -1567,8 +1461,6 @@
         "program": "P",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "STA139H1S",
@@ -1593,8 +1485,6 @@
         "program": "U",
         "department": "biophys",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [],
         "program_start": "2018-01-01",
@@ -1610,8 +1500,6 @@
         "program": "M",
         "department": "stat",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC839",
@@ -1647,8 +1535,6 @@
         "program": "U",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC359",
@@ -1683,8 +1569,6 @@
         "program": "U",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "MAT336",
@@ -1715,8 +1599,6 @@
         "program": "U",
         "department": "astro",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "MAT209H1S",
@@ -1746,8 +1628,6 @@
         "program": "U",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC276H1S"
@@ -1765,8 +1645,6 @@
         "program": "M",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC622H1S",
@@ -1786,8 +1664,6 @@
         "program": "U",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "MAT403",
@@ -1830,8 +1706,6 @@
         "program": "U",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA882H1S",
@@ -1862,8 +1736,6 @@
         "program": "U",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC434",
@@ -1896,8 +1768,6 @@
         "program": "M",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "MAT235H1S",
@@ -1925,8 +1795,6 @@
         "program": "U",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC311",
@@ -1957,8 +1825,6 @@
         "program": "P",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "MAT280",
@@ -1977,8 +1843,6 @@
         "program": "M",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC502",
@@ -2003,8 +1867,6 @@
         "program": "U",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "MAT558H1S",
@@ -2037,8 +1899,6 @@
         "program": "P",
         "department": "phys",
         "yip": 1,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "MAT921H1S"
@@ -2067,8 +1927,6 @@
         "program": "M",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "STA617H1F",
@@ -2102,8 +1960,6 @@
         "program": "M",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC221H1F",
@@ -2145,8 +2001,6 @@
         "program": "U",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "STA148H1S",
@@ -2181,8 +2035,6 @@
         "program": "M",
         "department": "engr",
         "yip": 2,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "STA382",
@@ -2213,8 +2065,6 @@
         "program": "P",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC504H1F"
@@ -2231,8 +2081,6 @@
         "program": "U",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "STA617",
@@ -2264,8 +2112,6 @@
         "program": "M",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC365",
@@ -2284,8 +2130,6 @@
         "program": "P",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [],
         "program_start": "2018-01-01"
@@ -2300,8 +2144,6 @@
         "program": "P",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [],
         "program_start": "2018-01-01"
@@ -2316,8 +2158,6 @@
         "program": "M",
         "department": "stat",
         "yip": 2,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [],
         "program_start": "2020-01-01"
@@ -2332,8 +2172,6 @@
         "program": "M",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA566H1F",
@@ -2367,8 +2205,6 @@
         "program": "U",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA485H1S",
@@ -2399,8 +2235,6 @@
         "program": "U",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "MAT575H1S",
@@ -2428,8 +2262,6 @@
         "program": "P",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC766H1S",
@@ -2467,8 +2299,6 @@
         "program": "P",
         "department": "stat",
         "yip": 2,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "MAT280",
@@ -2498,8 +2328,6 @@
         "program": "M",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "MAT897",
@@ -2526,8 +2354,6 @@
         "program": "M",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "STA448H1S",
@@ -2560,8 +2386,6 @@
         "program": "M",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC471",
@@ -2581,8 +2405,6 @@
         "program": "M",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC359"
@@ -2599,8 +2421,6 @@
         "program": "P",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "MAT106H1F",
@@ -2629,8 +2449,6 @@
         "program": "U",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "MAT897",
@@ -2657,8 +2475,6 @@
         "program": "U",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "STA292H1S"
@@ -2676,8 +2492,6 @@
         "program": "M",
         "department": "astro",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "MAT493",
@@ -2704,8 +2518,6 @@
         "program": "U",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "MAT620",
@@ -2737,8 +2549,6 @@
         "program": "M",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [],
         "program_start": "2019-01-01"
@@ -2753,8 +2563,6 @@
         "program": "M",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [],
         "program_start": "2021-01-01"
@@ -2769,8 +2577,6 @@
         "program": "U",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "MAT647",
@@ -2802,8 +2608,6 @@
         "program": "P",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC135H1S",
@@ -2829,8 +2633,6 @@
         "program": "P",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "STA617"
@@ -2854,8 +2656,6 @@
         "program": "M",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC135H1S",
@@ -2897,8 +2697,6 @@
         "program": "U",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC365",
@@ -2918,8 +2716,6 @@
         "program": "M",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA254H1F",
@@ -2947,8 +2743,6 @@
         "program": "U",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC622H1S",
@@ -2976,8 +2770,6 @@
         "program": "M",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC365",
@@ -3007,8 +2799,6 @@
         "program": "P",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "MAT172H1S",
@@ -3039,8 +2829,6 @@
         "program": "U",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA759H1S",
@@ -3061,8 +2849,6 @@
         "program": "U",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC486H1F",
@@ -3089,8 +2875,6 @@
         "program": "M",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "STA275",
@@ -3119,8 +2903,6 @@
         "program": "U",
         "department": "biophys",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC471",
@@ -3148,8 +2930,6 @@
         "program": "U",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [],
         "program_start": "2019-01-01",
@@ -3165,8 +2945,6 @@
         "program": "U",
         "department": "astro",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC471",
@@ -3198,8 +2976,6 @@
         "program": "P",
         "department": "stat",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "STA666",
@@ -3225,8 +3001,6 @@
         "program": "P",
         "department": "chem",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [],
         "program_start": "2019-01-01"
@@ -3241,8 +3015,6 @@
         "program": "P",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "STA759H1S",
@@ -3277,8 +3049,6 @@
         "program": "P",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC839",
@@ -3296,8 +3066,6 @@
         "program": "M",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [],
         "program_start": "2018-01-01"
@@ -3312,8 +3080,6 @@
         "program": "U",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "MAT660",
@@ -3343,8 +3109,6 @@
         "program": "M",
         "department": "phys",
         "yip": 2,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA275",
@@ -3372,8 +3136,6 @@
         "program": "U",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "MAT147H1F",
@@ -3405,8 +3167,6 @@
         "program": "P",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "MAT554H1S",
@@ -3443,8 +3203,6 @@
         "program": "U",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC924"
@@ -3462,8 +3220,6 @@
         "program": "P",
         "department": "astro",
         "yip": 2,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [],
         "program_start": "2020-01-01"
@@ -3478,8 +3234,6 @@
         "program": "P",
         "department": "phys",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC941H1S",
@@ -3512,8 +3266,6 @@
         "program": "M",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC151H1S",
@@ -3546,8 +3298,6 @@
         "program": "P",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "MAT493",
@@ -3573,8 +3323,6 @@
         "program": "P",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "MAT493",
@@ -3602,8 +3350,6 @@
         "program": "M",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [],
         "program_start": "2019-01-01"
@@ -3618,8 +3364,6 @@
         "program": "M",
         "department": "phys",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "MAT301H1S",
@@ -3646,8 +3390,6 @@
         "program": "M",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "STA168H1S"
@@ -3676,8 +3418,6 @@
         "program": "M",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [],
         "program_start": "2021-01-01"
@@ -3692,8 +3432,6 @@
         "program": "M",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC719H1S",
@@ -3731,8 +3469,6 @@
         "program": "M",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC434",
@@ -3766,8 +3502,6 @@
         "program": "P",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "MAT493"
@@ -3791,8 +3525,6 @@
         "program": "U",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "STA206",
@@ -3824,8 +3556,6 @@
         "program": "P",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC960H1S",
@@ -3868,8 +3598,6 @@
         "program": "U",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA337H1S",
@@ -3899,8 +3627,6 @@
         "program": "U",
         "department": "chem",
         "yip": 2,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "MAT355H1S",
@@ -3939,8 +3665,6 @@
         "program": "P",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC677H1F",
@@ -3971,8 +3695,6 @@
         "program": "P",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "STA566H1F",
@@ -4003,8 +3725,6 @@
         "program": "U",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [],
         "program_start": "2021-01-01",
@@ -4020,8 +3740,6 @@
         "program": "P",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "STA168H1S",
@@ -4054,8 +3772,6 @@
         "program": "P",
         "department": "stat",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC390H1S"
@@ -4079,8 +3795,6 @@
         "program": "U",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "MAT918",
@@ -4099,8 +3813,6 @@
         "program": "M",
         "department": "engr",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC151H1S",
@@ -4132,8 +3844,6 @@
         "program": "U",
         "department": "astro",
         "yip": 2,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC564H1F",
@@ -4161,8 +3871,6 @@
         "program": "P",
         "department": "stat",
         "yip": 3,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC725H1S"
@@ -4179,8 +3887,6 @@
         "program": "M",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [],
         "program_start": "2019-01-01"
@@ -4195,8 +3901,6 @@
         "program": "M",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC504H1F",
@@ -4223,8 +3927,6 @@
         "program": "P",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC564H1F",
@@ -4267,8 +3969,6 @@
         "program": "P",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC561H1S",
@@ -4296,8 +3996,6 @@
         "program": "U",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "STA224H1F",
@@ -4336,8 +4034,6 @@
         "program": "U",
         "department": "chem",
         "yip": 1,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC151H1S",
@@ -4365,8 +4061,6 @@
         "program": "P",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC876H1S",
@@ -4397,8 +4091,6 @@
         "program": "U",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC311",
@@ -4428,8 +4120,6 @@
         "program": "P",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "STA485H1S",
@@ -4461,8 +4151,6 @@
         "program": "U",
         "department": "stat",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "MAT558H1S",
@@ -4492,8 +4180,6 @@
         "program": "U",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC135H1S",
@@ -4512,8 +4198,6 @@
         "program": "P",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA485H1S",
@@ -4545,8 +4229,6 @@
         "program": "M",
         "department": "engr",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA168H1S",
@@ -4564,8 +4246,6 @@
         "program": "M",
         "department": "engr",
         "yip": 3,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC778H1S",
@@ -4595,8 +4275,6 @@
         "program": "P",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [],
         "program_start": "2018-01-01"
@@ -4611,8 +4289,6 @@
         "program": "P",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA292H1S",
@@ -4643,8 +4319,6 @@
         "program": "P",
         "department": "stat",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA167H1F",
@@ -4669,8 +4343,6 @@
         "program": "P",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "STA139H1S",
@@ -4705,8 +4377,6 @@
         "program": "U",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "MAT969H1S",
@@ -4737,8 +4407,6 @@
         "program": "P",
         "department": "engr",
         "yip": 2,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA617H1F",
@@ -4770,8 +4438,6 @@
         "program": "P",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC151H1S",
@@ -4810,8 +4476,6 @@
         "program": "M",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "STA168H1S",
@@ -4840,8 +4504,6 @@
         "program": "P",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC211H1S",
@@ -4877,8 +4539,6 @@
         "program": "U",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC960H1S",
@@ -4910,8 +4570,6 @@
         "program": "M",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "MAT971",
@@ -4947,8 +4605,6 @@
         "program": "P",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "STA168H1S",
@@ -4973,8 +4629,6 @@
         "program": "U",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "MAT355H1S",
@@ -5002,8 +4656,6 @@
         "program": "P",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA139H1S",
@@ -5029,8 +4681,6 @@
         "program": "U",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [],
         "program_start": "2021-01-01",
@@ -5046,8 +4696,6 @@
         "program": "M",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC725H1S",
@@ -5080,8 +4728,6 @@
         "program": "M",
         "department": "math",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [],
         "program_start": "2019-01-01"
@@ -5096,8 +4742,6 @@
         "program": "U",
         "department": "engr",
         "yip": 1,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC504H1F",
@@ -5123,8 +4767,6 @@
         "program": "M",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC677H1F"
@@ -5141,8 +4783,6 @@
         "program": "M",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [],
         "program_start": "2019-01-01"
@@ -5157,8 +4797,6 @@
         "program": "U",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "MAT209H1S",
@@ -5191,8 +4829,6 @@
         "program": "M",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA456",
@@ -5217,8 +4853,6 @@
         "program": "U",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "STA382",
@@ -5246,8 +4880,6 @@
         "program": "M",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC941H1S"
@@ -5264,8 +4896,6 @@
         "program": "U",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "MAT235H1S",
@@ -5293,8 +4923,6 @@
         "program": "U",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC276H1S",
@@ -5323,8 +4951,6 @@
         "program": "P",
         "department": "astro",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA275",
@@ -5359,8 +4985,6 @@
         "program": "M",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "STA617H1F",
@@ -5385,8 +5009,6 @@
         "program": "U",
         "department": "math",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA759H1S",
@@ -5413,8 +5035,6 @@
         "program": "P",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "MAT301H1S",
@@ -5454,8 +5074,6 @@
         "program": "M",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA485H1S",
@@ -5480,8 +5098,6 @@
         "program": "M",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "MAT897",
@@ -5508,8 +5124,6 @@
         "program": "M",
         "department": "stat",
         "yip": 3,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "MAT910H1S"
@@ -5526,8 +5140,6 @@
         "program": "M",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA985",
@@ -5562,8 +5174,6 @@
         "program": "M",
         "department": "stat",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "STA566H1F",
@@ -5605,8 +5215,6 @@
         "program": "P",
         "department": "phys",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "MAT330H1F",
@@ -5639,8 +5247,6 @@
         "program": "U",
         "department": "math",
         "yip": 2,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "MAT496"
@@ -5665,8 +5271,6 @@
         "program": "M",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "STA793",
@@ -5694,8 +5298,6 @@
         "program": "U",
         "department": "chem",
         "yip": 1,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [],
         "program_start": "2021-01-01",
@@ -5711,8 +5313,6 @@
         "program": "U",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA275",
@@ -5743,8 +5343,6 @@
         "program": "M",
         "department": "phys",
         "yip": 1,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC299"
@@ -5768,8 +5366,6 @@
         "program": "U",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC564H1F",
@@ -5801,8 +5397,6 @@
         "program": "M",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "MAT496",
@@ -5845,8 +5439,6 @@
         "program": "P",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "MAT660",
@@ -5877,8 +5469,6 @@
         "program": "U",
         "department": "biophys",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [],
         "program_start": "2018-01-01",
@@ -5894,8 +5484,6 @@
         "program": "U",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC839"
@@ -5913,8 +5501,6 @@
         "program": "M",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "MAT361H1S",
@@ -5952,8 +5538,6 @@
         "program": "U",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC778H1S",
@@ -5984,8 +5568,6 @@
         "program": "P",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC311",
@@ -6021,8 +5603,6 @@
         "program": "M",
         "department": "math",
         "yip": 3,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA845H1F",
@@ -6051,8 +5631,6 @@
         "program": "P",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [],
         "program_start": "2021-01-01"
@@ -6067,8 +5645,6 @@
         "program": "U",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC502",
@@ -6104,8 +5680,6 @@
         "program": "P",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC504H1F",
@@ -6138,8 +5712,6 @@
         "program": "P",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC502",
@@ -6166,8 +5738,6 @@
         "program": "P",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC151H1S",
@@ -6185,8 +5755,6 @@
         "program": "M",
         "department": "astro",
         "yip": 3,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "MAT454H1F",
@@ -6213,8 +5781,6 @@
         "program": "P",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC211H1S",
@@ -6241,8 +5807,6 @@
         "program": "M",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "STA382",
@@ -6270,8 +5834,6 @@
         "program": "M",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [],
         "program_start": "2019-01-01"
@@ -6286,8 +5848,6 @@
         "program": "U",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [],
         "program_start": "2019-01-01",
@@ -6303,8 +5863,6 @@
         "program": "U",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC361",
@@ -6339,8 +5897,6 @@
         "program": "U",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "STA154H1F",
@@ -6378,8 +5934,6 @@
         "program": "M",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA845H1F",
@@ -6414,8 +5968,6 @@
         "program": "U",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "MAT361H1S",
@@ -6451,8 +6003,6 @@
         "program": "U",
         "department": "phys",
         "yip": 1,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [],
         "program_start": "2021-01-01",
@@ -6468,8 +6018,6 @@
         "program": "P",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [],
         "program_start": "2019-01-01"
@@ -6484,8 +6032,6 @@
         "program": "U",
         "department": "phys",
         "yip": 1,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "MAT330H1F",
@@ -6519,8 +6065,6 @@
         "program": "M",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "MAT760H1S",
@@ -6546,8 +6090,6 @@
         "program": "U",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC829H1S",
@@ -6582,8 +6124,6 @@
         "program": "M",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC622H1S",
@@ -6608,8 +6148,6 @@
         "program": "U",
         "department": "math",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "MAT969H1S",
@@ -6644,8 +6182,6 @@
         "program": "M",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC622H1S",
@@ -6677,8 +6213,6 @@
         "program": "U",
         "department": "phys",
         "yip": 1,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC778H1S",
@@ -6716,8 +6250,6 @@
         "program": "P",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [],
         "program_start": "2020-01-01"
@@ -6732,8 +6264,6 @@
         "program": "M",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC390H1S",
@@ -6771,8 +6301,6 @@
         "program": "U",
         "department": "math",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "MAT403",
@@ -6804,8 +6332,6 @@
         "program": "U",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC756H1S",
@@ -6843,8 +6369,6 @@
         "program": "M",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA759H1S",
@@ -6874,8 +6398,6 @@
         "program": "P",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA382",
@@ -6906,8 +6428,6 @@
         "program": "P",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC778H1S",
@@ -6932,8 +6452,6 @@
         "program": "P",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC135H1S"
@@ -6950,8 +6468,6 @@
         "program": "P",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "MAT647"
@@ -6985,8 +6501,6 @@
         "program": "U",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "MAT575H1S",
@@ -7014,8 +6528,6 @@
         "program": "U",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "STA617H1F",
@@ -7045,8 +6557,6 @@
         "program": "M",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "STA617",
@@ -7077,8 +6587,6 @@
         "program": "U",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "MAT971",
@@ -7111,8 +6619,6 @@
         "program": "U",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [],
         "program_start": "2020-01-01",
@@ -7128,8 +6634,6 @@
         "program": "M",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC276H1S",
@@ -7166,8 +6670,6 @@
         "program": "U",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC276H1S",
@@ -7201,8 +6703,6 @@
         "program": "M",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA275",
@@ -7224,8 +6724,6 @@
         "program": "U",
         "department": "engr",
         "yip": 3,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [],
         "program_start": "2019-01-01",
@@ -7241,8 +6739,6 @@
         "program": "P",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC839"
@@ -7259,8 +6755,6 @@
         "program": "M",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC876H1S",
@@ -7293,8 +6787,6 @@
         "program": "M",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [],
         "program_start": "2018-01-01"
@@ -7309,8 +6801,6 @@
         "program": "P",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA254H1F",
@@ -7348,8 +6838,6 @@
         "program": "M",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC564H1F",
@@ -7381,8 +6869,6 @@
         "program": "M",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "MAT493",
@@ -7414,8 +6900,6 @@
         "program": "M",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC502",
@@ -7447,8 +6931,6 @@
         "program": "P",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC218H1S"
@@ -7465,8 +6947,6 @@
         "program": "M",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC276H1S",
@@ -7499,8 +6979,6 @@
         "program": "U",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA382",
@@ -7519,8 +6997,6 @@
         "program": "U",
         "department": "engr",
         "yip": 1,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "MAT496",
@@ -7548,8 +7024,6 @@
         "program": "P",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC573",
@@ -7575,8 +7049,6 @@
         "program": "P",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [],
         "program_start": "2020-01-01"
@@ -7591,8 +7063,6 @@
         "program": "M",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC359",
@@ -7630,8 +7100,6 @@
         "program": "P",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC486H1F",
@@ -7664,8 +7132,6 @@
         "program": "M",
         "department": "biophys",
         "yip": 1,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "MAT647",
@@ -7698,8 +7164,6 @@
         "program": "U",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC997",
@@ -7727,8 +7191,6 @@
         "program": "M",
         "department": "astro",
         "yip": 1,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC941H1S",
@@ -7759,8 +7221,6 @@
         "program": "U",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC573",
@@ -7786,8 +7246,6 @@
         "program": "P",
         "department": "chem",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA456",
@@ -7818,8 +7276,6 @@
         "program": "U",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC329H1S",
@@ -7849,8 +7305,6 @@
         "program": "M",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC486H1F",
@@ -7870,8 +7324,6 @@
         "program": "M",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "MAT355H1S",
@@ -7902,8 +7354,6 @@
         "program": "M",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA485H1S",
@@ -7929,8 +7379,6 @@
         "program": "P",
         "department": "stat",
         "yip": 2,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "STA768",
@@ -7962,8 +7410,6 @@
         "program": "U",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC218H1S",
@@ -7992,8 +7438,6 @@
         "program": "P",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "STA793",
@@ -8023,8 +7467,6 @@
         "program": "P",
         "department": "engr",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC486H1F",
@@ -8053,8 +7495,6 @@
         "program": "M",
         "department": "stat",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC870",
@@ -8084,8 +7524,6 @@
         "program": "P",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "MAT969H1S"
@@ -8109,8 +7547,6 @@
         "program": "M",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC365",
@@ -8146,8 +7582,6 @@
         "program": "P",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC564H1F",
@@ -8178,8 +7612,6 @@
         "program": "P",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "MAT620",
@@ -8208,8 +7640,6 @@
         "program": "U",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC778H1S",
@@ -8248,8 +7678,6 @@
         "program": "P",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC390H1S",
@@ -8287,8 +7715,6 @@
         "program": "M",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC211H1S",
@@ -8318,8 +7744,6 @@
         "program": "P",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC756H1S",
@@ -8349,8 +7773,6 @@
         "program": "M",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "MAT496",
@@ -8383,8 +7805,6 @@
         "program": "P",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "STA448H1S",
@@ -8413,8 +7833,6 @@
         "program": "M",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA167H1F",
@@ -8443,8 +7861,6 @@
         "program": "U",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "MAT403",
@@ -8478,8 +7894,6 @@
         "program": "M",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC288H1F",
@@ -8512,8 +7926,6 @@
         "program": "M",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "MAT917H1S",
@@ -8531,8 +7943,6 @@
         "program": "P",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "MAT969H1S",
@@ -8562,8 +7972,6 @@
         "program": "M",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [],
         "program_start": "2020-01-01"
@@ -8578,8 +7986,6 @@
         "program": "P",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA666"
@@ -8596,8 +8002,6 @@
         "program": "U",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC725H1S",
@@ -8631,8 +8035,6 @@
         "program": "U",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC288H1F",
@@ -8666,8 +8068,6 @@
         "program": "U",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "MAT235H1S",
@@ -8696,8 +8096,6 @@
         "program": "M",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "MAT403",
@@ -8734,8 +8132,6 @@
         "program": "P",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "STA666",
@@ -8765,8 +8161,6 @@
         "program": "M",
         "department": "math",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC778H1S"
@@ -8795,8 +8189,6 @@
         "program": "M",
         "department": "phys",
         "yip": 1,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC135H1S",
@@ -8822,8 +8214,6 @@
         "program": "U",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC398H1F",
@@ -8862,8 +8252,6 @@
         "program": "M",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [],
         "program_start": "2018-01-01"
@@ -8878,8 +8266,6 @@
         "program": "P",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [],
         "program_start": "2021-01-01"
@@ -8894,8 +8280,6 @@
         "program": "P",
         "department": "phys",
         "yip": 2,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC622H1S",
@@ -8931,8 +8315,6 @@
         "program": "U",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [],
         "program_start": "2019-01-01",
@@ -8948,8 +8330,6 @@
         "program": "U",
         "department": "chem",
         "yip": 1,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "MAT120H1F",
@@ -8989,8 +8369,6 @@
         "program": "U",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC725H1S",
@@ -9027,8 +8405,6 @@
         "program": "P",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "STA206",
@@ -9062,8 +8438,6 @@
         "program": "M",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA768",
@@ -9098,8 +8472,6 @@
         "program": "M",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "MAT194",
@@ -9127,8 +8499,6 @@
         "program": "P",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC622H1S",
@@ -9159,8 +8529,6 @@
         "program": "U",
         "department": "chem",
         "yip": 2,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC365",
@@ -9189,8 +8557,6 @@
         "program": "M",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "STA337H1S",
@@ -9216,8 +8582,6 @@
         "program": "U",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA386H1S",
@@ -9244,8 +8608,6 @@
         "program": "M",
         "department": "stat",
         "yip": 2,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "MAT897",
@@ -9280,8 +8642,6 @@
         "program": "U",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC218H1S",
@@ -9314,8 +8674,6 @@
         "program": "P",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC766H1S",
@@ -9346,8 +8704,6 @@
         "program": "P",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC618H1F",
@@ -9378,8 +8734,6 @@
         "program": "U",
         "department": "biophys",
         "yip": 3,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC829H1S"
@@ -9404,8 +8758,6 @@
         "program": "U",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "STA275",
@@ -9440,8 +8792,6 @@
         "program": "U",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC361",
@@ -9468,8 +8818,6 @@
         "program": "M",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "STA337H1S",
@@ -9503,8 +8851,6 @@
         "program": "P",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "MAT917H1S",
@@ -9531,8 +8877,6 @@
         "program": "U",
         "department": "phys",
         "yip": 3,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC778H1S",
@@ -9558,8 +8902,6 @@
         "program": "M",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [],
         "program_start": "2020-01-01"
@@ -9574,8 +8916,6 @@
         "program": "U",
         "department": "engr",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC618H1F",
@@ -9614,8 +8954,6 @@
         "program": "P",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA485H1S"
@@ -9639,8 +8977,6 @@
         "program": "M",
         "department": "engr",
         "yip": 1,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC329H1S",
@@ -9667,8 +9003,6 @@
         "program": "P",
         "department": "phys",
         "yip": 3,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [],
         "program_start": "2019-01-01"
@@ -9683,8 +9017,6 @@
         "program": "M",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA472H1S",
@@ -9711,8 +9043,6 @@
         "program": "U",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "STA168H1S"
@@ -9737,8 +9067,6 @@
         "program": "U",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "MAT194",
@@ -9765,8 +9093,6 @@
         "program": "U",
         "department": "engr",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "MAT172H1S",
@@ -9797,8 +9123,6 @@
         "program": "U",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "MAT336"
@@ -9816,8 +9140,6 @@
         "program": "P",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC924",
@@ -9852,8 +9174,6 @@
         "program": "M",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "MAT660",
@@ -9878,8 +9198,6 @@
         "program": "U",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA845H1F",
@@ -9898,8 +9216,6 @@
         "program": "U",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "MAT403",
@@ -9930,8 +9246,6 @@
         "program": "U",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "MAT493",
@@ -9964,8 +9278,6 @@
         "program": "M",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC390H1S",
@@ -9994,8 +9306,6 @@
         "program": "P",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [],
         "program_start": "2018-01-01"
@@ -10010,8 +9320,6 @@
         "program": "P",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA254H1F",
@@ -10044,8 +9352,6 @@
         "program": "M",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC390H1S",
@@ -10071,8 +9377,6 @@
         "program": "M",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA472H1S",
@@ -10100,8 +9404,6 @@
         "program": "U",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC725H1S"
@@ -10126,8 +9428,6 @@
         "program": "U",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC829H1S",
@@ -10161,8 +9461,6 @@
         "program": "P",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC361",
@@ -10191,8 +9489,6 @@
         "program": "P",
         "department": "biophys",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "MAT660",
@@ -10227,8 +9523,6 @@
         "program": "M",
         "department": "astro",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC941H1S",
@@ -10266,8 +9560,6 @@
         "program": "U",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC564H1F",
@@ -10297,8 +9589,6 @@
         "program": "P",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [],
         "program_start": "2021-01-01"
@@ -10313,8 +9603,6 @@
         "program": "P",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "MAT554H1S",
@@ -10351,8 +9639,6 @@
         "program": "P",
         "department": "math",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "STA254H1F",
@@ -10370,8 +9656,6 @@
         "program": "P",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "MAT660",
@@ -10400,8 +9684,6 @@
         "program": "P",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC839H1S",
@@ -10438,8 +9720,6 @@
         "program": "U",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "STA337H1S",
@@ -10468,8 +9748,6 @@
         "program": "M",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "STA167H1F",
@@ -10495,8 +9773,6 @@
         "program": "U",
         "department": "stat",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "MAT969H1S",
@@ -10524,8 +9800,6 @@
         "program": "M",
         "department": "biophys",
         "yip": 2,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA845H1F",
@@ -10558,8 +9832,6 @@
         "program": "U",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "MAT554H1S",
@@ -10594,8 +9866,6 @@
         "program": "M",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "MAT336",
@@ -10623,8 +9893,6 @@
         "program": "P",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC561H1S",
@@ -10649,8 +9917,6 @@
         "program": "U",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC151H1S",
@@ -10669,8 +9935,6 @@
         "program": "U",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "MAT918",
@@ -10698,8 +9962,6 @@
         "program": "P",
         "department": "engr",
         "yip": 1,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "MAT558H1S",
@@ -10737,8 +9999,6 @@
         "program": "P",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA148H1S",
@@ -10768,8 +10028,6 @@
         "program": "P",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA666"
@@ -10798,8 +10056,6 @@
         "program": "M",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC398H1F",
@@ -10832,8 +10088,6 @@
         "program": "M",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA275",
@@ -10862,8 +10116,6 @@
         "program": "P",
         "department": "chem",
         "yip": 1,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC329H1S",
@@ -10894,8 +10146,6 @@
         "program": "U",
         "department": "phys",
         "yip": 2,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "MAT361H1S",
@@ -10928,8 +10178,6 @@
         "program": "U",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC960H1S",
@@ -10959,8 +10207,6 @@
         "program": "M",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC960H1S",
@@ -10993,8 +10239,6 @@
         "program": "M",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "STA882H1S",
@@ -11028,8 +10272,6 @@
         "program": "U",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [],
         "program_start": "2021-01-01",
@@ -11045,8 +10287,6 @@
         "program": "P",
         "department": "stat",
         "yip": 2,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA441H1S",
@@ -11064,8 +10304,6 @@
         "program": "U",
         "department": "engr",
         "yip": 1,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "MAT235H1S"
@@ -11083,8 +10321,6 @@
         "program": "M",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC398H1F",
@@ -11109,8 +10345,6 @@
         "program": "U",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "MAT897"
@@ -11140,8 +10374,6 @@
         "program": "P",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [],
         "program_start": "2019-01-01"
@@ -11156,8 +10388,6 @@
         "program": "P",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "MAT403",
@@ -11185,8 +10415,6 @@
         "program": "U",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA666"
@@ -11211,8 +10439,6 @@
         "program": "U",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "MAT280",
@@ -11242,8 +10468,6 @@
         "program": "P",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "STA224H1F",
@@ -11276,8 +10500,6 @@
         "program": "M",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "MAT917H1S",
@@ -11305,8 +10527,6 @@
         "program": "M",
         "department": "stat",
         "yip": 3,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC329H1S",
@@ -11338,8 +10558,6 @@
         "program": "M",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC829H1S",
@@ -11367,8 +10585,6 @@
         "program": "M",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC311",
@@ -11402,8 +10618,6 @@
         "program": "P",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC299",
@@ -11434,8 +10648,6 @@
         "program": "M",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA666",
@@ -11461,8 +10673,6 @@
         "program": "U",
         "department": "phys",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC870",
@@ -11490,8 +10700,6 @@
         "program": "M",
         "department": "math",
         "yip": 2,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "MAT120H1F",
@@ -11523,8 +10731,6 @@
         "program": "M",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA759H1S",
@@ -11550,8 +10756,6 @@
         "program": "M",
         "department": "astro",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC829H1S",
@@ -11582,8 +10786,6 @@
         "program": "M",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC618H1F",
@@ -11619,8 +10821,6 @@
         "program": "M",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC218H1S"
@@ -11644,8 +10844,6 @@
         "program": "U",
         "department": "biophys",
         "yip": 2,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC486H1F",
@@ -11677,8 +10875,6 @@
         "program": "P",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC311",
@@ -11721,8 +10917,6 @@
         "program": "U",
         "department": "astro",
         "yip": 1,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "MAT403",
@@ -11756,8 +10950,6 @@
         "program": "P",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "STA793",
@@ -11783,8 +10975,6 @@
         "program": "U",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC719H1S",
@@ -11803,8 +10993,6 @@
         "program": "U",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC299",
@@ -11839,8 +11027,6 @@
         "program": "P",
         "department": "astro",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC778H1S",
@@ -11872,8 +11058,6 @@
         "program": "P",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC876H1S"
@@ -11890,8 +11074,6 @@
         "program": "U",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC564H1F",
@@ -11922,8 +11104,6 @@
         "program": "M",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC398H1F",
@@ -11949,8 +11129,6 @@
         "program": "U",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC502",
@@ -11981,8 +11159,6 @@
         "program": "P",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "STA566H1F",
@@ -12008,8 +11184,6 @@
         "program": "M",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC573",
@@ -12035,8 +11209,6 @@
         "program": "U",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "STA224H1F",
@@ -12062,8 +11234,6 @@
         "program": "U",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "MAT969H1S",
@@ -12097,8 +11267,6 @@
         "program": "M",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC311"
@@ -12122,8 +11290,6 @@
         "program": "P",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "MAT921H1S",
@@ -12152,8 +11318,6 @@
         "program": "M",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "STA275",
@@ -12186,8 +11350,6 @@
         "program": "U",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "STA759H1S",
@@ -12225,8 +11387,6 @@
         "program": "M",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC151H1S",
@@ -12257,8 +11417,6 @@
         "program": "P",
         "department": "astro",
         "yip": 2,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA224H1F",
@@ -12283,8 +11441,6 @@
         "program": "U",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC924",
@@ -12321,8 +11477,6 @@
         "program": "U",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "MAT971",
@@ -12350,8 +11504,6 @@
         "program": "U",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA793",
@@ -12382,8 +11534,6 @@
         "program": "M",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "MAT355H1S",
@@ -12414,8 +11564,6 @@
         "program": "M",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC434",
@@ -12446,8 +11594,6 @@
         "program": "P",
         "department": "chem",
         "yip": 1,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC299",
@@ -12478,8 +11624,6 @@
         "program": "U",
         "department": "engr",
         "yip": 2,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA617",
@@ -12513,8 +11657,6 @@
         "program": "M",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "MAT921H1S",
@@ -12547,8 +11689,6 @@
         "program": "P",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC573",
@@ -12578,8 +11718,6 @@
         "program": "P",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "STA337H1S",
@@ -12613,8 +11751,6 @@
         "program": "U",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "MAT969H1S",
@@ -12646,8 +11782,6 @@
         "program": "M",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC359",
@@ -12683,8 +11817,6 @@
         "program": "M",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC211H1S",
@@ -12712,8 +11844,6 @@
         "program": "P",
         "department": "stat",
         "yip": 1,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [],
         "program_start": "2021-01-01"
@@ -12728,8 +11858,6 @@
         "program": "P",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [],
         "program_start": "2018-01-01"
@@ -12744,8 +11872,6 @@
         "program": "M",
         "department": "biophys",
         "yip": 2,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "STA768",
@@ -12778,8 +11904,6 @@
         "program": "U",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC211H1S",
@@ -12805,8 +11929,6 @@
         "program": "M",
         "department": "engr",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [],
         "program_start": "2018-01-01"
@@ -12821,8 +11943,6 @@
         "program": "U",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "STA666",
@@ -12850,8 +11970,6 @@
         "program": "P",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC218H1S",
@@ -12888,8 +12006,6 @@
         "program": "M",
         "department": "math",
         "yip": 3,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "MAT355H1S",
@@ -12921,8 +12037,6 @@
         "program": "U",
         "department": "math",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC311",
@@ -12951,8 +12065,6 @@
         "program": "M",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "MAT403",
@@ -12984,8 +12096,6 @@
         "program": "U",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC941H1S",
@@ -13019,8 +12129,6 @@
         "program": "M",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC221H1F"
@@ -13044,8 +12152,6 @@
         "program": "U",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA441H1S",
@@ -13075,8 +12181,6 @@
         "program": "M",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "STA768",
@@ -13094,8 +12198,6 @@
         "program": "M",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA292H1S",
@@ -13130,8 +12232,6 @@
         "program": "M",
         "department": "math",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "MAT558H1S"
@@ -13148,8 +12248,6 @@
         "program": "M",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC218H1S",
@@ -13178,8 +12276,6 @@
         "program": "U",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA472H1S",
@@ -13209,8 +12305,6 @@
         "program": "M",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC756H1S"
@@ -13227,8 +12321,6 @@
         "program": "P",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "STA706H1F",
@@ -13260,8 +12352,6 @@
         "program": "P",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "MAT120H1F",
@@ -13290,8 +12380,6 @@
         "program": "M",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC390H1S",
@@ -13321,8 +12409,6 @@
         "program": "M",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC725H1S",
@@ -13350,8 +12436,6 @@
         "program": "U",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [],
         "program_start": "2019-01-01",
@@ -13367,8 +12451,6 @@
         "program": "M",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA759H1S",
@@ -13398,8 +12480,6 @@
         "program": "M",
         "department": "math",
         "yip": 2,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC839H1S",
@@ -13429,8 +12509,6 @@
         "program": "P",
         "department": "engr",
         "yip": 1,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA224H1F"
@@ -13454,8 +12532,6 @@
         "program": "P",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC398H1F",
@@ -13498,8 +12574,6 @@
         "program": "M",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [],
         "program_start": "2021-01-01"
@@ -13514,8 +12588,6 @@
         "program": "M",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA759H1S",
@@ -13547,8 +12619,6 @@
         "program": "U",
         "department": "engr",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA275",
@@ -13588,8 +12658,6 @@
         "program": "M",
         "department": "stat",
         "yip": 2,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA448H1S",
@@ -13617,8 +12685,6 @@
         "program": "P",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "STA386H1S",
@@ -13647,8 +12713,6 @@
         "program": "U",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "MAT918"
@@ -13666,8 +12730,6 @@
         "program": "U",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "MAT910H1S",
@@ -13697,8 +12759,6 @@
         "program": "P",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "STA254H1F",
@@ -13725,8 +12785,6 @@
         "program": "P",
         "department": "engr",
         "yip": 2,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "MAT660",
@@ -13756,8 +12814,6 @@
         "program": "P",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC398H1F",
@@ -13789,8 +12845,6 @@
         "program": "U",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC876H1S"
@@ -13825,8 +12879,6 @@
         "program": "M",
         "department": "biophys",
         "yip": 1,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "MAT620",
@@ -13853,8 +12905,6 @@
         "program": "U",
         "department": "phys",
         "yip": 2,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC839",
@@ -13884,8 +12934,6 @@
         "program": "U",
         "department": "phys",
         "yip": 1,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC361",
@@ -13919,8 +12967,6 @@
         "program": "M",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "STA167H1F",
@@ -13940,8 +12986,6 @@
         "program": "U",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "STA617H1F",
@@ -13971,8 +13015,6 @@
         "program": "U",
         "department": "biophys",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC870",
@@ -14000,8 +13042,6 @@
         "program": "M",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "MAT554H1S",
@@ -14038,8 +13078,6 @@
         "program": "U",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC434",
@@ -14067,8 +13105,6 @@
         "program": "P",
         "department": "chem",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC211H1S",
@@ -14097,8 +13133,6 @@
         "program": "U",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "STA617",
@@ -14140,8 +13174,6 @@
         "program": "U",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [],
         "program_start": "2020-01-01",
@@ -14157,8 +13189,6 @@
         "program": "U",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC311",
@@ -14186,8 +13216,6 @@
         "program": "U",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC218H1S",
@@ -14218,8 +13246,6 @@
         "program": "U",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [],
         "program_start": "2020-01-01",
@@ -14235,8 +13261,6 @@
         "program": "U",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA206",
@@ -14262,8 +13286,6 @@
         "program": "U",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC288H1F",
@@ -14301,8 +13323,6 @@
         "program": "M",
         "department": "chem",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA337H1S",
@@ -14331,8 +13351,6 @@
         "program": "M",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "MAT558H1S",
@@ -14363,8 +13381,6 @@
         "program": "P",
         "department": "engr",
         "yip": 2,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC434",
@@ -14396,8 +13412,6 @@
         "program": "M",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC365",
@@ -14430,8 +13444,6 @@
         "program": "U",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA448H1S",
@@ -14475,8 +13487,6 @@
         "program": "U",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC839H1S",
@@ -14509,8 +13519,6 @@
         "program": "M",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "STA985"
@@ -14534,8 +13542,6 @@
         "program": "U",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC876H1S"
@@ -14560,8 +13566,6 @@
         "program": "P",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "MAT172H1S",
@@ -14596,8 +13600,6 @@
         "program": "M",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "MAT921H1S"
@@ -14626,8 +13628,6 @@
         "program": "P",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA148H1S",
@@ -14655,8 +13655,6 @@
         "program": "P",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "STA566H1F",
@@ -14688,8 +13686,6 @@
         "program": "P",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC677H1F",
@@ -14720,8 +13716,6 @@
         "program": "P",
         "department": "stat",
         "yip": 3,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "MAT172H1S",
@@ -14752,8 +13746,6 @@
         "program": "M",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA566H1F",
@@ -14781,8 +13773,6 @@
         "program": "U",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA566H1F",
@@ -14811,8 +13801,6 @@
         "program": "P",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "MAT361H1S",
@@ -14849,8 +13837,6 @@
         "program": "M",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "STA485H1S",
@@ -14885,8 +13871,6 @@
         "program": "P",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC211H1S",
@@ -14917,8 +13901,6 @@
         "program": "U",
         "department": "stat",
         "yip": 1,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "STA472H1S",
@@ -14949,8 +13931,6 @@
         "program": "U",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC221H1F",
@@ -14984,8 +13964,6 @@
         "program": "P",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA617",
@@ -15018,8 +13996,6 @@
         "program": "M",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC135H1S",
@@ -15051,8 +14027,6 @@
         "program": "M",
         "department": "engr",
         "yip": 2,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "MAT330H1F"
@@ -15069,8 +14043,6 @@
         "program": "M",
         "department": "engr",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "MAT403",
@@ -15103,8 +14075,6 @@
         "program": "P",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA154H1F",
@@ -15132,8 +14102,6 @@
         "program": "P",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC151H1S",
@@ -15161,8 +14129,6 @@
         "program": "U",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "MAT971",
@@ -15190,8 +14156,6 @@
         "program": "U",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "MAT660"
@@ -15216,8 +14180,6 @@
         "program": "M",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "STA706H1F",
@@ -15247,8 +14209,6 @@
         "program": "P",
         "department": "stat",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "MAT280",
@@ -15283,8 +14243,6 @@
         "program": "U",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [],
         "program_start": "2020-01-01",
@@ -15300,8 +14258,6 @@
         "program": "M",
         "department": "astro",
         "yip": 2,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC311",
@@ -15326,8 +14282,6 @@
         "program": "M",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC471"
@@ -15344,8 +14298,6 @@
         "program": "P",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA706H1F",
@@ -15373,8 +14325,6 @@
         "program": "M",
         "department": "stat",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA382",
@@ -15402,8 +14352,6 @@
         "program": "U",
         "department": "chem",
         "yip": 2,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA206",
@@ -15434,8 +14382,6 @@
         "program": "U",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [],
         "program_start": "2019-01-01",
@@ -15451,8 +14397,6 @@
         "program": "P",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "STA386H1S",
@@ -15470,8 +14414,6 @@
         "program": "P",
         "department": "math",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC766H1S",
@@ -15500,8 +14442,6 @@
         "program": "P",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "MAT336",
@@ -15534,8 +14474,6 @@
         "program": "P",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "STA224H1F",
@@ -15566,8 +14504,6 @@
         "program": "U",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC618H1F",
@@ -15593,8 +14529,6 @@
         "program": "P",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [],
         "program_start": "2018-01-01"
@@ -15609,8 +14543,6 @@
         "program": "M",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC622H1S",
@@ -15638,8 +14570,6 @@
         "program": "U",
         "department": "engr",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA382",
@@ -15675,8 +14605,6 @@
         "program": "M",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC561H1S",
@@ -15709,8 +14637,6 @@
         "program": "M",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC839H1S",
@@ -15736,8 +14662,6 @@
         "program": "P",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC218H1S",
@@ -15767,8 +14691,6 @@
         "program": "U",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [],
         "program_start": "2018-01-01",
@@ -15784,8 +14706,6 @@
         "program": "M",
         "department": "phys",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "MAT172H1S",
@@ -15818,8 +14738,6 @@
         "program": "M",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC719H1S"
@@ -15843,8 +14761,6 @@
         "program": "M",
         "department": "chem",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC218H1S",
@@ -15882,8 +14798,6 @@
         "program": "M",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "MAT897",
@@ -15915,8 +14829,6 @@
         "program": "P",
         "department": "chem",
         "yip": 3,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [],
         "program_start": "2019-01-01"
@@ -15931,8 +14843,6 @@
         "program": "M",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "MAT106H1F",
@@ -15969,8 +14879,6 @@
         "program": "P",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "MAT910H1S",
@@ -15999,8 +14907,6 @@
         "program": "U",
         "department": "phys",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC211H1S",
@@ -16026,8 +14932,6 @@
         "program": "M",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC960H1S"
@@ -16056,8 +14960,6 @@
         "program": "P",
         "department": "stat",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC677H1F",
@@ -16087,8 +14989,6 @@
         "program": "P",
         "department": "astro",
         "yip": 2,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC960H1S",
@@ -16118,8 +15018,6 @@
         "program": "U",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA456",
@@ -16149,8 +15047,6 @@
         "program": "P",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA759H1S",
@@ -16181,8 +15077,6 @@
         "program": "M",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC390H1S",
@@ -16215,8 +15109,6 @@
         "program": "P",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "STA167H1F"
@@ -16240,8 +15132,6 @@
         "program": "U",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "STA139H1S"
@@ -16259,8 +15149,6 @@
         "program": "M",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "MAT971",
@@ -16285,8 +15173,6 @@
         "program": "P",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA666"
@@ -16310,8 +15196,6 @@
         "program": "M",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC870",
@@ -16344,8 +15228,6 @@
         "program": "U",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA139H1S",
@@ -16374,8 +15256,6 @@
         "program": "M",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "STA617H1F",
@@ -16406,8 +15286,6 @@
         "program": "U",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA845H1F",
@@ -16445,8 +15323,6 @@
         "program": "M",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "MAT403",
@@ -16477,8 +15353,6 @@
         "program": "P",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC719H1S"
@@ -16502,8 +15376,6 @@
         "program": "M",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC359",
@@ -16529,8 +15401,6 @@
         "program": "U",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [],
         "program_start": "2018-01-01",
@@ -16546,8 +15416,6 @@
         "program": "P",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC756H1S",
@@ -16580,8 +15448,6 @@
         "program": "P",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "MAT921H1S",
@@ -16607,8 +15473,6 @@
         "program": "M",
         "department": "stat",
         "yip": 2,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "MAT971",
@@ -16634,8 +15498,6 @@
         "program": "P",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "STA292H1S",
@@ -16665,8 +15527,6 @@
         "program": "M",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "MAT493",
@@ -16696,8 +15556,6 @@
         "program": "U",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "STA206",
@@ -16731,8 +15589,6 @@
         "program": "M",
         "department": "engr",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA768",
@@ -16750,8 +15606,6 @@
         "program": "M",
         "department": "biophys",
         "yip": 2,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA337H1S",
@@ -16782,8 +15636,6 @@
         "program": "M",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "MAT647",
@@ -16815,8 +15667,6 @@
         "program": "U",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC876H1S",
@@ -16845,8 +15695,6 @@
         "program": "M",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA224H1F"
@@ -16863,8 +15711,6 @@
         "program": "P",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC471",
@@ -16902,8 +15748,6 @@
         "program": "P",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC719H1S",
@@ -16930,8 +15774,6 @@
         "program": "M",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "MAT355H1S",
@@ -16969,8 +15811,6 @@
         "program": "U",
         "department": "math",
         "yip": 1,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "STA617H1F",
@@ -17002,8 +15842,6 @@
         "program": "P",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "MAT493",
@@ -17036,8 +15874,6 @@
         "program": "P",
         "department": "chem",
         "yip": 2,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "MAT235H1S",
@@ -17070,8 +15906,6 @@
         "program": "U",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "MAT575H1S",
@@ -17107,8 +15941,6 @@
         "program": "P",
         "department": "math",
         "yip": 3,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC329H1S",
@@ -17135,8 +15967,6 @@
         "program": "M",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "MAT147H1F",
@@ -17169,8 +15999,6 @@
         "program": "U",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "MAT172H1S"
@@ -17195,8 +16023,6 @@
         "program": "P",
         "department": "cs",
         "yip": 2,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC471",
@@ -17228,8 +16054,6 @@
         "program": "P",
         "department": "stat",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [],
         "program_start": "2018-01-01"
@@ -17244,8 +16068,6 @@
         "program": "M",
         "department": "biophys",
         "yip": 1,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "CSC471",
@@ -17272,8 +16094,6 @@
         "program": "M",
         "department": "phys",
         "yip": 2,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [],
         "program_start": "2020-01-01"
@@ -17288,8 +16108,6 @@
         "program": "M",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA985",
@@ -17318,8 +16136,6 @@
         "program": "U",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": true,
         "position_preferences": [
             "STA382",
@@ -17346,8 +16162,6 @@
         "program": "M",
         "department": "engr",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC390H1S",
@@ -17384,8 +16198,6 @@
         "program": "P",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "CSC398H1F",
@@ -17418,8 +16230,6 @@
         "program": "P",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "STA485H1S"
@@ -17443,8 +16253,6 @@
         "program": "M",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": true,
-        "previous_university_ta": false,
         "previous_other_university_ta": false,
         "position_preferences": [],
         "program_start": "2018-01-01"
@@ -17459,8 +16267,6 @@
         "program": "M",
         "department": "cs",
         "yip": 4,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "MAT172H1S",
@@ -17491,8 +16297,6 @@
         "program": "M",
         "department": "astro",
         "yip": 2,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "MAT620",
@@ -17521,8 +16325,6 @@
         "program": "P",
         "department": "cs",
         "yip": 1,
-        "previous_department_ta": false,
-        "previous_university_ta": true,
         "previous_other_university_ta": true,
         "position_preferences": [
             "MAT575H1S",
@@ -17555,8 +16357,6 @@
         "program": "M",
         "department": "cs",
         "yip": 3,
-        "previous_department_ta": true,
-        "previous_university_ta": true,
         "previous_other_university_ta": false,
         "position_preferences": [
             "MAT647",

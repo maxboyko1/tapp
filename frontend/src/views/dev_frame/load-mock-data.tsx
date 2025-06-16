@@ -390,8 +390,6 @@ export function SeedDataMenu() {
                 department: application.department,
                 yip: application.yip,
                 gpa: application.gpa || 0,
-                previous_department_ta: application.previous_department_ta,
-                previous_university_ta: application.previous_university_ta,
                 program_start: application.program_start,
                 previous_other_university_ta:
                     application.previous_other_university_ta,

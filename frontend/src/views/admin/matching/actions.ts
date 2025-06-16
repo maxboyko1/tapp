@@ -151,13 +151,6 @@ export const combinedApplicationsSelector = createSelector(
                                 combinedApplication.comments += `\n[${newestApplication.submission_date}: ${newestApplication.comments}]`;
                             }
                         }
-                        if (newestApplication.previous_experience_summary) {
-                            if (
-                                combinedApplication.previous_experience_summary
-                            ) {
-                                combinedApplication.previous_experience_summary += `\n[${newestApplication.submission_date}: ${newestApplication.previous_experience_summary}]`;
-                            }
-                        }
                     }
                 }
                 return combinedApplication;
