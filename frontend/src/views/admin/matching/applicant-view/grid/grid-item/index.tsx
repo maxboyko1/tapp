@@ -87,7 +87,15 @@ export function ConnectedApplicantPill({
                     vertical: "top",
                     horizontal: "left",
                 }}
-                slotProps={{ list: { sx: { p: 0 } } }}
+                slotProps={{ 
+                    list: { sx: { p: 0 } },
+                    paper: {
+                        sx: (theme) => ({
+                            backgroundColor: theme.palette.primary.main,
+                            color: theme.palette.primary.contrastText,
+                        })
+                    }
+                }}
             >
                 <div style={{ padding: 0 }}>
                     <GridItemDropdown

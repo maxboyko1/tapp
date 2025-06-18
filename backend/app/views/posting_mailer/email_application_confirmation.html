@@ -59,15 +59,17 @@
                 </tr>
                 <tr>
                     <th>Preferences</th>
-                    {% assign preference_hash = "None,Low,Medium,High,Preference
-                    Against" | split: "," %}
+                    {% assign preference_labels = "Willing,4th Choice,3rd Choice,2nd Choice,1st Choice" | split: "," %}
                     <td>
                         <ul>
-                            {% for preference in position_preferences %}
-                            <li>
-                                {{ preference.position_code }}: {{
-                                preference_hash[preference.preference_level] }}
-                            </li>
+                            {% assign sorted_preferences = position_preferences | sort: "preference_level" | reverse %}
+                            {% for preference in sorted_preferences %}
+                                {% if preference.preference_level != -1 %}
+                                    <li>
+                                        {{ preference.position_code }}:
+                                        {{ preference_labels[preference.preference_level] }}
+                                    </li>
+                                {% endif %}
                             {% endfor %}
                         </ul>
                     </td>

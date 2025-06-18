@@ -588,7 +588,7 @@ export function SeedDataMenu() {
         >
             <Button
                 variant="contained"
-                color="primary"
+                color="secondary"
                 endIcon={<ArrowDropDownIcon />}
                 onClick={(e) => setAnchorEl(e.currentTarget)}
             >
@@ -598,8 +598,23 @@ export function SeedDataMenu() {
                 anchorEl={anchorEl}
                 open={Boolean(anchorEl)}
                 onClose={() => setAnchorEl(null)}
+                slotProps={{
+                    paper: {
+                        sx: (theme) => ({
+                            backgroundColor: theme.palette.secondary.main,
+                            color: theme.palette.secondary.contrastText,
+                        })
+                    }
+                }}
             >
-                <ListSubheader>Load seed data into current session</ListSubheader>
+                <ListSubheader
+                    sx={{
+                        backgroundColor: (theme) => theme.palette.secondary.main,
+                        color: (theme) => theme.palette.secondary.contrastText,
+                    }}
+                >
+                    Load seed data into current session
+                </ListSubheader>
                 {Object.keys(seedActions).map((key: string) => (
                     <MenuItem
                         key={key}
