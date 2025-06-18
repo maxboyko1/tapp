@@ -164,9 +164,9 @@ function getApplicantPreferenceChipStyle(theme: Theme, level: number) {
         case 3:
             return { backgroundColor: alpha(theme.palette.success.main, 0.25), color: theme.palette.success.main };
         case 2:
-            return { backgroundColor: alpha(theme.palette.secondary.main, 0.8), color: "#fff" };
-        case 1:
             return { backgroundColor: alpha(theme.palette.secondary.main, 0.25), color: theme.palette.secondary.main };
+        case 1:
+            return { backgroundColor: alpha("#007FA3", 0.25), color: "#007FA3" };
         case 0:
             return { backgroundColor: theme.palette.warning.main, color: "#fff" };
         default:
