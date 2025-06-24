@@ -30,6 +30,20 @@ export function dataToFile(
     if (dataFormat === "spreadsheet" || dataFormat === "csv") {
         const workbook = XLSX.utils.book_new();
         const sheet = XLSX.utils.aoa_to_sheet(formatters.toSpreadsheet());
+
+        // Force all cells to be plain text (type 's') and remove any formula property
+        Object.keys(sheet).forEach((cellAddr) => {
+            if (!cellAddr.startsWith('!')) {
+                const cell = sheet[cellAddr];
+                if (cell) {
+                    cell.t = 's';
+                    if ('f' in cell) {
+                        delete cell.f;
+                    }
+                }
+            }
+        });
+
         XLSX.utils.book_append_sheet(workbook, sheet, "Instructors");
 
         const bookType = dataFormat === "csv" ? "csv" : "xlsx";
