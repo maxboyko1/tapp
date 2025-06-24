@@ -7,7 +7,7 @@ import { useThunkDispatch } from "../../../libs/thunk-dispatch";
 import { useSelector } from "react-redux";
 import { activePositionSelector } from "../store/actions";
 import { Applicant, Application, Assignment, Position } from "../../../api/defs/types";
-import { spreadsheetUndefinedToNull } from "../../../libs/import-export/undefinedToNull";
+import { normalizeSpreadsheet } from "../../../libs/import-export/normalize-spreadsheet";
 
 /**
  * Slice a date string to only include the YYYY-MM-DD part.
@@ -188,7 +188,7 @@ function spreadsheetOutputForInstructorAssignments(position: Position, applicati
                     }, {}),
                 }));
 
-                return spreadsheetUndefinedToNull(
+                return normalizeSpreadsheet(
                     (
                         [
                             [
