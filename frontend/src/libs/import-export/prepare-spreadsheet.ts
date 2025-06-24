@@ -10,7 +10,7 @@ import {
     WageChunk,
 } from "../../api/defs/types";
 import { isQuestionsFieldInValidFormat } from "../../components/custom-question-utils";
-import { spreadsheetUndefinedToNull } from "../import-export/undefinedToNull";
+import { normalizeSpreadsheet } from "./normalize-spreadsheet";
 import { prepareMinimal } from "./prepare-minimal";
 
 /**
@@ -115,7 +115,7 @@ function formatWageChunksToList(
  */
 export const prepareSpreadsheet = {
     instructor: function (instructors: Instructor[]) {
-        return spreadsheetUndefinedToNull(
+        return normalizeSpreadsheet(
             (
                 [["Last Name", "First Name", "UTORid", "email"]] as CellType[][]
             ).concat(
@@ -129,7 +129,7 @@ export const prepareSpreadsheet = {
         );
     },
     applicant: function (applicants: Applicant[]) {
-        return spreadsheetUndefinedToNull(
+        return normalizeSpreadsheet(
             (
                 [
                     [
@@ -169,7 +169,7 @@ export const prepareSpreadsheet = {
             )
         );
 
-        return spreadsheetUndefinedToNull(
+        return normalizeSpreadsheet(
             (
                 [
                     [
@@ -314,7 +314,7 @@ export const prepareSpreadsheet = {
             return [...baseRow, ...questionCells];
         });
 
-        return spreadsheetUndefinedToNull([
+        return normalizeSpreadsheet([
             headers,
             ...rows
         ]);
@@ -363,7 +363,7 @@ export const prepareSpreadsheet = {
             ...questionHeaders,
         ];
 
-        return spreadsheetUndefinedToNull(
+        return normalizeSpreadsheet(
             [
                 headers,
                 ...Array.from(
@@ -401,7 +401,7 @@ export const prepareSpreadsheet = {
             return `Duty ${(i - 1) / 2 + 1}`;
         });
 
-        return spreadsheetUndefinedToNull(
+        return normalizeSpreadsheet(
             (
                 [
                     [
@@ -455,7 +455,7 @@ export const prepareSpreadsheet = {
                 end_date: chunk.end_date,
             })),
         }));
-        return spreadsheetUndefinedToNull(
+        return normalizeSpreadsheet(
             (
                 [
                     [
@@ -497,7 +497,7 @@ export const prepareSpreadsheet = {
         );
     },
     appointment: function (applicantMatchingData: ApplicantMatchingDatum[]) {
-        return spreadsheetUndefinedToNull(
+        return normalizeSpreadsheet(
             (
                 [
                     [

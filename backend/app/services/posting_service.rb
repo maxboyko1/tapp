@@ -206,6 +206,11 @@ class PostingService
         # Extract position preferences
         ranking_codes = Array(answers[:position_preferences])
 
+        # If there is only one item in the ranking, treat it as ranked
+        if ranking_codes.empty? && Array(answers[:willing_positions]).size == 1
+            ranking_codes = Array(answers[:willing_positions])
+        end
+
         # Extract position-specific custom question answers, extracting the position ID prefix
         # to differentiate questions associated with different positions
         position_custom_answers = {}
@@ -261,6 +266,15 @@ class PostingService
         # Retrieve all IDs for positions we are assigning preference levels for
         ranking_ids = ranking_codes.map { |code| code_to_id[code] }.compact
 
+        # Error if any ranked codes are not valid for this posting
+        invalid_codes = ranking_codes.uniq - code_to_id.keys
+        unless invalid_codes.empty?
+            raise StandardError,
+                  "Cannot set preferences for the following positions: '#{
+                    invalid_codes
+                }'"
+        end
+
         # Compute preference levels
         preference_levels = {}
         ranking_ids.each_with_index do |position_id, idx|
@@ -281,6 +295,8 @@ class PostingService
         # All other unselected, unranked positions get -1
         (all_ids - ranking_ids).each { |position_id| preference_levels[position_id] = -1 }
 
+        Rails.logger.debug "preference_levels: #{preference_levels.inspect}"
+
         # Build position preference attributes for all positions
         position_preferences_attributes = all_ids.map do |position_id|
             {
@@ -290,15 +306,6 @@ class PostingService
                 created_at: DateTime.now,
                 updated_at: DateTime.now
             }
-        end
-
-        # Error if any ranked codes are not valid for this posting
-        invalid_codes = ranking_codes.uniq - code_to_id.keys
-        unless invalid_codes.empty?
-            raise StandardError,
-                  "Cannot set preferences for the following positions: '#{
-                    invalid_codes
-                }'"
         end
 
         # Extract all the file upload questions
