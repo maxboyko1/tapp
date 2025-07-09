@@ -44,6 +44,7 @@ class PostingService
                 {
                     'type' => 'ranking',
                     'name' => 'position_preferences',
+                    'dragDropMode' => 'handle',
                     'isRequired' => true,
                     'title' => 'Rank your selected positions in order of preference, from highest to lowest.',
                     'description' => 'Any positions that are colour-coded the same here will be considered equivalent regarding your preference ranking.',

@@ -153,7 +153,7 @@ export const prepareSpreadsheet = {
             )
         );
     },
-    application: function (applications: Application[]) {
+    application: function (applications: Application[], isInstructor: boolean = false) {
         const minApps = applications.map(prepareMinimal.application);
         const baseUrl = document.location.origin;
 
@@ -178,7 +178,7 @@ export const prepareSpreadsheet = {
                         "UTORid",
                         "Student Number",
                         "email",
-                        "Phone",
+                        ...(isInstructor ? [] : ["Phone"]),
                         "Annotation",
                         "Department",
                         "Program",
@@ -203,7 +203,7 @@ export const prepareSpreadsheet = {
                     application.utorid,
                     application.student_number,
                     application.email,
-                    application.phone,
+                    ...(isInstructor ? [] : [application.phone]),
                     application.annotation,
                     application.department,
                     application.program,

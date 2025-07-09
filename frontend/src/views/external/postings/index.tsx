@@ -17,6 +17,7 @@ import CloseIcon from "@mui/icons-material/Close";
 
 import { apiGET, apiPOST } from "../../../libs/api-utils";
 
+import "core-js/stable";
 import "survey-core/survey-core.css";
 import "./survey.css";
 

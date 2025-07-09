@@ -27,11 +27,12 @@ type FilterFunc<T> = ((array: T[]) => T[]) | null;
  */
 export function prepareApplicationData(
     applications: Application[],
-    dataFormat: ExportFormat
+    dataFormat: ExportFormat,
+    isInstructor: boolean = false
 ) {
     return dataToFile(
         {
-            toSpreadsheet: () => prepareSpreadsheet.application(applications),
+            toSpreadsheet: () => prepareSpreadsheet.application(applications, isInstructor),
             toJson: () => ({
                 applications: applications.map((application) =>
                     prepareMinimal.application(application)

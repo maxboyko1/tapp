@@ -336,9 +336,7 @@ export const positionSummariesByIdSelector = createSelector(
             }
 
             // Add any positions that the applicant has applied to
-            for (const positionPref of applicantSummary.application?.position_preferences.filter(
-                (pref) => pref.preference_level !== 0
-            ) || []) {
+            for (const positionPref of applicantSummary.application?.position_preferences || []) {
                 applicantSummariesByPosition[positionPref.position.id] =
                     applicantSummariesByPosition[positionPref.position.id] ||
                     [];
