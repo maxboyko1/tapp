@@ -16,7 +16,7 @@ import { FilterType, filterMap } from "./filters";
 export const defaultFilterList: Record<FilterType, any[]> = {
     program: [],
     department: [],
-    taPositionPref: [0, -1, "other"],
+    taPositionPref: [-1, "other"],
     status: ["unassignable", "hidden"],
     hourFulfillment: [],
 };

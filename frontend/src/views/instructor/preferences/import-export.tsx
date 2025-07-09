@@ -30,7 +30,6 @@ export function ConnectedExportApplicationsAction() {
                 ? allApplications.filter((app) =>
                       app.position_preferences.some(
                           (pref) => pref.position.id === activePosition.id &&
-                                    pref.preference_level !== 0 &&
                                     pref.preference_level !== -1
                       )
                   )
@@ -56,7 +55,7 @@ export function ConnectedExportApplicationsAction() {
                 throw new Error(`Unknown export type ${exportType}`);
             }
 
-            const file = prepareApplicationData(applications, exportType);
+            const file = prepareApplicationData(applications, exportType, true);
             FileSaver.saveAs(file as any);
         }
         doExport().catch(console.error);
