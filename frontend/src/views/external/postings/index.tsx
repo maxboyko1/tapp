@@ -13,7 +13,6 @@ import {
     DialogActions,
     DialogContent,
     DialogTitle,
-    Grid,
     IconButton,
     Paper,
     Typography,
@@ -256,163 +255,195 @@ function PreferenceBoard(props: any) {
     }
 
     return (
-        <Box sx={{ width: "100%", mt: 2 }}>
+        <Box sx={{ width: "100%", mx: "auto", minWidth: 0 }}>
             <DragDropContext onDragEnd={onDragEnd}>
-                <Grid container direction="column" spacing={1}>
+                <Box sx={{ display: "flex", flexDirection: "column", width: "100%", minWidth: 0 }}>
                     {PREFERENCE_REGIONS.map(region => {
                         const isFinite = Number.isFinite(region.capacity);
                         const count = boardState[region.level].length;
                         const atCapacity = isFinite && count >= region.capacity;
                         return (
-                            <Grid key={region.level} sx={{ mb: 0.5 }}>
+                            <Box
+                                key={region.level}
+                                sx={{
+                                    width: "100%",
+                                    minWidth: 0,
+                                    mb: 1.5,
+                                    mr: 4,
+                                    background: region.background,
+                                    borderLeft: `6px solid ${region.borderLeft}`,
+                                    border: atCapacity ? "2px solid #dc4633" : "1px solid #ccc",
+                                    boxShadow: 0,
+                                    transition: "border 0.2s",
+                                    display: "flex",
+                                    flexDirection: "column",
+                                }}
+                            >
+                                {/* Region header: label and counter */}
                                 <Box
                                     sx={{
-                                        background: region.background,
-                                        borderLeft: `6px solid ${region.borderLeft}`,
-                                        border: atCapacity ? "2px solid #dc4633" : "1px solid #ccc",
-                                        p: 0,
-                                        mb: 0,
-                                        boxShadow: 0,
-                                        transition: "border 0.2s",
+                                        display: "flex",
+                                        justifyContent: "space-between",
+                                        alignItems: "center",
+                                        fontWeight: "bold",
+                                        px: 2,
+                                        py: 1,
+                                        borderBottom: "1px solid #ddd",
+                                        borderTopLeftRadius: 6,
+                                        borderTopRightRadius: 6,
+                                        width: "100%",
+                                        minWidth: 0,
+                                        boxSizing: "border-box",
                                     }}
                                 >
-                                    {/* Region header: label and counter */}
-                                    <Box
+                                    <Typography
+                                        variant="subtitle2"
                                         sx={{
-                                            display: "flex",
-                                            justifyContent: "space-between",
-                                            alignItems: "center",
                                             fontWeight: "bold",
-                                            px: 2,
-                                            py: 1,
-                                            borderBottom: "1px solid #ddd",
-                                            background: "#fff",
-                                            borderTopLeftRadius: 6,
-                                            borderTopRightRadius: 6,
+                                            color: region.color,
+                                            flex: 1,
+                                            textAlign: "left",
+                                            minWidth: 0,
                                         }}
                                     >
-                                        <Typography variant="subtitle2" sx={{ fontWeight: "bold", color: region.color }}>
-                                            {region.label}
-                                        </Typography>
-                                        {isFinite && (
-                                            <span style={{
-                                                background: atCapacity ? "#dc4633" : "#1e3765",
-                                                color: "#fff",
-                                                borderRadius: 8,
-                                                padding: "2px 10px",
-                                                fontWeight: "bold",
-                                                fontSize: "0.95em",
-                                                marginLeft: 8,
-                                                minWidth: 40,
-                                                textAlign: "center" as const,
+                                        {region.label}
+                                    </Typography>
+                                    {isFinite && (
+                                        <span style={{
+                                            background: atCapacity ? "#dc4633" : "#1e3765",
+                                            color: "#fff",
+                                            borderRadius: 8,
+                                            padding: "2px 10px",
+                                            fontWeight: "bold",
+                                            fontSize: "0.95em",
+                                            marginLeft: 8,
+                                            textAlign: "right",
+                                            transition: "background 0.2s",
+                                            whiteSpace: "nowrap",
+                                            boxSizing: "border-box",
+                                        }}>
+                                            {count}/{region.capacity}
+                                        </span>
+                                    )}
+                                </Box>
+                                {/* Droppable destination area for position items */}
+                                <Droppable
+                                    droppableId={String(region.level)}
+                                    isDropDisabled={atCapacity}
+                                >
+                                    {(provided, snapshot) => (
+                                        <Box
+                                            ref={provided.innerRef}
+                                            {...provided.droppableProps}
+                                            sx={{
+                                                minHeight: 40,
+                                                background: snapshot.isDraggingOver && !atCapacity
+                                                    ? "#e3f2fd"
+                                                    : region.background,
+                                                borderRadius: 0,
+                                                borderBottomLeftRadius: 6,
+                                                borderBottomRightRadius: 6,
+                                                py: 1,
                                                 transition: "background 0.2s",
-                                            }}>
-                                                {count}/{region.capacity}
-                                            </span>
-                                        )}
-                                    </Box>
-                                    {/* Droppable destination area for position items */}
-                                    <Droppable
-                                        droppableId={String(region.level)}
-                                        isDropDisabled={atCapacity}
-                                    >
-                                        {(provided, snapshot) => (
-                                            <Box
-                                                ref={provided.innerRef}
-                                                {...provided.droppableProps}
-                                                sx={{
-                                                    minHeight: 40,
-                                                    background: snapshot.isDraggingOver && !atCapacity
-                                                        ? "#e3f2fd"
-                                                        : region.background,
-                                                    borderRadius: 0,
-                                                    borderBottomLeftRadius: 6,
-                                                    borderBottomRightRadius: 6,
-                                                    px: 2,
-                                                    py: 1,
-                                                    transition: "background 0.2s",
-                                                }}
-                                            >
-                                                {boardState[region.level].map((posId, idx) => {
-                                                    const pos = positions.find((c: any) => c.id === posId);
-                                                    const isOpen = expanded.has(posId);
-                                                    return (
-                                                        <Draggable draggableId={String(posId)} index={idx} key={posId}>
-                                                            {(provided, snapshot) => (
-                                                                <div
-                                                                    ref={provided.innerRef}
-                                                                    {...provided.draggableProps}
-                                                                    style={{
-                                                                        ...provided.draggableProps.style,
-                                                                        marginBottom: 4,
+                                                alignSelf: "stretch",
+                                                boxSizing: "border-box",
+                                            }}
+                                        >
+                                            {boardState[region.level].map((posId, idx) => {
+                                                const pos = positions.find((c: any) => c.id === posId);
+                                                const isOpen = expanded.has(posId);
+                                                return (
+                                                    <Draggable draggableId={String(posId)} index={idx} key={posId}>
+                                                        {(provided, snapshot) => (
+                                                            <div
+                                                                ref={provided.innerRef}
+                                                                {...provided.draggableProps}
+                                                                style={{
+                                                                    ...provided.draggableProps.style,
+                                                                    marginBottom: 4,
+                                                                }}
+                                                            >
+                                                                {/* Draggable position card */}
+                                                                <Paper
+                                                                    elevation={isOpen ? 4 : 1}
+                                                                    sx={{
+                                                                        background: snapshot.isDragging ? "#e3f2fd" : "#fff",
+                                                                        borderLeft: `6px solid ${region.borderLeft}`,
+                                                                        borderRadius: 4,
+                                                                        mb: 0.5,
+                                                                        mx: 1,
+                                                                        transition: "background 0.2s",
+                                                                        alignSelf: "stretch",
+                                                                        boxSizing: "border-box",
                                                                     }}
                                                                 >
-                                                                    {/* Draggable position card */}
-                                                                    <Paper
-                                                                        elevation={isOpen ? 4 : 1}
+                                                                    {/* Position summary and expand/collapse section */}
+                                                                    <Box
+                                                                        {...provided.dragHandleProps}
                                                                         sx={{
-                                                                            background: snapshot.isDragging ? "#e3f2fd" : "#fff",
-                                                                            borderLeft: `6px solid ${region.borderLeft}`,
-                                                                            borderRadius: 4,
-                                                                            mb: 0.5,
-                                                                            transition: "background 0.2s",
+                                                                            display: "flex",
+                                                                            alignItems: "center",
+                                                                            cursor: "grab",
+                                                                            p: 1,
+                                                                            width: "100%",
+                                                                            minWidth: 0,
                                                                         }}
+                                                                        onClick={() => handleCollapseToggle(posId)}
                                                                     >
-                                                                        {/* Position summary and expand/collapse section */}
-                                                                        <Box
-                                                                            {...provided.dragHandleProps}
+                                                                        <ExpandMoreIcon
                                                                             sx={{
-                                                                                display: "flex",
-                                                                                alignItems: "center",
-                                                                                cursor: "grab",
-                                                                                p: 1,
+                                                                                mr: 1,
+                                                                                transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
+                                                                                transition: "transform 0.2s"
                                                                             }}
-                                                                            onClick={() => handleCollapseToggle(posId)}
+                                                                        />
+                                                                        <Typography
+                                                                            sx={{
+                                                                                wordBreak: "break-word",
+                                                                                whiteSpace: "normal",
+                                                                                display: "block",
+                                                                                flex: 1,
+                                                                                minWidth: 0,
+                                                                                pr: 2,
+                                                                            }}
                                                                         >
-                                                                            <ExpandMoreIcon
-                                                                                sx={{
-                                                                                    mr: 1,
-                                                                                    transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
-                                                                                    transition: "transform 0.2s"
-                                                                                }}
-                                                                            />
+                                                                            {pos.text}
+                                                                        </Typography>
+                                                                    </Box>
+                                                                    {/* Expanded details */}
+                                                                    <Collapse in={isOpen}>
+                                                                        <Box sx={{ p: 2, width: "100%", minWidth: 0 }}>
                                                                             <Typography
+                                                                                variant="body2"
                                                                                 sx={{
                                                                                     wordBreak: "break-word",
                                                                                     whiteSpace: "normal",
-                                                                                    display: "block",
-                                                                                    flex: 1,
+                                                                                    width: "100%",
                                                                                     minWidth: 0,
+                                                                                    display: "block",
+                                                                                    pr: 2,
                                                                                 }}
                                                                             >
-                                                                                {pos.text}
+                                                                                <b>Hours per assignment:</b> {pos.hours_per_assignment || "N/A"}<br/><br/>
+                                                                                <b>Duties:</b> {pos.duties || "N/A"}<br /><br />
+                                                                                <b>Qualifications:</b> {pos.qualifications || "N/A"}
                                                                             </Typography>
                                                                         </Box>
-                                                                        {/* Expanded details */}
-                                                                        <Collapse in={isOpen}>
-                                                                            <Box sx={{ p: 2 }}>
-                                                                                <Typography variant="body2">
-                                                                                    <b>Hours per assignment:</b> {pos.hours_per_assignment || "N/A"}<br/><br/>
-                                                                                    <b>Duties:</b> {pos.duties || "N/A"}<br /><br />
-                                                                                    <b>Qualifications:</b> {pos.qualifications || "N/A"}
-                                                                                </Typography>
-                                                                            </Box>
-                                                                        </Collapse>
-                                                                    </Paper>
-                                                                </div>
-                                                            )}
-                                                        </Draggable>
-                                                    );
-                                                })}
-                                                {provided.placeholder}
-                                            </Box>
-                                        )}
-                                    </Droppable>
-                                </Box>
-                            </Grid>
+                                                                    </Collapse>
+                                                                </Paper>
+                                                            </div>
+                                                        )}
+                                                    </Draggable>
+                                                );
+                                            })}
+                                            {provided.placeholder}
+                                        </Box>
+                                    )}
+                                </Droppable>
+                            </Box>
                         );
                     })}
-                </Grid>
+                </Box>
             </DragDropContext>
         </Box>
     );
