@@ -24,41 +24,29 @@ class PostingService
             fixed_survey['pages'] << posting_questions_page
         end
 
-        # Prepare all position data for choices and panels
+        # Prepare all position data for drag/drop board and custom question panels
         positions = assemble_position_data
-        choices = positions.map { |pos| { 'value' => pos[:value], 'text' => pos[:text] } }
+        fixed_survey['positions'] = positions
 
-        # Preferences page, with opt-in checkboxes for positions, followed by ranking of those checked
+        # Preferences page, drag and drop component for selecting position preferences
         preferences_page = {
             'name' => 'preferences_page',
+            'title' => 'Position Preferences',
             'elements' => [
                 {
-                    'type' => 'checkbox',
-                    'name' => 'willing_positions',
-                    'title' => 'Select all positions you are willing to TA.',
-                    'isRequired' => true,
-                    'description' =>
-                        'You may rank your selections in order of preference in the next question below. Duties, qualifications, etc for each of your selections will be shown on the next page, and each one may also have additional position-specific questions for you to answer.',
-                    'choices' => choices
-                },
-                {
-                    'type' => 'ranking',
+                    'type' => 'preference-board',
                     'name' => 'position_preferences',
-                    'dragDropMode' => 'handle',
-                    'isRequired' => true,
-                    'title' => 'Rank your selected positions in order of preference, from highest to lowest.',
-                    'description' => 'Any positions that are colour-coded the same here will be considered equivalent regarding your preference ranking.',
-                    'choices' => choices,
-                    'visibleIf' => '{willing_positions.length} > 0'
+                    'title' => 'Rank the positions you are interested in TAing for in order of preference by dragging and dropping them into their respective region below, leaving everything else in the "Unwilling" category.',
+                    'description' => 'The first four regions have capacity limits. You can also click on any position to see its associated hours, duties and qualifications info.',
+                    'positions' => positions
                 }
-            ],
-            'title' => 'Position Preferences'
+            ]
         }
         fixed_survey['pages'] << preferences_page
 
         # Add position-specific questions page
         position_panels = positions.map do |pos|
-            custom_elements =
+            custom_question_elements =
                 if pos[:custom_questions].present? && pos[:custom_questions]['elements'].present?
                     pos[:custom_questions]['elements'].map do |el|
                         el = el.deep_dup
@@ -70,37 +58,28 @@ class PostingService
                     [
                         {
                             'type' => 'html',
-                            'name' => "no_questions_#{pos[:value]}",
+                            'name' => "no_questions_#{pos[:id]}",
                             'html' => '<i>No questions for this position.</i>'
                         }
                     ]
                 end
             {
                 'type' => 'panel',
-                'name' => "panel_#{pos[:value]}",
+                'name' => "panel_#{pos[:id]}",
                 'title' => pos[:text].to_s,
-                'visibleIf' => "{willing_positions} contains '#{pos[:value]}'",
-                'elements' => [
-                    {
-                        'type' => 'html',
-                        'name' => "desc_#{pos[:value]}",
-                        'html' => "<b>Hours per assignment:</b> #{pos[:hours_per_assignment]}<br/><br/><b>Duties:</b> #{pos[:duties].to_s.gsub("\n", "<br/>")}<br/><br/><b>Qualifications:</b> #{pos[:qualifications].to_s.gsub("\n", "<br/>")}"
-                    }
-                ] + custom_elements
+                'visibleIf' => "{position_preferences.#{pos[:id]}} >= 0",
+                'elements' => custom_question_elements
             }
         end
 
         # This placeholder_panel logic is a workaround for a quirk of Survey.js that removes the
         # entire page from the survey if its elements field is empty, which is not really what we
         # want, we would rather show a message like this saying that no positions were selected.
-        # However, because the prior page's willing_positions question is required, an applicant
-        # filling out the survey should never actually see this placeholder panel on this page,
-        # and so it is only visible for TAPP admins in the Posting -> Preview view.
         placeholder_panel = {
             'type' => 'panel',
             'name' => 'no_positions_checked_panel',
             'title' => '(No Positions Selected)',
-            'visibleIf' => '{willing_positions.length} == 0',
+            'visibleIf' => positions.map { |pos| "{position_preferences.#{pos[:id]}} = -1" }.join(' and '),
             'elements' => [
                 {
                     'type' => 'html',
@@ -197,23 +176,22 @@ class PostingService
         utorid = user.utorid
         answers = answers.to_hash.symbolize_keys
 
-        # Get all valid position codes and ids for this posting
-        all_positions = PostingPosition.joins(:position)
+        # Get all valid position ids for this posting
+        all_ids = PostingPosition.joins(:position)
             .where(posting: @posting)
-            .pluck('positions.position_code', 'positions.id')
-        code_to_id = all_positions.to_h # code => positions.id
-        all_ids = all_positions.map(&:last) # positions.id
+            .pluck('positions.id')
 
-        # Extract position preferences
-        ranking_codes = Array(answers[:position_preferences])
+        # Extract position preferences from drag-and-drop board
+        preference_levels_by_id = answers[:position_preferences] || {}
 
-        # If there is only one item in the ranking, treat it as ranked
-        if ranking_codes.empty? && Array(answers[:willing_positions]).size == 1
-            ranking_codes = Array(answers[:willing_positions])
+        # Build preference_levels hash (all positions get a value, default -1)
+        preference_levels = {}
+        all_ids.each do |position_id|
+            level = preference_levels_by_id[position_id.to_s]
+            preference_levels[position_id] = level.nil? ? -1 : level.to_i
         end
 
-        # Extract position-specific custom question answers, extracting the position ID prefix
-        # to differentiate questions associated with different positions
+        # Extract position-specific custom question answers
         position_custom_answers = {}
         all_ids.each do |position_id|
             answers_for_id = answers.select { |k, _| k.to_s.start_with?("#{position_id}:") }
@@ -224,9 +202,8 @@ class PostingService
             position_custom_answers[position_id] = cleaned unless cleaned.empty?
         end
 
-        # Clean up posting answers json by removing position_preferences and willing_positions,
+        # Clean up posting answers json by removing position_preferences,
         # so we don't have this redundant info stored in the custom_question_answers later
-        answers.delete(:willing_positions)
         answers.delete(:position_preferences)
         all_ids.each do |position_id|
             answers.keys.grep(/^#{position_id}:/).each { |k| answers.delete(k) }
@@ -263,40 +240,6 @@ class PostingService
         end
         application_attributes[:session] = @posting.session
         application_attributes[:posting] = @posting
-
-        # Retrieve all IDs for positions we are assigning preference levels for
-        ranking_ids = ranking_codes.map { |code| code_to_id[code] }.compact
-
-        # Error if any ranked codes are not valid for this posting
-        invalid_codes = ranking_codes.uniq - code_to_id.keys
-        unless invalid_codes.empty?
-            raise StandardError,
-                  "Cannot set preferences for the following positions: '#{
-                    invalid_codes
-                }'"
-        end
-
-        # Compute preference levels
-        preference_levels = {}
-        ranking_ids.each_with_index do |position_id, idx|
-            level =
-                if idx.zero?
-                    4
-                elsif idx < 4
-                    3
-                elsif idx < 7
-                    2
-                elsif idx < 10
-                    1
-                else
-                    0
-                end
-            preference_levels[position_id] = level
-        end
-        # All other unselected, unranked positions get -1
-        (all_ids - ranking_ids).each { |position_id| preference_levels[position_id] = -1 }
-
-        Rails.logger.debug "preference_levels: #{preference_levels.inspect}"
 
         # Build position preference attributes for all positions
         position_preferences_attributes = all_ids.map do |position_id|
