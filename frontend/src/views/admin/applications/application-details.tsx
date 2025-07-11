@@ -153,7 +153,7 @@ function createSurveyModel(jsonSurvey: any, data: any) {
 }
 
 /**
- * Map applicant preference levels to human-readable labels.
+ * Map applicant preference levels to display colors.
  * @param level preference level from 0 to 4.
  * @returns 
  */
@@ -180,10 +180,10 @@ function getApplicantPreferenceChipStyle(theme: Theme, level: number) {
  */
 function getApplicantPreferenceLevelLabel(level: number): string {
     switch (level) {
-        case 4: return "First Choice";
-        case 3: return "Second Choice";
-        case 2: return "Third Choice";
-        case 1: return "Fourth Choice";
+        case 4: return "1st Choice";
+        case 3: return "2nd Choice";
+        case 2: return "3rd Choice";
+        case 1: return "4th Choice";
         case 0: return "Willing";
         default: return ""; // -1 case, should not reach
     }

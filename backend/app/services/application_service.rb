@@ -30,44 +30,22 @@ class ApplicationService
             data.merge! @application.custom_question_answers.except('utorid')
         end
 
-        # Position preferences and position-specific answers, which the user may have
-        # filled out previously for any positions ranked >= 0 in preference
-        willing_positions = []
-        willing_only_positions = []
-        ranked_positions = []
-
+        # Retrieve position preferences from drag-and-drop board, and custom question answers if any
+        position_preferences_hash = {}
         position_preferences_subs.each do |preference|
-            code = preference['position_code']
-            pos_id = preference['position_id']
+            id = preference['position_id']
             level = preference['preference_level'].to_i
-
-            # Willing if level >= 0
-            willing_positions << code if level >= 0
-
-            # Ranked if level > 0 (sort by level descending)
-            if level.positive?
-                ranked_positions << [code, level]
-            elsif level.zero?
-                willing_only_positions << code
-            end
+            position_preferences_hash[id] = level
 
             # Position-specific custom question answers
             next unless preference['custom_question_answers'].present?
 
-            # In the survey prefill data, each answer to a custom question is stored
-            # in a format like "1:Who are you?": "Myself", the actual question name
-            # is prefixed with the position ID, to account for possible duplicate
-            # question names across different positions.
             preference['custom_question_answers'].each do |k, v|
-                data["#{pos_id}:#{k}"] = v
+                data["#{preference['position_id']}:#{k}"] = v
             end
         end
 
-        # Sort ranked_positions by level descending, then by code for stability
-        ranked_positions.sort_by! { |code, level| [-level, code] }
-        # Prefill ranking with ranked positions first, then willing-only positions
-        data[:willing_positions] = willing_positions
-        data[:position_preferences] = ranked_positions.map(&:first) + willing_only_positions
+        data[:position_preferences] = position_preferences_hash
 
         data.symbolize_keys!
     end

@@ -1,25 +1,414 @@
 import React from "react";
 import { useParams } from "react-router-dom";
-import { Model } from "survey-core";
+import { ElementFactory, Model, Question, Serializer } from "survey-core";
 import { DoubleBorderLight } from "survey-core/themes";
-import { Survey } from "survey-react-ui";
+import { ReactQuestionFactory, Survey, SurveyQuestionElementBase } from "survey-react-ui";
 import {
     Alert,
+    Box,
     Button,
     CircularProgress,
+    Collapse,
     Dialog,
     DialogActions,
     DialogContent,
     DialogTitle,
+    Grid,
     IconButton,
+    Paper,
+    Typography,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 
 import { apiGET, apiPOST } from "../../../libs/api-utils";
 
 import "core-js/stable";
 import "survey-core/survey-core.css";
-import "./survey.css";
+
+// --- Position Preferences Custom Drag/Drop Board Component ---
+
+// Defines static info for rendering the preference regions of the board
+const PREFERENCE_REGIONS = [
+    {
+        level: 4,
+        label: "1st Choice",
+        capacity: 1,
+        background: "#e0f7f4",
+        borderLeft: "#00a189",
+        color: "#00a189"
+    },
+    {
+        level: 3,
+        label: "2nd Choices",
+        capacity: 3,
+        background: "#f3fae5",
+        borderLeft: "#8dbf2e",
+        color: "#8dbf2e"
+    },
+    {
+        level: 2,
+        label: "3rd Choices",
+        capacity: 3,
+        background: "#fae6f0",
+        borderLeft: "#ab1368",
+        color: "#ab1368"
+    },
+    {
+        level: 1,
+        label: "4th Choices",
+        capacity: 3,
+        background: "#ede6f1",
+        borderLeft: "#6d247a",
+        color: "#6d247a"
+    },
+    {
+        level: 0,
+        label: "Willing",
+        capacity: Infinity,
+        background: "#fffbe7",
+        borderLeft: "#f1c500",
+        color: "#f1c500"
+    },
+    {
+        level: -1,
+        label: "Unwilling",
+        capacity: Infinity,
+        background: "#f0f0f0",
+        borderLeft: "#b0b0b0",
+        color: "#b0b0b0"
+    }
+];
+
+// Returns the initial board state: all positions start in the "Unwilling" region (-1).
+function getInitialBoardState(choices: any[]): Record<number, string[]> {
+    const state: Record<number, string[]> = {};
+    for (const region of PREFERENCE_REGIONS) {
+        state[region.level] = [];
+    }
+    for (const choice of choices) {
+        state[-1].push(choice.id);
+    }
+    return state;
+}
+
+// Converts a value object (from SurveyJS) into the board state structure.
+function getBoardStateFromValue(value: Record<string, number>, choices: any[]): Record<number, string[]> {
+    const state: Record<number, string[]> = {};
+    for (const region of PREFERENCE_REGIONS) {
+        state[region.level] = [];
+    }
+    for (const choice of choices) {
+        const level = value?.[choice.id] ?? -1;
+        state[level].push(choice.id);
+    }
+    return state;
+}
+
+// Converts the board state back into a value object for SurveyJS (position.id -> preference_level).
+function getValueFromBoardState(boardState: Record<number, string[]>): Record<string, number> {
+    const value: Record<string, number> = {};
+    for (const region of PREFERENCE_REGIONS) {
+        for (const id of boardState[region.level]) {
+            value[id] = region.level;
+        }
+    }
+    return value;
+}
+
+// Handles moving an item from one region to another, ensuring no duplicates and
+// enforcing region capacity.
+function moveItem(
+    boardState: Record<number, string[]>,
+    source: { droppableId: string; index: number },
+    destination: { droppableId: string; index: number }
+): Record<number, string[]> {
+    const sourceLevel = Number(source.droppableId);
+    const destLevel = Number(destination.droppableId);
+
+    // If dropped in the same place, do nothing
+    if (sourceLevel === destLevel && source.index === destination.index) {
+        return boardState;
+    }
+
+    const sourceList = Array.from(boardState[sourceLevel]);
+    const destList = Array.from(boardState[destLevel]);
+
+    // Prevent duplicate: if moving within same region and item is already at dest index
+    if (sourceLevel === destLevel && destList[destination.index] === sourceList[source.index]) {
+        return boardState;
+    }
+
+    const [removed] = sourceList.splice(source.index, 1);
+
+    // Prevent duplicate: if already present in destList, do not insert again
+    if (destList.includes(removed)) {
+        return boardState;
+    }
+
+    destList.splice(destination.index, 0, removed);
+
+    return {
+        ...boardState,
+        [sourceLevel]: sourceList,
+        [destLevel]: destList,
+    };
+}
+
+// --- SurveyJS Drag/Drop Question Registration ---
+
+const CUSTOM_TYPE = "preference-board";
+
+// SurveyJS model for the custom drag/drop question type
+class QuestionPreferenceBoardModel extends Question {
+    getType() { return CUSTOM_TYPE; }
+    get positions() { return this.getPropertyValue("positions"); }
+    set positions(val) { this.setPropertyValue("positions", val); }
+}
+
+// Register the custom question type with SurveyJS
+ElementFactory.Instance.registerElement(
+    CUSTOM_TYPE,
+    (name) => new QuestionPreferenceBoardModel(name)
+);
+
+// Add the custom question type to the SurveyJS serializer
+Serializer.addClass(
+    CUSTOM_TYPE,
+    [{ name: "positions", default: [] }],
+    () => new QuestionPreferenceBoardModel(""),
+    "question"
+);
+
+// SurveyJS React wrapper for the custom drag/drop board
+class SurveyQuestionPreferenceBoard extends SurveyQuestionElementBase {
+    get question(): QuestionPreferenceBoardModel {
+        return this.questionBase as QuestionPreferenceBoardModel;
+    }
+    renderElement() {
+        return <PreferenceBoard question={this.question} />;
+    }
+}
+
+// Register the React component for the custom question type
+ReactQuestionFactory.Instance.registerQuestion(
+    CUSTOM_TYPE,
+    (props) => React.createElement(SurveyQuestionPreferenceBoard, props)
+);
+
+// The actual custom component
+function PreferenceBoard(props: any) {
+    const { question } = props;
+    // Positions available for ranking
+    const positions = React.useMemo(() => question.positions || [], [question.positions]);
+    // Tracks which items are expanded (duties, qualifications, hours info visible)
+    const [expanded, setExpanded] = React.useState<Set<string>>(new Set());
+
+    // Board state, which positions are in which region, either we pull prefilled data from
+    // the database if available or we use the default all -1 (Unwilling) state
+    const [boardState, setBoardState] = React.useState<Record<number, string[]>>(
+        () =>
+            question.value
+                ? getBoardStateFromValue(question.value, positions)
+                : getInitialBoardState(positions)
+    );
+
+    // Sync board state if question value changes externally
+    React.useEffect(() => {
+        // If question.value changes externally, update board state
+        if (question.value) {
+            setBoardState(getBoardStateFromValue(question.value, positions));
+        }
+    }, [question.value, positions]);
+
+    // Toggle expanded/collapsed state for a position item
+    function handleCollapseToggle(code: string) {
+        setExpanded(prev => {
+            const next = new Set(prev);
+            if (next.has(code)) {
+                next.delete(code);
+            } else {
+                next.add(code);
+            }
+            return next;
+        });
+    }
+
+    // Handle drag-and-drop events
+    function onDragEnd(result: any) {
+        if (!result.destination) return;
+        const destLevel = Number(result.destination.droppableId);
+        const destCapacity = PREFERENCE_REGIONS.find(r => r.level === destLevel)?.capacity ?? Infinity;
+        if (boardState[destLevel].length >= destCapacity) return;
+
+        const newState = moveItem(boardState, result.source, result.destination);
+        setBoardState(newState);
+        question.value = getValueFromBoardState(newState);
+
+        // Collapse the dragged item if it was expanded
+        const draggedCode = boardState[Number(result.source.droppableId)][result.source.index];
+        setExpanded(prev => {
+            const next = new Set(prev);
+            next.delete(draggedCode);
+            return next;
+        });
+    }
+
+    return (
+        <Box sx={{ width: "100%", mt: 2 }}>
+            <DragDropContext onDragEnd={onDragEnd}>
+                <Grid container direction="column" spacing={1}>
+                    {PREFERENCE_REGIONS.map(region => {
+                        const isFinite = Number.isFinite(region.capacity);
+                        const count = boardState[region.level].length;
+                        const atCapacity = isFinite && count >= region.capacity;
+                        return (
+                            <Grid key={region.level} sx={{ mb: 0.5 }}>
+                                <Box
+                                    sx={{
+                                        background: region.background,
+                                        borderLeft: `6px solid ${region.borderLeft}`,
+                                        border: atCapacity ? "2px solid #dc4633" : "1px solid #ccc",
+                                        p: 0,
+                                        mb: 0,
+                                        boxShadow: 0,
+                                        transition: "border 0.2s",
+                                    }}
+                                >
+                                    {/* Region header: label and counter */}
+                                    <Box
+                                        sx={{
+                                            display: "flex",
+                                            justifyContent: "space-between",
+                                            alignItems: "center",
+                                            fontWeight: "bold",
+                                            px: 2,
+                                            py: 1,
+                                            borderBottom: "1px solid #ddd",
+                                            background: "#fff",
+                                            borderTopLeftRadius: 6,
+                                            borderTopRightRadius: 6,
+                                        }}
+                                    >
+                                        <Typography variant="subtitle2" sx={{ fontWeight: "bold", color: region.color }}>
+                                            {region.label}
+                                        </Typography>
+                                        {isFinite && (
+                                            <span style={{
+                                                background: atCapacity ? "#dc4633" : "#1e3765",
+                                                color: "#fff",
+                                                borderRadius: 8,
+                                                padding: "2px 10px",
+                                                fontWeight: "bold",
+                                                fontSize: "0.95em",
+                                                marginLeft: 8,
+                                                minWidth: 40,
+                                                textAlign: "center" as const,
+                                                transition: "background 0.2s",
+                                            }}>
+                                                {count}/{region.capacity}
+                                            </span>
+                                        )}
+                                    </Box>
+                                    {/* Droppable destination area for position items */}
+                                    <Droppable
+                                        droppableId={String(region.level)}
+                                        isDropDisabled={atCapacity}
+                                    >
+                                        {(provided, snapshot) => (
+                                            <Box
+                                                ref={provided.innerRef}
+                                                {...provided.droppableProps}
+                                                sx={{
+                                                    minHeight: 40,
+                                                    background: snapshot.isDraggingOver && !atCapacity
+                                                        ? "#e3f2fd"
+                                                        : region.background,
+                                                    borderRadius: 0,
+                                                    borderBottomLeftRadius: 6,
+                                                    borderBottomRightRadius: 6,
+                                                    px: 2,
+                                                    py: 1,
+                                                    transition: "background 0.2s",
+                                                }}
+                                            >
+                                                {boardState[region.level].map((posId, idx) => {
+                                                    const pos = positions.find((c: any) => c.id === posId);
+                                                    const isOpen = expanded.has(posId);
+                                                    return (
+                                                        <Draggable draggableId={String(posId)} index={idx} key={posId}>
+                                                            {(provided, snapshot) => (
+                                                                <div
+                                                                    ref={provided.innerRef}
+                                                                    {...provided.draggableProps}
+                                                                    style={{
+                                                                        ...provided.draggableProps.style,
+                                                                        marginBottom: 4,
+                                                                    }}
+                                                                >
+                                                                    {/* Draggable position card */}
+                                                                    <Paper
+                                                                        elevation={isOpen ? 4 : 1}
+                                                                        sx={{
+                                                                            background: snapshot.isDragging ? "#e3f2fd" : "#fff",
+                                                                            borderLeft: `6px solid ${region.borderLeft}`,
+                                                                            borderRadius: 4,
+                                                                            mb: 0.5,
+                                                                            transition: "background 0.2s",
+                                                                        }}
+                                                                    >
+                                                                        {/* Position summary and expand/collapse section */}
+                                                                        <Box
+                                                                            {...provided.dragHandleProps}
+                                                                            sx={{
+                                                                                display: "flex",
+                                                                                alignItems: "center",
+                                                                                cursor: "grab",
+                                                                                p: 1,
+                                                                            }}
+                                                                            onClick={() => handleCollapseToggle(posId)}
+                                                                        >
+                                                                            <ExpandMoreIcon
+                                                                                sx={{
+                                                                                    mr: 1,
+                                                                                    transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
+                                                                                    transition: "transform 0.2s"
+                                                                                }}
+                                                                            />
+                                                                            <Typography>{pos.text}</Typography>
+                                                                        </Box>
+                                                                        {/* Expanded details */}
+                                                                        <Collapse in={isOpen}>
+                                                                            <Box sx={{ p: 2 }}>
+                                                                                <Typography variant="body2">
+                                                                                    <b>Hours per assignment:</b> {pos.hours_per_assignment || "N/A"}<br/><br/>
+                                                                                    <b>Duties:</b> {pos.duties || "N/A"}<br /><br />
+                                                                                    <b>Qualifications:</b> {pos.qualifications || "N/A"}
+                                                                                </Typography>
+                                                                            </Box>
+                                                                        </Collapse>
+                                                                    </Paper>
+                                                                </div>
+                                                            )}
+                                                        </Draggable>
+                                                    );
+                                                })}
+                                                {provided.placeholder}
+                                            </Box>
+                                        )}
+                                    </Droppable>
+                                </Box>
+                            </Grid>
+                        );
+                    })}
+                </Grid>
+            </DragDropContext>
+        </Box>
+    );
+}
+
+// --- End of Position Preferences Custom Drag/Drop Board Component ---
 
 /**
  * Determine whether a survey.js survey has has at least one
@@ -33,8 +422,9 @@ function validSurvey(surveyJson: any): boolean {
     for (const page of surveyJson?.pages || []) {
         for (const item of page?.elements || []) {
             if (
-                item.name === "willing_positions" &&
-                item?.choices?.length > 0
+                item.name === "position_preferences" &&
+                Array.isArray(item.positions) &&
+                item.positions.length > 0
             ) {
                 return true;
             }
@@ -225,29 +615,6 @@ export default function PostingView() {
             }
         });
     }, [survey, setSurveyData, setSubmitDialogVisible, hasSubmitted]);
-
-    // Filter out items in the position preferences ranking question if they were not selected
-    // to be included as such in the prior checkbox question, i.e. the "Unwilling" category
-    React.useEffect(() => {
-        if (!survey) return;
-        survey.onValueChanged.add((sender, options) => {
-            if (options.name === "willing_positions") {
-                const rankingQuestion = sender.getQuestionByName("position_preferences");
-                if (rankingQuestion) {
-                    // Only show choices that are in willing_positions
-                    const allChoices = surveyJson.pages
-                        .find((p: any) =>
-                            p.elements.some((el: any) => el.name === "position_preferences")
-                        )
-                        ?.elements.find((el: any) => el.name === "position_preferences")
-                        ?.choices || [];
-                    rankingQuestion.choices = allChoices.filter((choice: any) =>
-                        (options.value || []).includes(choice.value)
-                    );
-                }
-            }
-        });
-    }, [survey, surveyJson]);
 
     if (url_token == null) {
         return <React.Fragment>Unknown URL token.</React.Fragment>;

@@ -152,6 +152,11 @@
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.27.4.tgz#a91ec580e6c00c67118127777c316dfd5a5a6abf"
   integrity sha512-t3yaEOuGu9NlIZ+hIeGbBjFtZT7j2cb2tg0fuaJKeGotchRjjLfrBA9Kwf8quhpP1EUuxModQg04q/mBwyg8uA==
 
+"@babel/runtime@^7.26.7":
+  version "7.27.6"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.27.6.tgz#ec4070a04d76bae8ddbb10770ba55714a417b7c6"
+  integrity sha512-vbavdySgbTTrmFE+EsiqUTzlOr5bzlnJtUv9PynGCAKvfQqjIXbvFdumPM/GxMDfyuGMJaJAU6TO4zc1Jf1i8Q==
+
 "@babel/template@^7.27.2":
   version "7.27.2"
   resolved "https://registry.yarnpkg.com/@babel/template/-/template-7.27.2.tgz#fa78ceed3c4e7b63ebf6cb39e5852fca45f6809d"
@@ -472,6 +477,17 @@
   version "8.57.1"
   resolved "https://registry.yarnpkg.com/@eslint/js/-/js-8.57.1.tgz#de633db3ec2ef6a3c89e2f19038063e8a122e2c2"
   integrity sha512-d9zaMRSTIKDLhctzH12MtXvJKSSUhaHcjV+2Z+GK+EEY7XKpP5yR4x+N3TAcHTcu963nIr+TMcCb4DBCYX1z6Q==
+
+"@hello-pangea/dnd@^18.0.1":
+  version "18.0.1"
+  resolved "https://registry.yarnpkg.com/@hello-pangea/dnd/-/dnd-18.0.1.tgz#7d5ef7fe8bddf195307b16e03635b1be582b7b8d"
+  integrity sha512-xojVWG8s/TGrKT1fC8K2tIWeejJYTAeJuj36zM//yEm/ZrnZUSFGS15BpO+jGZT1ybWvyXmeDJwPYb4dhWlbZQ==
+  dependencies:
+    "@babel/runtime" "^7.26.7"
+    css-box-model "^1.2.1"
+    raf-schd "^4.0.3"
+    react-redux "^9.2.0"
+    redux "^5.0.1"
 
 "@humanwhocodes/config-array@^0.13.0":
   version "0.13.0"
@@ -2167,6 +2183,13 @@ cross-spawn@^7.0.2, cross-spawn@^7.0.6:
     path-key "^3.1.0"
     shebang-command "^2.0.0"
     which "^2.0.1"
+
+css-box-model@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/css-box-model/-/css-box-model-1.2.1.tgz#59951d3b81fd6b2074a62d49444415b0d2b4d7c1"
+  integrity sha512-a7Vr4Q/kd/aw96bnJG332W9V9LkJO69JRcaCYDUqjp6/z0w6VcZjgAcTbgFxEPfBgdnAwlh3iwu+hLopa+flJw==
+  dependencies:
+    tiny-invariant "^1.0.6"
 
 csstype@^3.0.2, csstype@^3.1.3:
   version "3.1.3"
@@ -3920,6 +3943,11 @@ queue-microtask@^1.2.2:
   resolved "https://registry.yarnpkg.com/queue-microtask/-/queue-microtask-1.2.3.tgz#4929228bbc724dfac43e0efb058caf7b6cfb6243"
   integrity sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==
 
+raf-schd@^4.0.3:
+  version "4.0.3"
+  resolved "https://registry.yarnpkg.com/raf-schd/-/raf-schd-4.0.3.tgz#5d6c34ef46f8b2a0e880a8fcdb743efc5bfdbc1a"
+  integrity sha512-tQkJl2GRWh83ui2DiPTJz9wEiMN20syf+5oKfB03yYP7ioZcJwsIK8FjrtLwH1m7C7e+Tt2yYBlrOpdT+dyeIQ==
+
 ramda-adjunct@^5.0.0, ramda-adjunct@^5.1.0:
   version "5.1.0"
   resolved "https://registry.yarnpkg.com/ramda-adjunct/-/ramda-adjunct-5.1.0.tgz#c1281100922b03e74b1535cb9c966628697c5cc1"
@@ -4585,7 +4613,7 @@ text-table@^0.2.0:
   resolved "https://registry.yarnpkg.com/text-table/-/text-table-0.2.0.tgz#7f5ee823ae805207c00af2df4a84ec3fcfa570b4"
   integrity sha512-N+8UisAXDGk8PFXP4HAzVR9nbfmVJ3zYLAWiTIoqC5v5isinhr+r5uaO8+7r3BMfuNIufIsA7RdpVgacC2cSpw==
 
-tiny-invariant@^1.3.3:
+tiny-invariant@^1.0.6, tiny-invariant@^1.3.3:
   version "1.3.3"
   resolved "https://registry.yarnpkg.com/tiny-invariant/-/tiny-invariant-1.3.3.tgz#46680b7a873a0d5d10005995eb90a70d74d60127"
   integrity sha512-+FbBPE1o9QAYvviau/qC5SE3caw21q3xkvWKBtja5vgqOWIHHJ3ioaq1VPfn/Szqctz2bU/oYeKd9/z5BL+PVg==
