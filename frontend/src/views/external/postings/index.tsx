@@ -376,7 +376,17 @@ function PreferenceBoard(props: any) {
                                                                                     transition: "transform 0.2s"
                                                                                 }}
                                                                             />
-                                                                            <Typography>{pos.text}</Typography>
+                                                                            <Typography
+                                                                                sx={{
+                                                                                    wordBreak: "break-word",
+                                                                                    whiteSpace: "normal",
+                                                                                    display: "block",
+                                                                                    flex: 1,
+                                                                                    minWidth: 0,
+                                                                                }}
+                                                                            >
+                                                                                {pos.text}
+                                                                            </Typography>
                                                                         </Box>
                                                                         {/* Expanded details */}
                                                                         <Collapse in={isOpen}>
