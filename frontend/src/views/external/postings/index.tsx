@@ -595,6 +595,7 @@ export default function PostingView() {
     const [submitDialogVisible, setSubmitDialogVisible] = React.useState(false);
     const [hasSubmitted, setHasSubmitted] = React.useState(false);
     const [waiting, setWaiting] = React.useState(false);
+    const submittingRef = React.useRef(false);
     const [submissionError, setSubmissionError] = React.useState<string | null>(
         null
     );
@@ -676,9 +677,12 @@ export default function PostingView() {
 
     // Handle survey results submission back to the backend for processing
     async function confirmClicked() {
+        if (submittingRef.current) return; // Prevent duplicate submissions
+        submittingRef.current = true;
+
         console.log("Submitting data", surveyData);
+        setWaiting(true);
         try {
-            setWaiting(true);
             await apiPOST(
                 `/external/postings/${url_token}/submit`,
                 { answers: surveyData },
@@ -694,6 +698,7 @@ export default function PostingView() {
             setSubmissionError("Could not submit application.");
         } finally {
             setWaiting(false);
+            submittingRef.current = false;
         }
     }
 
@@ -704,6 +709,7 @@ export default function PostingView() {
         setHasSubmitted(false);
         setSubmitDialogVisible(false);
         setSubmissionError(null);
+        submittingRef.current = false;
     }
 
     return (
