@@ -187,7 +187,6 @@ export const prepareSpreadsheet = {
                         "CV/LinkedIn",
                         "Posting",
                         "Position Preferences",
-                        "Previous Experience Summary",
                         "Comments",
                         "Documents",
                         "Instructor Preferences",
