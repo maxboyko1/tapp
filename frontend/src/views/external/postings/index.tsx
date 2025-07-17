@@ -575,7 +575,7 @@ function ConfirmDialog({
                 <Button
                     variant="contained"
                     onClick={confirmClicked}
-                    disabled={!!submissionError}
+                    disabled={!!submissionError || waiting}
                     startIcon={waiting ? <CircularProgress size={18} /> : null}
                 >
                     Submit
