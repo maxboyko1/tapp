@@ -219,7 +219,7 @@ class PostingService
         # Extract application info
         application_attributes = rest
         rest = application_attributes.slice!(
-            :comments, :department, :gpa, :cv_link, :program
+            :comments, :department, :gpa, :program
         )
 
         # Build prior_assignments from the applicant's offer history

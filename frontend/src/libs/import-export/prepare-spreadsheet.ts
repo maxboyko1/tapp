@@ -153,8 +153,10 @@ export const prepareSpreadsheet = {
             )
         );
     },
-    application: function (applications: Application[], isInstructor: boolean = false) {
-        const minApps = applications.map(prepareMinimal.application);
+    application: function (applications: Application[], activePosition: Position | null = null) {
+        const minApps = applications.map(app =>
+            prepareMinimal.application(app, activePosition?.id)
+        );
         const baseUrl = document.location.origin;
 
         // Collect all unique posting-level custom question keys (excluding "utorid"),
@@ -169,82 +171,123 @@ export const prepareSpreadsheet = {
             )
         );
 
+        // A null activePosition value means we are performing the admin-side spreadsheet export
+        // of all applications for the session, a non-null activePosition means we are performing
+        // the instructor-side export of applications for one specific position, in which case we
+        // are streamlining the info shown for some columns, and omitting some of them entirely
+        const headers = [
+            "Last Name",
+            "First Name",
+            "UTORid",
+            "Student Number",
+            "email",
+            ...(activePosition ? [] : ["Phone"]),
+            "Annotation",
+            "Department",
+            "Program",
+            "YIP",
+            ...(activePosition ? [] : ["GPA"]),
+            ...(activePosition ? [] : ["Posting"]),
+            "Applicant Comments",
+            ...(activePosition
+                ? [
+                    "Applicant Preference Level",
+                    "Instructor Preference Level",
+                    "Instructor Comment"
+                ]
+                : [
+                    "Position Preferences",
+                    "Top 10 Positions",
+                    "Instructor Preferences",
+                    "Instructor Comments"
+                ]),
+            "Assignment(s)",
+            "Documents",
+            ...(activePosition ? [] : ["Submission Date"]),
+            ...allCustomQuestionKeys,
+        ];
+
         return normalizeSpreadsheet(
-            (
-                [
-                    [
-                        "Last Name",
-                        "First Name",
-                        "UTORid",
-                        "Student Number",
-                        "email",
-                        ...(isInstructor ? [] : ["Phone"]),
-                        "Annotation",
-                        "Department",
-                        "Program",
-                        "YIP",
-                        "GPA",
-                        "CV/LinkedIn",
-                        "Posting",
-                        "Position Preferences",
-                        "Comments",
-                        "Documents",
-                        "Instructor Preferences",
-                        "Instructor Comments",
-                        "Submission Date",
-                        ...allCustomQuestionKeys,
-                    ],
-                ] as CellType[][]
-            ).concat(
-                minApps.map((application) => [
-                    application.last_name,
-                    application.first_name,
-                    application.utorid,
-                    application.student_number,
-                    application.email,
-                    ...(isInstructor ? [] : [application.phone]),
-                    application.annotation,
-                    application.department,
-                    application.program,
-                    application.yip,
-                    application.gpa,
-                    application.cv_link,
-                    application.posting,
-                    application.position_preferences
-                        .map((pref) => {
-                            const posCode = pref.position_code;
-                            const prefLevel = pref.preference_level;
-                            const customAnswers = pref.custom_question_answers ?
-                                JSON.stringify(pref.custom_question_answers) : null;
-                            return `${posCode}:${prefLevel}:${customAnswers}`;
-                        }).join("; "),
-                    application.comments,
-                    application.documents
-                        .map(
-                            (document) =>
-                                new URL(
-                                    `${baseUrl}/external/files/${document.url_token}`
-                                ).href
-                        )
-                        .join(" "),
-                    application.instructor_preferences
-                        .map(
-                            (pref) =>
-                                `${pref.position_code}:${pref.preference_level}`
-                        )
-                        .join("; "),
-                    application.instructor_preferences
-                        .filter((pref) => pref.comment != null)
-                        .map(
-                            (pref) => `${pref.position_code}:"${pref.comment}"`
-                        )
-                        .join("; "),
-                    application.submission_date,
-                    ...allCustomQuestionKeys.map(
-                        (key) => (application.custom_question_answers as Record<string, any> | undefined)?.[key] ?? ""
-                    ),
-                ])
-            )
+            [
+                headers,
+                ...minApps.map((application: any) => {
+                    // Compute assignments for this applicant
+                    const applicantAssignments = (application.assignments || [])
+                        .filter((assignment: any) =>
+                            assignment.active_offer_status &&
+                            assignment.applicant &&
+                            assignment.applicant.utorid === application.utorid
+                        );
+
+                    return [
+                        application.last_name,
+                        application.first_name,
+                        application.utorid,
+                        application.student_number,
+                        application.email,
+                        ...(activePosition ? [] : [application.phone]),
+                        application.annotation,
+                        application.department,
+                        application.program,
+                        application.yip,
+                        ...(activePosition ? [] : [application.gpa]),
+                        ...(activePosition ? [] : [application.posting]),
+                        application.comments,
+                        ...(activePosition
+                            ? [
+                                application.applicant_preference_level,
+                                application.instructor_preference_level,
+                                application.instructor_comment
+                            ]
+                            : [
+                                application.position_preferences
+                                    .filter((pref: any) => pref.preference_level !== -1)
+                                    .map((pref: any) => `${pref.position_code}:${pref.preference_level}`)
+                                    .join("; "),
+                                application.position_preferences
+                                    .filter(
+                                        (pref: any) =>
+                                            pref.preference_level >= 1 && pref.preference_level <= 4
+                                    )
+                                    .sort(
+                                        (a: any, b: any) => b.preference_level - a.preference_level
+                                    )
+                                    .map((pref: any) => pref.position_code)
+                                    .join(", "),
+                                application.instructor_preferences
+                                    .map(
+                                        (pref: any) =>
+                                            `${pref.position_code}:${pref.preference_level}`
+                                    )
+                                    .join("; "),
+                                application.instructor_preferences
+                                    .filter((pref: any) => pref.comment != null)
+                                    .map(
+                                        (pref: any) => `${pref.position_code}:"${pref.comment}"`
+                                    )
+                                    .join("; "),
+                            ]),
+                        applicantAssignments
+                            .map(
+                                (assignment: any) =>
+                                    `${assignment.position.position_code} (${assignment.hours}) (${assignment.active_offer_status})`
+                            )
+                            .join("; "),
+                        application.documents
+                            .map(
+                                (document: any) =>
+                                    new URL(
+                                        `${baseUrl}/external/files/${document.url_token}`
+                                    ).href
+                            )
+                            .join(" "),
+                        ...(activePosition ? [] : [application.submission_date]),
+                        ...allCustomQuestionKeys.map(
+                            (key) => (application.custom_question_answers as Record<string, any> | undefined)?.[key] ?? ""
+                        ),
+                    ];
+                }),
+            ]
         );
     },
     position: function (positions: Position[]) {

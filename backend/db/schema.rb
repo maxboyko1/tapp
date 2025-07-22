@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2025_06_13_144542) do
+ActiveRecord::Schema.define(version: 2025_07_21_212223) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -89,7 +89,6 @@ ActiveRecord::Schema.define(version: 2025_06_13_144542) do
     t.float "gpa"
     t.json "custom_question_answers"
     t.bigint "posting_id"
-    t.string "cv_link"
     t.index ["applicant_id"], name: "index_applications_on_applicant_id"
     t.index ["posting_id"], name: "index_applications_on_posting_id"
     t.index ["session_id"], name: "index_applications_on_session_id"

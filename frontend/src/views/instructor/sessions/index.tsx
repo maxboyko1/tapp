@@ -14,7 +14,7 @@ import { useTheme } from "@mui/material/styles";
 import { Link } from "react-router-dom";
 
 import { ContentArea } from "../../../components/layout";
-import { formatDate } from "../../../libs/utils";
+import { formatDate, isTappAdmin } from "../../../libs/utils";
 import {
     activeSessionSelector,
     activeUserSelector,
@@ -33,7 +33,12 @@ export default function InstructorSessionsView() {
     const allPositions = useSelector(positionsSelector);
     const activeUser = useSelector(activeUserSelector);
 
+    // Show all positions if admin, otherwise filter by instructor
+    const isUserTappAdmin = isTappAdmin(activeUser);
     const positions = React.useMemo(() => {
+        if (isUserTappAdmin) {
+            return allPositions;
+        }
         return allPositions.filter((position) =>
             position.instructors.find(
                 (instructor) =>
@@ -41,7 +46,7 @@ export default function InstructorSessionsView() {
                     instructor.utorid === activeUser.utorid
             )
         );
-    }, [allPositions, activeUser]);
+    }, [allPositions, activeUser, isUserTappAdmin]);
 
     let heading = (
         <Typography variant="h4" color="text.primary">
@@ -63,14 +68,22 @@ export default function InstructorSessionsView() {
         <div className="page-body">
             <ContentArea>
                 {heading}
-                <Typography sx={{ mt: 2, mb: 2 }}>
-                    Below is a list of all sessions where you are listed as an
-                    instructor. Select a session to see <i>positions</i>{" "}
-                    (courses) that you are/were an instructor for.
-                </Typography>
+                {isUserTappAdmin ? (
+                    <Typography sx={{ mt: 2, mb: 2 }}>
+                        Logged in with a TAPP administrator account, showing all sessions and positions.
+                    </Typography>
+                ) : (
+                    <Typography sx={{ mt: 2, mb: 2 }}>
+                        Below is a list of all sessions where you are listed as an
+                        instructor. Select a session to see <i>positions</i>{" "}
+                        (courses) that you are/were an instructor for.
+                    </Typography>
+                )}
                 {sessions.length === 0 ? (
                     <Typography variant="h4">
-                        You are not listed as an instructor for any session
+                        {isUserTappAdmin
+                            ? "No sessions available."
+                            : "You are not listed as an instructor for any session"}
                     </Typography>
                 ) : null}
                 {sessions.map((session) => {

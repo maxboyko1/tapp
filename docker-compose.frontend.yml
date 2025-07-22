@@ -4,3 +4,5 @@ services:
   frontend:
     command: yarn build
     build: ./frontend
+    environment:
+      - VITE_TAPP_ADMINS=${VITE_TAPP_ADMINS}
