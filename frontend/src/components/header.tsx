@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { NavLink, NavLinkProps, useLocation, useParams } from "react-router-dom";
+import { NavLink, NavLinkProps, useLocation } from "react-router-dom";
 import {
     Box,
     Button,
@@ -26,7 +26,7 @@ function MaterialNavItem(
             sx={{
                 textTransform: "none",
                 minHeight: 0,
-                minWidth: 0,
+                minWidth: "unset",
                 px: 1,
                 py: 0.5,
                 mx: 0.5,
@@ -79,7 +79,6 @@ export function Header(props: {
     infoComponents: React.ReactNode[];
 }) {
     const { routes = [], infoComponents = [] } = props;
-    const { mainRoute = "tapp" } = useParams<{ mainRoute?: string }>();
     const fullRoute = useLocation().pathname;
 
     if (routes.length === 0) {
@@ -97,12 +96,12 @@ export function Header(props: {
         </MaterialNavItem>
     ));
 
-    // filters the routes to include only the current route, then maps all of that route's subroutes to BootstrapNavItems
+    // filters the routes to include only the current route, then maps all of that route's subroutes to MaterialNavItems
     const availableSubroutes = routes
         .filter(
             (route) =>
-                route.route.substring(1) === mainRoute ||
-                fullRoute.startsWith(route.route)
+                fullRoute === route.route ||
+                fullRoute.startsWith(route.route + "/")
         )
         .map((route) =>
             (route.subroutes || []).map((subroute) => {
@@ -121,18 +120,60 @@ export function Header(props: {
         );
 
     return (
-        <Box className="header-container" sx={{ bgcolor: "primary.main", color: "primary.contrastText", px: 1, py: 0.5 }}>
-            <Box className="header-nav" sx={{ display: "flex", flexDirection: "column", gap: 0.5 }}>
-                <Box className="primary-nav-links" sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
+        <Box
+            className="header-container"
+            sx={{
+                bgcolor: "primary.main",
+                color: "primary.contrastText",
+                px: 1,
+                py: 0.5,
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "stretch",
+                position: "relative",
+            }}
+        >
+            <Box className="header-nav" sx={{ flexGrow: 1, minWidth: 0, display: "flex", flexDirection: "column", gap: 0.5 }}>
+                <Box
+                    className="primary-nav-links"
+                    sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 0.5,
+                        overflowX: "auto",
+                        whiteSpace: "nowrap",
+                        minHeight: "2.5rem",
+                    }}
+                >
                     {activeMainRoutes}
                 </Box>
                 {availableSubroutes.length > 0 && (
-                    <Box className="secondary-nav-links" sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
+                    <Box
+                        className="secondary-nav-links"
+                        sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 0.5,
+                            overflowX: "auto",
+                            whiteSpace: "nowrap",
+                            minHeight: "2.2rem",
+                        }}
+                    >
                         {availableSubroutes}
                     </Box>
                 )}
             </Box>
-            <Box className="header-widgets" sx={{ ml: "auto", display: "flex", alignItems: "center", gap: 1 }}>
+            <Box
+                className="header-widgets"
+                sx={{
+                    ml: "auto",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 1,
+                    flexShrink: 0,
+                    position: "relative",
+                }}
+            >
                 {infoComponents}
             </Box>
         </Box>

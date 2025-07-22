@@ -19,28 +19,36 @@ type FilterFunc<T> = ((array: T[]) => T[]) | null;
 
 /**
  * Make a function that converts a list of applications into a `File` object.
+ * If `activePosition` is null then this will perform a general admin-side
+ * export of all applications, otherwise it will perform an instructor-side
+ * export of applications for the given position.
  *
  * @export
  * @param {Applicant[]} applications
  * @param {"csv" | "json" | "xlsx"} dataFormat
+ * @param {Position | null} activePosition
  * @returns
  */
 export function prepareApplicationData(
     applications: Application[],
     dataFormat: ExportFormat,
-    isInstructor: boolean = false
+    activePosition: Position | null = null,
 ) {
     return dataToFile(
         {
-            toSpreadsheet: () => prepareSpreadsheet.application(applications, isInstructor),
+            toSpreadsheet: () =>
+                prepareSpreadsheet.application(applications, activePosition),
             toJson: () => ({
                 applications: applications.map((application) =>
-                    prepareMinimal.application(application)
+                    prepareMinimal.application(
+                        application,
+                        activePosition?.id
+                    )
                 ),
             }),
         },
         dataFormat,
-        "applications"
+        `${activePosition ? activePosition.position_code + "_" : ""}applications`
     );
 }
 

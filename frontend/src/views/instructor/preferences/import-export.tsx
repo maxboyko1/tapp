@@ -55,11 +55,11 @@ export function ConnectedExportApplicationsAction() {
                 throw new Error(`Unknown export type ${exportType}`);
             }
 
-            const file = prepareApplicationData(applications, exportType, true);
+            const file = prepareApplicationData(applications, exportType, activePosition);
             FileSaver.saveAs(file as any);
         }
         doExport().catch(console.error);
-    }, [exportType, applications]);
+    }, [exportType, applications, activePosition]);
 
     function onClick(option: ExportFormat) {
         setExportType(option);

@@ -9,7 +9,6 @@ import { useSelector } from "react-redux";
 import { activePositionSelector } from "../store/actions";
 import {
     activeSessionSelector,
-    activeUserSelector,
 } from "../../../api/actions";
 import { formatDate } from "../../../libs/utils";
 import { DisplayRating } from "../../../components/applicant-rating";
@@ -18,20 +17,8 @@ import { ConnectedExportApplicationsAction } from "./import-export";
 export default function InstructorPreferencesView() {
     const activeSession = useSelector(activeSessionSelector);
     const activePosition = useSelector(activePositionSelector);
-    const activeUser = useSelector(activeUserSelector);
 
-    // Display nothing if the instructor is not valid for this course
-
-    if (
-        !activeSession ||
-        !activePosition ||
-        !(
-            "utorid" in activeUser &&
-            !!activePosition.instructors.find(
-                (instructor) => instructor.utorid === activeUser.utorid
-            )
-        )
-    ) {
+    if (!activeSession || !activePosition) {
         return (
             <h4>Please select a Session and Position to see TA information</h4>
         );

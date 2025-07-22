@@ -83,7 +83,6 @@ export function InstructorApplicationsTable() {
             application.position_preferences.some(
                 (preference) =>
                     preference.position.id === activePosition.id &&
-                    preference.preference_level !== 0 &&
                     preference.preference_level !== -1
             )
         );

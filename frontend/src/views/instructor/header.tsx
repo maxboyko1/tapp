@@ -9,7 +9,7 @@ import {
 import { positionsSelector } from "../../api/actions";
 import { Header } from "../../components/header";
 import { useThunkDispatch } from "../../libs/thunk-dispatch";
-import { guessActiveSession } from "../../libs/utils";
+import { guessActiveSession, isTappAdmin } from "../../libs/utils";
 import {
     ConnectedActiveSessionDisplay,
     ConnectedActiveUserDisplay,
@@ -25,7 +25,11 @@ export function InstructorHeader() {
     const allPositions = useSelector(positionsSelector);
     const activeUser = useSelector(activeUserSelector);
 
+    const isUserTappAdmin = isTappAdmin(activeUser);
     const positions = React.useMemo(() => {
+        if (isUserTappAdmin) {
+            return allPositions;
+        }
         return allPositions.filter((position) =>
             position.instructors.find(
                 (instructor) =>
@@ -33,7 +37,8 @@ export function InstructorHeader() {
                     instructor.utorid === activeUser.utorid
             )
         );
-    }, [allPositions, activeUser]);
+    }, [allPositions, activeUser, isUserTappAdmin]);
+
     const sessions = useSelector(sessionsSelector);
     const activeSession = useSelector(activeSessionSelector);
 

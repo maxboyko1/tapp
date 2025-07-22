@@ -137,7 +137,6 @@ function generatePropTypes(PropTypes: typeof OrigPropTypes) {
             program: PropTypes.string,
             department: PropTypes.string,
             yip: PropTypes.number,
-            cv_link: PropTypes.string,
             annotation: PropTypes.string,
             submission_date: PropTypes.string,
             position_preference: PropTypes.arrayOf(

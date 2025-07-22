@@ -9,7 +9,6 @@ class ApplicationSerializer < ActiveModel::Serializer
                :department,
                :yip,
                :gpa,
-               :cv_link,
                :custom_question_answers,
                :annotation,
                :documents,

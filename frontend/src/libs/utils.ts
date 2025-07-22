@@ -133,6 +133,24 @@ export function parseLocalDate(dateStr?: string | null): Date | null {
 }
 
 /**
+ * Checks if the active user is a TAPP administrator.
+ * @param activeUser The user object to check.
+ * @returns True if the user is a TAPP admin, false otherwise.
+ */
+export function isTappAdmin(activeUser: any): boolean {
+    const tappAdmins = (import.meta.env.VITE_TAPP_ADMINS || "")
+        .split(",")
+        .map((s: string) => s.trim())
+        .filter(Boolean);
+    return (
+        !!activeUser &&
+        typeof activeUser === "object" &&
+        "utorid" in activeUser &&
+        tappAdmins.includes((activeUser as any).utorid)
+    );
+}
+
+/**
  * Format a url for downloading. In production, this is the
  * identity function. In development mode, this function replaces
  * port `8000` with `3000` so that non-json data can be downloaded from the

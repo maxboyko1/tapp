@@ -280,34 +280,65 @@ export const prepareMinimal = {
             phone: applicant.phone,
         };
     },
-    application: function (application: Application): MinimalApplication {
-        return Object.assign(prepareMinimal.applicant(application.applicant), {
-            annotation: application.annotation,
-            comments: application.comments,
-            department: application.department,
-            gpa: application.gpa,
-            program: application.program,
-            yip: application.yip,
-            cv_link: application.cv_link,
-            documents: application.documents,
-            custom_question_answers: application.custom_question_answers,
-            posting: application.posting?.name || null,
-            position_preferences: application.position_preferences.map(
-                (position_preference) => ({
-                    position_code: position_preference.position.position_code,
-                    preference_level: position_preference.preference_level,
-                    custom_question_answers: position_preference.custom_question_answers,
-                })
-            ),
-            instructor_preferences: application.instructor_preferences.map(
-                (pref) => ({
-                    position_code: pref.position.position_code,
-                    preference_level: pref.preference_level,
-                    comment: pref.comment,
-                })
-            ),
-            submission_date: application.submission_date,
-        });
+    application: function (
+        application: Application,
+        activePositionId?: number
+    ): MinimalApplication | Record<string, any> {
+        if (activePositionId) {
+            // Instructor-side export: only include info for this position
+            const posPref = application.position_preferences.find(
+                (pp) => pp.position.id === activePositionId
+            );
+            const instrPref = application.instructor_preferences.find(
+                (ip) => ip.position.id === activePositionId
+            );
+            return Object.assign(prepareMinimal.applicant(application.applicant), {
+                annotation: application.annotation,
+                comments: application.comments,
+                department: application.department,
+                gpa: application.gpa,
+                program: application.program,
+                yip: application.yip,
+                documents: application.documents,
+                custom_question_answers: application.custom_question_answers,
+                posting: application.posting?.name || null,
+                applicant_preference_level: posPref?.preference_level ?? null,
+                position_custom_question_answers: posPref?.custom_question_answers ?? null,
+                instructor_preference_level: instrPref?.preference_level ?? null,
+                instructor_comment: instrPref?.comment ?? null,
+                submission_date: application.submission_date,
+            });
+        } else {
+            // Admin-side export: show all applications for the session
+            return Object.assign(prepareMinimal.applicant(application.applicant), {
+                annotation: application.annotation,
+                comments: application.comments,
+                department: application.department,
+                gpa: application.gpa,
+                program: application.program,
+                yip: application.yip,
+                documents: application.documents,
+                custom_question_answers: application.custom_question_answers,
+                posting: application.posting?.name || null,
+                position_preferences: application.position_preferences.filter(
+                    (position_preference) => position_preference.preference_level !== -1
+                ).map(
+                    (position_preference) => ({
+                        position_code: position_preference.position.position_code,
+                        preference_level: position_preference.preference_level,
+                        custom_question_answers: position_preference.custom_question_answers,
+                    })
+                ),
+                instructor_preferences: application.instructor_preferences.map(
+                    (pref) => ({
+                        position_code: pref.position.position_code,
+                        preference_level: pref.preference_level,
+                        comment: pref.comment,
+                    })
+                ),
+                submission_date: application.submission_date,
+            });
+        }
     },
     ddah: function (ddah: Ddah): MinimalDdah {
         const duties = [...ddah.duties];

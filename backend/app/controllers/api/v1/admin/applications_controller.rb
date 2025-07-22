@@ -32,7 +32,6 @@ class Api::V1::Admin::ApplicationsController < ApplicationController
             :yip,
             :annotation,
             :gpa,
-            :cv_link,
             :custom_question_answers
         )
     end

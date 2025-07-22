@@ -2,6 +2,8 @@
 // to convert undefined to null since in dataToFile function in "./data-to-file"
 // we use JSON.stringify() which will do the conversion
 
+import { CellType } from "./prepare-spreadsheet";
+
 /**
  * Normalize spreadsheet data:
  * - Convert undefined to null
@@ -14,7 +16,7 @@
 const CELL_LENGTH_LIMIT = 32767;
 
 export function normalizeSpreadsheet(
-    items: (number | string | null | undefined)[][]
+    items: CellType[][]
 ): (number | string | null)[][] {
     return items.map((row) =>
         row.map((val) => {

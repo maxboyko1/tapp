@@ -5,10 +5,86 @@
 .header-container {
     display: flex;
     flex-direction: row;
+    align-items: stretch;
     background-color: primary;
+    position: relative;
 }
+
 .header-nav {
     flex-grow: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    overflow: hidden;
+}
+
+.primary-nav-links,
+.secondary-nav-links {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    overflow-x: auto;
+    white-space: nowrap;
+    min-height: 2.5rem;
+    scrollbar-width: thin;
+    scrollbar-color: #bbb #eee;
+}
+
+.primary-nav-links > *,
+.secondary-nav-links > * {
+    display: inline-block;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+    margin-right: 0.25rem;
+    margin-left: 0.25rem;
+    text-align: center;
+    background: none;
+    border: none;
+    outline: none;
+    white-space: nowrap;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-weight: bold;
+    transition: background 0.2s;
+}
+
+.secondary-nav-links {
+    min-height: 2.2rem;
+    padding-bottom: 3px;
+}
+
+.secondary-nav-links > * {
+    font-size: 0.95rem;
+    font-weight: normal;
+    border-radius: 3px;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    margin-right: 0.2rem;
+    margin-left: 0.2rem;
+}
+
+.header-widgets {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-shrink: 0;
+    margin-left: auto;
+    position: relative;
+    padding-left: 1rem;
+    background: inherit;
+    z-index: 1;
+}
+
+.header-widgets::before {
+    content: "";
+    display: block;
+    width: 1px;
+    height: 70%;
+    background: rgba(0,0,0,0.08);
+    position: absolute;
+    left: 0;
+    top: 15%;
 }
 
 .header-nav .navbar .nav-item .nav-link {
@@ -47,6 +123,7 @@
 .header-nav .active {
     background: rgba(167, 182, 194, 0.4);
 }
+
 .header-nav .secondary-nav-links .nav-link.active {
     color: white;
     background-color: rgba(0, 123, 255, 0.7);
@@ -61,15 +138,6 @@
 
 .header-nav .secondary-nav-links .nav-item {
     margin-left: 4px;
-}
-
-.secondary-nav-links {
-    padding-bottom: 3px;
-}
-
-.header-widgets {
-    display: flex;
-    align-items: center;
 }
 
 .input-row-icon {
