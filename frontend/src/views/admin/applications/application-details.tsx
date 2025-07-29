@@ -241,7 +241,7 @@ export function ApplicationDetails({
         );
     }, [matches, application]);
 
-    const customAnswers = application.custom_question_answers as CustomQuestionAnswers;
+    const customAnswers = (application.custom_question_answers || {}) as CustomQuestionAnswers;
 
     return (
         <TableContainer component={Paper}>
@@ -287,7 +287,7 @@ export function ApplicationDetails({
                         <TableCell sx={{ fontWeight: "bold" }}>Experience Overview</TableCell>
                         <TableCell>
                             <Stack spacing={1}>
-                                {customAnswers.completed_degrees && (
+                                {customAnswers && customAnswers.completed_degrees && (
                                     <div>
                                         <span style={{ fontStyle: "italic" }}>
                                             Completed Degrees:
@@ -295,7 +295,7 @@ export function ApplicationDetails({
                                         {customAnswers.completed_degrees}
                                     </div>
                                 )}
-                                {customAnswers.previous_non_dcs_ta && (
+                                {customAnswers && customAnswers.previous_non_dcs_ta && (
                                     <div>
                                         <span style={{ fontStyle: "italic" }}>
                                             Non-DCS TA Experience:
@@ -326,7 +326,7 @@ export function ApplicationDetails({
                         <TableCell sx={{ fontWeight: "bold" }}>Prior Assignments</TableCell>
                         <TableCell>
                             <Stack direction="row" flexWrap="wrap" gap={1}>
-                                {customAnswers.prior_assignments?.map((assignment, idx) => (
+                                {customAnswers && customAnswers.prior_assignments?.map((assignment, idx) => (
                                     <Chip
                                         key={assignment + idx}
                                         label={assignment}
