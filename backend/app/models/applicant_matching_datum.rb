@@ -10,13 +10,6 @@ class ApplicantMatchingDatum < ApplicationRecord
     scope :by_session, ->(session_id) { where(session_id: session_id) }
     scope :by_applicant, ->(applicant_id) { where(applicant_id: applicant_id) }
 
-    scope :with_pending_or_accepted_confirmation,
-          lambda {
-              joins(:active_confirmation).where(
-                  confirmations: { status: %i[pending accepted] }
-              )
-          }
-
     validates :min_hours_owed, numericality: true, allow_nil: true
     validates :max_hours_owed, numericality: true, allow_nil: true
     validates :prev_hours_fulfilled, numericality: true, allow_nil: true
