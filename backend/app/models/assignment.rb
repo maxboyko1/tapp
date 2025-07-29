@@ -34,14 +34,6 @@ class Assignment < ApplicationRecord
               )
           }
 
-    # Return all applications corresponding to the instructor
-    scope :assigned_to_instructor,
-          lambda { |instructor_id|
-              joins(position: :instructors).where(
-                  positions: { instructors: instructor_id }
-              ).group(:id)
-          }
-
     after_create :create_wage_chunks
 
     def hours
