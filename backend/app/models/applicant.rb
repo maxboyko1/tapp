@@ -23,48 +23,6 @@ class Applicant < ApplicationRecord
                   session_id
               ).group(:id)
           }
-
-    # Returns all applicants that correspond to applicants with a
-    # "pending" or "accepted" active offer. These are special because
-    # an instructor should be able to see these applications.
-    scope :with_pending_or_accepted_offer,
-          lambda {
-              joins(assignments: :active_offer).where(
-                  offers: { status: %i[pending accepted] }
-              ).group(:id)
-          }
-
-    # Return all applicants corresponding to the instructor
-    scope :assigned_to_instructor,
-          lambda { |instructor_id|
-              joins(assignments: { position: :instructors }).where(
-                  positions: { instructors: instructor_id }
-              ).group(:id)
-          }
-
-    # Returns all applicants for sessions that have the "applications_visible_to_instructors"
-    # flag set.
-    scope :by_visible_to_instructors,
-          lambda {
-              joins(applications: :session).where(
-                  session: { applications_visible_to_instructors: true }
-              )
-          }
-
-    # Returns all applicants that applied to a position that the given instructor is
-    # assigned to. This method only returns applicants who on an
-    # application indicated a positive preference for the position.
-    scope :applied_to_position_for_instructor,
-          lambda { |instructor_id|
-              joins(
-                  applications: {
-                      position_preferences: { position: :instructors }
-                  }
-              ).where(positions: { instructors: instructor_id }).where(
-                  'position_preferences.preference_level > ?',
-                  0
-              ).group(:id)
-          }
 end
 
 # == Schema Information
