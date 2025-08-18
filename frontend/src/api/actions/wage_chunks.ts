@@ -52,9 +52,9 @@ export const fetchWageChunksForAssignment = validatedApiDispatcher({
 
 export const upsertWageChunksForAssignment = validatedApiDispatcher({
     name: "upsertWageChunksForAssignment",
-    description: "Fetch wage chunks associated with an assignment",
+    description: "Upsert wage chunks associated with an assignment",
     onErrorDispatch: (e) => fetchError(e.toString()),
-    dispatcher: (assignment: Assignment | RawAssignment, payload: WageChunk[]) => {
+    dispatcher: (assignment: Assignment | RawAssignment, payload: Partial<WageChunk>[]) => {
         return async (dispatch, getState) => {
             const role = activeRoleSelector(getState());
             // When we fetch wage chunks for an assignment, we only get the wage chunks for that particular assignment

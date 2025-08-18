@@ -34,8 +34,6 @@ class Assignment < ApplicationRecord
               )
           }
 
-    after_create :create_wage_chunks
-
     def hours
         if wage_chunks.blank?
             position.hours_per_assignment
@@ -55,7 +53,6 @@ class Assignment < ApplicationRecord
             # if the record has already been created, the `after_create` functions
             # will not be called, so call the manually.
             @initial_hours = nil
-            create_wage_chunks(hours: value) unless value == hours
         end
     end
 
@@ -104,57 +101,6 @@ class Assignment < ApplicationRecord
 
     def accessible_by_instructor(instructor_id)
         position.instructors.exists?(instructor_id)
-    end
-
-    private
-
-    def create_wage_chunks(hours: @initial_hours)
-        hours = position.hours_per_assignment if hours.blank?
-        assignment_hours = hours
-        return unless assignment_hours
-        return unless start_date && end_date
-
-        # make sure assignment_hours is not a string...
-        assignment_hours = assignment_hours.to_f
-
-        # Compute the number of wage chunks needed. If January 1st
-        # falls between the start_date and the end_date, then two are needed.
-        # otherwise one is needed.
-        wage_chunks_needed = 1
-        if start_date.at_beginning_of_year.next_year < end_date
-            wage_chunks_needed = 2
-        end
-
-        # TODO: Wage chunks should be reused if possible; that way
-        # they preserve any reporting tags they may have.
-
-        # Delete any old wage_chunks
-        wage_chunks.destroy_all
-
-        if wage_chunks_needed == 2
-            boundary_date = start_date.end_of_year
-            assignment_hours_split = assignment_hours / 2.to_f
-            wage_chunks.create!(
-                [
-                    {
-                        start_date: start_date,
-                        end_date: boundary_date,
-                        hours: assignment_hours_split
-                    },
-                    {
-                        start_date: (boundary_date + 1.day).beginning_of_year,
-                        end_date: end_date,
-                        hours: assignment_hours_split
-                    }
-                ]
-            )
-        else
-            wage_chunks.create!(
-                start_date: start_date,
-                end_date: end_date,
-                hours: assignment_hours
-            )
-        end
     end
 end
 

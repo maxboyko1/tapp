@@ -23,6 +23,24 @@ class Api::V1::Admin::AssignmentsController < ApplicationController
         )
     end
 
+    # POST /assignments/delete
+    def delete
+        @assignment = Assignment.find(params[:id])
+        if @assignment.active_offer &&
+        !%w[provisional withdrawn].include?(@assignment.active_offer.status)
+            render_on_condition(
+                object: @assignment,
+                condition: proc { false },
+                message: "Cannot delete an assignment that has an active offer with status '#{@assignment.active_offer.status}'"
+            )
+            return
+        end
+        render_on_condition(
+            object: @assignment,
+            condition: proc { @assignment.destroy }
+        )
+    end
+
     private
 
     def assignment_params

@@ -28,6 +28,7 @@ export type AdvancedColumnDef<T extends MRT_RowData> = MRT_ColumnDef<T> & {
         value: any;
         onChange: (value: any) => void;
         row: MRT_Row<T>;
+        editValues: any;
     }) => React.ReactNode;
 };
 
@@ -71,6 +72,25 @@ export function AdvancedFilterTable({
     const [rowSelection, setRowSelection] = React.useState<Record<string, boolean>>({});
     const [editingRowId, setEditingRowId] = React.useState<string | null>(null);
     const [editValues, setEditValues] = React.useState<any>({});
+
+    const tableContainerRef = React.useRef<HTMLDivElement>(null);
+    const scrollLeftRef = React.useRef<number>(0);
+
+    // Save scroll position before entering edit mode
+    const handleStartEdit = (rowId: string, rowOriginal: any) => {
+        if (tableContainerRef.current) {
+            scrollLeftRef.current = tableContainerRef.current.scrollLeft;
+        }
+        setEditingRowId(rowId);
+        setEditValues(rowOriginal);
+    };
+
+    // Restore scroll position after entering edit mode
+    React.useEffect(() => {
+        if (editingRowId && tableContainerRef.current) {
+            tableContainerRef.current.scrollLeft = scrollLeftRef.current;
+        }
+    }, [editingRowId]);
 
     // Convert selected numbers to strings for MRT
     const selectedStringIds = selectable ? selected.map(String) : [];
@@ -133,6 +153,7 @@ export function AdvancedFilterTable({
                                     [accessorKey]: value,
                                 })),
                             row,
+                            editValues,
                         });
                     }
                     // Otherwise, default to text input
@@ -173,7 +194,10 @@ export function AdvancedFilterTable({
                 enableBottomToolbar={false}
                 enablePagination={false}
                 enableRowVirtualization
-                muiTableContainerProps={{ sx: { maxHeight: 600 } }}
+                muiTableContainerProps={{
+                    sx: { maxHeight: 600 },
+                    ref: tableContainerRef,
+                }}
                 initialState={{
                     density: "compact",
                     columnPinning: {
@@ -270,10 +294,7 @@ export function AdvancedFilterTable({
                         return (
                             <IconButton
                                 size="small"
-                                onClick={() => {
-                                    setEditingRowId(row.id);
-                                    setEditValues(row.original);
-                                }}
+                                onClick={() => handleStartEdit(row.id, row.original)}
                                 title="Edit"
                             >
                                 <EditIcon fontSize="small" />
