@@ -27,6 +27,7 @@ import {
 import type { RawAssignment, Assignment, WageChunk } from "../defs/types";
 import { activeSessionSelector } from "./sessions";
 import { ExportFormat, PrepareDataFunc } from "../../libs/import-export";
+import { splitDateRangeAtNewYear } from "../mockAPI/utils";
 
 // actions
 export const fetchAssignmentsSuccess = actionFactory<RawAssignment[]>(
@@ -104,25 +105,62 @@ function prepForApi(data: Partial<Assignment>) {
 
 export const upsertAssignment = validatedApiDispatcher<
     RawAssignment,
-    [Partial<Assignment>]
+    [Omit<Partial<Assignment>, "wage_chunks"> & { wage_chunks?: Partial<WageChunk>[] }]
 >({
     name: "upsertAssignment",
     description: "Add/insert assignment",
     onErrorDispatch: (e) => upsertError(e.toString()),
     dispatcher:
-        (payload: Partial<Assignment>) => async (dispatch, getState) => {
+        (payload) => async (dispatch, getState) => {
+            // Prepare wageChunksPayload
+            let wageChunksPayload: Partial<WageChunk>[] | undefined = payload.wage_chunks;
+            if (!wageChunksPayload) {
+                const { start_date, end_date, hours } = payload;
+                if (start_date && end_date && typeof hours === "number") {
+                    const splitRanges = splitDateRangeAtNewYear(start_date, end_date);
+                    if (splitRanges.length === 2) {
+                        const chunk1 = hours / 2;
+                        wageChunksPayload = [
+                            {
+                                start_date: splitRanges[0].start_date,
+                                end_date: splitRanges[0].end_date,
+                                hours: chunk1,
+                                rate: 0,
+                            },
+                            {
+                                start_date: splitRanges[1].start_date,
+                                end_date: splitRanges[1].end_date,
+                                hours: hours - chunk1,
+                                rate: 0,
+                            },
+                        ];
+                    } else if (splitRanges.length === 1) {
+                        wageChunksPayload = [
+                            {
+                                start_date: splitRanges[0].start_date,
+                                end_date: splitRanges[0].end_date,
+                                hours: hours,
+                                rate: 0,
+                            },
+                        ];
+                    }
+                }
+            }
+
+            // Prepare assignmentPayload (no wage_chunks)
+            const assignmentPayload = { ...payload };
+            delete assignmentPayload.wage_chunks;
+
             const role = activeRoleSelector(getState());
             let data = (await apiPOST(
                 `/${role}/assignments`,
-                prepForApi(payload)
+                prepForApi(assignmentPayload as Partial<Assignment>)
             )) as RawAssignment;
-            dispatch(upsertOneAssignmentSuccess(data));
-            if (payload.wage_chunks) {
-                await dispatch(
-                    upsertWageChunksForAssignment(data, payload.wage_chunks)
-                );
-                // The wage chunks could have changed the number of "hours" for the assignment.
-                // Refetch it to make sure the data isn't stale.
+
+            if (wageChunksPayload) {
+                await dispatch(upsertWageChunksForAssignment(data, wageChunksPayload));
+                data = await dispatch(fetchAssignment(data));
+            } else {
                 data = await dispatch(fetchAssignment(data));
             }
             dispatch(upsertOneAssignmentSuccess(data));

@@ -182,54 +182,44 @@ export function AssignmentEditor(props: {
         // one for pre-January and one for post.
         const wageChunks = assignment.wage_chunks;
         wageChunkAdjuster1 = (
-            <>
-                <Typography variant="body2" sx={{ mb: 1 }}>
-                    F Hours
-                </Typography>
-                <TextField
-                    type="number"
-                    label="F Hours"
-                    title="The number of pre-January hours"
-                    value={wageChunks[0].hours}
-                    onChange={(e) => {
-                        const newHours = Math.min(
-                            Math.max(Number(e.target.value), 0),
-                            assignment.hours
-                        );
-                        setAssignment({
-                            ...assignment,
-                            wage_chunks: [
-                                { ...wageChunks[0], hours: newHours },
-                                {
-                                    ...wageChunks[1],
-                                    hours: assignment.hours - newHours,
-                                },
-                            ],
-                        });
-                    }}
-                    size="small"
-                    fullWidth
-                    margin="normal"
-                />
-            </>
+            <TextField
+                type="number"
+                label="F Hours"
+                title="The number of pre-January hours"
+                value={wageChunks[0].hours}
+                onChange={(e) => {
+                    const newHours = Math.min(
+                        Math.max(Number(e.target.value), 0),
+                        assignment.hours
+                    );
+                    setAssignment({
+                        ...assignment,
+                        wage_chunks: [
+                            { ...wageChunks[0], hours: newHours },
+                            {
+                                ...wageChunks[1],
+                                hours: assignment.hours - newHours,
+                            },
+                        ],
+                    });
+                }}
+                size="small"
+                fullWidth
+                margin="normal"
+            />
         );
 
         wageChunkAdjuster2 = (
-            <>
-                <Typography variant="body2" sx={{ mb: 1 }}>
-                    S Hours
-                </Typography>
-                <TextField
-                    type="number"
-                    label="S Hours"
-                    title="The number of post-January hours. This value cannot be set directly. You must set the number of pre-January hours."
-                    disabled
-                    value={wageChunks[1]?.hours}
-                    size="small"
-                    fullWidth
-                    margin="normal"
-                />
-            </>
+            <TextField
+                type="number"
+                label="S Hours"
+                title="The number of post-January hours. This value cannot be set directly. You must set the number of pre-January hours."
+                disabled
+                value={wageChunks[1]?.hours}
+                size="small"
+                fullWidth
+                margin="normal"
+            />
         );
     }
 

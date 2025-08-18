@@ -83,6 +83,7 @@ Rails
 
                         # Assignments
                         resources :assignments, only: %i[show create] do
+                            collection { post :delete }
                             resources :wage_chunks,
                                       controller: :assignment_wage_chunks,
                                       only: %i[index create]
