@@ -113,6 +113,7 @@ export const upsertAssignment = validatedApiDispatcher<
     dispatcher:
         (payload) => async (dispatch, getState) => {
             // Prepare wageChunksPayload
+            const activeSession = activeSessionSelector(getState());
             let wageChunksPayload: Partial<WageChunk>[] | undefined = payload.wage_chunks;
             if (!wageChunksPayload) {
                 const { start_date, end_date, hours } = payload;
@@ -125,13 +126,13 @@ export const upsertAssignment = validatedApiDispatcher<
                                 start_date: splitRanges[0].start_date,
                                 end_date: splitRanges[0].end_date,
                                 hours: chunk1,
-                                rate: 0,
+                                rate: activeSession?.rate1,
                             },
                             {
                                 start_date: splitRanges[1].start_date,
                                 end_date: splitRanges[1].end_date,
                                 hours: hours - chunk1,
-                                rate: 0,
+                                rate: activeSession?.rate2 ?? undefined,
                             },
                         ];
                     } else if (splitRanges.length === 1) {
@@ -140,7 +141,7 @@ export const upsertAssignment = validatedApiDispatcher<
                                 start_date: splitRanges[0].start_date,
                                 end_date: splitRanges[0].end_date,
                                 hours: hours,
-                                rate: 0,
+                                rate: activeSession?.rate1,
                             },
                         ];
                     }

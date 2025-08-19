@@ -8,7 +8,7 @@ class WageChunk < ApplicationRecord
     validates :hours, numericality: { only_float: true }, allow_nil: true
     validates :rate, numericality: { only_float: true }, allow_nil: true
 
-    before_save :set_rates
+    before_validation :set_rates
 
     def rate
         self[:rate] || compute_rate_from_session
@@ -32,7 +32,7 @@ class WageChunk < ApplicationRecord
     end
 
     def set_rates
-        self.rate = compute_rate_from_session if rate.blank?
+        self[:rate] = compute_rate_from_session if self[:rate].blank?
     end
 end
 
