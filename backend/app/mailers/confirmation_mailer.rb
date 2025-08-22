@@ -6,7 +6,7 @@ class ConfirmationMailer < ActionMailer::Base
     def email_letter(confirmation)
         populate_vars confirmation
 
-        unless ENV['ENABLE_EMAILING'].to_s.downcase == 'true'
+        unless Rails.application.config.enable_emailing
             logger.warn "ENABLE_EMAILING is not true; skipping email to \"#{@email}\""
             return
         end
@@ -36,7 +36,7 @@ class ConfirmationMailer < ActionMailer::Base
     def email_nag(confirmation)
         populate_vars confirmation
 
-        unless ENV['ENABLE_EMAILING'].to_s.downcase == 'true'
+        unless Rails.application.config.enable_emailing
             logger.warn "ENABLE_EMAILING is not true; skipping email to \"#{@email}\""
             return
         end

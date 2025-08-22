@@ -6,7 +6,7 @@ class DdahMailer < ActionMailer::Base
     def email_ddah(ddah)
         generate_vars(ddah)
 
-        unless ENV['ENABLE_EMAILING'].to_s.downcase == 'true'
+        unless Rails.application.config.enable_emailing
             logger.warn "ENABLE_EMAILING is not true; skipping email to \"#{@email}\""
             return
         end

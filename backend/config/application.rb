@@ -69,6 +69,7 @@ module Tapp
         config.action_mailer.smtp_settings = {
             address: email_server, port: email_port
         }
+        config.enable_emailing = %w[true 1].include?(ENV.fetch('ENABLE_EMAILING', 'false').downcase)
 
         # Authorization
         config.allow_basic_auth =
