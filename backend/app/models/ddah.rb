@@ -14,14 +14,20 @@ class Ddah < ApplicationRecord
               )
           }
 
-    scope :by_instructor,
-          lambda { |instructor_id|
-              joins(assignment: { position: :instructors }).where(
-                  instructors: { id: instructor_id }
-              )
-          }
+    scope :by_instructor, lambda { |instructor_id, utorid|
+        # TAPP admins are treated as instructors for every course, so for them this scope is a no-op
+        admin_utorids = Rails.configuration.always_admin
+        if admin_utorids.include?(utorid)
+            all
+        else
+            joins(assignment: { position: :instructors }).where(instructors: { id: instructor_id })
+        end
+    }
 
-    def accessible_by_instructor(instructor_id)
+    def accessible_by_instructor(instructor_id, utorid)
+        admin_utorids = Rails.configuration.always_admin
+        return true if admin_utorids.include?(utorid)
+
         assignment.position.instructors.exists?(instructor_id)
     end
 

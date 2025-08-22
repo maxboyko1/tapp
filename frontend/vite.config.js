@@ -28,4 +28,10 @@ export default defineConfig({
         chunkSizeWarningLimit: 1500,
         outDir: "build",
     },
+    optimizeDeps: {
+        include: [
+            "@mui/x-date-pickers",
+            "@mui/x-date-pickers/DatePicker",
+        ]
+    }
 });

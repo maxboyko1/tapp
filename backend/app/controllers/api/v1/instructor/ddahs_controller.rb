@@ -7,7 +7,7 @@ class Api::V1::Instructor::DdahsController < ApplicationController
     def index
         render_success Ddah
                            .by_session(params[:session_id])
-                           .by_instructor(@active_instructor.id)
+                           .by_instructor(@active_instructor&.id, @active_user.utorid)
     end
 
     # GET /ddahs/:ddah_id
@@ -62,11 +62,12 @@ class Api::V1::Instructor::DdahsController < ApplicationController
 
     def validate_instructor
         @active_user = ActiveUserService.active_user request
-
-        # If we're here, we have `instructor` permissions, but that doesn't mean
-        # we actually *are* an instructor.
         @active_instructor = Instructor.find_by(utorid: @active_user.utorid)
-        render_error(message: 'Not an instructor') unless @active_instructor
+        admin_utorids = Rails.configuration.always_admin
+
+        unless @active_instructor || admin_utorids.include?(@active_user.utorid)
+            render_error(message: 'Not an instructor or admin')
+        end
     end
 
     def find_or_create
