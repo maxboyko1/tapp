@@ -445,12 +445,12 @@ export function ApplicationDetails({
                     <TableRow>
                         <TableCell sx={{ fontWeight: "bold" }}>Instructor Preferences</TableCell>
                         <TableCell>
-                            <Stack direction="column" flexWrap="wrap" gap={1}>
+                            <Stack direction="row" flexWrap="wrap" gap={1}>
                                 {instructorPreferences.map((pref) => (
                                     <Chip
                                         key={pref.position.position_code}
                                         label={
-                                            <Stack direction="row" alignItems="center" spacing={1}>
+                                            <Stack direction="row" alignItems="center" spacing={1} sx={{ whiteSpace: "normal" }}>
                                                 <Box component="span" sx={{ fontWeight: "bold" }}>
                                                     {pref.position.position_code}
                                                 </Box>
@@ -464,7 +464,12 @@ export function ApplicationDetails({
                                         }
                                         color={getInstructorPreferenceChipColor(pref.preference_level)}
                                         size="small"
-                                        sx={{ width: "auto", maxWidth: 350 }}
+                                        sx={{
+                                            width: "fit-content",
+                                            minWidth: 0,
+                                            maxWidth: "100%",
+                                            whiteSpace: "normal",
+                                        }}
                                     />
                                 ))}
                             </Stack>
