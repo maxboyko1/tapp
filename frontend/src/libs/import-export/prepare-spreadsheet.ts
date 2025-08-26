@@ -216,12 +216,14 @@ export const prepareSpreadsheet = {
                 headers,
                 ...minApps.map((application: any) => {
                     // Compute assignments for this applicant
+                    const utorid = application.applicant?.utorid || application.utorid;
                     const applicantAssignments = allAssignments
                         .filter(
                             (assignment: Assignment) =>
                                 assignment.active_offer_status &&
                                 assignment.applicant &&
-                                assignment.applicant.utorid === application.applicant.utorid
+                                utorid &&
+                                assignment.applicant.utorid === utorid
                         )
                         .map(
                             (assignment: Assignment) =>
