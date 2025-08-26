@@ -20,6 +20,7 @@ import { activeSessionSelector } from "./sessions";
 import { fetchPostings } from "./postings";
 import { ExportFormat, PrepareDataFunc } from "../../libs/import-export";
 import { applicationsSelector } from "../selectors/application-smash";
+import { fetchAssignments } from "./assignments";
 
 // actions
 export const fetchApplicationsSuccess = actionFactory<RawApplication[]>(
@@ -150,10 +151,11 @@ export const exportApplications = validatedApiDispatcher<Blob, [PrepareDataFunc<
                     `"formatter" must be a function when using the export action.`
                 );
             }
-            // Re-fetch all applicants from the server in case things happened to be out of sync.
+            // Re-fetch all applications and auxiliary data from the server in case things happened to be out of sync.
             await Promise.all([
                 dispatch(fetchApplicants()),
                 dispatch(fetchPostings()),
+                dispatch(fetchAssignments()),
                 dispatch(fetchApplications()),
             ]);
             const applications = applicationsSelector(getState());

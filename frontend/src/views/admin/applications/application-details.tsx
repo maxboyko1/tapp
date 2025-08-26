@@ -24,7 +24,7 @@ import { Model } from "survey-core";
 import { Survey } from "survey-react-ui";
 import { useSelector } from "react-redux";
 
-import { Application, Assignment, Match } from "../../../api/defs/types";
+import { Application, Assignment, Match, Position } from "../../../api/defs/types";
 import { DisplayRating } from "../../../components/applicant-rating";
 import { formatDateTime, formatDownloadUrl } from "../../../libs/utils";
 import {
@@ -154,7 +154,7 @@ function createSurveyModel(jsonSurvey: any, data: any) {
 
 /**
  * Map applicant preference levels to display colors.
- * @param level preference level from 0 to 4.
+ * @param level preference level from -1 to 4.
  * @returns 
  */
 function getApplicantPreferenceChipStyle(theme: Theme, level: number) {
@@ -170,12 +170,12 @@ function getApplicantPreferenceChipStyle(theme: Theme, level: number) {
         case 0:
             return { backgroundColor: theme.palette.warning.main, color: "#fff" };
         default:
-            return {};
+            return { backgroundColor : alpha(theme.palette.error.main, 0.25), color: theme.palette.error.main };
     }
 }
 /**
  * Map applicant preference levels to human-readable labels.
- * @param level preference level from 0 to 4.
+ * @param level preference level from -1 to 4.
  * @returns 
  */
 function getApplicantPreferenceLevelLabel(level: number): string {
@@ -185,7 +185,7 @@ function getApplicantPreferenceLevelLabel(level: number): string {
         case 2: return "3rd Choice";
         case 1: return "4th Choice";
         case 0: return "Willing";
-        default: return ""; // -1 case, should not reach
+        default: return "Unwilling"; // -1 case
     }
 }
 
@@ -211,15 +211,17 @@ function getInstructorPreferenceChipColor(level: number) {
     switch (level) {
         case 2: return "success";
         case 1: return "info";
-        case 0: return "default";
-        default: return "error"; // -1, not suitable 
+        case -1: return "error";
+        default: return "default"; // case 0 or null, unknown
     }
 }
 
 export function ApplicationDetails({
     application,
+    activePosition = null,
 }: {
     application: Application;
+    activePosition?: Position | null;
 }) {
     const theme = useTheme();
 
@@ -366,6 +368,32 @@ export function ApplicationDetails({
                             </Stack>
                         </TableCell>
                     </TableRow>
+                    {/* Show activePosition preference level if activePosition is provided */}
+                    {activePosition && (
+                        <TableRow>
+                            <TableCell sx={{ fontWeight: "bold" }}>
+                                {activePosition.position_code} Preference
+                            </TableCell>
+                            <TableCell>
+                                {(() => {
+                                    const pref = application.position_preferences.find(
+                                        (p) => p.position.position_code === activePosition.position_code
+                                    );
+                                    const prefLevel = typeof pref?.preference_level === "number" ? pref.preference_level : -1;
+                                    return (
+                                        <Chip
+                                            label={getApplicantPreferenceLevelLabel(prefLevel)}
+                                            size="small"
+                                            sx={{
+                                                ...getApplicantPreferenceChipStyle(theme, prefLevel),
+                                                fontWeight: "bold",
+                                            }}
+                                        />
+                                    );
+                                })()}
+                            </TableCell>
+                        </TableRow>
+                    )}
                     <TableRow>
                         <TableCell sx={{ fontWeight: "bold" }}>Positions Applied For</TableCell>
                         <TableCell>
@@ -415,23 +443,30 @@ export function ApplicationDetails({
                         <TableCell>{application.comments}</TableCell>
                     </TableRow>
                     <TableRow>
-                        <TableCell sx={{ fontWeight: "bold" }}>Instructor Comments</TableCell>
+                        <TableCell sx={{ fontWeight: "bold" }}>Instructor Preferences</TableCell>
                         <TableCell>
-                            <Stack direction="row" flexWrap="wrap" gap={1}>
-                                {instructorPreferences
-                                    .map((pref) => (
-                                        <Chip
-                                            key={pref.position.position_code}
-                                            label={
-                                                <Box component="span" display="flex" alignItems="center" gap={1}>
+                            <Stack direction="column" flexWrap="wrap" gap={1}>
+                                {instructorPreferences.map((pref) => (
+                                    <Chip
+                                        key={pref.position.position_code}
+                                        label={
+                                            <Stack direction="row" alignItems="center" spacing={1}>
+                                                <Box component="span" sx={{ fontWeight: "bold" }}>
                                                     {pref.position.position_code}
-                                                    <DisplayRating rating={pref.preference_level} />
                                                 </Box>
-                                            }
-                                            color={getInstructorPreferenceChipColor(pref.preference_level)}
-                                            size="small"
-                                        />
-                                    ))}
+                                                {pref.comment && (
+                                                    <Box component="span" sx={{ fontWeight: "normal", ml: 0.5 }}>
+                                                        {pref.comment}
+                                                    </Box>
+                                                )}
+                                                <DisplayRating rating={pref.preference_level} />
+                                            </Stack>
+                                        }
+                                        color={getInstructorPreferenceChipColor(pref.preference_level)}
+                                        size="small"
+                                        sx={{ width: "auto", maxWidth: 350 }}
+                                    />
+                                ))}
                             </Stack>
                         </TableCell>
                     </TableRow>
