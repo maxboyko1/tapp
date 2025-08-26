@@ -32,12 +32,13 @@ type FilterFunc<T> = ((array: T[]) => T[]) | null;
 export function prepareApplicationData(
     applications: Application[],
     dataFormat: ExportFormat,
+    allAssignments: Assignment[],
     activePosition: Position | null = null,
 ) {
     return dataToFile(
         {
             toSpreadsheet: () =>
-                prepareSpreadsheet.application(applications, activePosition),
+                prepareSpreadsheet.application(applications, allAssignments, activePosition),
             toJson: () => ({
                 applications: applications.map((application) =>
                     prepareMinimal.application(

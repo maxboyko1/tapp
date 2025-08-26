@@ -193,9 +193,6 @@ export function ConnectedDdahsTable({
             id: "add_or_edit",
             size: 60,
             enableResizing: false,
-            // muiTableBodyCellProps: {
-            //     sx: { textAlign: "center" }
-            // }
         },
         {
             ...generateHeaderCellProps("Last Name"),

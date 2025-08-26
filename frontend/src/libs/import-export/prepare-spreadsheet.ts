@@ -153,7 +153,11 @@ export const prepareSpreadsheet = {
             )
         );
     },
-    application: function (applications: Application[], activePosition: Position | null = null) {
+    application: function (
+        applications: Application[],
+        allAssignments: Assignment[],
+        activePosition: Position | null = null,
+    ) {
         const minApps = applications.map(app =>
             prepareMinimal.application(app, activePosition?.id)
         );
@@ -212,11 +216,16 @@ export const prepareSpreadsheet = {
                 headers,
                 ...minApps.map((application: any) => {
                     // Compute assignments for this applicant
-                    const applicantAssignments = (application.assignments || [])
-                        .filter((assignment: any) =>
-                            assignment.active_offer_status &&
-                            assignment.applicant &&
-                            assignment.applicant.utorid === application.utorid
+                    const applicantAssignments = allAssignments
+                        .filter(
+                            (assignment: Assignment) =>
+                                assignment.active_offer_status &&
+                                assignment.applicant &&
+                                assignment.applicant.utorid === application.applicant.utorid
+                        )
+                        .map(
+                            (assignment: Assignment) =>
+                                `${assignment.position.position_code} (${assignment.hours}) (${assignment.active_offer_status})`
                         );
 
                     return [
@@ -267,12 +276,7 @@ export const prepareSpreadsheet = {
                                     )
                                     .join("; "),
                             ]),
-                        applicantAssignments
-                            .map(
-                                (assignment: any) =>
-                                    `${assignment.position.position_code} (${assignment.hours}) (${assignment.active_offer_status})`
-                            )
-                            .join("; "),
+                        applicantAssignments.join("; "),
                         application.documents
                             .map(
                                 (document: any) =>
@@ -282,9 +286,13 @@ export const prepareSpreadsheet = {
                             )
                             .join(" "),
                         ...(activePosition ? [] : [application.submission_date]),
-                        ...allCustomQuestionKeys.map(
-                            (key) => (application.custom_question_answers as Record<string, any> | undefined)?.[key] ?? ""
-                        ),
+                        ...allCustomQuestionKeys.map((key) => {
+                            const value = (application.custom_question_answers as Record<string, any> | undefined)?.[key];
+                            if (Array.isArray(value)) {
+                                return value.join("; ");
+                            }
+                            return value ?? "";
+                        }),
                     ];
                 }),
             ]

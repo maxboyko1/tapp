@@ -1,12 +1,15 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import FileSaver from "file-saver";
-import { exportApplications } from "../../../api/actions";
+
+import { assignmentsSelector, exportApplications } from "../../../api/actions";
 import { ExportActionButton } from "../../../components/export-button";
 import {
     ExportFormat,
     prepareApplicationData,
 } from "../../../libs/import-export";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
+import { Application } from "../../../api/defs/types";
 
 /**
  * Allows for the download of a file blob containing the exported instructors.
@@ -20,6 +23,7 @@ export function ConnectedExportApplicationsAction() {
     const [exportType, setExportType] = React.useState<ExportFormat | null>(
         null
     );
+    const allAssignments = useSelector(assignmentsSelector);
 
     React.useEffect(() => {
         if (!exportType) {
@@ -35,14 +39,17 @@ export function ConnectedExportApplicationsAction() {
                 throw new Error(`Unknown export type ${exportType}`);
             }
 
+            const prepareDataFunc = (applications: Application[], dataFormat: ExportFormat) =>
+                prepareApplicationData(applications, dataFormat, allAssignments);
+
             const file = await dispatch(
-                exportApplications(prepareApplicationData, exportType)
+                exportApplications(prepareDataFunc, exportType)
             );
 
             FileSaver.saveAs(file as any);
         }
         doExport().catch(console.error);
-    }, [exportType, dispatch]);
+    }, [exportType, allAssignments, dispatch]);
 
     function onClick(option: ExportFormat) {
         setExportType(option);

@@ -254,7 +254,10 @@ export function InstructorApplicationsTable() {
                                     compact={false}
                                 />
                             </Alert>
-                            <ApplicationDetails application={shownApplication} />
+                            <ApplicationDetails
+                                application={shownApplication}
+                                activePosition={activePosition}
+                            />
                         </React.Fragment>
                     )}
                 </DialogContent>

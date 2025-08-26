@@ -5,12 +5,15 @@ class Api::V1::Instructor::InstructorPreferencesController < ApplicationControll
 
     # GET /sessions/:session_id/instructor_preferences
     def index
-        render_success([]) && return unless @active_instructor
+        render_success([]) && return unless @active_instructor || @is_admin
 
-        render_success InstructorPreference.by_visible_to_instructors
-                           .by_instructor(@active_instructor).by_session(
-                           params[:session_id]
-                       )
+        if @is_admin
+            render_success InstructorPreference.by_session(params[:session_id])
+        else
+            render_success InstructorPreference.by_visible_to_instructors
+                               .by_instructor(@active_instructor)
+                               .by_session(params[:session_id])
+        end
     end
 
     # POST /assignments
@@ -38,10 +41,8 @@ class Api::V1::Instructor::InstructorPreferencesController < ApplicationControll
 
     def find_instructor
         active_user = ActiveUserService.active_user request
-
-        # If we're here, we have `instructor` permissions, but that doesn't mean
-        # we actually *are* an instructor. If we aren't an instructor, return an empty
-        # array.
+        admin_utorids = Rails.configuration.always_admin
+        @is_admin = admin_utorids.include?(active_user.utorid)
         @active_instructor = Instructor.find_by(utorid: active_user.utorid)
     end
 
