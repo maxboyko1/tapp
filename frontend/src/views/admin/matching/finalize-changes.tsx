@@ -53,6 +53,8 @@ export function FinalizeChangesButton() {
                     position: match.position,
                     applicant: match.applicant,
                     hours: match.hours_assigned || 0,
+                    start_date: match.position.start_date,
+                    end_date: match.position.end_date,
                 })
             );
         });
