@@ -65,6 +65,22 @@ export function InstructorAssignmentsTable() {
             maxSize: 70,
         },
         {
+            header: "Start Date",
+            accessorKey: "start_date",
+            Cell: ({ cell }) => {
+                const date = cell.getValue();
+                return typeof date === "string" ? formatDate(date) : <></>;
+            }
+        },
+        {
+            header: "End Date",
+            accessorKey: "end_date",
+            Cell: ({ cell }) => {
+                const date = cell.getValue();
+                return typeof date === "string" ? formatDate(date) : <></>;
+            }
+        },
+        {
             header: "Offer Status",
             id: "status",
             // We want items with no active offer to appear at the end of the list
