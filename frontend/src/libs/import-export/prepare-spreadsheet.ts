@@ -43,7 +43,7 @@ function flattenDuties(ddah: Ddah) {
  * @param {*} date
  * @returns
  */
-function formatDateForSpreadsheet(date: string | number | null | undefined) {
+export function formatDateForSpreadsheet(date: string | number | null | undefined) {
     try {
         return date && new Date(date).toJSON().slice(0, 10);
     } catch {
