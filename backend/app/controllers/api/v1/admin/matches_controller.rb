@@ -45,6 +45,7 @@ class Api::V1::Admin::MatchesController < ApplicationController
             :hours_assigned,
             :assigned,
             :starred,
+            :tentative,
             :hidden
         )
     end

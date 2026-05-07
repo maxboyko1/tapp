@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2025_07_21_212223) do
+ActiveRecord::Schema.define(version: 2026_04_27_211720) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -210,11 +210,12 @@ ActiveRecord::Schema.define(version: 2025_07_21_212223) do
     t.bigint "applicant_id", null: false
     t.bigint "position_id", null: false
     t.float "hours_assigned"
-    t.boolean "assigned", default: false
     t.boolean "starred", default: false
     t.boolean "hidden", default: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.boolean "assigned", default: false
+    t.boolean "tentative", default: false
     t.index ["applicant_id"], name: "index_matches_on_applicant_id"
     t.index ["position_id"], name: "index_matches_on_position_id"
   end

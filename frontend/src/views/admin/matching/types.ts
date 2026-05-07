@@ -26,6 +26,7 @@ export type ApplicantViewMode = "table" | "grid";
 export type MatchStatus =
     | "applied"
     | "starred"
+    | "tentative"
     | "staged-assigned"
     | "assigned"
     | "unassignable"

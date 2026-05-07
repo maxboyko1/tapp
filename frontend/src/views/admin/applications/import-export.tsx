@@ -2,7 +2,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import FileSaver from "file-saver";
 
-import { assignmentsSelector, exportApplications } from "../../../api/actions";
+import { assignmentsSelector, exportApplications, matchesSelector } from "../../../api/actions";
 import { ExportActionButton } from "../../../components/export-button";
 import {
     ExportFormat,
@@ -24,6 +24,7 @@ export function ConnectedExportApplicationsAction() {
         null
     );
     const allAssignments = useSelector(assignmentsSelector);
+    const allMatches = useSelector(matchesSelector);
 
     React.useEffect(() => {
         if (!exportType) {
@@ -40,7 +41,7 @@ export function ConnectedExportApplicationsAction() {
             }
 
             const prepareDataFunc = (applications: Application[], dataFormat: ExportFormat) =>
-                prepareApplicationData(applications, dataFormat, allAssignments);
+                prepareApplicationData(applications, dataFormat, allAssignments, allMatches);
 
             const file = await dispatch(
                 exportApplications(prepareDataFunc, exportType)
@@ -49,7 +50,7 @@ export function ConnectedExportApplicationsAction() {
             FileSaver.saveAs(file as any);
         }
         doExport().catch(console.error);
-    }, [exportType, allAssignments, dispatch]);
+    }, [exportType, allAssignments, allMatches, dispatch]);
 
     function onClick(option: ExportFormat) {
         setExportType(option);

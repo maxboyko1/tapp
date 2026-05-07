@@ -32,6 +32,7 @@ export function prepApplicantMatchForPosition(
         applicant: applicantSummary.applicantMatchingDatum.applicant,
         position: position,
         assigned: false,
+        tentative: false,
         starred: false,
         hidden: false,
         hours_assigned: 0,
@@ -76,6 +77,7 @@ export function getMatchStatus(
     for (const match of applicantSummary.matches) {
         if (match.position.id === position.id) {
             if (match.assigned) return "staged-assigned";
+            if (match.tentative) return "tentative";
             if (match.starred) return "starred";
             if (match.hidden) return "hidden";
         }

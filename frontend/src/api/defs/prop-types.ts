@@ -255,6 +255,7 @@ function generatePropTypes(PropTypes: typeof OrigPropTypes) {
             hours_assigned: PropTypes.number,
             assigned: PropTypes.bool,
             starred: PropTypes.bool,
+            tentative: PropTypes.bool,
             hidden: PropTypes.bool,
         }),
     };

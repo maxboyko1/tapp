@@ -236,10 +236,16 @@ export function ApplicationDetails({
     }, [assignments, application]);
 
     const matches = useSelector(matchesSelector) as Match[];
-    const applicantMatches = React.useMemo(() => {
+    const applicantMatchesAssigned = React.useMemo(() => {
         return matches.filter(
             (match) =>
                 match.applicant === application.applicant && match.assigned
+        );
+    }, [matches, application]);
+    const applicantMatchesTentative = React.useMemo(() => {
+        return matches.filter(
+            (match) =>
+                match.applicant === application.applicant && match.tentative
         );
     }, [matches, application]);
 
@@ -345,7 +351,7 @@ export function ApplicationDetails({
                         <TableCell sx={{ fontWeight: "bold" }}>Current Assignments</TableCell>
                         <TableCell>
                             <Stack direction="row" flexWrap="wrap" gap={1}>
-                                {applicantMatches.map((match) => (
+                                {applicantMatchesAssigned.map((match) => (
                                     <Chip
                                         key={match.position.position_code}
                                         label={`${match.position.position_code} (${match.hours_assigned})`}
@@ -360,6 +366,23 @@ export function ApplicationDetails({
                                         key={assignment.position.position_code}
                                         label={`${assignment.position.position_code} (${assignment.hours})`}
                                         color={getOfferStatusColor(assignment.active_offer_status ?? "")}
+                                        variant="outlined"
+                                        size="small"
+                                        sx={{ mr: 1, mb: 1 }}
+                                    />
+                                ))}
+                            </Stack>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell sx={{ fontWeight: "bold" }}>Tentatively Assigned To</TableCell>
+                        <TableCell>
+                            <Stack direction="row" flexWrap="wrap" gap={1}>
+                                {applicantMatchesTentative.map((match) => (
+                                    <Chip
+                                        key={match.position.position_code}
+                                        label={`${match.position.position_code} (${match.hours_assigned})`}
+                                        color="secondary"
                                         variant="outlined"
                                         size="small"
                                         sx={{ mr: 1, mb: 1 }}

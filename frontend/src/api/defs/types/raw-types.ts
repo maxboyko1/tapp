@@ -256,5 +256,6 @@ export interface RawMatch {
     hours_assigned: number | null;
     assigned: boolean;
     starred: boolean;
+    tentative: boolean;
     hidden: boolean;
 }

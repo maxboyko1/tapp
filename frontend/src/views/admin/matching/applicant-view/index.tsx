@@ -13,6 +13,7 @@ export const matchingStatusToString: Record<MatchStatus, string> = {
     "staged-assigned": "Assigned (Staged)",
     applied: "Applied",
     starred: "Starred",
+    tentative: "Tentatively Assigned",
     unassignable: "Unassignable",
     hidden: "Hidden",
     "n/a": "N/A",

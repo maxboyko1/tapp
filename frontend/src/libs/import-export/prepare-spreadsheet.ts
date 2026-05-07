@@ -5,6 +5,7 @@ import {
     Assignment,
     Ddah,
     Instructor,
+    Match,
     Position,
     Posting,
     WageChunk,
@@ -156,6 +157,7 @@ export const prepareSpreadsheet = {
     application: function (
         applications: Application[],
         allAssignments: Assignment[],
+        allMatches: Match[],
         activePosition: Position | null = null,
     ) {
         const minApps = applications.map(app =>
@@ -205,6 +207,7 @@ export const prepareSpreadsheet = {
                     "Instructor Preferences",
                     "Instructor Comments"
                 ]),
+            "Tentatively Assigned To",
             "Assignment(s)",
             "Documents",
             ...(activePosition ? [] : ["Submission Date"]),
@@ -228,6 +231,18 @@ export const prepareSpreadsheet = {
                         .map(
                             (assignment: Assignment) =>
                                 `${assignment.position.position_code} (${assignment.hours}) (${assignment.active_offer_status})`
+                        );
+                    const applicantTentativeMatches = allMatches
+                        .filter(
+                            (match: Match) =>
+                                match.applicant &&
+                                utorid &&
+                                match.applicant.utorid === utorid &&
+                                match.tentative
+                        )
+                        .map(
+                            (match: Match) =>
+                                `${match.position.position_code} (${match.hours_assigned})`
                         );
 
                     return [
@@ -278,6 +293,7 @@ export const prepareSpreadsheet = {
                                     )
                                     .join("; "),
                             ]),
+                        applicantTentativeMatches.join("; "),
                         applicantAssignments.join("; "),
                         application.documents
                             .map(

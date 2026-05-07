@@ -2,7 +2,7 @@ import React from "react";
 import FileSaver from "file-saver";
 import { useSelector } from "react-redux";
 
-import { applicationsSelector, assignmentsSelector } from "../../../api/actions";
+import { applicationsSelector, assignmentsSelector, matchesSelector } from "../../../api/actions";
 import { ExportActionButton } from "../../../components/export-button";
 import {
     ExportFormat,
@@ -38,6 +38,7 @@ export function ConnectedExportApplicationsAction() {
         [activePosition, allApplications]
     );
     const allAssignments = useSelector(assignmentsSelector);
+    const allMatches = useSelector(matchesSelector)
 
     applications.sort((a: Application, b: Application) =>
         instructorApplicationsComparator(activePosition, a, b)
@@ -57,11 +58,11 @@ export function ConnectedExportApplicationsAction() {
                 throw new Error(`Unknown export type ${exportType}`);
             }
 
-            const file = prepareApplicationData(applications, exportType, allAssignments, activePosition);
+            const file = prepareApplicationData(applications, exportType, allAssignments, allMatches, activePosition);
             FileSaver.saveAs(file as any);
         }
         doExport().catch(console.error);
-    }, [exportType, applications, allAssignments, activePosition]);
+    }, [exportType, applications, allAssignments, allMatches, activePosition]);
 
     function onClick(option: ExportFormat) {
         setExportType(option);
