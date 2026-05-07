@@ -70,6 +70,7 @@ export const filterMap: Record<
         values: [
             { label: "Assigned", value: "assigned" },
             { label: "Assigned (Staged)", value: "staged-assigned" },
+            { label: "Tentatively Assigned", value: "tentative" },
             { label: "Starred", value: "starred" },
             { label: "Applied", value: "applied" },
             { label: "Unassignable", value: "unassignable" },

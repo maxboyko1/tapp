@@ -24,6 +24,21 @@ export function toggleAssigned(
 }
 
 /**
+ * Toggle the "tentatively assigned" status of a match.
+ */
+export function toggleTentative(
+    applicantSummary: ApplicantSummary,
+    position: Position
+) {
+    const applicantMatch = prepApplicantMatchForPosition(
+        applicantSummary,
+        position
+    );
+    applicantMatch.tentative = !applicantMatch.tentative;
+    return upsertMatch(applicantMatch);
+}
+
+/**
  * Toggle the "starred" status of a match.
  */
 export function toggleStarred(

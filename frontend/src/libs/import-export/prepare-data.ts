@@ -11,6 +11,7 @@ import type {
     Position,
     Posting,
     Session,
+    Match,
 } from "../../api/defs/types";
 import type { ExportFormat } from "./data-to-file";
 
@@ -33,12 +34,13 @@ export function prepareApplicationData(
     applications: Application[],
     dataFormat: ExportFormat,
     allAssignments: Assignment[],
+    allMatches: Match[],
     activePosition: Position | null = null,
 ) {
     return dataToFile(
         {
             toSpreadsheet: () =>
-                prepareSpreadsheet.application(applications, allAssignments, activePosition),
+                prepareSpreadsheet.application(applications, allAssignments, allMatches, activePosition),
             toJson: () => ({
                 applications: applications.map((application) =>
                     prepareMinimal.application(

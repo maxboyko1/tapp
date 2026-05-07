@@ -3,6 +3,17 @@
  */
 
 /**
+ * Normalize a date string by ensuring the timezone offset is in the format ±HH:MM.
+ * @param {*} dateStr 
+ * @returns {string|*}
+ */
+export function normalizeDateString(dateStr) {
+    if (typeof dateStr !== "string") return dateStr;
+    // Match timezone at the end, e.g. -04 or +05, and replace
+    return dateStr.replace(/([+-]\d{2})(?!:)(?=$)/, "$1:00");
+}
+
+/**
  * Given a date range, returns an array of one or two ranges depending
  * on whether the date range includes a new-years.
  *
@@ -12,8 +23,8 @@
  * @returns {{start_date: string, end_date:string}[]}
  */
 export function splitDateRangeAtNewYear(start_date, end_date) {
-    start_date = new Date(start_date);
-    end_date = new Date(end_date);
+    start_date = new Date(normalizeDateString(start_date));
+    end_date = new Date(normalizeDateString(end_date));
     // For `Date`, 11 is december
     const december = new Date(start_date.getFullYear(), 11, 31);
     // For `Date`, 12 will be the first month of the subsequent year

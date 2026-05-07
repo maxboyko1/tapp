@@ -16,12 +16,13 @@ import {
 } from "@mui/material";
 
 import { activePositionSelector } from "../store/actions";
-import { applicationsSelector } from "../../../api/actions";
+import { applicationsSelector, matchesSelector } from "../../../api/actions";
 import { AdvancedColumnDef, AdvancedFilterTable } from "../../../components/advanced-filter-table";
 import {
     Application,
     Assignment,
     InstructorPreference,
+    Match,
     Position
 } from "../../../api/defs/types";
 import { ApplicantRatingAndComment } from "../../../components/applicant-rating";
@@ -42,6 +43,7 @@ export function InstructorApplicationsTable() {
     const activePosition = useSelector(activePositionSelector);
     const allApplications = useSelector(applicationsSelector);
     const assignments = useSelector(assignmentsSelector);
+    const matches = useSelector(matchesSelector);
 
     const assignmentsByApplicantId: Record<number, Assignment[]> =
         React.useMemo(() => {
@@ -59,6 +61,18 @@ export function InstructorApplicationsTable() {
 
             return ret;
         }, [assignments]);
+    const tentativeMatchesByApplicantId: Record<number, Match[]> =
+        React.useMemo(() => {
+            const ret: Record<number, Match[]> = {};
+            for (const match of matches) {
+                if (match.tentative) {
+                    ret[match.applicant.id] = ret[match.applicant.id] || [];
+                    ret[match.applicant.id].push(match);
+                }
+            }
+
+            return ret;
+        }, [matches]);
 
     const [shownApplicationId, setShownApplicationId] = React.useState<
         number | null
@@ -184,6 +198,28 @@ export function InstructorApplicationsTable() {
             ...generateHeaderCellProps("GPA"),
             accessorKey: "gpa",
             size: 60,
+        },
+        {
+            header: "Tentative Match(es)",
+            id: "tentative_matches",
+            size: 300,
+            Cell: ({ row }) => {
+                const matches: Match[] =
+                    tentativeMatchesByApplicantId[row.original.applicant.id] || [];
+                return (
+                    <Stack direction="row" gap={0.25} flexWrap="wrap">
+                        {matches.map((match) => (
+                            <Chip
+                                label={`${match.position.position_code} (${match.hours_assigned})`}
+                                variant="outlined"
+                                color="secondary"
+                                key={match.position.position_code}
+                                size="small"
+                            />
+                        ))}
+                    </Stack>
+                );
+            },
         },
         {
             header: "Assignment(s)",

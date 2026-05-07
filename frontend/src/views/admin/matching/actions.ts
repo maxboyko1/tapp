@@ -321,7 +321,7 @@ export const positionSummariesByIdSelector = createSelector(
 
             // Add for any existing matches, but only if at least one flag is set
             for (const match of applicantSummary.matches) {
-                if (match.assigned || match.starred || match.hidden) {
+                if (match.assigned || match.tentative || match.starred || match.hidden) {
                     applicantSummariesByPosition[match.position.id] =
                         applicantSummariesByPosition[match.position.id] || [];
                     if (

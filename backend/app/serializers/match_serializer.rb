@@ -7,5 +7,6 @@ class MatchSerializer < ActiveModel::Serializer
                :hours_assigned,
                :assigned,
                :starred,
+               :tentative,
                :hidden
 end

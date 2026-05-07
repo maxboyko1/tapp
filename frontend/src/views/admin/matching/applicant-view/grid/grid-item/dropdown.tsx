@@ -5,6 +5,7 @@ import { ApplicantSummary } from "../../../types";
 import { Application, Position } from "../../../../../../api/defs/types";
 import {
     toggleAssigned,
+    toggleTentative,
     toggleStarred,
     toggleHidden,
     toggleApplicantHidden,
@@ -41,7 +42,8 @@ export function GridItemDropdown({
     const canBeAssigned =
         matchStatus === "hidden" ||
         matchStatus === "applied" ||
-        matchStatus === "starred";
+        matchStatus === "starred" ||
+        matchStatus === "tentative";
 
     const canBeHidden =
         matchStatus !== "assigned" &&
@@ -51,10 +53,17 @@ export function GridItemDropdown({
     const canBeStarred =
         matchStatus !== "assigned" && matchStatus !== "staged-assigned";
 
+    const canBeTentative =
+        matchStatus !== "assigned" && matchStatus !== "staged-assigned";
+
     const dispatch = useThunkDispatch();
 
     async function _toggleStarred() {
         await dispatch(toggleStarred(applicantSummary, position));
+    }
+
+    async function _toggleTentative() {
+        await dispatch(toggleTentative(applicantSummary, position));
     }
 
     async function _toggleHidden() {
@@ -126,6 +135,20 @@ export function GridItemDropdown({
                     </ListItemText>
                 </MenuItem>
             )}
+            {canBeTentative && (
+                <MenuItem
+                    dense
+                    onClick={() => {
+                        _toggleTentative();
+                        onClose();
+                    }}
+                >
+                    <ListItemText>
+                        {applicantMatch.tentative ? "Undo tentative assignment for " : "Tentatively assign to "}
+                        <b>{position.position_code}</b>
+                    </ListItemText>
+                </MenuItem>
+            )}
             {canBeStarred && (
                 <MenuItem
                     dense
@@ -135,7 +158,7 @@ export function GridItemDropdown({
                     }}
                 >
                     <ListItemText>
-                        {applicantMatch.starred ? "Star for " : "Unstar from "}
+                        {applicantMatch.starred ? "Unstar from " : "Star for "}
                         <b>{position.position_code}</b>
                     </ListItemText>
                 </MenuItem>

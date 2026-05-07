@@ -18,6 +18,7 @@ end
 #  hours_assigned       :float
 #  assigned             :boolean          default: false
 #  starred              :boolean          default: false
+#  tentative            :boolean          default: false
 #  hidden               :boolean          default: false
 #
 #  created_at   :datetime         not null

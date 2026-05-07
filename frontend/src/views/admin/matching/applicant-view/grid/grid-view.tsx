@@ -27,6 +27,7 @@ export function GridView({
             applied: [],
             starred: [],
             "staged-assigned": [],
+            tentative: [],
             assigned: [],
             unassignable: [],
             hidden: [],
@@ -52,6 +53,7 @@ export function GridView({
         "applied",
         "unassignable",
         "hidden",
+        "tentative",
     ];
 
     return (
