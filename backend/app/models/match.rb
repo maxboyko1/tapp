@@ -14,6 +14,7 @@ class Match < ApplicationRecord
             )
         end
     )
+    scope :tentative, -> { where(tentative: true) }
 
     validates_uniqueness_of :applicant_id, scope: %i[position_id]
 end

@@ -284,6 +284,9 @@ Rails
                         # InstructorPreferences
                         resources :instructor_preferences, only: %i[create]
 
+                        # Matches
+                        resources :matches, only: %i[index]
+
                         # DDAHs
                         resources :ddahs, only: %i[show create] do
                             member do

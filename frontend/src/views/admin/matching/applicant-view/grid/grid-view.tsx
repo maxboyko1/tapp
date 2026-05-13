@@ -49,11 +49,11 @@ export function GridView({
     const statusList: MatchStatus[] = [
         "assigned",
         "staged-assigned",
+        "tentative",
         "starred",
         "applied",
         "unassignable",
         "hidden",
-        "tentative",
     ];
 
     return (
