@@ -38,7 +38,7 @@ export function ConnectedExportApplicationsAction() {
         [activePosition, allApplications]
     );
     const allAssignments = useSelector(assignmentsSelector);
-    const allMatches = useSelector(matchesSelector)
+    const allMatches = useSelector(matchesSelector);
 
     applications.sort((a: Application, b: Application) =>
         instructorApplicationsComparator(activePosition, a, b)

@@ -269,10 +269,10 @@ export function initFromStage(
                     wrapThunk(fetchAssignments),
                     wrapThunk(fetchDdahs),
                     wrapThunk(fetchInstructorPreferences),
+                    wrapThunk(fetchMatches),
                 ];
             }
             if (activeRole === "admin") {
-                fetchActions.push(wrapThunk(fetchMatches));
                 fetchActions.push(wrapThunk(fetchApplicantMatchingData));
                 fetchActions.push(wrapThunk(fetchLetterTemplates));
             }

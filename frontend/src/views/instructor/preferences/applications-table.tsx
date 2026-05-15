@@ -200,7 +200,7 @@ export function InstructorApplicationsTable() {
             size: 60,
         },
         {
-            header: "Tentative Match(es)",
+            header: "Tentatively Assigned To",
             id: "tentative_matches",
             size: 300,
             Cell: ({ row }) => {

@@ -269,6 +269,7 @@ Rails
                             resources :positions, only: %i[index]
                             resources :ddahs, only: %i[index]
                             resources :instructor_preferences, only: %i[index]
+                            resources :matches, only: %i[index]
                         end
 
                         # Assignments
@@ -285,7 +286,7 @@ Rails
                         resources :instructor_preferences, only: %i[create]
 
                         # Matches
-                        resources :matches, only: %i[index]
+                        resources :matches, only: %i[show]
 
                         # DDAHs
                         resources :ddahs, only: %i[show create] do
