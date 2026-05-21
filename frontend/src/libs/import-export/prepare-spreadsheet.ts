@@ -207,8 +207,8 @@ export const prepareSpreadsheet = {
                     "Instructor Preferences",
                     "Instructor Comments"
                 ]),
-            "Tentatively Assigned To",
             "Assignment(s)",
+            "Tentatively Assigned To",
             "Documents",
             ...(activePosition ? [] : ["Submission Date"]),
             ...allCustomQuestionKeys,
@@ -238,7 +238,8 @@ export const prepareSpreadsheet = {
                                 match.applicant &&
                                 utorid &&
                                 match.applicant.utorid === utorid &&
-                                match.tentative
+                                match.tentative &&
+                                !match.assigned
                         )
                         .map(
                             (match: Match) =>
@@ -293,8 +294,8 @@ export const prepareSpreadsheet = {
                                     )
                                     .join("; "),
                             ]),
-                        applicantTentativeMatches.join("; "),
                         applicantAssignments.join("; "),
+                        applicantTentativeMatches.join("; "),
                         application.documents
                             .map(
                                 (document: any) =>

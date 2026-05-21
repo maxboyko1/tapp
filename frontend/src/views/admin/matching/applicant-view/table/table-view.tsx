@@ -66,6 +66,15 @@ const DEFAULT_COLUMNS: AdvancedColumnDef<ApplicantSummary>[] = [
         size: 64
     },
     {
+        header: "Tentative Assignments",
+        accessorKey: "tentativeAssignments"   
+    },
+    {
+        header: "Tentative Hours",
+        accessorKey: "totalHoursTentative",
+        size: 64,
+    },
+    {
         header: "Previously Assigned Hours",
         accessorKey: "previousHoursFulfilled",
         size: 64,
@@ -134,7 +143,8 @@ export function TableView({
                 matchingStatusToString[getMatchStatus(summary, position)];
             if (
                 statusCategory === "Assigned" ||
-                statusCategory === "Assigned (Staged)"
+                statusCategory === "Assigned (Staged)" ||
+                statusCategory === "Tentatively Assigned"
             ) {
                 statusCategory += ` (${match.hours_assigned || "0"})`;
             }
@@ -164,6 +174,8 @@ export function TableView({
             instructorPreference: avgInstructorRating,
             assignments: formatAssignedCourses(summary, position),
             totalHoursAssigned: summary.totalHoursAssigned,
+            tentativeAssignments: formatTentativelyAssignedCourses(summary, position),
+            totalHoursTentative: summary.totalHoursTentative,
             previousHoursFulfilled:
                 summary.applicantMatchingDatum.prev_hours_fulfilled,
             guaranteedHours: `${
@@ -192,7 +204,7 @@ function formatAssignedCourses(
     applicantSummary: ApplicantSummary,
     position: Position
 ) {
-    return applicantSummary.matches
+    const matches = applicantSummary.matches
         .map(() => {
             const applicantMatch = getApplicantMatchForPosition(
                 applicantSummary,
@@ -209,6 +221,34 @@ function formatAssignedCourses(
             }
             return null;
         })
-        .filter((match) => match)
-        .join("\n");
+        .filter((match): match is string => Boolean(match));
+
+    return [...new Set(matches)].join("\n");
+}
+
+/**
+ * Takes an applicant summary and returns a formatted string containing the 
+ * applicant's tentative assignments with hours, separated by newlines.
+ */
+function formatTentativelyAssignedCourses(
+    applicantSummary: ApplicantSummary,
+    position: Position
+) {
+    const matches = applicantSummary.matches
+        .map(() => {
+            const applicantMatch = getApplicantMatchForPosition(
+                applicantSummary,
+                position
+            );
+            const matchStatus = getMatchStatus(applicantSummary, position);
+            if (matchStatus === "tentative") {
+                return `${position.position_code} (${
+                    applicantMatch?.hours_assigned || 0
+                })`;
+            }
+            return null;
+        })
+        .filter((match): match is string => Boolean(match));
+
+    return [...new Set(matches)].join("\n");
 }

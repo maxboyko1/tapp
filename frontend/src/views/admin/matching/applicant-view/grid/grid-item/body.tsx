@@ -4,6 +4,7 @@ import { Position } from "../../../../../../api/defs/types";
 import { sum, round } from "../../../../../../libs/utils";
 import {
     getHoursAssigned,
+    getHoursTentativelyAssigned,
     getMatchStatus,
     getPositionPrefForPosition,
 } from "../../../utils";
@@ -118,9 +119,9 @@ export function ApplicantPillRight({
     applicantSummary: ApplicantSummary;
     position: Position;
 }) {
-    const isAssigned = ["assigned", "staged-assigned"].includes(
-        getMatchStatus(applicantSummary, position)
-    );
+    const matchStatus = getMatchStatus(applicantSummary, position);
+    const isAssigned = ["assigned", "staged-assigned"].includes(matchStatus);
+    const isTentativelyAssigned = matchStatus === "tentative";
 
     return (
         <div className="applicant-pill-right">
@@ -128,6 +129,10 @@ export function ApplicantPillRight({
                 {isAssigned ? (
                     <div className="applicant-hours">
                         ({getHoursAssigned(applicantSummary, position)})
+                    </div>
+                ) : isTentativelyAssigned ? (
+                    <div className="applicant-hours tentative">
+                        ({getHoursTentativelyAssigned(applicantSummary, position)})
                     </div>
                 ) : (
                     <div

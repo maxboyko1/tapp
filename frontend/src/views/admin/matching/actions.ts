@@ -31,7 +31,10 @@ import {
     FillStatus,
 } from "./types";
 
-import { getHoursAssigned } from "./utils";
+import {
+    getHoursAssigned,
+    getHoursTentativelyAssigned
+} from "./utils";
 import { actionFactory } from "../../../api/actions/utils";
 
 export const setSelectedMatchingPosition = actionFactory<number | null>(
@@ -234,6 +237,7 @@ const applicantSummariesSelector = createSelector(
             let hoursAssigned =
                 applicantMatchingDataByApplicantId[applicant.id]
                     ?.prev_hours_fulfilled || 0;
+            let hoursTentative = 0;
 
             for (const assignment of assignmentsByApplicantId[applicant.id] ||
                 []) {
@@ -255,8 +259,11 @@ const applicantSummariesSelector = createSelector(
                             assignment.active_offer_status !== "rejected" &&
                             assignment.active_offer_status !== "withdrawn"
                     )
-                )
+                ) {
                     hoursAssigned += match.hours_assigned || 0;
+                } else if (match.tentative && !match.assigned) {
+                    hoursTentative += match.hours_assigned || 0;
+                }
             }
 
             let filledStatus: FillStatus = "n/a";
@@ -264,7 +271,7 @@ const applicantSummariesSelector = createSelector(
                 filledStatus = getFilledStatus(
                     applicantMatchingDataByApplicantId[applicant.id]
                         ?.min_hours_owed || 0,
-                    hoursAssigned
+                    hoursAssigned + hoursTentative
                 );
 
             ret.push({
@@ -279,6 +286,7 @@ const applicantSummariesSelector = createSelector(
                 matches: matchesByApplicantId[applicant.id] || [],
                 assignments: assignmentsByApplicantId[applicant.id] || [],
                 totalHoursAssigned: hoursAssigned,
+                totalHoursTentative: hoursTentative,
                 filledStatus: filledStatus,
             });
         }
@@ -288,15 +296,15 @@ const applicantSummariesSelector = createSelector(
 
 function getFilledStatus(
     targetHours: number,
-    hoursAssigned: number
+    totalHours: number
 ): FillStatus {
-    if (targetHours === 0 && hoursAssigned === 0) {
+    if (targetHours === 0 && totalHours === 0) {
         return "n/a";
-    } else if (targetHours > 0 && hoursAssigned === 0) {
+    } else if (targetHours > 0 && totalHours === 0) {
         return "empty";
-    } else if (targetHours - hoursAssigned > 0) {
+    } else if (targetHours - totalHours > 0) {
         return "under";
-    } else if (targetHours - hoursAssigned === 0) {
+    } else if (targetHours - totalHours === 0) {
         return "matched";
     }
     return "over";
@@ -361,18 +369,21 @@ export const positionSummariesByIdSelector = createSelector(
 
             // Go over matches marked as assigned/staged-assigned and get the number of hours assigned
             let hoursAssigned = 0;
+            let hoursTentative = 0;
 
             for (const applicantSummary of applicantSummariesByPosition[
                 position.id
             ] || []) {
                 hoursAssigned += getHoursAssigned(applicantSummary, position);
+                hoursTentative += getHoursTentativelyAssigned(applicantSummary, position);
             }
 
-            const filledStatus: FillStatus = getFilledStatus(targetHours, hoursAssigned);
+            const filledStatus: FillStatus = getFilledStatus(targetHours, hoursAssigned + hoursTentative);
 
             ret[position.id] = {
                 position: position,
                 hoursAssigned: hoursAssigned,
+                hoursTentative: hoursTentative,
                 filledStatus: filledStatus,
                 applicantSummaries:
                     applicantSummariesByPosition[position.id] || [],

@@ -28,7 +28,15 @@ const ApplicantPill = React.forwardRef(function ApplicantPill(
     ref: React.Ref<HTMLButtonElement>
 ) {
     return (
-        <button ref={ref} className="applicant-pill" onClick={onClick}>
+        // Applicants with > 0 total tentatively assigned hours, either for this position or any
+        // others, get a special border to visually distinguish them in the grid
+        <button
+            ref={ref}
+            className={`applicant-pill${
+                applicantSummary.totalHoursTentative > 0 ? " tentative" : ""
+            }`}
+            onClick={onClick}
+        >
             <ApplicantPillLeft applicantSummary={applicantSummary} />
             <ApplicantPillMiddle
                 applicantSummary={applicantSummary}
