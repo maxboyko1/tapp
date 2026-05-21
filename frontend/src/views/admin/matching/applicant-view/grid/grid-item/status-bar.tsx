@@ -21,6 +21,11 @@ export function ApplicantPillLeft({
             <div className="applicant-status-value">
                 {applicantSummary.totalHoursAssigned}
             </div>
+            {applicantSummary.totalHoursTentative > 0 && (
+                <div className="applicant-status-value tentative">
+                    ({applicantSummary.totalHoursTentative})
+                </div>
+            )}
             <div className="applicant-status-divider" />
             <div className="applicant-status-value">
                 {applicantSummary.applicantMatchingDatum?.min_hours_owed || 0}

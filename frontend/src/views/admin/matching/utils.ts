@@ -122,3 +122,19 @@ export function getHoursAssigned(
 
     return 0;
 }
+
+/**
+ * Returns the number of tentatively assigned hours an applicant has for a position.
+ */
+export function getHoursTentativelyAssigned(
+    applicantSummary: ApplicantSummary,
+    position: Position
+) {
+    for (const match of applicantSummary.matches) {
+        if (match.position.id === position.id) {
+            if (match.tentative && !match.assigned) return match.hours_assigned || 0;
+            return 0;
+        }
+    }
+    return 0;
+}

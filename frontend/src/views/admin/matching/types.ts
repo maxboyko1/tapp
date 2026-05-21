@@ -12,12 +12,14 @@ export type ApplicantSummary = {
     matches: Match[];
     assignments: Assignment[];
     totalHoursAssigned: number;
+    totalHoursTentative: number;
     filledStatus: FillStatus;
 };
 
 export type PositionSummary = {
     position: Position;
     hoursAssigned: number;
+    hoursTentative: number;
     filledStatus: FillStatus;
     applicantSummaries: ApplicantSummary[];
 };

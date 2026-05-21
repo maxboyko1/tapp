@@ -51,7 +51,7 @@ export function GridItemDropdown({
         matchStatus !== "unassignable";
 
     const canBeStarred =
-        matchStatus !== "assigned" && matchStatus !== "staged-assigned";
+        matchStatus !== "assigned" && matchStatus !== "staged-assigned" && matchStatus !== "tentative";
 
     const canBeTentative =
         matchStatus !== "assigned" && matchStatus !== "staged-assigned";
@@ -62,12 +62,18 @@ export function GridItemDropdown({
         await dispatch(toggleStarred(applicantSummary, position));
     }
 
-    async function _toggleTentative() {
-        await dispatch(toggleTentative(applicantSummary, position));
-    }
-
     async function _toggleHidden() {
         await dispatch(toggleHidden(applicantSummary, position));
+    }
+
+    async function _toggleTentative() {
+        await dispatch(
+            toggleTentative(
+                applicantSummary,
+                position,
+                position.hours_per_assignment || 0
+            )
+        );
     }
 
     async function _toggleAssigned() {
@@ -118,6 +124,17 @@ export function GridItemDropdown({
                     <ListItemText>Change assigned hours</ListItemText>
                 </MenuItem>
             )}
+            {matchStatus === "tentative" && (
+                <MenuItem
+                    dense
+                    onClick={() => {
+                        setShowChangeHours(true);
+                        onClose();
+                    }}
+                >
+                    <ListItemText>Change tentative hours</ListItemText>
+                </MenuItem>
+            )}
             {(canBeAssigned || matchStatus === "staged-assigned") && (
                 <MenuItem
                     dense
@@ -146,6 +163,7 @@ export function GridItemDropdown({
                     <ListItemText>
                         {applicantMatch.tentative ? "Undo tentative assignment for " : "Tentatively assign to "}
                         <b>{position.position_code}</b>
+                        {applicantMatch.tentative ? "" : ` (${position.hours_per_assignment || 0})`}
                     </ListItemText>
                 </MenuItem>
             )}

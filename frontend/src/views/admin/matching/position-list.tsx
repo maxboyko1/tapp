@@ -107,7 +107,7 @@ function PositionRow({
             return 100;
         } else if (positionSummary.filledStatus === "under") {
             return round(
-                (positionSummary.hoursAssigned / targetHours) * 100,
+                ((positionSummary.hoursAssigned + positionSummary.hoursTentative) / targetHours) * 100,
                 0
             );
         }
@@ -158,7 +158,20 @@ function PositionRow({
                     {positionSummary.position.position_code}
                 </Typography>
                 <Typography variant="body2" color="text.secondary" sx={{ fontSize: 13 }}>
-                    {positionSummary.hoursAssigned} / {targetHours} h
+                    {positionSummary.hoursAssigned}
+                    {positionSummary.hoursTentative > 0 && (
+                        <Box
+                            component="span"
+                            sx={{
+                                color: "secondary.main",
+                                fontWeight: 700,
+                                fontStyle: "italic",
+                            }}
+                        >
+                            {` (+ ${positionSummary.hoursTentative})`}
+                        </Box>
+                    )}{" "}
+                    / {targetHours} h
                 </Typography>
             </Box>
             {focused && (

@@ -16,11 +16,13 @@ export type SortType =
     | "TA Preference"
     | "Instructor Preference"
     | "Total Hours Assigned"
+    | "Total Hours Tentative"
+    | "Total Hours Combined"
     | "Total Hours Owed"
     | "Remaining Hours Owed"
     | "First Name"
     | "Last Name";
-
+    
 type SortFunction = (
     applicantSummaries: ApplicantSummary[],
     asc?: boolean,
@@ -36,6 +38,8 @@ export const sortMap: Record<SortType, SortFunction> = {
     "TA Preference": sortByApplicantPref,
     "Instructor Preference": sortByInstructorRating,
     "Total Hours Assigned": sortByTotalHoursAssigned,
+    "Total Hours Tentative": sortByTotalHoursTentative,
+    "Total Hours Combined": sortByTotalHoursCombined,
     "Total Hours Owed": sortByTotalHoursOwed,
     "Remaining Hours Owed": sortByRemainingHoursOwed,
     "First Name": sortByFirstName,
@@ -280,6 +284,57 @@ function sortByTotalHoursAssigned(
         }
 
         return a.totalHoursAssigned < b.totalHoursAssigned
+            ? flipIfDescending(-1, asc)
+            : flipIfDescending(1, asc);
+    });
+}
+
+function sortByTotalHoursTentative(
+    applicantSummaries: ApplicantSummary[],
+    asc = true,
+    _position?: Position | null
+) {
+    applicantSummaries.sort((a, b) => {
+        if (!a.matches) {
+            return flipIfDescending(-1, asc);
+        }
+
+        if (!b.matches) {
+            return flipIfDescending(1, asc);
+        }
+
+        if (a.totalHoursTentative === b.totalHoursTentative) {
+            return 0;
+        }
+
+        return a.totalHoursTentative < b.totalHoursTentative
+            ? flipIfDescending(-1, asc)
+            : flipIfDescending(1, asc);
+    });
+}
+
+function sortByTotalHoursCombined(
+    applicantSummaries: ApplicantSummary[],
+    asc = true,
+    _position?: Position | null
+) {
+    applicantSummaries.sort((a, b) => {
+        if (!a.matches) {
+            return flipIfDescending(-1, asc);
+        }
+
+        if (!b.matches) {
+            return flipIfDescending(1, asc);
+        }
+
+        const aTotal = a.totalHoursAssigned + a.totalHoursTentative;
+        const bTotal = b.totalHoursAssigned + b.totalHoursTentative;
+
+        if (aTotal === bTotal) {
+            return 0;
+        }
+
+        return aTotal < bTotal
             ? flipIfDescending(-1, asc)
             : flipIfDescending(1, asc);
     });

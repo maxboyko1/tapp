@@ -135,7 +135,7 @@
 }
 
 .position-row.n\/a {
-    border-color: #ab1368;
+    border-color: #6d247a;
 }
 
 .position-row.empty {
@@ -187,7 +187,7 @@
 }
 
 .progress.n\/a {
-    background-color: rgba(171, 19, 104, 0.25);
+    background-color: rgba(109, 36, 122, 0.18);
 }
 
 .progress.under {
@@ -253,6 +253,15 @@
     font-size: smaller;
     box-shadow: 2px 2px 6px #ccc;
 }
+
+.applicant-pill.tentative {
+    background-color: rgba(171, 19, 104, 0.12);
+}
+
+.applicant-pill.tentative:hover {
+    background-color: rgba(171, 19, 104, 0.18);
+}
+
 .applicant-pill-right {
     margin-left: auto;
     display: flex;
@@ -270,7 +279,7 @@
 
 .applicant-status-sidebar {
     display: flex;
-    width: 30px;
+    width: 35px;
     align-items: center;
     flex-direction: column;
     text-align: center;
@@ -348,6 +357,10 @@
 
 .applicant-status-value {
     flex-grow: 1;
+}
+
+.applicant-status-value.tentative {
+    color: #ab1368;
 }
 
 .no-highlight {
@@ -439,6 +452,10 @@
     margin-right: 2px;
 
     column-gap: 2px;
+}
+
+.applicant-hours.tentative {
+    color: #ab1368;
 }
 
 .grid-view-section > h4 {

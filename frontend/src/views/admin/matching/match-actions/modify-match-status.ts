@@ -28,13 +28,15 @@ export function toggleAssigned(
  */
 export function toggleTentative(
     applicantSummary: ApplicantSummary,
-    position: Position
+    position: Position,
+    hoursAssigned?: number
 ) {
     const applicantMatch = prepApplicantMatchForPosition(
         applicantSummary,
         position
     );
     applicantMatch.tentative = !applicantMatch.tentative;
+    applicantMatch.hours_assigned = hoursAssigned || 0;
     return upsertMatch(applicantMatch);
 }
 

@@ -200,28 +200,6 @@ export function InstructorApplicationsTable() {
             size: 60,
         },
         {
-            header: "Tentatively Assigned To",
-            id: "tentative_matches",
-            size: 300,
-            Cell: ({ row }) => {
-                const matches: Match[] =
-                    tentativeMatchesByApplicantId[row.original.applicant.id] || [];
-                return (
-                    <Stack direction="row" gap={0.25} flexWrap="wrap">
-                        {matches.map((match) => (
-                            <Chip
-                                label={`${match.position.position_code} (${match.hours_assigned})`}
-                                variant="outlined"
-                                color="secondary"
-                                key={match.position.position_code}
-                                size="small"
-                            />
-                        ))}
-                    </Stack>
-                );
-            },
-        },
-        {
             header: "Assignment(s)",
             id: "assignments",
             size: 300,
@@ -240,6 +218,28 @@ export function InstructorApplicationsTable() {
                                     ] || 'warning'
                                 }
                                 key={assignment.id}
+                                size="small"
+                            />
+                        ))}
+                    </Stack>
+                );
+            },
+        },
+        {
+            header: "Tentatively Assigned To",
+            id: "tentative_matches",
+            size: 300,
+            Cell: ({ row }) => {
+                const matches: Match[] =
+                    tentativeMatchesByApplicantId[row.original.applicant.id] || [];
+                return (
+                    <Stack direction="row" gap={0.25} flexWrap="wrap">
+                        {matches.map((match) => (
+                            <Chip
+                                label={`${match.position.position_code} (${match.hours_assigned})`}
+                                variant="outlined"
+                                color="secondary"
+                                key={match.position.position_code}
                                 size="small"
                             />
                         ))}
