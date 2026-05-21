@@ -60,7 +60,8 @@ export function ActiveSessionDisplay(props: {
                     {label}
                 </Button>
                 <FilterableMenu
-                    items={sessions as (HasId & { name: string })[]}
+                    // Reversing the order of sessions to show the most recent first
+                    items={[...sessions].reverse() as (HasId & { name: string })[]}
                     activeItemId={activeSessionId}
                     anchorEl={anchorEl}
                     clearFilter={!anchorEl}

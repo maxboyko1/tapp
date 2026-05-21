@@ -86,7 +86,8 @@ export default function InstructorSessionsView() {
                             : "You are not listed as an instructor for any session"}
                     </Typography>
                 ) : null}
-                {sessions.map((session) => {
+                {/* Reversing the order of sessions to show the most recent first */}
+                {[...sessions].reverse().map((session) => {
                     const isActive = session.id === activeSession?.id;
                     const sessionPositions = positions.filter(
                         (position) => position.session_id === session.id
