@@ -1,6 +1,6 @@
 import React from "react";
 import { useParams } from "react-router-dom";
-import { ElementFactory, Model, Question, Serializer } from "survey-core";
+import { ElementFactory, Model, Question, Serializer, settings } from "survey-core";
 import { DoubleBorderLight } from "survey-core/themes";
 import { ReactQuestionFactory, Survey, SurveyQuestionElementBase } from "survey-react-ui";
 import {
@@ -25,6 +25,18 @@ import { apiGET, apiPOST } from "../../../libs/api-utils";
 
 import "core-js/stable";
 import "survey-core/survey-core.css";
+
+// Set SurveyJS notification lifetime to 20 seconds
+settings.notifications.lifetime = 20000;
+
+// Text for the position preferences warning notification, to be displayed to users
+// on certain selections, both when leaving Position Preferences page and in the
+// final confirmation dialog
+const POSITION_PREFERENCES_WARNING_TEXT =
+    "There are limited TA positions available for upper-level computer science " +
+    "courses, and these tend to be quite competitive. We strongly recommend " +
+    "indicating preferences for at least four courses, including at least one " +
+    "first- or second- year computer science course.";
 
 // --- Position Preferences Custom Drag/Drop Board Component ---
 
@@ -452,6 +464,60 @@ function PreferenceBoard(props: any) {
 // --- End of Position Preferences Custom Drag/Drop Board Component ---
 
 /**
+ * Helper function to check if a given position code corresponds to a 1st or 2nd-year course.
+ * @param positionCode
+ * @returns 
+ */
+function isFirstOrSecondYearCourse(positionCode: string): boolean {
+    // Matches codes like CSC108H1F, CSC236H1S, etc. where first numeric digit is 1 or 2
+    return /^[A-Za-z]{3}[12]\d{2}[A-Za-z].*$/.test(positionCode);
+}
+
+/**
+ * Check whether or not to warn the applicant about their position preferences selections.
+ * Warning is displayed for CS department PhDs or MSc students, who have either specified
+ * fewer than 4 positions to apply to, or have not included at least one 1st or 2nd-year
+ * course in their preferences.
+ * @param program 
+ * @param department 
+ * @param preferenceMap 
+ * @param positions 
+ * @returns 
+ */
+function shouldShowPositionPreferencesWarning(
+    program: string,
+    department: string,
+    preferenceMap: Record<string, number>,
+    positions: any[]
+): boolean {
+    if (department !== "cs" || (program !== "P" && program !== "M")) {
+        return false;
+    }
+
+    const normalizedPreferences = preferenceMap || {};
+    const selectedPositionIds = Object.entries(normalizedPreferences)
+        .filter(([, level]) => {
+            const numericLevel = Number(level);
+            return numericLevel >= 0 && numericLevel <= 4;
+        })
+        .map(([id]) => String(id));
+
+    if (selectedPositionIds.length < 4) {
+        return true;
+    }
+
+    const selectedPositionIdSet = new Set(selectedPositionIds);
+    const hasFirstOrSecondYearCourse = positions.some((position: any) => {
+        return (
+            selectedPositionIdSet.has(String(position.id)) &&
+            isFirstOrSecondYearCourse(String(position.value || ""))
+        );
+    });
+
+    return !hasFirstOrSecondYearCourse;
+}
+
+/**
  * Determine whether a survey.js survey has has at least one
  * position preference available. (Surveys that don't have any position
  * preferences available to be selected are considered invalid.)
@@ -478,6 +544,7 @@ function ConfirmDialog({
     submitDialogVisible,
     hideDialogAndResetData,
     applicationOpen,
+    preferenceWarning,
     submissionError,
     confirmClicked,
     waiting,
@@ -485,6 +552,7 @@ function ConfirmDialog({
     submitDialogVisible: boolean;
     hideDialogAndResetData: (...args: any[]) => any;
     applicationOpen: boolean;
+    preferenceWarning: string | null;
     submissionError: string | null;
     confirmClicked: (...args: any[]) => any;
     waiting: boolean;
@@ -535,6 +603,11 @@ function ConfirmDialog({
                         The application window is currently not open. Any
                         applications submitted outside of the application window
                         may not be considered.
+                    </Alert>
+                ) : null}
+                {preferenceWarning ? (
+                    <Alert severity="warning" sx={{ mb: 2 }}>
+                        {preferenceWarning}
                     </Alert>
                 ) : null}
                 {sessionTimeout && (
@@ -599,6 +672,9 @@ export default function PostingView() {
     const [submissionError, setSubmissionError] = React.useState<string | null>(
         null
     );
+    const [preferenceWarning, setPreferenceWarning] = React.useState<string | null>(
+        null
+    );
     const [applicationOpen, setApplicationOpen] = React.useState(true);
 
     // Fetch the survey JSON and prefilled data from the backend
@@ -648,15 +724,52 @@ export default function PostingView() {
     React.useEffect(() => {
         if (!survey) return;
         // We only want to add this callback once when the survey is initialized
-        survey.onCompleting.add((result, options) => {
+        const onCompletingHandler = (result: any, options: any) => {
             if (!hasSubmitted) {
                 options.allow = false;
                 setSurveyData(result.data);
+                setPreferenceWarning(
+                    shouldShowPositionPreferencesWarning(
+                        survey.getValue("program"),
+                        survey.getValue("department"),
+                        (result.data?.position_preferences || {}) as Record<string, number>,
+                        surveyJson?.positions || []
+                    )
+                        ? POSITION_PREFERENCES_WARNING_TEXT
+                        : null
+                );
                 setSubmitDialogVisible(true);
                 setTimeout(() => survey.showPreview(), 0);
             }
-        });
-    }, [survey, setSurveyData, setSubmitDialogVisible, hasSubmitted]);
+        };
+
+        // Display toast notification warning upon leaving Position Preferences page, depending on
+        // the applicant's responses to that question and their program/department
+        const onCurrentPageChangingHandler = (_sender: any, options: any) => {
+            if (options.oldCurrentPage?.name !== "preferences_page") {
+                return;
+            }
+
+            if (
+                shouldShowPositionPreferencesWarning(
+                    survey.getValue("program"),
+                    survey.getValue("department"),
+                    (survey.getValue("position_preferences") || {}) as Record<string, number>,
+                    surveyJson?.positions || []
+                )
+            ) {
+                survey.notify(POSITION_PREFERENCES_WARNING_TEXT, "success");
+            }
+        };
+
+        survey.onCompleting.add(onCompletingHandler);
+        survey.onCurrentPageChanging.add(onCurrentPageChangingHandler);
+
+        return () => {
+            survey.onCompleting.remove(onCompletingHandler);
+            survey.onCurrentPageChanging.remove(onCurrentPageChangingHandler);
+        };
+    }, [survey, surveyJson, setSurveyData, setSubmitDialogVisible, hasSubmitted]);
 
     if (url_token == null) {
         return <React.Fragment>Unknown URL token.</React.Fragment>;
@@ -693,6 +806,7 @@ export default function PostingView() {
             setSurveyData(surveyPrefilledData);
             setSubmitDialogVisible(false);
             setSubmissionError(null);
+            setPreferenceWarning(null);
         } catch (e) {
             console.warn(e);
             setSubmissionError("Could not submit application.");
@@ -709,6 +823,7 @@ export default function PostingView() {
         setHasSubmitted(false);
         setSubmitDialogVisible(false);
         setSubmissionError(null);
+        setPreferenceWarning(null);
         submittingRef.current = false;
     }
 
@@ -719,6 +834,7 @@ export default function PostingView() {
                 submitDialogVisible={submitDialogVisible}
                 hideDialogAndResetData={hideDialogAndResetData}
                 applicationOpen={applicationOpen}
+                preferenceWarning={preferenceWarning}
                 submissionError={submissionError}
                 confirmClicked={confirmClicked}
                 waiting={waiting}
