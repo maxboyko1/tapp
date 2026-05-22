@@ -129,16 +129,6 @@
                     "inputType": "number",
                     "min": "0",
                     "max": "4"
-                },
-                {
-                    "type": "file",
-                    "name": "transcripts",
-                    "visibleIf": "{program} = 'U'",
-                    "title": "Please upload your unofficial transcript(s), in PDF format.",
-                    "isRequired": true,
-                    "allowMultiple": true,
-                    "maxSize": 5242880,
-                    "acceptedTypes": "application/pdf"
                 }
             ],
             "title": "Current Status"
@@ -185,6 +175,17 @@
                     "title": "Please upload your CV/resume here, in PDF format.",
                     "isRequired": true,
                     "allowMultiple": false,
+                    "maxSize": 5242880,
+                    "acceptedTypes": "application/pdf"
+                },
+                {
+                    "type": "file",
+                    "name": "academic_history",
+                    "title": "Please upload your academic history (official/unofficial transcript) files here, in PDF format.",
+                    "description": "Max 5 files allowed.",
+                    "requiredIf": "{program} = 'U'",
+                    "allowMultiple": true,
+                    "maxFiles": 5,
                     "maxSize": 5242880,
                     "acceptedTypes": "application/pdf"
                 },

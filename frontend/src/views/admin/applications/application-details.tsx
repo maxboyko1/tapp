@@ -47,6 +47,7 @@ type CustomQuestionAnswers = {
     previous_industry_work?: string;
     research_interests?: string;
     prior_assignments?: string[];
+    ideal_workload?: string;
 };
 
 export function PreferencesLinkDialog({
@@ -329,6 +330,10 @@ export function ApplicationDetails({
                                 )}
                             </Stack>
                         </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell sx={{ fontWeight: "bold" }}>Ideal Workload</TableCell>
+                        <TableCell>{customAnswers.ideal_workload}</TableCell>
                     </TableRow>
                     <TableRow>
                         <TableCell sx={{ fontWeight: "bold" }}>Prior Assignments</TableCell>
