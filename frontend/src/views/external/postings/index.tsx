@@ -1,6 +1,6 @@
 import React from "react";
 import { useParams } from "react-router-dom";
-import { ElementFactory, Model, Question, Serializer, settings } from "survey-core";
+import { ElementFactory, Model, Question, Serializer } from "survey-core";
 import { DoubleBorderLight } from "survey-core/themes";
 import { ReactQuestionFactory, Survey, SurveyQuestionElementBase } from "survey-react-ui";
 import {
@@ -26,13 +26,10 @@ import { apiGET, apiPOST } from "../../../libs/api-utils";
 import "core-js/stable";
 import "survey-core/survey-core.css";
 
-// Set SurveyJS notification lifetime to 20 seconds
-settings.notifications.lifetime = 20000;
-
 // Text for the position preferences warning notification, to be displayed to users
 // on certain selections, both when leaving Position Preferences page and in the
 // final confirmation dialog
-const POSITION_PREFERENCES_WARNING_TEXT =
+const PREFERENCES_WARNING_TEXT =
     "There are limited TA positions available for upper-level computer science " +
     "courses, and these tend to be quite competitive. We strongly recommend " +
     "indicating preferences for at least four courses, including at least one " +
@@ -658,6 +655,33 @@ function ConfirmDialog({
     );
 }
 
+function PreferencesSelectionDialog({
+    open,
+    onRedo,
+    onProceed,
+}: {
+    open: boolean;
+    onRedo: () => void;
+    onProceed: () => void;
+}) {
+    return (
+        <Dialog open={open} onClose={onRedo} maxWidth="sm" fullWidth>
+            <DialogTitle>Position Preferences Selection Warning</DialogTitle>
+            <DialogContent dividers>
+                <Alert severity="warning">{PREFERENCES_WARNING_TEXT}</Alert>
+            </DialogContent>
+            <DialogActions>
+                <Button variant="outlined" color="secondary" onClick={onRedo}>
+                    Redo Preferences
+                </Button>
+                <Button variant="outlined" onClick={onProceed}>
+                    Proceed
+                </Button>
+            </DialogActions>
+        </Dialog>
+    );
+}
+
 export default function PostingView() {
     const params = useParams<{ url_token?: string }>();
     const url_token = params?.url_token;
@@ -675,7 +699,10 @@ export default function PostingView() {
     const [preferenceWarning, setPreferenceWarning] = React.useState<string | null>(
         null
     );
+    const [preferencesSelectionDialogVisible, setPreferencesSelectionDialogVisible] =
+        React.useState(false);
     const [applicationOpen, setApplicationOpen] = React.useState(true);
+    const allowPreferencesPageProceedRef = React.useRef(false);
 
     // Fetch the survey JSON and prefilled data from the backend
     React.useEffect(() => {
@@ -709,7 +736,7 @@ export default function PostingView() {
         survey.showQuestionNumbers = "off";
 
         // The utorid is auto-filled when the user is actually taking a survey.
-        survey.data = surveyData || surveyPrefilledData;
+        survey.data = surveyPrefilledData;
 
         // If the data has changed but we've finished the survey, make sure to set the survey to
         // a finished state.
@@ -718,7 +745,23 @@ export default function PostingView() {
         }
 
         return survey;
-    }, [surveyJson, surveyData, surveyPrefilledData, hasSubmitted]);
+    }, [surveyJson, surveyPrefilledData, hasSubmitted]);
+
+    function handleRedoPreferences() {
+        setPreferencesSelectionDialogVisible(false);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function handleProceedPreferences() {
+        setPreferencesSelectionDialogVisible(false);
+
+        if (!survey) {
+            return;
+        }
+
+        allowPreferencesPageProceedRef.current = true;
+        survey.nextPage();
+    }
 
     // Show survey submit confirmation dialog on completion
     React.useEffect(() => {
@@ -735,7 +778,7 @@ export default function PostingView() {
                         (result.data?.position_preferences || {}) as Record<string, number>,
                         surveyJson?.positions || []
                     )
-                        ? POSITION_PREFERENCES_WARNING_TEXT
+                        ? PREFERENCES_WARNING_TEXT
                         : null
                 );
                 setSubmitDialogVisible(true);
@@ -743,9 +786,14 @@ export default function PostingView() {
             }
         };
 
-        // Display toast notification warning upon leaving Position Preferences page, depending on
+        // Display warning dialog upon leaving Position Preferences page, depending on
         // the applicant's responses to that question and their program/department
         const onCurrentPageChangingHandler = (_sender: any, options: any) => {
+            if (allowPreferencesPageProceedRef.current) {
+                allowPreferencesPageProceedRef.current = false;
+                return;
+            }
+
             if (options.oldCurrentPage?.name !== "preferences_page") {
                 return;
             }
@@ -758,7 +806,8 @@ export default function PostingView() {
                     surveyJson?.positions || []
                 )
             ) {
-                survey.notify(POSITION_PREFERENCES_WARNING_TEXT, "success");
+                options.allow = false;
+                setPreferencesSelectionDialogVisible(true);
             }
         };
 
@@ -766,6 +815,7 @@ export default function PostingView() {
         survey.onCurrentPageChanging.add(onCurrentPageChangingHandler);
 
         return () => {
+            allowPreferencesPageProceedRef.current = false;
             survey.onCompleting.remove(onCompletingHandler);
             survey.onCurrentPageChanging.remove(onCurrentPageChangingHandler);
         };
@@ -838,6 +888,11 @@ export default function PostingView() {
                 submissionError={submissionError}
                 confirmClicked={confirmClicked}
                 waiting={waiting}
+            />
+            <PreferencesSelectionDialog
+                open={preferencesSelectionDialogVisible}
+                onRedo={handleRedoPreferences}
+                onProceed={handleProceedPreferences}
             />
         </React.Fragment>
     );
