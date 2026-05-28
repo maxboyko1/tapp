@@ -672,7 +672,7 @@ function PreferencesSelectionDialog({
             </DialogContent>
             <DialogActions>
                 <Button variant="outlined" color="secondary" onClick={onRedo}>
-                    Redo Preferences
+                    Modify Preferences
                 </Button>
                 <Button variant="outlined" onClick={onProceed}>
                     Proceed
