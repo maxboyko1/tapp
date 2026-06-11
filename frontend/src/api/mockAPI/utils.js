@@ -23,8 +23,30 @@ export function normalizeDateString(dateStr) {
  * @returns {{start_date: string, end_date:string}[]}
  */
 export function splitDateRangeAtNewYear(start_date, end_date) {
-    start_date = new Date(normalizeDateString(start_date));
-    end_date = new Date(normalizeDateString(end_date));
+    const normalizedStart = normalizeDateString(start_date);
+    const normalizedEnd = normalizeDateString(end_date);
+    const parsedStart = new Date(normalizedStart);
+    const parsedEnd = new Date(normalizedEnd);
+
+    // Return fallback values for invalid inputs, may occur during e.g. in-place table editing
+    if (isNaN(parsedStart.getTime()) || isNaN(parsedEnd.getTime())) {
+        const startFallback =
+            typeof normalizedStart === "string"
+                ? normalizedStart
+                : normalizedStart instanceof Date && !isNaN(normalizedStart.getTime())
+                    ? normalizedStart.toISOString()
+                    : "";
+        const endFallback =
+            typeof normalizedEnd === "string"
+                ? normalizedEnd
+                : normalizedEnd instanceof Date && !isNaN(normalizedEnd.getTime())
+                    ? normalizedEnd.toISOString()
+                    : "";
+        return [{ start_date: startFallback, end_date: endFallback }];
+    }
+
+    start_date = parsedStart;
+    end_date = parsedEnd;
     // For `Date`, 11 is december
     const december = new Date(start_date.getFullYear(), 11, 31);
     // For `Date`, 12 will be the first month of the subsequent year
