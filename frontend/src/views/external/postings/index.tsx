@@ -798,6 +798,19 @@ export default function PostingView() {
                 return;
             }
 
+            // Only show warning dialog if user is trying to proceed to the next page,
+            // going back to the previous page is fine
+            const isNavigatingForward =
+                options.isNextPage === true ||
+                (typeof options.oldCurrentPage?.visibleIndex === "number" &&
+                    typeof options.newCurrentPage?.visibleIndex === "number" &&
+                    options.newCurrentPage.visibleIndex >
+                        options.oldCurrentPage.visibleIndex);
+
+            if (!isNavigatingForward) {
+                return;
+            }
+
             if (
                 shouldShowPositionPreferencesWarning(
                     survey.getValue("program"),
