@@ -5,10 +5,10 @@ import { Typography } from "@mui/material";
 import { StatusCell } from "../../admin/offertable";
 import { useSelector } from "react-redux";
 import { activePositionSelector } from "../store/actions";
-import { formatDate } from "../../../libs/utils";
 import { assignmentsSelector } from "../../../api/actions";
 import { AdvancedColumnDef, AdvancedFilterTable } from "../../../components/advanced-filter-table";
 import { Assignment } from "../../../api/defs/types";
+import { generateFixedDateColumnProps } from "../../../components/table-utils";
 
 export function InstructorAssignmentsTable() {
     const activePosition = useSelector(activePositionSelector);
@@ -66,19 +66,11 @@ export function InstructorAssignmentsTable() {
         },
         {
             header: "Start Date",
-            accessorKey: "start_date",
-            Cell: ({ cell }) => {
-                const date = cell.getValue();
-                return typeof date === "string" ? formatDate(date) : <></>;
-            }
+            ...generateFixedDateColumnProps<Assignment>("start_date"),
         },
         {
             header: "End Date",
-            accessorKey: "end_date",
-            Cell: ({ cell }) => {
-                const date = cell.getValue();
-                return typeof date === "string" ? formatDate(date) : <></>;
-            }
+            ...generateFixedDateColumnProps<Assignment>("end_date"),
         },
         {
             header: "Offer Status",
@@ -99,11 +91,7 @@ export function InstructorAssignmentsTable() {
         },
         {
             header: "Recent Activity",
-            accessorKey: "active_offer_recent_activity_date",
-            Cell: ({ cell }) => {
-                const date = cell.getValue();
-                return typeof date === "string" ? formatDate(date) : <></>;
-            }
+            ...generateFixedDateColumnProps<Assignment>("active_offer_recent_activity_date"),
         },
     ];
 

@@ -2,6 +2,7 @@ import React from "react";
 import {
     MaterialReactTable,
     MRT_ColumnDef,
+    MRT_FilterFn,
     MRT_Row,
     MRT_RowData,
 } from "material-react-table";
@@ -30,6 +31,7 @@ export type AdvancedColumnDef<T extends MRT_RowData> = MRT_ColumnDef<T> & {
         row: MRT_Row<T>;
         editValues: any;
     }) => React.ReactNode;
+    FilterFunc?: (row: T, columnId?: string) => unknown;
 };
 
 /**
@@ -135,11 +137,35 @@ export function AdvancedFilterTable({
         const isEditable = !!editable && !!col.meta && (col.meta as any).editable;
         const accessorKey = typeof col.accessorKey === "string" ? col.accessorKey : undefined;
         const OriginalCell = col.Cell; // For default cell rendering, when not in edit mode
+        const FilterFunc = col.FilterFunc;
 
-        if (!isEditable || !accessorKey) return col;
+        const getComparableFilterText = (value: unknown) =>
+            typeof value === "string"
+                ? value.toLowerCase()
+                : value == null
+                ? ""
+                : String(value).toLowerCase();
+
+        const customFilterFn: MRT_FilterFn<any> = (
+            row: any,
+            columnId: string,
+            filterValue: unknown
+        ) => {
+            const cellValue = FilterFunc?.(row.original, columnId);
+            const normalizedCellValue = getComparableFilterText(cellValue);
+            const normalizedFilter = getComparableFilterText(filterValue).trim();
+            return normalizedCellValue.includes(normalizedFilter);
+        };
+
+        const baseColumn = {
+            ...col,
+            filterFn: FilterFunc ? customFilterFn : col.filterFn,
+        };
+
+        if (!isEditable || !accessorKey) return baseColumn;
 
         return {
-            ...col,
+            ...baseColumn,
             Cell: (props: any) => {
                 const { cell, row } = props;
                 if (editingRowId === row.id) {
@@ -187,6 +213,8 @@ export function AdvancedFilterTable({
                 data={data}
                 enableEditing={editable}
                 enableRowSelection={selectable ? (row) => isRowSelectable(row.original) : false}
+                enableFilters={filterable}
+                enableColumnFilters={filterable}
                 enableGlobalFilter={filterable}
                 enableColumnResizing
                 enableSorting

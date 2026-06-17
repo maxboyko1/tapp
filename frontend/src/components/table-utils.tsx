@@ -14,9 +14,53 @@ import {
 } from "material-react-table";
 import { format } from "date-fns";
 
-import { parseLocalDate } from "../libs/utils";
+import { formatDate, parseLocalDate } from "../libs/utils";
 import { HasId } from "../api/defs/types";
 import { AdvancedColumnDef } from "./advanced-filter-table";
+
+/**
+ * Helper function to extract content from a table cell, given the provided
+ * row and column info.
+ *
+ * @param row The table row item to retrieve the value from
+ * @param accessorKey The column name to use as an accessor
+ * @returns The value at the specified cell, or undefined if not found
+ */
+function getValueAtPath(row: unknown, accessorKey?: string): unknown {
+    if (!accessorKey || row == null || typeof row !== "object") {
+        return undefined;
+    }
+
+    return accessorKey
+        .split(".")
+        .reduce<unknown>((currentValue, key) => {
+            if (currentValue == null || typeof currentValue !== "object") {
+                return undefined;
+            }
+            return (currentValue as Record<string, unknown>)[key];
+        }, row);
+}
+
+/**
+ * Helper function to render a date string into our standardized display format
+ * to be used for the human-readable cell content as well as the column filter.
+ * @param value The date string to format
+ * @returns The formatted date string
+ */
+function formatEditableDateDisplay(value: unknown): string {
+    if (!value || typeof value !== "string") {
+        return "";
+    }
+
+    const match = value.match(/^(\d{4})-(\d{2})-(\d{2})/);
+    if (!match) {
+        return value;
+    }
+
+    const [, year, month, day] = match;
+    const date = new Date(Number(year), Number(month) - 1, Number(day));
+    return isNaN(date.getTime()) ? "" : format(date, "MMM d, yyyy");
+}
 
 /**
  * Generates a special header cell for an AdvancedFilterTable, with help text on hover.
@@ -52,6 +96,8 @@ export function generateHeaderCellProps(name: string, title?: string) {
  */
 export function generateDateColumnProps<T extends MRT_RowData>() {
     return {
+        FilterFunc: (row: T, columnId?: string) =>
+            formatEditableDateDisplay(getValueAtPath(row, columnId)),
         EditCell: ({
             value,
             onChange,
@@ -76,14 +122,35 @@ export function generateDateColumnProps<T extends MRT_RowData>() {
         Cell: (props: {
             cell: MRT_Cell<T, unknown>;
         }) => {
-            const value = props.cell.getValue() as string | undefined;
-            if (!value || typeof value !== "string") return "";
+            return formatEditableDateDisplay(props.cell.getValue());
+        },
+    };
+}
 
-            const match = value.match(/^(\d{4})-(\d{2})-(\d{2})/);
-            if (!match) return value;
-            const [, year, month, day ] = match;
-            const date = new Date(Number(year), Number(month) - 1, Number(day));
-            return isNaN(date.getTime()) ? "" : format(date, "MMM d, yyyy");
+/**
+ * Generate properties for a fixed date column in an AdvancedFilterTable, defining the
+ * content of the cell when in standard display mode (Cell) and ensuring the filter
+ * property provided by FilterFunc is using the same content for filtering.
+ * 
+ * @param accessorKey 
+ * @returns 
+ */
+export function generateFixedDateColumnProps<RowType extends MRT_RowData>(
+    accessorKey: keyof RowType & string
+): Pick<AdvancedColumnDef<RowType>, "accessorKey" | "FilterFunc" | "Cell"> {
+    return {
+        accessorKey,
+        FilterFunc: (row: RowType) => {
+            const value = getValueAtPath(row, accessorKey);
+            return typeof value === "string" ? formatDate(value) : "";
+        },
+        Cell: ({
+            cell,
+        }: {
+            cell: MRT_Cell<RowType, unknown>;
+        }) => {
+            const value = cell.getValue();
+            return typeof value === "string" ? formatDate(value) : "";
         },
     };
 }
@@ -117,7 +184,23 @@ export function generateSingleSelectColumnProps<RowType extends MRT_RowData, Val
     options: ValueType[];
     getLabel: (option: ValueType) => string;
 }): Partial<AdvancedColumnDef<RowType>> {
+    // Local helper to extract the display label for a given cell value
+    const getSingleSelectLabel = (value: unknown): string => {
+        if (value == null) {
+            return "";
+        }
+
+        if (typeof value === "object" && "id" in (value as Record<string, unknown>)) {
+            return getLabel(value as ValueType);
+        }
+
+        const matchedOption = options.find((option) => option.id === value);
+        return matchedOption ? getLabel(matchedOption) : String(value);
+    };
+
     return {
+        FilterFunc: (row: RowType, columnId?: string) =>
+            getSingleSelectLabel(getValueAtPath(row, columnId)),
         EditCell: ({
             value,
             onChange,
@@ -186,7 +269,32 @@ export function generateMultiSelectColumnProps<RowType extends MRT_RowData, Valu
     options: ValueType[];
     getLabel: (option: ValueType) => string;
 }): Partial<AdvancedColumnDef<RowType>> {
+    // Local helper to extract the display labels for a given cell value, space-separated
+    const getMultiSelectLabels = (value: unknown): string => {
+        if (!Array.isArray(value) || value.length === 0) {
+            return "";
+        }
+
+        return value
+            .map((item) => {
+                if (item == null) {
+                    return "";
+                }
+
+                if (typeof item === "object" && "id" in (item as Record<string, unknown>)) {
+                    return getLabel(item as ValueType);
+                }
+
+                const matchedOption = options.find((option) => option.id === item);
+                return matchedOption ? getLabel(matchedOption) : String(item);
+            })
+            .filter(Boolean)
+            .join(" ");
+    };
+
     return {
+        FilterFunc: (row: RowType, columnId?: string) =>
+            getMultiSelectLabels(getValueAtPath(row, columnId)),
         EditCell: ({
             value,
             onChange,

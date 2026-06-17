@@ -11,7 +11,7 @@ import { ddahsSelector } from "../../../api/actions/ddahs";
 import { AdvancedColumnDef, AdvancedFilterTable } from "../../../components/advanced-filter-table";
 import { ddahIssues, getReadableStatus } from "../../../libs/ddah-utils";
 import { formatDate } from "../../../libs/utils";
-import { generateHeaderCellProps } from "../../../components/table-utils";
+import { generateFixedDateColumnProps, generateHeaderCellProps } from "../../../components/table-utils";
 
 export interface RowData {
     id?: number;
@@ -217,12 +217,8 @@ export function ConnectedDdahsTable({
         },
         {
             ...generateHeaderCellProps("Emailed"),
-            accessorKey: "emailed_date",
+            ...generateFixedDateColumnProps<RowData>("emailed_date"),
             size: 120,
-            Cell: ({ row, cell }) => {
-                const value = cell.getValue<string>();
-                return row.original.id ? <>{value}</> : null;
-            }
         },
         {
             ...generateHeaderCellProps("Approved"),

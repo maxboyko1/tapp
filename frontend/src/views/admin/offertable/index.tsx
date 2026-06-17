@@ -23,13 +23,13 @@ import {
     upsertAssignment,
 } from "../../../api/actions";
 import { offerTableSelector, setSelectedRows } from "./actions";
-import { formatDownloadUrl, capitalize, formatDate } from "../../../libs/utils";
+import { formatDownloadUrl, capitalize } from "../../../libs/utils";
 import { splitDateRangeAtNewYear } from "../../../api/mockAPI/utils";
 import { AdvancedFilterTable, AdvancedColumnDef } from "../../../components/advanced-filter-table";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
 import { Applicant, Assignment, WageChunk } from "../../../api/defs/types";
 import { PropsForElement } from "../../../api/defs/types/react";
-import { generateDateColumnProps } from "../../../components/table-utils";
+import { generateDateColumnProps, generateFixedDateColumnProps } from "../../../components/table-utils";
 
 function HoursEditCell({
     value,
@@ -497,11 +497,7 @@ export function ConnectedOfferTable({
             },
             {
                 header: "Last Updated",
-                accessorKey: "active_offer_recent_activity_date",
-                Cell: ({ cell }) => {
-                    const date = cell.getValue();
-                    return typeof date === "string" ? formatDate(date) : <></>;
-                },
+                ...generateFixedDateColumnProps<Assignment>("active_offer_recent_activity_date"),
                 maxSize: 120,
             },
             {

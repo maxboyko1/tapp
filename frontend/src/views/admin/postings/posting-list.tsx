@@ -70,7 +70,7 @@ export function ConnectedPostingsList({ editable = true }) {
         },
         {
             header: "Custom Questions",
-            accessorKey: "custom_questions",
+            id: "custom_questions",
             Cell: (props) => <EditCustomQuestionsCell {...props} showQuestions={true} />,
         },
     ];

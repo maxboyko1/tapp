@@ -189,7 +189,7 @@ export function ConnectedPositionsList({
         },
         {
             header: "Custom Questions",
-            accessorKey: "custom_questions",
+            id: "custom_questions",
             Cell: EditCustomQuestionsCell,
         },
     ], [editable, allInstructors, allTemplates, numAssignmentsByPositionCode, CellDetailsButton]);
@@ -199,6 +199,7 @@ export function ConnectedPositionsList({
             <PositionsList
                 positions={positions}
                 columns={columns || DEFAULT_COLUMNS}
+                filterable={true}
                 deleteable={inDeleteMode}
                 onDelete={handleDelete}
                 deleteBlocked={(position) =>

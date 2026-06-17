@@ -1,8 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import { formatDate } from "../libs/utils";
 import { createDiffColumnsFromColumns } from "./diff-table";
+import { generateFixedDateColumnProps } from "./table-utils";
 import { AdvancedFilterTable, AdvancedColumnDef } from "./advanced-filter-table";
 import { Assignment, MinimalAssignment } from "../api/defs/types";
 import { DiffSpec } from "../libs/diffs";
@@ -26,19 +26,11 @@ const DEFAULT_COLUMNS: AdvancedColumnDef<Assignment>[] = [
     },
     {
         header: "Start",
-        accessorKey: "start_date",
-        Cell: ({ cell }) => {
-            const date = cell?.getValue?.();
-            return typeof date === "string" ? formatDate(date) : <></>;
-        },
+        ...generateFixedDateColumnProps<Assignment>("start_date"),
     },
     {
         header: "End",
-        accessorKey: "end_date",
-        Cell: ({ cell }) => {
-            const date = cell?.getValue?.();
-            return typeof date === "string" ? formatDate(date) : <></>;
-        },
+        ...generateFixedDateColumnProps<Assignment>("end_date"),
     },
 ];
 
