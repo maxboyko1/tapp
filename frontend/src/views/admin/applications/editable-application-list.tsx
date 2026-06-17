@@ -23,8 +23,8 @@ import type {
 import { ApplicationsList } from "../../../components/applications";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
 import { ApplicationDetails } from "./application-details";
-import { formatDate } from "../../../libs/utils";
 import { AdvancedColumnDef } from "../../../components/advanced-filter-table";
+import { generateFixedDateColumnProps } from "../../../components/table-utils";
 
 export function ConnectedApplicationsList() {
     const applicants = useSelector(applicationsSelector) as Application[];
@@ -150,11 +150,7 @@ export function ConnectedApplicationsList() {
         },
         {
             header: "Submitted",
-            accessorKey: "submission_date",
-            Cell: ({ cell }) => {
-                const date = cell.getValue();
-                return typeof date === "string" ? formatDate(date) : <></>;
-            },
+            ...generateFixedDateColumnProps<Application>("submission_date"),
         }
     ], [CellDetailsButton]);
 

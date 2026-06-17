@@ -2,9 +2,8 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Chip } from "@mui/material";
 
-import { formatDate } from "../libs/utils";
 import { createDiffColumnsFromColumns } from "./diff-table";
-import { generateHeaderCellProps } from "./table-utils";
+import { generateFixedDateColumnProps, generateHeaderCellProps } from "./table-utils";
 import { AdvancedFilterTable, AdvancedColumnDef } from "./advanced-filter-table";
 import { Instructor, MinimalPosition, Position } from "../api/defs/types";
 import { DiffSpec } from "../libs/diffs";
@@ -25,19 +24,11 @@ const DEFAULT_COLUMNS: AdvancedColumnDef<Position>[] = [
     },
     {
         ...generateHeaderCellProps("Start"),
-        accessorKey: "start_date",
-        Cell: ({ cell }) => {
-            const value = cell?.getValue?.();
-            return typeof value === "string" && value ? formatDate(value) : "";
-        },
+        ...generateFixedDateColumnProps("start_date"),
     },
     {
         ...generateHeaderCellProps("End"),
-        accessorKey: "end_date",
-        Cell: ({ cell }) => {
-            const value = cell?.getValue?.();
-            return typeof value === "string" && value ? formatDate(value) : "";
-        },
+        ...generateFixedDateColumnProps("end_date"),
     },
     {
         ...generateHeaderCellProps("Instructors"),
@@ -80,7 +71,7 @@ const DEFAULT_COLUMNS: AdvancedColumnDef<Position>[] = [
     },
     {
         ...generateHeaderCellProps("Custom Questions"),
-        accessorKey: "custom_questions",
+        id: "custom_questions",
         Cell: ({ cell }) => {
             const value = cell?.getValue?.();
             if (
@@ -148,6 +139,7 @@ export function PositionsList(props: {
         | Omit<Position, "id">[]
         | DiffSpec<MinimalPosition, Position>[]
     columns?: AdvancedColumnDef<any>[];
+    filterable?: boolean;
     deleteable?: boolean;
     onDelete?: (row: any) => void;
     deleteBlocked?: (row: any) => string | false;
@@ -157,6 +149,7 @@ export function PositionsList(props: {
     const {
         positions,
         columns = DEFAULT_COLUMNS,
+        filterable = false,
         deleteable = false,
         onDelete,
         deleteBlocked,
@@ -167,7 +160,7 @@ export function PositionsList(props: {
         <AdvancedFilterTable
             columns={columns}
             data={positions}
-            filterable={true}
+            filterable={filterable}
             deleteable={deleteable}
             onDelete={onDelete}
             deleteBlocked={deleteBlocked}

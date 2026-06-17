@@ -7,7 +7,7 @@ import {
     upsertApplicantMatchingDatum,
 } from "../../../api/actions";
 import { guaranteeTableSelector, setSelectedRows } from "./actions";
-import { formatDownloadUrl, capitalize, formatDate } from "../../../libs/utils";
+import { formatDownloadUrl, capitalize } from "../../../libs/utils";
 import { AdvancedColumnDef, AdvancedFilterTable } from "../../../components/advanced-filter-table";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
 import { Applicant, ApplicantMatchingDatum } from "../../../api/defs/types";
@@ -15,7 +15,11 @@ import { PropsForElement } from "../../../api/defs/types/react";
 import { MRT_Row } from "material-react-table";
 import { Button, Stack, Tooltip, Typography } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-import { generateNumberCell, generateSingleSelectColumnProps } from "../../../components/table-utils";
+import {
+    generateFixedDateColumnProps,
+    generateNumberCell,
+    generateSingleSelectColumnProps
+} from "../../../components/table-utils";
 
 /**
  * Cell to show the status of a letter and offer a download button if a letter has been created.
@@ -199,6 +203,8 @@ export function ConnectedGuaranteeTable({
             {
                 header: "Status",
                 id: "status",
+                FilterFunc: (row: ApplicantMatchingDatum) =>
+                    capitalize(row.active_confirmation_status || "No Letter Sent"),
                 // We want items with no active confirmation to appear at the end of the list
                 // when sorted, so we set their accessor to null (the accessor is used by react table
                 // when sorting items).
@@ -215,11 +221,9 @@ export function ConnectedGuaranteeTable({
             },
             {
                 header: "Last Updated",
-                accessorKey: "active_confirmation_recent_activity_date",
-                Cell: ({ cell }) => {
-                    const date = cell.getValue();
-                    return typeof date === "string" ? formatDate(date) : <></>;
-                },
+                ...generateFixedDateColumnProps<ApplicantMatchingDatum>(
+                    "active_confirmation_recent_activity_date"
+                ),
                 maxSize: 120,
             },
             {

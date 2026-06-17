@@ -42,6 +42,7 @@ import {
     splitDutyDescription,
 } from "./../../../libs/ddah-utils";
 import { DutyCategory } from "../../../components/ddahs";
+import { generateFixedDateColumnProps } from "../../../components/table-utils";
 
 import "./styles.css";
 
@@ -570,15 +571,17 @@ export function ConnectedDdahsTable() {
         {
             header: "Status",
             accessorKey: "status",
+            FilterFunc: (row: RowData) =>
+                getReadableStatus({ status: row.status as Ddah["status"] }),
             Cell: WrappedStatusCell,
         },
         {
             header: "Recent Activity",
-            accessorKey: "recent_activity_date",
+            ...generateFixedDateColumnProps<RowData>("recent_activity_date"),
         },
         {
             header: "Emailed",
-            accessorKey: "emailed_date",
+            ...generateFixedDateColumnProps<RowData>("emailed_date"),
         },
         {
             header: "Approved",
