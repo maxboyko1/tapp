@@ -4,6 +4,15 @@ class PostingService
     include TransactionHandler
     attr_reader :posting, :application
 
+    # Mapping of responses to "ideal workload" question to numerical max hours owed value
+    # to use for the applicant's appointment guarantee for this session
+    WORKLOAD_TO_MAX_HOURS = {
+        '30 hours' => 30,
+        '60 hours' => 60,
+        '70-115 hours' => 90,
+        '120 hours' => 120
+    }.freeze
+
     def initialize(params: nil, posting: nil)
         @params = params
         @posting = posting
@@ -225,6 +234,10 @@ class PostingService
         # Build prior_assignments from the applicant's offer history
         @applicant = Applicant.find_or_initialize_by(utorid: utorid)
         applicant = @applicant
+
+        # Set max hours owed based on applicant's response to the "ideal workload" question
+        @max_hours = WORKLOAD_TO_MAX_HOURS[rest[:ideal_workload]]
+
         offer_history = assemble_offer_history(applicant)
         prior_assignments = offer_history.map do |(course, session_name, *_rest)|
             "#{course} (#{session_name})"
@@ -277,6 +290,7 @@ class PostingService
     def save_answers!
         start_transaction_and_rollback_on_exception do
             @applicant.save!
+            save_max_hours!
             application = @applicant.applications.find_by(posting: @posting)
             # upsert_all will very efficiently upsert all the position preferences.
             unless @position_preferences_attributes.blank?
@@ -376,6 +390,21 @@ class PostingService
                 }
             end
         end.flatten
+    end
+
+    # Save the max_hours_owed value for this applicant's appointment guarantee (in practice,
+    # there should be only one ApplicantMatchingDatum for each applicant and session) according
+    # to the applicant's response to the "ideal workload" question from the application
+    def save_max_hours!
+        return if @max_hours.nil? || @applicant.id.nil?
+
+        ApplicantMatchingDatum.by_session(@posting.session.id)
+            .by_applicant(@applicant.id)
+            .find_each do |applicant_matching_datum|
+                applicant_matching_datum.update!(
+                    max_hours_owed: @max_hours
+                )
+            end
     end
 end
 
