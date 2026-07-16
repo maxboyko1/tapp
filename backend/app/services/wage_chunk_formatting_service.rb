@@ -14,8 +14,8 @@ class WageChunkFormattingService
     def pay_period_description
         formatted_chunks =
             rate_chunks.map do |chunk|
-                start_date = I18n.l chunk[:start_date].to_date, format: :long
-                end_date = I18n.l chunk[:end_date].to_date, format: :long
+                start_date = format_long_date(chunk[:start_date])
+                end_date = format_long_date(chunk[:end_date])
                 hours = chunk[:hours]
                 rate = format('%.2f', chunk[:rate])
 
@@ -43,23 +43,37 @@ class WageChunkFormattingService
 
         rate_windows = {}
         rates.entries.each do |rate, chunks|
-            start_date = chunks.map(&extract(:start_date)).min
-            end_date = chunks.map(&extract(:end_date)).max
+            start_date = chunks.map(&extract(:start_date)).compact.min
+            end_date = chunks.map(&extract(:end_date)).compact.max
             hours = chunks.map(&:hours).sum
             rate_windows[rate] = {
-                start_date: start_date,
-                end_date: end_date,
+                start_date: start_date || fallback_start_date,
+                end_date: end_date || fallback_end_date,
                 hours: hours,
                 rate: rate
             }
         end
 
-        rate_windows.values.sort_by(&extract(:start_date))
+        rate_windows.values.sort_by { |chunk| chunk[:start_date] || Time.zone.at(0) }
     end
 
     # Helper function to be able to map over arrays of hashes
     # taken from https://stackoverflow.com/questions/20179636/ruby-using-the-methodname-shortcut-from-array-mapmethodname-for-hash-key
     def extract(key)
         ->(h) { h[key] }
+    end
+
+    def fallback_start_date
+        assignment.start_date || assignment.position&.start_date
+    end
+
+    def fallback_end_date
+        assignment.end_date || assignment.position&.end_date
+    end
+
+    def format_long_date(value)
+        return 'Unknown date!' unless value.present?
+
+        I18n.l(value.to_date, format: :long)
     end
 end
