@@ -35,6 +35,7 @@ function generatePropTypes(PropTypes: typeof OrigPropTypes) {
             start_date: PropTypes.string,
             end_date: PropTypes.string,
             name: PropTypes.string.isRequired,
+            hours_ref_session_id: id,
         }),
         contractTemplateMinimal: PropTypes.shape({
             template_file: PropTypes.string,

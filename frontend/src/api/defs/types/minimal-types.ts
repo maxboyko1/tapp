@@ -22,7 +22,7 @@ type NoId<T> = Omit<T, "id">;
 
 export type MinimalSession = Omit<
     NoId<Session>,
-    "applications_visible_to_instructors"
+    "applications_visible_to_instructors" | "hours_ref_session"
 >;
 export type MinimalContractTemplate = NoId<ContractTemplate>;
 export type MinimalLetterTemplate = NoId<LetterTemplate>;

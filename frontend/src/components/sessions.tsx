@@ -22,7 +22,11 @@ import {
     deleteSession,
     setActiveSession,
 } from "../api/actions";
-import { generateDateColumnProps, generateHeaderCellProps } from "./table-utils";
+import {
+    generateDateColumnProps,
+    generateHeaderCellProps,
+    generateSingleSelectColumnProps,
+} from "./table-utils";
 import { AdvancedFilterTable, AdvancedColumnDef } from "./advanced-filter-table";
 import { useThunkDispatch } from "../libs/thunk-dispatch";
 import { Session } from "../api/defs/types";
@@ -60,6 +64,14 @@ export function ConnectedSessionsList(props: {
     for (const position of allPositions || []) {
         sessionsCurrentlyAssignedHash[position.session_id] = true;
     }
+
+    const validReferenceSessions = React.useMemo(
+        () =>
+            sessions.filter((candidate) => {
+                return candidate.hours_ref_session == null;
+            }),
+        [sessions]
+    );
 
     const DEFAULT_COLUMNS: AdvancedColumnDef<Session>[] = [
         {
@@ -129,6 +141,21 @@ export function ConnectedSessionsList(props: {
                 />
             ),
             Cell: ({ cell }) => (cell.getValue() ? "True" : "False"),
+        },
+        {
+            ...generateHeaderCellProps(
+                "Reference Session",
+                "Session to pull from for Min Hours Owed for appointment guarantees"
+            ),
+            accessorKey: "hours_ref_session",
+            meta: { editable: true },
+            ...generateSingleSelectColumnProps<Session, Session>({
+                options: validReferenceSessions,
+                getLabel: (option) => option.name,
+                clearable: true,
+                getOptionsForRow: (options, row) =>
+                    options.filter((candidate) => candidate.id !== row.original.id),
+            }),
         },
     ];
 

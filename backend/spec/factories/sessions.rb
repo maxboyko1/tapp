@@ -31,12 +31,13 @@ end
 #
 # Table name: sessions
 #
-#  id         :integer          not null, primary key
-#  start_date :datetime
-#  end_date   :datetime
-#  name       :string
-#  rate1      :float
-#  rate2      :float
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
+#  id                   :integer          not null, primary key
+#  start_date           :datetime
+#  end_date             :datetime
+#  name        .        :string
+#  rate1                :float
+#  rate2                :float
+#  hours_ref_session_id :bigint
+#  created_at           :datetime         not null
+#  updated_at           :datetime         not null
 #
