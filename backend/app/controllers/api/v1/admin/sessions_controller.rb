@@ -35,7 +35,8 @@ class Api::V1::Admin::SessionsController < ApplicationController
             :rate2,
             :start_date,
             :end_date,
-            :applications_visible_to_instructors
+            :applications_visible_to_instructors,
+            :hours_ref_session_id
         )
     end
 

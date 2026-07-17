@@ -34,8 +34,11 @@ export type LetterTemplate = RawLetterTemplate;
 export type ContractTemplate = RawContractTemplate;
 export type Instructor = RawInstructor;
 export type Applicant = RawApplicant;
-export type Session = RawSession;
 export type User = RawUser;
+
+export interface Session extends Omit<RawSession, "hours_ref_session_id"> {
+    hours_ref_session: Session | null;
+}
 
 export interface Ddah extends Omit<RawDdah, "assignment_id"> {
     assignment: Assignment;

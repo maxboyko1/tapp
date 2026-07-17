@@ -16,6 +16,10 @@ class ApplicantMatchingDatum < ApplicationRecord
 
     validates_uniqueness_of :applicant_id, scope: %i[session_id]
 
+    after_commit :propagate_min_hours_owed_to_referencing_sessions,
+                 on: %i[create update],
+                 if: :should_propagate_min_hours_owed?
+
     def active_confirmation_status
         active_confirmation.blank? ? nil : active_confirmation.status
     end
@@ -41,6 +45,27 @@ class ApplicantMatchingDatum < ApplicationRecord
                 active_confirmation.rejected_date
             ].compact.max
         end
+    end
+
+    private
+
+    # Check for non-nil changes to min_hours_owed value, propagation in this case
+    def should_propagate_min_hours_owed?
+        return false if min_hours_owed.nil?
+        return true if previous_changes.key?('id')
+
+        previous_changes.key?('min_hours_owed')
+    end
+
+    # Propagate min hours owed value to any appointment guarantees for this applicant
+    # in any other sessions referencing this one
+    def propagate_min_hours_owed_to_referencing_sessions
+        ref_session_ids = session.referencing_sessions.pluck(:id)
+        return if ref_session_ids.empty?
+
+        ApplicantMatchingDatum
+            .where(session_id: ref_session_ids, applicant_id: applicant_id)
+            .update_all(min_hours_owed: min_hours_owed, updated_at: Time.current)
     end
 end
 

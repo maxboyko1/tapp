@@ -10,6 +10,7 @@ import {
 import { DatePicker } from "@mui/x-date-pickers";
 import {
     MRT_Cell,
+    MRT_Row,
     MRT_RowData,
 } from "material-react-table";
 import { format } from "date-fns";
@@ -180,9 +181,13 @@ export function generateNumberCell() {
 export function generateSingleSelectColumnProps<RowType extends MRT_RowData, ValueType extends HasId>({
     options,
     getLabel,
+    clearable = false,
+    getOptionsForRow,
 }: {
     options: ValueType[];
     getLabel: (option: ValueType) => string;
+    clearable?: boolean;
+    getOptionsForRow?: (options: ValueType[], row: MRT_Row<RowType>) => ValueType[];
 }): Partial<AdvancedColumnDef<RowType>> {
     // Local helper to extract the display label for a given cell value
     const getSingleSelectLabel = (value: unknown): string => {
@@ -204,15 +209,19 @@ export function generateSingleSelectColumnProps<RowType extends MRT_RowData, Val
         EditCell: ({
             value,
             onChange,
+            row,
         }: {
             value: ValueType | null | undefined;
             onChange: (v: ValueType | null) => void;
+            row: MRT_Row<RowType>;
         }) => (
             <Autocomplete
-                options={options}
+                options={getOptionsForRow ? getOptionsForRow(options, row) : options}
                 getOptionLabel={getLabel}
                 value={value ?? null}
                 onChange={(_, newValue) => onChange(newValue)}
+                disableClearable={!clearable}
+                clearOnEscape={clearable}
                 renderInput={(params) => (
                     <TextField
                         {...params}
@@ -222,17 +231,7 @@ export function generateSingleSelectColumnProps<RowType extends MRT_RowData, Val
                 )}
                 size="small"
                 sx={{ minWidth: 200 }}
-                isOptionEqualToValue={(option, value) => option.id === value.id}
-                renderValue={(selected) =>
-                    selected ? (
-                        <Chip
-                            color="primary"
-                            variant="outlined"
-                            label={getLabel(selected)}
-                            size="small"
-                        />
-                    ) : null
-                }
+                isOptionEqualToValue={(option, selected) => option.id === selected.id}
                 slotProps={{
                     paper: {
                         sx: (theme) => ({
@@ -247,14 +246,21 @@ export function generateSingleSelectColumnProps<RowType extends MRT_RowData, Val
             cell,
         }: {
             cell: MRT_Cell<RowType, unknown>;
-        }) => (
-            <Chip
-                color="primary"
-                variant="outlined"
-                label={getLabel(cell.getValue() as ValueType)}
-                size="small"
-            />
-        )
+        }) => {
+            const label = getSingleSelectLabel(cell.getValue());
+            if (!label) {
+                return null;
+            }
+
+            return (
+                <Chip
+                    color="primary"
+                    variant="outlined"
+                    label={label}
+                    size="small"
+                />
+            );
+        }
     };
 }
 

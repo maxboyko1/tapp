@@ -1,5 +1,5 @@
 import React from "react";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import { 
     Alert,
     Button,
@@ -40,11 +40,13 @@ const BLANK_SESSION = {
     end_date: "",
     rate1: "",
     rate2: "",
+    hours_ref_session: null,
 };
 
 export function AddSessionDialog(props) {
     const { show, onHide = () => {}, sessions, upsertSession } = props;
     const [newSession, setNewSession] = React.useState(BLANK_SESSION);
+    const allSessions = useSelector(sessionsSelector);
 
     React.useEffect(() => {
         if (!show) {
@@ -71,6 +73,7 @@ export function AddSessionDialog(props) {
                 <SessionEditor
                     session={newSession}
                     setSession={setNewSession}
+                    allSessions={allSessions}
                 />
                 {conflicts.immediateShow ? (
                     <Alert severity="error">{conflicts.immediateShow}</Alert>

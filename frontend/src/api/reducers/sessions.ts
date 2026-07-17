@@ -7,13 +7,13 @@ import {
 } from "../constants";
 import { createBasicReducerObject, createReducer } from "./utils";
 import type { BasicState, HasPayload } from "./utils";
-import { RawSession } from "../defs/types";
+import { Session } from "../defs/types";
 
-export type SessionState = BasicState<RawSession> & {
-    activeSession: RawSession | null;
+export type SessionState = BasicState<Session> & {
+    activeSession: Session | null;
 };
 const initialState: SessionState = {
-    _modelData: [] as RawSession[],
+    _modelData: [] as Session[],
     activeSession: null,
 };
 
@@ -30,7 +30,7 @@ export const sessionsReducer = createReducer<SessionState>(initialState, {
     ...basicReducers,
     [SET_ACTIVE_SESSION]: (
         state: SessionState,
-        action: HasPayload<RawSession>
+        action: HasPayload<Session>
     ): SessionState => ({
         ...state,
         activeSession: action.payload,

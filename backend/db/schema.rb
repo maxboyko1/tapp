@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2026_04_27_211720) do
+ActiveRecord::Schema.define(version: 2026_07_13_201027) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -58,6 +58,7 @@ ActiveRecord::Schema.define(version: 2026_04_27_211720) do
     t.index ["active_confirmation_id"], name: "index_applicant_matching_data_on_active_confirmation_id"
     t.index ["applicant_id"], name: "index_applicant_matching_data_on_applicant_id"
     t.index ["letter_template_id"], name: "index_applicant_matching_data_on_letter_template_id"
+    t.index ["session_id", "applicant_id"], name: "index_applicant_matching_data_on_session_id_and_applicant_id", unique: true
     t.index ["session_id"], name: "index_applicant_matching_data_on_session_id"
   end
 
@@ -343,6 +344,8 @@ ActiveRecord::Schema.define(version: 2026_04_27_211720) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.boolean "applications_visible_to_instructors", default: false
+    t.bigint "hours_ref_session_id"
+    t.index ["hours_ref_session_id"], name: "index_sessions_on_hours_ref_session_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -396,5 +399,6 @@ ActiveRecord::Schema.define(version: 2026_04_27_211720) do
   add_foreign_key "postings", "sessions"
   add_foreign_key "reporting_tags", "positions"
   add_foreign_key "reporting_tags", "wage_chunks"
+  add_foreign_key "sessions", "sessions", column: "hours_ref_session_id", on_delete: :nullify
   add_foreign_key "wage_chunks", "assignments", on_delete: :cascade
 end
