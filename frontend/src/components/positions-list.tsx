@@ -54,6 +54,10 @@ const DEFAULT_COLUMNS: AdvancedColumnDef<Position>[] = [
         },
     },
     {
+        ...generateHeaderCellProps("Last Emailed Date"),
+        ...generateFixedDateColumnProps("last_emailed_date"),
+    },
+    {
         ...generateHeaderCellProps("Enrolled"),
         accessorKey: "current_enrollment",
     },
@@ -140,6 +144,9 @@ export function PositionsList(props: {
         | DiffSpec<MinimalPosition, Position>[]
     columns?: AdvancedColumnDef<any>[];
     filterable?: boolean;
+    selectable?: boolean;
+    selected?: number[];
+    setSelected?: (selected: number[]) => void;
     deleteable?: boolean;
     onDelete?: (row: any) => void;
     deleteBlocked?: (row: any) => string | false;
@@ -150,6 +157,9 @@ export function PositionsList(props: {
         positions,
         columns = DEFAULT_COLUMNS,
         filterable = false,
+        selectable = false,
+        selected = [],
+        setSelected,
         deleteable = false,
         onDelete,
         deleteBlocked,
@@ -161,6 +171,9 @@ export function PositionsList(props: {
             columns={columns}
             data={positions}
             filterable={filterable}
+            selectable={selectable}
+            selected={selected}
+            setSelected={setSelected}
             deleteable={deleteable}
             onDelete={onDelete}
             deleteBlocked={deleteBlocked}

@@ -1,38 +1,66 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import {
+    Alert,
     Button,
     Dialog,
     DialogActions,
     DialogContent,
     DialogTitle,
-    IconButton
+    IconButton,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import SavedSearchIcon from "@mui/icons-material/SavedSearch";
 
-import { useSelector } from "react-redux";
+import { positionsSelector } from "../../../api/actions";
 import { Position } from "../../../api/defs/types";
-import { useThunkDispatch } from "../../../libs/thunk-dispatch";
+import { ActionButton } from "../../../components/action-buttons";
 import { PositionsDetails } from "./position-details";
-import { selectedPositionSelector, setSelectedPosition } from "./actions";
+import { positionsTableSelector } from "./actions";
 
 function PositionDetailsDialog({
-    position,
+    positions,
     visible,
     onHide,
 }: {
-    position: Position;
+    positions: Position[];
     visible: boolean;
     onHide: (...args: any[]) => any;
 }) {
+    const sortedPositions = [...positions].sort((a, b) => {
+        const aCode = a.position_code || "";
+        const bCode = b.position_code || "";
+        return aCode === bCode ? 0 : aCode > bCode ? 1 : -1;
+    });
+
+    let positionDetails: React.ReactNode = (
+        <Alert severity="info">
+            There are no selected positions. You must select positions to see
+            their details.
+        </Alert>
+    );
+
+    if (sortedPositions.length > 0) {
+        positionDetails = sortedPositions.map((position, i) => {
+            const split = i === 0 ? null : <hr />;
+            return (
+                <React.Fragment key={position.id}>
+                    {split}
+                    <PositionsDetails position={position} />
+                </React.Fragment>
+            );
+        });
+    }
+
     return (
         <Dialog open={visible} onClose={onHide} maxWidth="lg" fullWidth>
             <DialogTitle sx={{ m: 0, p: 2 }}>
-                Details for {position.position_code}
+                Position Details
                 <IconButton
                     aria-label="close"
                     onClick={onHide}
                     sx={{
-                        position: 'absolute',
+                        position: "absolute",
                         right: 8,
                         top: 8,
                         color: (theme) => theme.palette.grey[500],
@@ -42,9 +70,7 @@ function PositionDetailsDialog({
                     <CloseIcon />
                 </IconButton>
             </DialogTitle>
-            <DialogContent dividers>
-                <PositionsDetails position={position} />
-            </DialogContent>
+            <DialogContent dividers>{positionDetails}</DialogContent>
             <DialogActions>
                 <Button variant="contained" color="secondary" onClick={onHide}>
                     Close
@@ -55,18 +81,33 @@ function PositionDetailsDialog({
 }
 
 export function ConnectedPositionDetailsDialog() {
-    const selectedPosition = useSelector(selectedPositionSelector);
-    const dispatch = useThunkDispatch();
-
-    if (selectedPosition == null) {
-        return null;
-    }
+    const [dialogVisible, setDialogVisible] = React.useState(false);
+    const positions = useSelector<any, Position[]>(positionsSelector);
+    const { selectedPositionIds } = useSelector(positionsTableSelector);
+    const selectedPositions = positions.filter((position) =>
+        selectedPositionIds.includes(position.id)
+    );
+    const disabled = selectedPositionIds.length === 0;
 
     return (
-        <PositionDetailsDialog
-            visible={!!selectedPosition}
-            position={selectedPosition}
-            onHide={() => dispatch(setSelectedPosition(null))}
-        />
+        <React.Fragment>
+            <ActionButton
+                icon={<SavedSearchIcon />}
+                onClick={() => setDialogVisible(true)}
+                title={
+                    disabled
+                        ? "You must select a position to view details"
+                        : "View details of selected position(s)"
+                }
+                disabled={disabled}
+            >
+                Position Details
+            </ActionButton>
+            <PositionDetailsDialog
+                visible={dialogVisible}
+                positions={selectedPositions}
+                onHide={() => setDialogVisible(false)}
+            />
+        </React.Fragment>
     );
 }

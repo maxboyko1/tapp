@@ -65,6 +65,7 @@ function generatePropTypes(PropTypes: typeof OrigPropTypes) {
                     instructor_id: id,
                 })
             ),
+            last_emailed_date: PropTypes.string,
         }),
         instructor: PropTypes.shape({
             first_name: PropTypes.string.isRequired,

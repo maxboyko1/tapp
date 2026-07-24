@@ -28,6 +28,7 @@ export interface RawPosition extends HasId {
     current_waitlisted: number | null;
     instructor_ids: number[];
     session_id: number;
+    last_emailed_date: string | null;
 }
 
 export interface RawApplicant extends HasId {

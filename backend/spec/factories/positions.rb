@@ -10,6 +10,7 @@ FactoryBot.define do
         start_date { '2019-11-10 14:40:15' }
         end_date { '2019-11-10 14:40:15' }
         custom_questions { 'MyText' }
+        last_emailed_date { '2019-11-20 12:40:10' }
     end
 end
 
@@ -28,6 +29,7 @@ end
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
 #  contract_template_id :integer          not null
+#  last_emailed_date    :datetime
 #
 # Indexes
 #

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2026_07_13_201027) do
+ActiveRecord::Schema.define(version: 2026_07_22_154941) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -281,6 +281,7 @@ ActiveRecord::Schema.define(version: 2026_07_13_201027) do
     t.integer "current_enrollment"
     t.integer "current_waitlisted"
     t.json "custom_questions"
+    t.datetime "last_emailed_date"
     t.index ["contract_template_id"], name: "index_positions_on_contract_template_id"
     t.index ["session_id"], name: "index_positions_on_session_id"
   end

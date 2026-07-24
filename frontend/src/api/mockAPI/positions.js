@@ -197,6 +197,26 @@ export const positionsRoutes = {
             posts: docApiPropTypes.position,
             returns: docApiPropTypes.position,
         }),
+        "/sessions/:session_id/positions/:id/email": documentCallback({
+            func: (data, params) => {
+                errorUnlessRole(params, "admin");
+                const controller = new Position(data);
+                const position = controller
+                    .findAllBySession(params.session_id)
+                    .find((x) => `${x.id}` === `${params.id}`);
+                if (!position) {
+                    throw new Error(
+                        `Could not find position with id '${params.id}' in session '${params.session_id}'`
+                    );
+                }
+                return controller.upsertBySession({
+                    ...position,
+                    last_emailed_date: new Date().toISOString(),
+                }, params.session_id);
+            },
+            summary: "Email DDAH reminders to instructors for a position",
+            returns: docApiPropTypes.position,
+        }),
         "/positions": documentCallback({
             func: (data, params, body) => {
                 errorUnlessRole(params, "admin");

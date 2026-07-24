@@ -1,19 +1,16 @@
-import { SET_SELECTED_POSITION } from "./constants";
 import { createReducer } from "redux-create-reducer";
+import { SET_SELECTED_POSITIONS } from "./constants";
 
-interface PositionsTableState {
-    selectedPositionIds: number | null;
-}
-
-// initialize the state of offer table
-const initialState: PositionsTableState = {
-    selectedPositionIds: null,
+// Initialize the state of positions table
+const initialState = {
+    selectedPositionIds: [] as number[],
 };
 
 const positionsTableReducer = createReducer(initialState, {
-    [SET_SELECTED_POSITION]: (state, action) => {
+    [SET_SELECTED_POSITIONS]: (state: any, action: any) => {
         return { ...state, selectedPositionIds: action.payload };
     },
 });
+export type PositionsTableType = typeof initialState;
 
 export { positionsTableReducer };

@@ -4,6 +4,7 @@ import {
     FETCH_ONE_POSITION_SUCCESS,
     UPSERT_ONE_POSITION_SUCCESS,
     DELETE_ONE_POSITION_SUCCESS,
+    EMAIL_ONE_POSITION_SUCCESS,
 } from "../constants";
 import { fetchError, upsertError, deleteError } from "./errors";
 import {
@@ -36,6 +37,9 @@ const fetchOnePositionSuccess = actionFactory<RawPosition>(
 );
 const upsertOnePositionSuccess = actionFactory<RawPosition>(
     UPSERT_ONE_POSITION_SUCCESS
+);
+const emailOnePositionSuccess = actionFactory<RawPosition>(
+    EMAIL_ONE_POSITION_SUCCESS
 );
 const deleteOnePositionSuccess = actionFactory<RawPosition>(
     DELETE_ONE_POSITION_SUCCESS
@@ -115,6 +119,32 @@ function prepForApi(data: Partial<Position>) {
         instructorsToInstructorIds(data)
     ) as Partial<RawPosition>;
 }
+
+export const emailPosition = validatedApiDispatcher<
+    RawPosition,
+    [HasId]
+>({
+    name: "emailPosition",
+    description: "Email DDAH reminder to instructors for a position",
+    onErrorDispatch: (e) => upsertError(e.toString()),
+    dispatcher: (payload: HasId) => async (dispatch, getState) => {
+        const activeSession = activeSessionSelector(getState());
+        if (activeSession == null) {
+            throw MissingActiveSessionError;
+        }
+        const { id: activeSessionId } = activeSession;
+        const role = activeRoleSelector(getState());
+        const data = (await apiPOST(
+            `/${role}/sessions/${activeSessionId}/positions/${payload.id}/email`
+        )) as RawPosition;
+        dispatch(emailOnePositionSuccess(data));
+        // The previous action doesn't actually update the redux store,
+        // so we dispatch a fake upsert action to make sure the store gets updated
+        // with the new data.
+        dispatch(upsertOnePositionSuccess(data));
+        return data;
+    },
+});
 
 export const upsertPosition = validatedApiDispatcher<
     RawPosition,

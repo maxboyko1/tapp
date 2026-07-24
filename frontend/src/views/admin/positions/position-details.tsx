@@ -15,6 +15,7 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import EditIcon from "@mui/icons-material/Edit";
+import SaveIcon from "@mui/icons-material/Save";
 
 import { upsertPosition } from "../../../api/actions";
 import { Position } from "../../../api/defs/types";
@@ -144,7 +145,7 @@ export function PositionsDetails({ position }: { position: Position }) {
                                         onClick={() => handleSave("duties")}
                                         title="Save"
                                     >
-                                        <EditIcon fontSize="small" />
+                                        <SaveIcon fontSize="small" />
                                     </IconButton>
                                     <IconButton
                                         size="small"
@@ -195,7 +196,7 @@ export function PositionsDetails({ position }: { position: Position }) {
                                         onClick={() => handleSave("qualifications")}
                                         title="Save"
                                     >
-                                        <EditIcon fontSize="small" />
+                                        <SaveIcon fontSize="small" />
                                     </IconButton>
                                     <IconButton
                                         size="small"
