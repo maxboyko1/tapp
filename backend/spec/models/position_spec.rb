@@ -35,6 +35,7 @@ end
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
 #  contract_template_id :integer          not null
+#  last_emailed_date    :datetime
 #
 # Indexes
 #

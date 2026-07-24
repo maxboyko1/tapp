@@ -13,6 +13,17 @@ class Api::V1::Admin::SessionPositionsController < Api::V1::Admin::PositionsCont
         upsert
     end
 
+    # POST /positions/:id/email
+    def email
+        find_position
+        PositionMailer.email_ddah_reminder(@position).deliver_now!
+
+        @position.last_emailed_date = Time.now
+        @position.save!
+
+        render_success @position
+    end
+
     private
 
     def find_position

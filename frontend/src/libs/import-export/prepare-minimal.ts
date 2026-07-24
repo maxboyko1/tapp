@@ -180,6 +180,7 @@ export const prepareMinimal = {
             ),
             contract_template: position.contract_template.template_name,
             session_id: position.session_id,
+            last_emailed_date: position.last_emailed_date,
         };
     },
     posting: function (posting: Posting): MinimalPosting {

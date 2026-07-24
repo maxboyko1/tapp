@@ -142,7 +142,7 @@ export const diffImport = {
                 if (!isSame(oldVal, newVal)) {
                     ret.status = "modified";
                     // Format dates and instructor lists differently
-                    if (prop === "start_date" || prop === "end_date") {
+                    if (prop === "start_date" || prop === "end_date" || prop === "last_emailed_date") {
                         ret.changes[prop] = `"${("" + oldVal).slice(
                             0,
                             10

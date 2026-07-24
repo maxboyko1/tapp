@@ -25,7 +25,7 @@ class PositionService
         # merge @position attrs last so the `id`
         # field is the position id
         @all_position_attrs =
-            ({})
+            {}
                 .merge(@position.as_json)
                 .merge(
                     instructor_ids: @position.instructor_ids,
@@ -51,7 +51,8 @@ class PositionService
             :contract_template_id,
             :desired_num_assignments,
             :current_enrollment,
-            :current_waitlisted
+            :current_waitlisted,
+            :last_emailed_date
         )
     end
 

@@ -29,6 +29,7 @@ class PositionSerializer < ActiveModel::Serializer
             current_waitlisted
             instructor_ids
             session_id
+            last_emailed_date
         ]
     end
 

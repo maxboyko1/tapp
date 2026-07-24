@@ -71,7 +71,8 @@ class Api::V1::Admin::PositionsController < ApplicationController
                 :duties,
                 :qualifications,
                 :custom_questions,
-                :instructor_ids
+                :instructor_ids,
+                :last_emailed_date
             ).permit!
 
         # Moving forward, custom_questions for a position will be imported in the format of

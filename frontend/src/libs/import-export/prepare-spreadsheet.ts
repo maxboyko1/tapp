@@ -341,6 +341,7 @@ export const prepareSpreadsheet = {
             "Qualifications",
             "Current Enrollment",
             "Current Waitlist",
+            "Last Emailed Date",
         ];
         const questionHeaders = Array.from({ length: maxQuestions }, () => "question");
         const headers = [...baseHeaders, ...questionHeaders];
@@ -365,6 +366,7 @@ export const prepareSpreadsheet = {
                 position.qualifications || "",
                 position.current_enrollment,
                 position.current_waitlisted,
+                position.last_emailed_date,
             ];
 
             let questionCells: string[] = [];

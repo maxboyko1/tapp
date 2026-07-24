@@ -6,12 +6,8 @@ import {
     DialogActions,
     DialogContent,
     DialogTitle,
-    IconButton,
-    Tooltip,
     Typography,
 } from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
-import { MRT_Cell, MRT_Column, MRT_Row, MRT_TableInstance } from "material-react-table";
 
 import {
     contractTemplatesSelector,
@@ -25,9 +21,10 @@ import { PositionsList } from "../../../components/positions-list";
 import { generateDateColumnProps, generateMultiSelectColumnProps, generateNumberCell, generateSingleSelectColumnProps } from "../../../components/table-utils";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
 import { Position } from "../../../api/defs/types";
-import { setSelectedPosition } from "./actions";
+import { positionsTableSelector, setSelectedRows } from "./actions";
 import { EditCustomQuestionsCell } from "./custom-questions-cell";
 import { AdvancedColumnDef } from "../../../components/advanced-filter-table";
+import { generateFixedDateColumnProps } from "../../../components/table-utils";
 
 export function ConnectedPositionsList({
     inDeleteMode = false,
@@ -46,6 +43,7 @@ export function ConnectedPositionsList({
     const [positionToDelete, setPositionToDelete] =
         React.useState<Position | null>(null);
     const dispatch = useThunkDispatch();
+    const selectedPositionIds = useSelector(positionsTableSelector).selectedPositionIds;
 
     const numAssignmentsByPositionCode = React.useMemo(
         () =>
@@ -77,40 +75,20 @@ export function ConnectedPositionsList({
         [numAssignmentsByPositionCode]
     );
 
-    const CellDetailsButton = React.useCallback(
-        ({
-            row,
-        }: {
-            cell: MRT_Cell<Position, unknown>;
-            column: MRT_Column<Position, unknown>;
-            row: MRT_Row<Position>;
-            renderedCellValue: React.ReactNode;
-            table: MRT_TableInstance<Position>;
-        }) => {
-            const position = row.original;
-            return (
-                <Tooltip title={`View details of ${position.position_code}`}>
-                    <IconButton
-                        onClick={() => dispatch(setSelectedPosition(position.id))}
-                        size="small"
-                    >
-                        <SearchIcon />
-                    </IconButton>
-                </Tooltip>
-            );
+    const setSelected = React.useCallback(
+        (rows: number[]) => {
+            const filtered = rows.filter((id) => !isNaN(id));
+            if (
+                filtered.length !== selectedPositionIds.length ||
+                filtered.some((id, i) => id !== selectedPositionIds[i])
+            ) {
+                dispatch(setSelectedRows(filtered));
+            }
         },
-        [dispatch]
+        [dispatch, selectedPositionIds]
     );
 
     const DEFAULT_COLUMNS: AdvancedColumnDef<Position>[] = React.useMemo(() => [
-        {
-            header: "Details",
-            id: "details-col",
-            maxSize: 32,
-            meta: { className: "details-col" },
-            enableResizing: false,
-            Cell: CellDetailsButton,
-        },
         {
             header: "Position Code",
             accessorKey: "position_code",
@@ -142,6 +120,10 @@ export function ConnectedPositionsList({
                 options: allInstructors,
                 getLabel: (option) => `${option.first_name} ${option.last_name}`,
             }),
+        },
+        {
+            header: "Last Emailed Date",
+            ...generateFixedDateColumnProps<Position>("last_emailed_date"),
         },
         {
             header: "Hours/Assignment",
@@ -192,7 +174,7 @@ export function ConnectedPositionsList({
             id: "custom_questions",
             Cell: EditCustomQuestionsCell,
         },
-    ], [editable, allInstructors, allTemplates, numAssignmentsByPositionCode, CellDetailsButton]);
+    ], [editable, allInstructors, allTemplates, numAssignmentsByPositionCode]);
 
     return (
         <React.Fragment>
@@ -200,6 +182,9 @@ export function ConnectedPositionsList({
                 positions={positions}
                 columns={columns || DEFAULT_COLUMNS}
                 filterable={true}
+                selectable={true}
+                selected={selectedPositionIds}
+                setSelected={setSelected}
                 deleteable={inDeleteMode}
                 onDelete={handleDelete}
                 deleteBlocked={(position) =>

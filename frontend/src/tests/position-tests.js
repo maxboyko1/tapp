@@ -75,6 +75,15 @@ export function positionsTests(api = { apiGET, apiPOST }) {
         expect(withNewPosition.length).toEqual(2);
     });
 
+    it("email a position", async () => {
+        let resp = await apiPOST(`/admin/sessions/${session.id}/positions/${position.id}/email`); 
+        expect(resp).toHaveStatus("success");
+        expect(resp.payload.last_emailed_date).toBeTruthy();
+
+        // We've modified this object, so let's keep it up to date
+        Object.assign(position, resp.payload);
+    });
+
     it("update a position", async () => {
         const updatedPositionData = {
             ...newPosition,

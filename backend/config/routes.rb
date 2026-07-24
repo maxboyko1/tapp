@@ -170,6 +170,9 @@ Rails
                             resources :positions,
                                       controller: :session_positions,
                                       only: %i[index create] do
+                                member do
+                                    post :email
+                                end
                                 collection do
                                     get :reporting_tags,
                                         to:

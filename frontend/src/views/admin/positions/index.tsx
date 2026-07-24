@@ -16,9 +16,12 @@ import {
     ActionHeader,
 } from "../../../components/action-buttons";
 import { ContentArea } from "../../../components/layout";
-import { activeSessionSelector } from "../../../api/actions";
+import { activeSessionSelector, positionsSelector } from "../../../api/actions";
+import { Position } from "../../../api/defs/types";
+import { positionsTableSelector } from "./actions";
 import { MissingActiveSessionWarning } from "../../../components/sessions";
 import { ConnectedPositionDetailsDialog } from "./position-details-dialog";
+import { EmailPositionsButtonWithDialog } from "./email-button";
 
 export default function AdminPositionsView() {
     const [addDialogVisible, setAddDialogVisible] = React.useState(false);
@@ -27,6 +30,12 @@ export default function AdminPositionsView() {
     // While data is being imported, updating the react table takes a long time,
     // so we use this variable to hide the react table during import.
     const [importInProgress, setImportInProgress] = React.useState(false);
+
+    const { selectedPositionIds } = useSelector(positionsTableSelector);
+    const positions = useSelector<any, Position[]>(positionsSelector);
+    const selectedPositions = positions.filter((position) =>
+        selectedPositionIds.includes(position.id)
+    );
 
     return (
         <div className="page-body">
@@ -55,6 +64,11 @@ export default function AdminPositionsView() {
                     setImportInProgress={setImportInProgress}
                 />
                 <ConnectedExportPositionsAction disabled={!activeSession} />
+                <ActionHeader>Selected Position Actions</ActionHeader>
+                <ConnectedPositionDetailsDialog />
+                <EmailPositionsButtonWithDialog
+                    selectedPositions={selectedPositions}
+                />
             </ActionsList>
             <ContentArea>
                 {activeSession ? null : (
@@ -72,7 +86,6 @@ export default function AdminPositionsView() {
                 {!importInProgress && (
                     <ConnectedPositionsList inDeleteMode={inDeleteMode} />
                 )}
-                <ConnectedPositionDetailsDialog />
             </ContentArea>
         </div>
     );
