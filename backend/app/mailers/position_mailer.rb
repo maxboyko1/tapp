@@ -49,7 +49,7 @@ class PositionMailer < ActionMailer::Base
 
         @url =
             "#{Rails.application.config.base_url}/" \
-                "?role=\"instructor\"&activeSession=#{@session.id}" \
+                "?role=%22instructor%22&activeSession=#{@session.id}" \
                 "#/positions/#{@position.id}/ddahs"
 
         @subs = {

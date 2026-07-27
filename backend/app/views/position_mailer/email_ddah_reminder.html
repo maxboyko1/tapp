@@ -2,7 +2,16 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <style></style>
+        <style>
+            p {
+                margin: 0 0 16px 0;
+                line-height: 1.45;
+            }
+
+            p:last-child {
+                margin-bottom: 0;
+            }
+        </style>
     </head>
     <body>
         <p><i>[This is an automated email, please do not reply.]</i></p>
@@ -12,7 +21,7 @@
         <p>
             Your TAs for {{ position_code }} ({{ session_name }}) have been assigned on TAPP.
             As a next step, please enter the Description of Duties and Hours (DDAH)
-            information for these TAs at <a href="https://{{ url }}">https://{{ url }}</a>. For
+            information for these TAs at <a href="{{ url }}">{{ url }}</a>. For
             instructions and guidelines for completing DDAH information, please see the
             recent email that was circulated or contact
             <a href="mailto:{{ ta_coordinator_email }}">{{ ta_coordinator_email }}</a>.
