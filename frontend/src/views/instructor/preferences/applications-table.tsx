@@ -65,7 +65,7 @@ export function InstructorApplicationsTable() {
         React.useMemo(() => {
             const ret: Record<number, Match[]> = {};
             for (const match of matches) {
-                if (match.tentative) {
+                if (match.tentative && !match.assigned) {
                     ret[match.applicant.id] = ret[match.applicant.id] || [];
                     ret[match.applicant.id].push(match);
                 }
