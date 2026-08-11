@@ -17,6 +17,16 @@ class Match < ApplicationRecord
     scope :tentative, -> { where(tentative: true) }
 
     validates_uniqueness_of :applicant_id, scope: %i[position_id]
+
+    # Helper function to sync assigned status on existing match upon assignment creation/deletion
+    def self.sync_assigned_for(position_id:, applicant_id:, assigned:)
+        match = find_by(position_id: position_id, applicant_id: applicant_id)
+        return true if match.nil? && !assigned
+
+        match ||= new(position_id: position_id, applicant_id: applicant_id)
+        match.assigned = assigned
+        match.save
+    end
 end
 
 # == Schema Information

@@ -246,7 +246,7 @@ export function ApplicationDetails({
     const applicantMatchesTentative = React.useMemo(() => {
         return matches.filter(
             (match) =>
-                match.applicant === application.applicant && match.tentative
+                match.applicant === application.applicant && match.tentative && !match.assigned
         );
     }, [matches, application]);
 

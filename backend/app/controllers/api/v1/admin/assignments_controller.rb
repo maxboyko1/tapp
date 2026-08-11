@@ -19,7 +19,24 @@ class Api::V1::Admin::AssignmentsController < ApplicationController
 
         @assignment = Assignment.new(assignment_params)
         render_on_condition(
-            object: @assignment, condition: proc { @assignment.save! }
+            object: @assignment,
+            condition:
+                proc do
+                    success = false
+                    Assignment.transaction do
+                        success = @assignment.save
+                        if success
+                            # Propagate assigned status true to any corresponding matches
+                            success = Match.sync_assigned_for(
+                                position_id: @assignment.position_id,
+                                applicant_id: @assignment.applicant_id,
+                                assigned: true
+                            )
+                        end
+                        raise ActiveRecord::Rollback unless success
+                    end
+                    success
+                end
         )
     end
 
@@ -37,6 +54,17 @@ class Api::V1::Admin::AssignmentsController < ApplicationController
                 assignment.update_column(:active_offer_id, nil)
                 assignment.offers.destroy_all
                 success = assignment.destroy
+
+                if success
+                    # Propagate assigned status false to any corresponding matches
+                    success = Match.sync_assigned_for(
+                        position_id: assignment.position_id,
+                        applicant_id: assignment.applicant_id,
+                        assigned: false
+                    )
+                end
+
+                raise ActiveRecord::Rollback unless success
             end
         end
 
