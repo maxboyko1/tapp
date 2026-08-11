@@ -60,8 +60,8 @@ class PositionMailer < ActionMailer::Base
 
         # Use the /hash proxy route so frontend hash routing survives authentication redirects.
         @url =
-            "#{Rails.application.config.base_url}/?role=%22instructor%22&activeSession=#{@session.id}" \
-                "/hash/positions/#{@position.id}/ddahs"
+            "#{Rails.application.config.base_url}/hash/positions/#{@position.id}/ddahs" \
+                "?role=%22instructor%22&activeSession=#{@session.id}"
 
         @subs = {
             position: @position,
