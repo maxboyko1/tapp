@@ -24,7 +24,7 @@ export function EmailPositionsButtonWithDialog({
     }
 
     function confirm() {
-        if (selectedPositions?.length > 1) {
+        if (selectedPositions?.length > 0) {
             setShowConfirmation(true);
         } else {
             emailPositions();
@@ -39,14 +39,14 @@ export function EmailPositionsButtonWithDialog({
                 disabled={selectedPositions.length === 0}
                 title={"Email DDAH reminders to instructors for selected positions"}
             >
-                Email DDAH
+                Email DDAH Reminders
             </ActionButton>
             <PositionConfirmationDialog
                 selectedPositions={selectedPositions}
                 visible={showConfirmation}
                 setVisible={setShowConfirmation}
                 callback={emailPositions}
-                title="Emailing DDAH Reminders for Multiple Positions"
+                title="Emailing DDAH Reminders"
                 body={`Emailing DDAH reminders for the following ${selectedPositions.length} positions.`}
                 confirmation={`Email DDAH Reminders for ${selectedPositions.length} Positions`}
             />

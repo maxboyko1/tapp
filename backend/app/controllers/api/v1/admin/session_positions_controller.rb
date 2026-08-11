@@ -16,7 +16,9 @@ class Api::V1::Admin::SessionPositionsController < Api::V1::Admin::PositionsCont
     # POST /positions/:id/email
     def email
         find_position
-        PositionMailer.email_ddah_reminder(@position).deliver_now!
+        @position.instructors.each do |instructor|
+            PositionMailer.email_ddah_reminder(@position, instructor).deliver_now!
+        end
 
         @position.last_emailed_date = Time.now
         @position.save!
