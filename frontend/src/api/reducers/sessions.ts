@@ -28,6 +28,36 @@ const basicReducers = createBasicReducerObject(
 
 export const sessionsReducer = createReducer<SessionState>(initialState, {
     ...basicReducers,
+    [FETCH_ONE_SESSION_SUCCESS]: (
+        state: SessionState,
+        action: HasPayload<Session>
+    ): SessionState => ({
+        ...state,
+        activeSession:
+            state.activeSession?.id === action.payload.id
+                ? action.payload
+                : state.activeSession,
+    }),
+    [UPSERT_ONE_SESSION_SUCCESS]: (
+        state: SessionState,
+        action: HasPayload<Session>
+    ): SessionState => ({
+        ...state,
+        activeSession:
+            state.activeSession?.id === action.payload.id
+                ? action.payload
+                : state.activeSession,
+    }),
+    [DELETE_ONE_SESSION_SUCCESS]: (
+        state: SessionState,
+        action: HasPayload<Session>
+    ): SessionState => ({
+        ...state,
+        activeSession:
+            state.activeSession?.id === action.payload.id
+                ? null
+                : state.activeSession,
+    }),
     [SET_ACTIVE_SESSION]: (
         state: SessionState,
         action: HasPayload<Session>

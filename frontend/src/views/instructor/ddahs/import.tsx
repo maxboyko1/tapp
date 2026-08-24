@@ -1,12 +1,19 @@
 import React from "react";
 import { Alert } from "@mui/material";
 import { useSelector } from "react-redux";
-import { assignmentsSelector, applicantsSelector } from "../../../api/actions";
+import {
+    assignmentsSelector,
+    applicantsSelector,
+    activeSessionSelector,
+} from "../../../api/actions";
 import { ddahsSelector, upsertDdahs } from "../../../api/actions/ddahs";
 import { Ddah, MinimalDdah, RawDuty, Duty } from "../../../api/defs/types";
 import { ImportActionButton } from "../../../components/import-button";
 import { DiffSpec, diffImport, getChanged } from "../../../libs/diffs";
-import { normalizeDdahImports } from "../../../libs/import-export";
+import {
+    normalizeDdahImports,
+    validateImportedDdahsAgainstOutline,
+} from "../../../libs/import-export";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
 import { activePositionSelector } from "../store/actions";
 
@@ -169,6 +176,7 @@ export function InstructorImportDdahsAction({
     const ddahs = useSelector(ddahsSelector);
     const assignments = useSelector(assignmentsSelector);
     const applicants = useSelector(applicantsSelector);
+    const activeSession = useSelector(activeSessionSelector);
     const activePosition = useSelector(activePositionSelector);
     const [fileContent, setFileContent] = React.useState<{
         fileType: "json" | "spreadsheet";
@@ -216,6 +224,10 @@ export function InstructorImportDdahsAction({
                 undefined,
                 activePosition?.position_code
             );
+            validateImportedDdahsAgainstOutline(
+                data,
+                activeSession?.ddah_outline || []
+            );
 
             // Compute which DDAHs have been added/modified
             const newDiff = diffImport.ddahs(data, { ddahs, assignments });
@@ -243,6 +255,7 @@ export function InstructorImportDdahsAction({
         ddahs,
         assignments,
         applicants,
+        activeSession,
         inProgress,
         activePosition,
     ]);

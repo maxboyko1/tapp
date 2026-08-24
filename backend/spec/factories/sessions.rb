@@ -38,6 +38,7 @@ end
 #  rate1                :float
 #  rate2                :float
 #  hours_ref_session_id :bigint
+#  ddah_outline         :jsonb
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
 #

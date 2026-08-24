@@ -36,7 +36,9 @@ class Api::V1::Admin::SessionsController < ApplicationController
             :start_date,
             :end_date,
             :applications_visible_to_instructors,
-            :hours_ref_session_id
+            :hours_ref_session_id,
+            :ddah_outline,
+            ddah_outline: %i[hours description]
         )
     end
 

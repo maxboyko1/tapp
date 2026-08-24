@@ -129,6 +129,7 @@ export const prepareMinimal = {
             end_date: session.end_date,
             rate1: session.rate1,
             rate2: session.rate2,
+            ddah_outline: session.ddah_outline,
         };
     },
     contractTemplate: function (
@@ -351,6 +352,7 @@ export const prepareMinimal = {
             duties: duties.map((duty) => ({
                 hours: duty.hours,
                 description: duty.description,
+                is_fixed: duty.is_fixed,
             })),
         };
     },

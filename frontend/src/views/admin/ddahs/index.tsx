@@ -1,8 +1,10 @@
 import React from "react";
 import { Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
+import EditDocumentIcon from "@mui/icons-material/EditDocument";
 
 import { ConnectedAddDdahDialog } from "./add-ddah-dialog";
+import { ConnectedEditDdahOutlineDialog } from "./edit-ddah-outline-dialog";
 import {
     ConnectedImportDdahsAction,
     ConnectedExportDdahsAction,
@@ -31,6 +33,7 @@ import { DownloadDdahs } from "./download-ddahs";
 
 export default function AdminDdahsView() {
     const [addDialogVisible, setAddDialogVisible] = React.useState(false);
+    const [editOutlineDialogVisible, setEditOutlineDialogVisible] = React.useState(false);
     // While data is being imported, updating the react table takes a long time,
     // so we use this variable to hide the react table during import.
     const [importInProgress, setImportInProgress] = React.useState(false);
@@ -53,6 +56,15 @@ export default function AdminDdahsView() {
                     disabled={!activeSession}
                 >
                     Add DDAH
+                </ActionButton>
+                <ActionButton
+                    icon={<EditDocumentIcon />}
+                    onClick={() => {
+                        setEditOutlineDialogVisible(true);
+                    }}
+                    disabled={!activeSession}
+                >
+                    Edit DDAH Outline
                 </ActionButton>
                 <ConnectedDownloadPositionDdahTemplatesAction
                     disabled={!activeSession}
@@ -81,6 +93,12 @@ export default function AdminDdahsView() {
                     show={addDialogVisible}
                     onHide={() => {
                         setAddDialogVisible(false);
+                    }}
+                />
+                <ConnectedEditDdahOutlineDialog
+                    show={editOutlineDialogVisible}
+                    onHide={() => {
+                        setEditOutlineDialogVisible(false);
                     }}
                 />
                 <Typography variant="h3" sx={{ mb: 2 }}>

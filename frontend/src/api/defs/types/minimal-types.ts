@@ -1,4 +1,4 @@
-import type { Utorid } from "./common";
+import type { DutyOutline, Utorid } from "./common";
 import type {
     Applicant,
     Application,
@@ -46,7 +46,7 @@ export interface MinimalAssignment
 export interface MinimalDdah {
     position_code: string;
     applicant: Utorid;
-    duties: { hours: number; description: string }[];
+    duties: (DutyOutline & { is_fixed: boolean })[];
 }
 
 export interface MinimalPostingPosition

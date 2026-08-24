@@ -8,5 +8,6 @@ class SessionSerializer < ActiveModel::Serializer
                :rate1,
                :rate2,
                :applications_visible_to_instructors,
-               :hours_ref_session_id
+               :hours_ref_session_id,
+               :ddah_outline
 end

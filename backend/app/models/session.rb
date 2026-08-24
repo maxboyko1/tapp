@@ -2,6 +2,22 @@
 
 # A class representing a school term. For example, "fall 2018".
 class Session < ApplicationRecord
+    DDAH_OUTLINE_ALLOWED_KEYS = %w[hours description].freeze
+    DDAH_DUTY_CATEGORIES = %w[note prep training meeting contact marking other].freeze
+
+    DEFAULT_DDAH_OUTLINE = [
+        {
+            hours: 1,
+            description:
+                'meeting:Meetings with instructor including initial DDAH review'
+        },
+        {
+            hours: 0.5,
+            description:
+                'meeting:Meetings with instructor including mid-term DDAH review'
+        }
+    ].freeze
+
     # Each session can have up to one other session it is referencing, from which it will inherit
     # min_hours_owed values for its appointment guarantees
     belongs_to :hours_ref_session, class_name: 'Session', optional: true
@@ -27,12 +43,21 @@ class Session < ApplicationRecord
 
     validate :session_must_not_self_reference
     validate :session_must_have_strict_role
+    validate :ddah_outline_must_be_valid_structure
+
+    before_validation :set_default_ddah_outline, on: :create
 
     after_commit :sync_min_hours_owed_from_reference_session,
                  on: %i[create update],
                  if: :saved_change_to_hours_ref_session_id?
 
     private
+
+    def set_default_ddah_outline
+        return unless ddah_outline.blank?
+
+        self.ddah_outline = DEFAULT_DDAH_OUTLINE.deep_dup
+    end
 
     # Session cannot use itself as an hours reference session
     def session_must_not_self_reference
@@ -93,6 +118,64 @@ class Session < ApplicationRecord
                 )
             end
     end
+
+    # Validates that the ddah_outline attribute has a proper structure, i.e. either null, an empty
+    # array or an array of objects with valid "hours" and "description" fields. The UI for editing
+    # the outline will enforce this structure, but we also check it here to validate any changes
+    # to the ddah_outline by other means.
+    def ddah_outline_must_be_valid_structure
+        return if ddah_outline.nil?
+
+        unless ddah_outline.is_a?(Array)
+            errors.add(:ddah_outline, 'must be null or an array of duties')
+            return
+        end
+
+        ddah_outline.each_with_index do |duty, idx|
+            unless duty.is_a?(Hash)
+                errors.add(:ddah_outline, "entry #{idx + 1} must be an object")
+                next
+            end
+
+            duty_keys = duty.keys.map(&:to_s).sort
+            unless duty_keys == DDAH_OUTLINE_ALLOWED_KEYS.sort
+                errors.add(
+                    :ddah_outline,
+                    "entry #{idx + 1} must contain only hours and description"
+                )
+                next
+            end
+
+            parsed_duty = duty.with_indifferent_access
+
+            hours = parsed_duty[:hours]
+            unless hours.is_a?(Numeric) && hours.finite?
+                errors.add(:ddah_outline, "entry #{idx + 1} hours must be numeric")
+            end
+
+            description = parsed_duty[:description]
+            unless description.is_a?(String)
+                errors.add(:ddah_outline, "entry #{idx + 1} description must be a string")
+                next
+            end
+
+            unless description.include?(':')
+                errors.add(
+                    :ddah_outline,
+                    "entry #{idx + 1} description must use category:description format"
+                )
+                next
+            end
+
+            category, _description = description.split(':', 2)
+            next if DDAH_DUTY_CATEGORIES.include?(category)
+
+            errors.add(
+                :ddah_outline,
+                "entry #{idx + 1} description must start with a valid category"
+            )
+        end
+    end
 end
 
 # == Schema Information
@@ -106,6 +189,7 @@ end
 #  rate1                :float
 #  rate2                :float
 #  hours_ref_session_id :bigint
+#  ddah_outline         :jsonb
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
 #

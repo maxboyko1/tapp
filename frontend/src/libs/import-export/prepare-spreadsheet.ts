@@ -27,10 +27,19 @@ export type CellType = number | string | null | undefined;
  */
 function flattenDuties(ddah: Ddah) {
     const ret = [];
-    const duties = [...ddah.duties];
-    duties.sort((a, b) => a.order - b.order);
+    const fixedDuties = [...ddah.duties]
+        .filter((duty) => duty.is_fixed)
+        .sort((a, b) => a.order - b.order);
+    const nonFixedDuties = [...ddah.duties]
+        .filter((duty) => !duty.is_fixed)
+        .sort((a, b) => a.order - b.order);
 
-    for (const duty of duties) {
+    for (const duty of fixedDuties) {
+        ret.push(duty.hours);
+        ret.push(duty.description);
+    }
+
+    for (const duty of nonFixedDuties) {
         ret.push(duty.hours);
         ret.push(duty.description);
     }
@@ -459,18 +468,43 @@ export const prepareSpreadsheet = {
         );
     },
     ddah: function prepareDdahsSpreadsheet(ddahs: Ddah[]) {
-        // Compute the maximum number of duties, because each duty gets a column.
-        const maxDuties = Math.max(
-            ...ddahs.map((ddah) => ddah.duties.length || 0),
+        const maxFixedDuties = Math.max(
+            ...ddahs.map(
+                (ddah) => ddah.duties.filter((duty) => duty.is_fixed).length || 0
+            ),
             0
         );
-        // Create headers for the duty columns
-        const dutyHeaders = Array.from({ length: maxDuties * 2 }, (_, i) => {
-            if (i % 2 === 0) {
-                return `Hours ${i / 2 + 1}`;
+        const maxNonFixedDuties = Math.max(
+            ...ddahs.map(
+                (ddah) => ddah.duties.filter((duty) => !duty.is_fixed).length || 0
+            ),
+            0
+        );
+
+        // Create headers for fixed duty columns.
+        const fixedDutyHeaders = Array.from(
+            { length: maxFixedDuties * 2 },
+            (_, i) => {
+                if (i % 2 === 0) {
+                    return `Fixed Hours ${i / 2 + 1}`;
+                }
+                return `Fixed Duty ${(i - 1) / 2 + 1}`;
             }
-            return `Duty ${(i - 1) / 2 + 1}`;
-        });
+        );
+
+        // Create headers for editable duty columns.
+        const dutyHeaders = Array.from(
+            { length: maxNonFixedDuties * 2 },
+            (_, i) => {
+                if (i % 2 === 0) {
+                    return `Hours ${i / 2 + 1}`;
+                }
+                return `Duty ${(i - 1) / 2 + 1}`;
+            }
+        );
+
+        // Any fixed duties will be shown before any non-fixed duties
+        const allDutyHeaders = [...fixedDutyHeaders, ...dutyHeaders];
 
         return normalizeSpreadsheet(
             (
@@ -483,7 +517,7 @@ export const prepareSpreadsheet = {
                         "Assignment Hours",
                         "Offer Status",
                         "",
-                    ].concat(dutyHeaders),
+                    ].concat(allDutyHeaders),
                 ] as CellType[][]
             ).concat(
                 ddahs.map((ddah) =>

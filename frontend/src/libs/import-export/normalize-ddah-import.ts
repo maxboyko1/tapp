@@ -1,4 +1,4 @@
-import { Applicant, MinimalDdah } from "../../api/defs/types";
+import { Applicant, DutyOutline, MinimalDdah } from "../../api/defs/types";
 import {
     SpreadsheetRowMapper,
     matchByUtoridOrName,
@@ -26,13 +26,30 @@ export function normalizeDdahImports(
 ): MinimalDdah[] {
     const ret: MinimalDdah[] = [];
 
+    function hasValue(value: unknown) {
+        if (value == null) {
+            return false;
+        }
+        if (typeof value === "string") {
+            return value.trim() !== "";
+        }
+        return true;
+    }
+
     if (data.fileType === "json") {
         let unwrapped: MinimalDdah[] = data.data;
         if ((unwrapped as any).ddahs) {
             unwrapped = (unwrapped as any).ddahs;
         }
         for (const ddah of unwrapped) {
-            ret.push(ddah);
+            ret.push({
+                ...ddah,
+                duties: (ddah.duties || []).map((duty) => ({
+                    hours: Number(duty.hours || 0),
+                    description: duty.description || "",
+                    is_fixed: !!duty.is_fixed,
+                })),
+            });
         }
     }
 
@@ -66,9 +83,13 @@ export function normalizeDdahImports(
         for (let i = 0; i <= maxDuties; i++) {
             keyMap[`Duty ${i}`] = `duty_${i}`;
             keyMap[`Hours ${i}`] = `hours_${i}`;
+            keyMap[`Fixed Duty ${i}`] = `fixed_duty_${i}`;
+            keyMap[`Fixed Hours ${i}`] = `fixed_hours_${i}`;
             if (i < 10) {
                 keyMap[`Duty 0${i}`] = `duty_${i}`;
                 keyMap[`Hours 0${i}`] = `hours_${i}`;
+                keyMap[`Fixed Duty 0${i}`] = `fixed_duty_${i}`;
+                keyMap[`Fixed Hours 0${i}`] = `fixed_hours_${i}`;
             }
         }
 
@@ -99,15 +120,46 @@ export function normalizeDdahImports(
             }
             // Now we need to condense duties to a list
             // The easiest way is to just hunt for them
-            const duties: { description: string; hours: number }[] = [];
+            const duties: {
+                description: string;
+                hours: number;
+                is_fixed: boolean;
+            }[] = [];
+
+            for (let i = 0; i <= maxDuties; i++) {
+                const duty = normalized[`fixed_duty_${i}`];
+                const hours = normalized[`fixed_hours_${i}`];
+                if (!hasValue(duty) && !hasValue(hours)) {
+                    delete normalized[`fixed_duty_${i}`];
+                    delete normalized[`fixed_hours_${i}`];
+                    continue;
+                }
+
+                duties.push({
+                    description: duty || "",
+                    hours: Number(hours || 0),
+                    is_fixed: true,
+                });
+                delete normalized[`fixed_duty_${i}`];
+                delete normalized[`fixed_hours_${i}`];
+            }
+
             for (let i = 0; i <= maxDuties; i++) {
                 const duty = normalized[`duty_${i}`];
                 const hours = normalized[`hours_${i}`];
-                if (duty != null || hours != null) {
-                    duties.push({ description: duty || "", hours: hours || 0 });
+                if (!hasValue(duty) && !hasValue(hours)) {
                     delete normalized[`duty_${i}`];
                     delete normalized[`hours_${i}`];
+                    continue;
                 }
+
+                duties.push({
+                    description: duty || "",
+                    hours: Number(hours || 0),
+                    is_fixed: false,
+                });
+                delete normalized[`duty_${i}`];
+                delete normalized[`hours_${i}`];
             }
             ret.push({
                 position_code: normalized.position_code,
@@ -118,4 +170,62 @@ export function normalizeDdahImports(
     }
 
     return ret;
+}
+
+/**
+ * Helper to render an individual duty in a string format for comparison during validation.
+ * 
+ * @param duty 
+ * @returns 
+ */
+function dutyHash(duty: DutyOutline) {
+    return `${Number(duty.hours)}::${String(duty.description).trim()}`;
+}
+
+/**
+ * Validate that the DDAH duties being imported include the expected fixed duties as specified in
+ * the DDAH outline for this session.
+ * 
+ * @param ddahs 
+ * @param outline 
+ * @param isAdmin 
+ */
+export function validateImportedDdahsAgainstOutline(
+    ddahs: MinimalDdah[],
+    outline: DutyOutline[],
+    isAdmin: boolean = false,
+) {
+    const expectedFixed = (outline || []).map(dutyHash).sort();
+    const outlineDutyList = (outline || [])
+        .map((duty) => `${duty.hours}h - ${String(duty.description).trim()};`)
+        .join("\n");
+
+    for (const ddah of ddahs) {
+        const actualFixed = (ddah.duties || [])
+            .filter((duty) => duty.is_fixed)
+            .map(dutyHash)
+            .sort();
+
+        if (expectedFixed.length === actualFixed.length) {
+            const same = expectedFixed.every(
+                (expected, idx) => expected === actualFixed[idx]
+            );
+            if (same) {
+                continue;
+            }
+        }
+
+        // Error for instructors, explaining what specific fixed duties are expected in the import file
+        if (!isAdmin) {
+            const expectedSuffix = outlineDutyList ? `${outlineDutyList}` : "none.";
+            throw new Error(
+                `The duties specification for ${ddah.position_code} (${ddah.applicant}) must include the following fixed duties: ${expectedSuffix}`
+            );
+        }
+
+        // Error for admins, notifying to refer to the DDAH outline for proper fixed duties format
+        throw new Error(
+            `Fixed duties in the import for ${ddah.position_code} (${ddah.applicant}) do not match this session's DDAH outline.`
+        );
+    }
 }
