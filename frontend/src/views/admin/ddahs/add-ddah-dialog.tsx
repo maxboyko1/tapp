@@ -13,10 +13,10 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 
 import { useSelector } from "react-redux";
-import { Duty, Assignment, Ddah } from "../../../api/defs/types";
+import { Duty, Assignment, Ddah, DutyOutline } from "../../../api/defs/types";
 import { upsertDdah, ddahsSelector } from "../../../api/actions/ddahs";
 import { DdahEditor } from "../../../components/ddahs";
-import { assignmentsSelector } from "../../../api/actions";
+import { assignmentsSelector, activeSessionSelector } from "../../../api/actions";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
 
 interface PartialDdah {
@@ -24,13 +24,21 @@ interface PartialDdah {
     duties: Duty[];
 }
 
-const INITIAL_DDAH: PartialDdah = {
-    assignment: null,
-    duties: [
-        {order: 1, hours: 1, description: "meeting:Meetings with instructor including initial DDAH review"},
-        {order: 2, hours: 0.5, description: "meeting:Meetings with instructor including mid-term DDAH review"}
-    ],
-};
+function buildInitialDdah(activeSession: any): PartialDdah {
+    const duties = (activeSession?.ddah_outline || []).map(
+        (duty: DutyOutline, idx: number) => ({
+            order: idx + 1,
+            hours: duty.hours,
+            description: duty.description,
+            is_fixed: true,
+        })
+    );
+
+    return {
+        assignment: null,
+        duties,
+    };
+}
 
 /**
  * Find if there is a conflicting instructor in the passed in list
@@ -75,7 +83,12 @@ export function ConnectedAddDdahDialog(props: {
     onHide?: (...args: any) => any;
 }) {
     const { show, onHide = () => {} } = props;
-    const [newDdah, setNewDdah] = React.useState<PartialDdah>(INITIAL_DDAH);
+    const activeSession = useSelector(activeSessionSelector);
+    const initialDdah = React.useMemo(
+        () => buildInitialDdah(activeSession),
+        [activeSession]
+    );
+    const [newDdah, setNewDdah] = React.useState<PartialDdah>(initialDdah);
     const [inProgress, setInProgress] = React.useState(false);
 
     const ddahs = useSelector(ddahsSelector) as Ddah[];
@@ -110,11 +123,10 @@ export function ConnectedAddDdahDialog(props: {
     }
 
     React.useEffect(() => {
-        if (!show) {
-            // If the dialog is hidden, reset the state
-            setNewDdah(INITIAL_DDAH);
+        if (show) {
+            setNewDdah(initialDdah);
         }
-    }, [show]);
+    }, [show, initialDdah]);
 
     async function createDdah() {
         setInProgress(true);

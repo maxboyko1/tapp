@@ -138,23 +138,34 @@ function DutyRow({
     duty,
     removeDuty,
     upsertDuty,
+    isLocked = false,
 }: {
     duty: Duty;
     removeDuty: (duty: Duty) => void;
     upsertDuty: (duty: Duty) => void;
+    isLocked?: boolean;
 }) {
     const { category, description } = splitDutyDescription(duty.description);
     return (
-        <Stack direction="row" spacing={2} alignItems="flex-start" sx={{ mb: 2 }}>
+        <Stack
+            direction="row"
+            spacing={2}
+            alignItems="flex-start"
+            sx={{ mb: 2 }}
+        >
             <Box>
-                <IconButton
-                    title="Remove duty"
-                    onClick={() => removeDuty(duty)}
-                    color="info"
-                    size="small"
-                >
-                    <DeleteIcon />
-                </IconButton>
+                {isLocked ? (
+                    <Box sx={{ width: 40 }} />
+                ) : (
+                    <IconButton
+                        title="Remove duty"
+                        onClick={() => removeDuty(duty)}
+                        color="info"
+                        size="small"
+                    >
+                        <DeleteIcon />
+                    </IconButton>
+                )}
             </Box>
             <Box sx={{ minWidth: 100 }}>
                 {category === "note" ? (
@@ -170,6 +181,7 @@ function DutyRow({
                                 hours: stringToNativeType(e.target.value) as any,
                             })
                         }
+                        disabled={isLocked}
                         size="small"
                         fullWidth
                     />
@@ -193,6 +205,7 @@ function DutyRow({
                                 description: `${newCategory}:${description}`,
                             });
                         }}
+                        disabled={isLocked}
                         MenuProps={{
                             PaperProps: {
                                 sx: (theme: Theme) => ({
@@ -224,11 +237,89 @@ function DutyRow({
                             description: `${category}:${e.target.value}`,
                         })
                     }
+                    disabled={isLocked}
                     size="small"
                     fullWidth
                 />
             </Box>
         </Stack>
+    );
+}
+
+/**
+ * Display a list of duties and allow the user to add, remove, or edit them. If the newDutyIsFixed
+ * prop is true then the component is the version used for editing the DDAH outline, meaning we
+ * are an admin setting the fixed duties for the session. If newDutyIsFixed is false then this
+ * the component is being used in the DDAH editor, so any new duties added are of the non-fixed
+ * variety, with the existing fixed ones being greyed out and uneditable.
+ * 
+ * @param duties The list of duties to display and edit
+ * @param setDuties A function to update the list of duties
+ * @param newDutyIsFixed Whether new duties added should be fixed (uneditable)
+ * @param isDutyLocked A function to determine if an existing duty is fixed (uneditable) 
+ * @returns 
+ */
+export function DutyListEditor({
+    duties,
+    setDuties,
+    newDutyIsFixed = false,
+    isDutyLocked,
+}: {
+    duties: Duty[];
+    setDuties: (duties: Duty[]) => void;
+    newDutyIsFixed?: boolean;
+    isDutyLocked?: (duty: Duty) => boolean;
+}) {
+    // Sort a copy for consistent rendering order.
+    const sortedDuties = [...duties].sort((a, b) => a.order - b.order);
+    const nextOrder = Math.max(...sortedDuties.map((x) => x.order), 0) + 1;
+
+    function upsertDuty(duty: Duty) {
+        if (isDutyLocked?.(duty)) {
+            return;
+        }
+        const newDuties = sortedDuties.filter((x) => x.order !== duty.order);
+        newDuties.push(duty);
+        setDuties(newDuties);
+    }
+
+    function removeDuty(duty: Duty) {
+        if (isDutyLocked?.(duty)) {
+            return;
+        }
+        const newDuties = sortedDuties.filter((x) => x.order !== duty.order);
+        setDuties(newDuties);
+    }
+
+    return (
+        <React.Fragment>
+            {sortedDuties.map((duty) => (
+                <DutyRow
+                    duty={duty}
+                    removeDuty={removeDuty}
+                    upsertDuty={upsertDuty}
+                    isLocked={!!isDutyLocked?.(duty)}
+                    key={duty.order}
+                />
+            ))}
+            <DialogRow>
+                <Button
+                    variant="outlined"
+                    color="info"
+                    onClick={() =>
+                        upsertDuty({
+                            description: "",
+                            hours: 0,
+                            order: nextOrder,
+                            is_fixed: newDutyIsFixed,
+                        })
+                    }
+                    startIcon={<AddIcon />}
+                >
+                    Add Duty
+                </Button>
+            </DialogRow>
+        </React.Fragment>
     );
 }
 
@@ -379,10 +470,7 @@ export function DdahEditor(props: {
         );
     }
 
-    // Make a copy of the duties so that we can sort it without mutating the prop
-    const duties = [...ddah.duties];
-    duties.sort((a, b) => a.order - b.order);
-    const nextOrder = Math.max(...duties.map((x) => x.order), 0) + 1;
+    const duties = [...ddah.duties].sort((a, b) => a.order - b.order);
     let totalHours = 0;
     for (const duty of duties) {
         totalHours += duty.hours;
@@ -394,17 +482,6 @@ export function DdahEditor(props: {
     function setAssignment(assignments: Assignment[]) {
         const assignment = assignments[assignments.length - 1] || null;
         setDdah({ ...ddah, assignment });
-    }
-
-    function upsertDuty(duty: Duty) {
-        const newDuties = duties.filter((x) => x.order !== duty.order);
-        newDuties.push(duty);
-        setDdah({ ...ddah, duties: newDuties });
-    }
-
-    function removeDuty(duty: Duty) {
-        const newDuties = duties.filter((x) => x.order !== duty.order);
-        setDdah({ ...ddah, duties: newDuties });
     }
 
     return (
@@ -422,30 +499,12 @@ export function DdahEditor(props: {
                 <Typography variant="h6" sx={{ mt: 2, mb: 1 }}>
                     Duties
                 </Typography>
-                {duties.map((duty) => (
-                    <DutyRow
-                        duty={duty}
-                        removeDuty={removeDuty}
-                        upsertDuty={upsertDuty}
-                        key={duty.order}
-                    />
-                ))}
-                <DialogRow>
-                    <Button
-                        variant="outlined"
-                        color="info"
-                        onClick={() =>
-                            upsertDuty({
-                                description: "",
-                                hours: 0,
-                                order: nextOrder,
-                            })
-                        }
-                        startIcon={<AddIcon />}
-                    >
-                        Add Duty
-                    </Button>
-                </DialogRow>
+                <DutyListEditor
+                    duties={duties}
+                    setDuties={(newDuties) => setDdah({ ...ddah, duties: newDuties })}
+                    newDutyIsFixed={false}
+                    isDutyLocked={(duty) => duty.is_fixed}
+                />
                 <Box sx={{ mt: 2 }}>
                     <Typography variant="body2">
                         <Typography

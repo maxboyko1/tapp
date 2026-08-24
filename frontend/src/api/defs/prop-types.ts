@@ -165,6 +165,7 @@ function generatePropTypes(PropTypes: typeof OrigPropTypes) {
                     description: PropTypes.string,
                     hours: PropTypes.number,
                     order: PropTypes.number,
+                    is_fixed: PropTypes.bool,
                 })
             ),
         }),

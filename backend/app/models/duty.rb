@@ -12,6 +12,7 @@ end
 #  description :string
 #  hours       :float
 #  order       :integer
+#  is_fixed    :boolean          not null, default: false
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #

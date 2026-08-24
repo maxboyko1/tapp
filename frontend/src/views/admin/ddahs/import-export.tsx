@@ -5,7 +5,11 @@ import * as XLSX from "xlsx";
 import { Alert } from "@mui/material";
 import DownloadIcon from "@mui/icons-material/Download";
 
-import { applicantsSelector, assignmentsSelector } from "../../../api/actions";
+import {
+    applicantsSelector,
+    assignmentsSelector,
+    activeSessionSelector,
+} from "../../../api/actions";
 import { useSelector } from "react-redux";
 import { ExportActionButton } from "../../../components/export-button";
 import { ImportActionButton } from "../../../components/import-button";
@@ -13,6 +17,7 @@ import {
     prepareSpreadsheet,
     prepareDdahDataFactory,
     normalizeDdahImports,
+    validateImportedDdahsAgainstOutline,
     ExportFormat,
 } from "../../../libs/import-export";
 import { diffImport, getChanged, DiffSpec } from "../../../libs/diffs";
@@ -21,6 +26,7 @@ import {
     Ddah,
     MinimalDdah,
     Assignment,
+    Session,
 } from "../../../api/defs/types";
 import {
     exportDdahs,
@@ -100,6 +106,7 @@ export function ConnectedImportDdahsAction({
     const ddahs = useSelector<any, Ddah[]>(ddahsSelector);
     const assignments = useSelector<any, Assignment[]>(assignmentsSelector);
     const applicants = useSelector<any, Applicant[]>(applicantsSelector);
+    const activeSession = useSelector(activeSessionSelector);
     const [fileContent, setFileContent] = React.useState<{
         fileType: "json" | "spreadsheet";
         data: any;
@@ -137,6 +144,11 @@ export function ConnectedImportDdahsAction({
             setProcessingError(null);
             // normalize the data coming from the file
             const data = normalizeDdahImports(fileContent, applicants);
+            validateImportedDdahsAgainstOutline(
+                data,
+                activeSession?.ddah_outline || [],
+                true
+            );
             // Compute which applicants have been added/modified
             const newDiff = diffImport.ddahs(data, { ddahs, assignments });
 
@@ -145,7 +157,14 @@ export function ConnectedImportDdahsAction({
             console.warn(e);
             setProcessingError(e);
         }
-    }, [fileContent, ddahs, assignments, applicants, inProgress]);
+    }, [
+        fileContent,
+        ddahs,
+        assignments,
+        applicants,
+        activeSession,
+        inProgress,
+    ]);
 
     async function onConfirm() {
         if (!diffed) {
@@ -174,30 +193,45 @@ export function ConnectedImportDdahsAction({
     );
 }
 
-const DEFAULT_DDAH = {
-    duties: [
-        {
-            order: 1,
-            hours: 0,
-            description: "",
-        },
-        {
-            order: 2,
-            hours: 0,
-            description: "",
-        },
-        {
-            order: 3,
-            hours: 0,
-            description: "",
-        },
-        {
-            order: 4,
-            hours: 0,
-            description: "",
-        },
-    ],
-};
+const DEFAULT_VARIABLE_DUTIES = [
+    {
+        hours: 0,
+        description: "",
+        is_fixed: false,
+    },
+    {
+        hours: 0,
+        description: "",
+        is_fixed: false,
+    },
+    {
+        hours: 0,
+        description: "",
+        is_fixed: false,
+    },
+    {
+        hours: 0,
+        description: "",
+        is_fixed: false,
+    },
+];
+
+function buildTemplateDdahDuties(session: Session | null) {
+    const fixedDuties = (session?.ddah_outline || []).map((duty) => ({
+        hours: duty.hours,
+        description: duty.description,
+        is_fixed: true,
+    }));
+
+    const duties = [...fixedDuties, ...DEFAULT_VARIABLE_DUTIES].map(
+        (duty, idx) => ({
+            ...duty,
+            order: idx + 1,
+        })
+    );
+
+    return duties;
+}
 
 /**
  * Turn a list of ddahs and assignments into an object
@@ -210,7 +244,8 @@ const DEFAULT_DDAH = {
  */
 export function createDdahSpreadsheets(
     ddahs: Ddah[],
-    assignments: Assignment[]
+    assignments: Assignment[],
+    activeSession: Session | null
 ) {
     const ddahsByAssignmentId: { [key: string]: Ddah } = {};
     for (const ddah of ddahs) {
@@ -233,7 +268,10 @@ export function createDdahSpreadsheets(
             if (ddahsByAssignmentId[assignment.id]) {
                 return ddahsByAssignmentId[assignment.id];
             }
-            return { ...DEFAULT_DDAH, assignment: assignment };
+            return {
+                duties: buildTemplateDdahDuties(activeSession),
+                assignment,
+            };
         })
         .filter((x) => x) as Ddah[];
     allDdahs.sort(({ assignment: a }, { assignment: b }) => {
@@ -298,9 +336,14 @@ export function ConnectedDownloadPositionDdahTemplatesAction({
 }) {
     const assignments = useSelector<any, Assignment[]>(assignmentsSelector);
     const ddahs = useSelector<any, Ddah[]>(ddahsSelector);
+    const activeSession = useSelector(activeSessionSelector);
 
     async function download() {
-        const spreadsheets = createDdahSpreadsheets(ddahs, assignments);
+        const spreadsheets = createDdahSpreadsheets(
+            ddahs,
+            assignments,
+            activeSession
+        );
         const blob = await arraysByKeyToZip(spreadsheets);
         FileSaver.saveAs(blob, "DDAHs-by-position.zip");
     }

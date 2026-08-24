@@ -1,7 +1,7 @@
 /**
  * This file contains types that are returned by the backend as responses to API calls.
  */
-import type { CustomQuestions, HasId, UserRole, Utorid } from "./common";
+import type { CustomQuestions, HasId, UserRole, Utorid, DutyOutline } from "./common";
 
 export interface RawSession extends HasId {
     start_date: string;
@@ -11,6 +11,7 @@ export interface RawSession extends HasId {
     rate2: number | null;
     applications_visible_to_instructors: boolean;
     hours_ref_session_id: number | null;
+    ddah_outline: DutyOutline[];
 }
 
 export interface RawPosition extends HasId {
@@ -102,6 +103,7 @@ export interface RawDuty {
     order: number;
     hours: number;
     description: string;
+    is_fixed: boolean;
 }
 
 export interface RawDdah extends HasId {

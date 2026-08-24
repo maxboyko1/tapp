@@ -152,6 +152,8 @@ function DutyItem({
     onChange?: (category: DutyCategory, duty: Duty) => any;
     onDelete?: (duty: Duty) => any;
 }) {
+    const isFixed = !!duty.is_fixed;
+
     if (onChange) {
         return (
             <ListItem
@@ -161,6 +163,10 @@ function DutyItem({
                     alignItems: "center",
                     gap: 2,
                     py: 1,
+                    opacity: isFixed ? 0.65 : 1,
+                    backgroundColor: isFixed ? "action.disabledBackground" : "transparent",
+                    borderRadius: 1,
+                    px: isFixed ? 1 : 0,
                 }}
             >
                 {category !== "note" && (
@@ -179,6 +185,7 @@ function DutyItem({
                                 ) as any,
                             })
                         }
+                        disabled={isFixed}
                         sx={{ width: 100 }}
                         slotProps={{ htmlInput: { min: 0 } }}
                     />
@@ -201,10 +208,11 @@ function DutyItem({
                             description: e.target.value,
                         })
                     }
+                    disabled={isFixed}
                     fullWidth
                     sx={{ flex: 1 }}
                 />
-                {onDelete && (
+                {onDelete && !isFixed && (
                     <IconButton
                         title="Remove duty"
                         onClick={() => onDelete(duty)}
@@ -286,6 +294,9 @@ export function DdahPreviewModal({
     }
 
     function onDutyChange(category: DutyCategory, newDuty: Duty) {
+        if (newDuty.is_fixed) {
+            return;
+        }
         const newDuties = duties.map((duty) => {
             if (duty.order !== newDuty.order) {
                 return duty;
@@ -303,10 +314,13 @@ export function DdahPreviewModal({
         const order = Number.isFinite(maxOrder) ? maxOrder + 1 : -1;
         setDuties([
             ...duties,
-            { order, hours: 0, description: `${category}:` },
+            { order, hours: 0, description: `${category}:`, is_fixed: false },
         ]);
     }
     function onDutyDelete(duty: Duty) {
+        if (duty.is_fixed) {
+            return;
+        }
         setDuties(duties.filter((d) => d.order !== duty.order));
     }
 

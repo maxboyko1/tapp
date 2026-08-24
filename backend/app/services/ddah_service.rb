@@ -123,6 +123,6 @@ class DdahService
     end
 
     def duty_params
-        @params.slice(:duties).permit(duties: %i[order hours description])
+        @params.slice(:duties).permit(duties: %i[order hours description is_fixed])
     end
 end

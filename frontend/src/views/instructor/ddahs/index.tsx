@@ -32,13 +32,18 @@ export function ConnectedDownloadPositionDdahTemplatesAction({
 }) {
     const assignments = useSelector(assignmentsSelector);
     const ddahs = useSelector(ddahsSelector);
+    const activeSession = useSelector(activeSessionSelector);
     const activePosition = useSelector(activePositionSelector);
 
     async function download() {
         if (!activePosition) {
             return;
         }
-        const spreadsheets = createDdahSpreadsheets(ddahs, assignments);
+        const spreadsheets = createDdahSpreadsheets(
+            ddahs,
+            assignments,
+            activeSession
+        );
         const array = spreadsheets[activePosition.position_code];
         // workbook sheets and file names can't have `/` or other special characters in them
         // So we replace them with `_` before we start.
@@ -197,11 +202,16 @@ export default function InstructorDdahsView() {
                             );
                             return;
                         }
+                        const duties = (activeSession.ddah_outline || []).map(
+                            (duty, idx) => ({
+                                order: idx + 1,
+                                hours: duty.hours,
+                                description: duty.description,
+                                is_fixed: true,
+                            })
+                        );
                         const newDdah: Omit<Ddah, "id"> = {
-                            duties: [
-                                {order: 1, hours: 1, description: "meeting:Meetings with instructor including initial DDAH review"},
-                                {order: 2, hours: 0.5, description: "meeting:Meetings with instructor including mid-term DDAH review"}
-                            ],
+                            duties,
                             approved_date: null,
                             accepted_date: null,
                             revised_date: null,

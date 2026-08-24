@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2026_07_22_154941) do
+ActiveRecord::Schema.define(version: 2026_07_27_180313) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -166,6 +166,7 @@ ActiveRecord::Schema.define(version: 2026_07_22_154941) do
     t.integer "order"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.boolean "is_fixed", default: false, null: false
     t.index ["ddah_id"], name: "index_duties_on_ddah_id"
   end
 
@@ -346,6 +347,7 @@ ActiveRecord::Schema.define(version: 2026_07_22_154941) do
     t.datetime "updated_at", precision: 6, null: false
     t.boolean "applications_visible_to_instructors", default: false
     t.bigint "hours_ref_session_id"
+    t.jsonb "ddah_outline"
     t.index ["hours_ref_session_id"], name: "index_sessions_on_hours_ref_session_id"
   end
 
