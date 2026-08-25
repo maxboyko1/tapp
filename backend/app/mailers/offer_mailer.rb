@@ -64,6 +64,35 @@ class OfferMailer < ActionMailer::Base
         end
     end
 
+    def email_reject_notification(offer)
+        populate_vars offer
+
+        unless Rails.application.config.enable_emailing
+            logger.warn "ENABLE_EMAILING is not true; skipping email to \"#{@ta_coordinator_email}\""
+            return
+        end
+
+        debug_message = "Emailing #{@position_code} Offer Reject Notification to \"#{@ta_coordinator_email}\""
+        logger.warn debug_message
+
+        begin
+            mail(
+                to: @ta_coordinator_email,
+                from: @ta_coordinator_email,
+                subject:
+                    "TA Position Offer Rejected for #{@position_code}"
+            ) do |format|
+                html = reject_notification_email_html
+                format.html { render inline: html }
+                format.text do
+                    render plain: HtmlToPlainText.plain_text(html)
+                end
+            end
+        rescue Net::SMTPFatalError => e
+            raise StandardError, "Error when #{debug_message} (#{e})"
+        end
+    end
+
     private
 
     def populate_vars(offer)
@@ -82,6 +111,11 @@ class OfferMailer < ActionMailer::Base
 
     def nag_email_html
         template = liquid_template('email_nag.html')
+        template.render(@subs.stringify_keys)
+    end
+
+    def reject_notification_email_html
+        template = liquid_template('email_reject_notification.html')
         template.render(@subs.stringify_keys)
     end
 
