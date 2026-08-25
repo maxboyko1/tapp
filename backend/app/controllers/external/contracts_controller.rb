@@ -56,6 +56,8 @@ class External::ContractsController < ActionController::Base
             @offer.rejected!
             @offer.save!
         end
+
+        OfferMailer.email_reject_notification(@offer).deliver_now!
         render_success {}
     end
 
