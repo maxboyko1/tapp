@@ -77,7 +77,7 @@ class OfferMailer < ActionMailer::Base
 
         begin
             mail(
-                to: @ta_coordinator_email,
+                to: [@email, @ta_coordinator_email],
                 from: @ta_coordinator_email,
                 subject:
                     "TA Position Offer Rejected for #{@position_code}"
@@ -102,6 +102,8 @@ class OfferMailer < ActionMailer::Base
         @email = @subs[:email]
         @ta_coordinator_email = @subs[:ta_coordinator_email]
         @nag_count = @subs[:nag_count]
+        @rejected_date = @subs[:rejected_date]
+        @session_name = @subs[:session_name]
     end
 
     def email_html

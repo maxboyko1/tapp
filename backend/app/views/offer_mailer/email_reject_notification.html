@@ -6,8 +6,13 @@
     </head>
     <body>
         <p>
-            Please note that {{ first_name }} {{ last_name }} has rejected their TA contract offer
-            for {{ position_code }} {{ position_title }} for {{ hours }} hours.
+            This is to confirm {{ first_name }} {{ last_name }} has rejected their TA offer on
+            {{ rejected_date }}.
+        </p>
+        <p>
+            <strong>Session:</strong> {{ session_name }}<br />
+            <strong>Course/Position Code:</strong> {{ position_code }}<br />
+            <strong>Hours:</strong> {{ hours }}
         </p>
     </body>
 </html>
