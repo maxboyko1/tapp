@@ -15,10 +15,12 @@ class OfferService
             # It is possible that the email from when the offer was created is stale,
             # so send the offer to the applicant's current email.
             email: @offer.assignment.applicant.email,
+            session_name: @offer.assignment.position.session.name,
             position_code: @offer.position_code,
             hours: @offer.hours,
             position_title: @offer.position_title,
             ta_coordinator_email: @offer.ta_coordinator_email,
+            rejected_date: @offer.rejected_date,
             # TODO:  This seems too hard-coded.  Is there another way to get the route?
             # Note, we are using the `/hash` route proxying (instead of `#` hash)
             # to avoid issues with Shibboleth authentication
