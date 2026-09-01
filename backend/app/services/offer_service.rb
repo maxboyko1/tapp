@@ -20,7 +20,7 @@ class OfferService
             hours: @offer.hours,
             position_title: @offer.position_title,
             ta_coordinator_email: @offer.ta_coordinator_email,
-            rejected_date: @offer.rejected_date,
+            rejected_date: @offer.rejected_date&.strftime('%B %d, %Y'),
             # TODO:  This seems too hard-coded.  Is there another way to get the route?
             # Note, we are using the `/hash` route proxying (instead of `#` hash)
             # to avoid issues with Shibboleth authentication
