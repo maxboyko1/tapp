@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2026_09_17_190130) do
+ActiveRecord::Schema.define(version: 2026_10_13_160155) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -317,6 +317,7 @@ ActiveRecord::Schema.define(version: 2026_09_17_190130) do
     t.string "url_token"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.datetime "public_close_date"
     t.index ["session_id"], name: "index_postings_on_session_id"
     t.index ["url_token"], name: "index_postings_on_url_token"
   end

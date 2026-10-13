@@ -524,6 +524,7 @@ export function SeedDataMenu() {
                     name: "Matching Data Posting",
                     open_date: "2022-01-01T00:00:00.000Z",
                     close_date: "2022-12-31T00:00:00.000Z",
+                    public_close_date: "2022-12-25T00:00:00.000Z",
                     intro_text: "This is a test posting for matching data.",
                     availability: "auto",
                     custom_questions: null,

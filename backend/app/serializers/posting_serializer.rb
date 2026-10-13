@@ -5,6 +5,7 @@ class PostingSerializer < ActiveModel::Serializer
                :name,
                :open_date,
                :close_date,
+               :public_close_date,
                :intro_text,
                :availability,
                :custom_questions,

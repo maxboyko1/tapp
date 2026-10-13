@@ -132,6 +132,7 @@ export interface RawPosting extends HasId {
     intro_text: string | null;
     open_date: string | null;
     close_date: string | null;
+    public_close_date: string | null;
     availability: "auto" | "open" | "closed";
     custom_questions: CustomQuestions;
     application_ids: number[];

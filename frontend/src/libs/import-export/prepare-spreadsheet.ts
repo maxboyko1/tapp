@@ -419,14 +419,16 @@ export const prepareSpreadsheet = {
             posting.name,
             posting.open_date,
             posting.close_date,
+            posting.public_close_date,
         ];
-        const emptyFirstItems = [null, null, null];
+        const emptyFirstItems = [null, null, null, null];
 
         // Standard headers
         const baseHeaders = [
             "Name",
             "Open Date",
             "Close Date",
+            "Public Close Date",
             "Position Code",
             "Num Positions",
             "Hours per Assignment",

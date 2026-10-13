@@ -260,6 +260,9 @@ const DialogContent = React.memo(function DialogContent({
                                 <b>Close Date:</b> {posting.close_date}
                             </Typography>
                             <Typography variant="body2">
+                                <b>Public Close Date:</b> {posting.public_close_date}
+                            </Typography>
+                            <Typography variant="body2">
                                 <b>Intro Text:</b> {posting.intro_text}
                             </Typography>
                             <Typography variant="body2">

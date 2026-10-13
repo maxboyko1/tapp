@@ -196,6 +196,7 @@ export const prepareMinimal = {
             name: posting.name,
             open_date: posting.open_date,
             close_date: posting.close_date,
+            public_close_date: posting.public_close_date,
             intro_text: posting.intro_text,
             custom_questions: customQuestions,
             posting_positions: posting.posting_positions.map(

@@ -10,21 +10,24 @@ class External::PostingsController < ActionController::Base
     def show
         return unless valid_posting?(url_token: show_params[:id])
 
-        active_user = ActiveUserService.active_user request
-        posting_service = PostingService.new(posting: @posting)
-
-        render_success(
-            {
-                survey: posting_service.survey,
-                prefilled_data: posting_service.prefill(user: active_user),
-                open_status: @posting.open_status
-            }
-        )
+        open_status = @posting.open_status
+        payload = { open_status: open_status }
+        if open_status
+            active_user = ActiveUserService.active_user request
+            posting_service = PostingService.new(posting: @posting)
+            payload[:survey] = posting_service.survey
+            payload[:prefilled_data] = posting_service.prefill(user: active_user)
+        end
+        render_success(payload)
     end
 
     # /external/postings/<id>/submit
     def submit
         return unless valid_posting?(url_token: submit_params[:posting_id])
+
+        unless @posting.open_status
+            render_error(message: 'Application window is closed') && return
+        end
 
         active_user = ActiveUserService.active_user request
         posting_service = PostingService.new(posting: @posting)

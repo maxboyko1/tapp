@@ -23,6 +23,7 @@ export function postingTests(api) {
         intro_text: "TA posting for CSC494F",
         open_date: "2021/01/01",
         close_date: "2021/05/01",
+        public_close_date: "2021/04/01",
         availability: "auto",
         custom_questions: {
             pages: [
@@ -60,6 +61,7 @@ export function postingTests(api) {
         intro_text: "Testing posting for CSC200F",
         open_date: "2021/04/01",
         close_date: "2021/05/01",
+        public_close_date: "2021/04/30",
         availability: "open",
     };
     const postingPos = {
@@ -101,6 +103,7 @@ export function postingTests(api) {
             id: posting.id,
             open_date: "2021-06-01T00:00:00.000Z",
             close_date: "2021-08-01T00:00:00.000Z",
+            public_close_date: "2021-07-01T00:00:00.000Z",
             availability: "open",
         };
         resp = await apiPOST("/admin/postings", updatedPostingData);
@@ -111,6 +114,7 @@ export function postingTests(api) {
             id: posting.id,
             open_date: "2021-07-01T00:00:00.000Z",
             close_date: "2021-09-01T00:00:00.000Z",
+            public_close_date: "2021-08-01T00:00:00.000Z",
             availability: "auto",
         };
         resp = await apiPOST(
@@ -150,6 +154,7 @@ export function postingTests(api) {
             intro_text: "Posting 1 for CSC300F",
             open_date: "2021/04/01",
             close_date: "2021/05/01",
+            public_close_date: "2021/05/01",
             availability: "auto",
         };
 
@@ -164,6 +169,7 @@ export function postingTests(api) {
             intro_text: "Posting 2 for CSC300F",
             open_date: "2021/05/01",
             close_date: "2021/06/01",
+            public_close_date: "2021/05/20",
             availability: "auto",
         };
         resp = await apiPOST(
@@ -179,6 +185,7 @@ export function postingTests(api) {
             intro_text: "Posting for CSC400F",
             open_date: "2021/04/01",
             close_date: "2021/05/01",
+            public_close_date: "2021/04/19",
             availability: "auto",
         };
 
@@ -193,6 +200,7 @@ export function postingTests(api) {
             intro_text: "Posting for CSC400F",
             open_date: "2021/04/01",
             close_date: "2021/05/01",
+            public_close_date: "2021/04/19",
             availability: "auto",
         };
         resp = await apiPOST(
@@ -279,6 +287,7 @@ export function postingTests(api) {
             intro_text: "Posting for CSC500F",
             open_date: "2021/04/01",
             close_date: "2021/05/01",
+            public_close_date: "2021/04/21",
             availability: "auto",
         };
 
