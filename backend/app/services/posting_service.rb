@@ -127,7 +127,8 @@ class PostingService
         fixed_survey['pages'] << comments_page
 
         fixed_survey['pages'].each do |page|
-            page['description'] = 'Your responses will be saved once you submit your application, you may return to edit and re-submit later if necessary.'
+            page['description'] =
+                'Your responses will be saved once you submit your application, you may return to edit and re-submit later if necessary.'
         end
 
         fixed_survey['title'] = "#{@posting.name} (#{availability_description})"
@@ -312,14 +313,15 @@ class PostingService
     private
 
     def availability_description
-        if @posting.open_date.year == @posting.close_date.year
+        display_close_date = @posting.public_close_date || @posting.close_date
+        if @posting.open_date.year == display_close_date.year
             "Available from #{@posting.open_date.strftime('%b %d')} to #{
-                @posting.public_close_date.strftime('%b %d, %Y')
+                display_close_date.strftime('%b %d, %Y')
             }"
         else
             "Available from #{
                 @posting.open_date.strftime('%b %d, %Y')
-            } to #{@posting.public_close_date.strftime('%b %d, %Y')}"
+            } to #{display_close_date.strftime('%b %d, %Y')}"
         end
     end
 
