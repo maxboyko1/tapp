@@ -5,6 +5,7 @@
 	</head>
 	<body>
 		<p>Dear {{ instructor_name }},</p>
+		<br />
 		<p>
 			Here is your daily TA offer activity summary for
 			<strong>{{ position_code }}</strong>
@@ -17,49 +18,45 @@
 			You currently have {{ accepted_num_assignments }} assignments with accepted offers.
 			{% endif %}
 		</p>
+		<br />
 
-		<h2 style="color: #6fc7ea">New Offers</h2>
+		<p style="color: #6fc7ea"><strong>New Offers</strong></p>
 		{% if new_offers == empty %}
-		<p>None.</p>
+		<p>(None)</p>
 		{% else %}
-		<ul>
 			{% for applicant_name in new_offers %}
-			<li>{{ applicant_name }}</li>
+			<p>{{ applicant_name }}</p>
 			{% endfor %}
-		</ul>
 		{% endif %}
+		<br />
 
-		<h2 style="color: #00a189">Offers Accepted</h2>
+		<p style="color: #00a189"><strong>Offers Accepted</strong></p>
 		{% if accepted_offers == empty %}
-		<p>None.</p>
+		<p>(None)</p>
 		{% else %}
-		<ul>
 			{% for applicant_name in accepted_offers %}
-			<li>{{ applicant_name }}</li>
+			<p>{{ applicant_name }}</p>
 			{% endfor %}
-		</ul>
 		{% endif %}
+		<br />
 
-		<h2 style="color: #dc4633">Offers Rejected</h2>
+		<p style="color: #dc4633"><strong>Offers Rejected</strong></p>
 		{% if rejected_offers == empty %}
-		<p>None.</p>
+		<p>(None)</p>
 		{% else %}
-		<ul>
 			{% for applicant_name in rejected_offers %}
-			<li>{{ applicant_name }}</li>
+			<p>{{ applicant_name }}</p>
 			{% endfor %}
-		</ul>
 		{% endif %}
+		<br />
 
-		<h2 style="color: #ab1368">Offers Withdrawn</h2>
+		<p style="color: #ab1368"><strong>Offers Withdrawn</strong></p>
 		{% if withdrawn_offers == empty %}
-		<p>None.</p>
+		<p>(None)</p>
 		{% else %}
-		<ul>
 			{% for applicant_name in withdrawn_offers %}
-			<li>{{ applicant_name }}</li>
+			<p>{{ applicant_name }}</p>
 			{% endfor %}
-		</ul>
 		{% endif %}
 	</body>
 </html>
