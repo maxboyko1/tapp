@@ -67,6 +67,7 @@ class Api::V1::Admin::PostingsController < ApplicationController
                 :name,
                 :open_date,
                 :close_date,
+                :public_close_date,
                 :intro_text,
                 :custom_questions,
                 :availability
@@ -88,6 +89,7 @@ class Api::V1::Admin::PostingsController < ApplicationController
                 :name,
                 :open_date,
                 :close_date,
+                :public_close_date,
                 :intro_text,
                 :custom_questions,
                 :availability

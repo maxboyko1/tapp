@@ -56,6 +56,12 @@ export function ConnectedPostingsList({ editable = true }) {
             ...generateDateColumnProps(),
         },
         {
+            header: "Public Close Date",
+            accessorKey: "public_close_date",
+            meta: { editable: true },
+            ...generateDateColumnProps(),
+        },
+        {
             header: "Availability",
             id: "availability",
             Cell: ({ row }) => {

@@ -58,6 +58,7 @@ export function PostingEditor({
             </DialogRow>
             <DialogRow>
                 {createFieldEditor("Intro Text", "intro_text", "text")}
+                {createFieldEditor("Public Close Date", "public_close_date", "date")}
             </DialogRow>
             <Typography variant="h6" sx={{ mt: 2 }}>
                 Posting-Specific Custom Questions

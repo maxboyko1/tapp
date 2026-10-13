@@ -163,6 +163,9 @@ export function ConnectedPostingDetailsView({ posting }: { posting: Posting }) {
                 <strong>Close Date:</strong> {formatDate(posting.close_date ?? "")}
             </Typography>
             <Typography variant="body2" sx={{ mb: 1 }}>
+                <strong>Public Close Date:</strong> {formatDate(posting.public_close_date ?? "")}
+            </Typography>
+            <Typography variant="body2" sx={{ mb: 1 }}>
                 <strong>Intro Text:</strong> {posting.intro_text || <em>Not set</em>}
             </Typography>
 

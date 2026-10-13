@@ -366,6 +366,7 @@ export const prepareFull: PrepareFull = {
             availability: "auto",
             open_date: minPosting.open_date,
             close_date: minPosting.close_date,
+            public_close_date: minPosting.public_close_date,
             custom_questions: minPosting.custom_questions,
             intro_text: minPosting.intro_text,
             url_token: "",

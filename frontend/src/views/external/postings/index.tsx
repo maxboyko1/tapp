@@ -701,7 +701,7 @@ export default function PostingView() {
     );
     const [preferencesSelectionDialogVisible, setPreferencesSelectionDialogVisible] =
         React.useState(false);
-    const [applicationOpen, setApplicationOpen] = React.useState(true);
+    const [applicationOpen, setApplicationOpen] = React.useState<boolean | null>(null);
     const allowPreferencesPageProceedRef = React.useRef(false);
 
     // Fetch the survey JSON and prefilled data from the backend
@@ -712,13 +712,15 @@ export default function PostingView() {
         async function fetchSurvey() {
             try {
                 const details: {
-                    survey: any;
-                    prefilled_data: any;
+                    survey?: any;
+                    prefilled_data?: any;
                     open_status: boolean;
                 } = await apiGET(`/external/postings/${url_token}`, true);
-                setSurveyJson(details.survey);
-                setSurveyPrefilledData(details.prefilled_data);
                 setApplicationOpen(details.open_status);
+                if (details.open_status) {
+                    setSurveyJson(details.survey);
+                    setSurveyPrefilledData(details.prefilled_data);
+                }
             } catch (e) {
                 console.warn(e);
             }
@@ -838,11 +840,15 @@ export default function PostingView() {
         return <React.Fragment>Unknown URL token.</React.Fragment>;
     }
 
-    if (surveyJson == null || surveyPrefilledData == null) {
+    if (applicationOpen == null) {
         return <React.Fragment>Loading...</React.Fragment>;
     }
 
-    if (!validSurvey(surveyJson)) {
+    if (applicationOpen && (surveyJson == null || surveyPrefilledData == null)) {
+        return <React.Fragment>Loading...</React.Fragment>;
+    }
+
+    if (!applicationOpen || !validSurvey(surveyJson)) {
         return (
             <Alert severity="warning">
                 There are not positions that can be applied for at this time. An

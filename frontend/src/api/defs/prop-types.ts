@@ -174,6 +174,7 @@ function generatePropTypes(PropTypes: typeof OrigPropTypes) {
             intro_text: PropTypes.string,
             open_date: PropTypes.string,
             close_date: PropTypes.string,
+            public_close_date: PropTypes.string,
             availability: PropTypes.oneOf(["auto", "open", "closed"]),
             custom_questions: PropTypes.any,
             application_ids: PropTypes.arrayOf(id),

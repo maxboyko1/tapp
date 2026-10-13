@@ -13,17 +13,17 @@
 <!-- m_ActiveRecord::InternalMetadata -->
 <g id="node1" class="node">
 <title>m_ActiveRecord::InternalMetadata</title>
-<path fill="none" stroke="black" d="M24.5,-375.5C24.5,-375.5 176.5,-375.5 176.5,-375.5 182.5,-375.5 188.5,-381.5 188.5,-387.5 188.5,-387.5 188.5,-406.5 188.5,-406.5 188.5,-412.5 182.5,-418.5 176.5,-418.5 176.5,-418.5 24.5,-418.5 24.5,-418.5 18.5,-418.5 12.5,-412.5 12.5,-406.5 12.5,-406.5 12.5,-387.5 12.5,-387.5 12.5,-381.5 18.5,-375.5 24.5,-375.5"/>
-<text text-anchor="start" x="17.5" y="-405.7" font-family="Arial Bold" font-size="11.00">ActiveRecord::InternalMetadata</text>
-<polyline fill="none" stroke="black" points="12.5,-398.5 188.5,-398.5 "/>
-<text text-anchor="start" x="35.5" y="-385" font-family="Arial" font-size="10.00">value </text>
-<text text-anchor="start" x="62.5" y="-385" font-family="Arial Italic" font-size="10.00" fill="#999999">string</text>
+<path fill="none" stroke="black" d="M24.5,-382.5C24.5,-382.5 176.5,-382.5 176.5,-382.5 182.5,-382.5 188.5,-388.5 188.5,-394.5 188.5,-394.5 188.5,-413.5 188.5,-413.5 188.5,-419.5 182.5,-425.5 176.5,-425.5 176.5,-425.5 24.5,-425.5 24.5,-425.5 18.5,-425.5 12.5,-419.5 12.5,-413.5 12.5,-413.5 12.5,-394.5 12.5,-394.5 12.5,-388.5 18.5,-382.5 24.5,-382.5"/>
+<text text-anchor="start" x="17.5" y="-412.7" font-family="Arial Bold" font-size="11.00">ActiveRecord::InternalMetadata</text>
+<polyline fill="none" stroke="black" points="12.5,-405.5 188.5,-405.5 "/>
+<text text-anchor="start" x="35.5" y="-392" font-family="Arial" font-size="10.00">value </text>
+<text text-anchor="start" x="62.5" y="-392" font-family="Arial Italic" font-size="10.00" fill="#999999">string</text>
 </g>
 <!-- m_ActiveRecord::SchemaMigration -->
 <g id="node2" class="node">
 <title>m_ActiveRecord::SchemaMigration</title>
-<path fill="none" stroke="black" d="M22,-449C22,-449 179,-449 179,-449 185,-449 191,-455 191,-461 191,-461 191,-473 191,-473 191,-479 185,-485 179,-485 179,-485 22,-485 22,-485 16,-485 10,-479 10,-473 10,-473 10,-461 10,-461 10,-455 16,-449 22,-449"/>
-<text text-anchor="start" x="15.5" y="-464.2" font-family="Arial Bold" font-size="11.00">ActiveRecord::SchemaMigration</text>
+<path fill="none" stroke="black" d="M22,-456C22,-456 179,-456 179,-456 185,-456 191,-462 191,-468 191,-468 191,-480 191,-480 191,-486 185,-492 179,-492 179,-492 22,-492 22,-492 16,-492 10,-486 10,-480 10,-480 10,-468 10,-468 10,-462 16,-456 22,-456"/>
+<text text-anchor="start" x="15.5" y="-471.2" font-family="Arial Bold" font-size="11.00">ActiveRecord::SchemaMigration</text>
 </g>
 <!-- m_ActiveStorage::Attachment -->
 <g id="node3" class="node">
@@ -98,91 +98,91 @@
 <!-- m_Applicant -->
 <g id="node6" class="node">
 <title>m_Applicant</title>
-<path fill="none" stroke="black" d="M249,-626.5C249,-626.5 369,-626.5 369,-626.5 375,-626.5 381,-632.5 381,-638.5 381,-638.5 381,-761.5 381,-761.5 381,-767.5 375,-773.5 369,-773.5 369,-773.5 249,-773.5 249,-773.5 243,-773.5 237,-767.5 237,-761.5 237,-761.5 237,-638.5 237,-638.5 237,-632.5 243,-626.5 249,-626.5"/>
-<text text-anchor="start" x="281.5" y="-760.7" font-family="Arial Bold" font-size="11.00">Applicant</text>
-<polyline fill="none" stroke="black" points="237,-753.5 381,-753.5 "/>
-<text text-anchor="start" x="244" y="-740" font-family="Arial" font-size="10.00">email </text>
-<text text-anchor="start" x="271" y="-740" font-family="Arial Italic" font-size="10.00" fill="#999999">string</text>
-<text text-anchor="start" x="244" y="-727" font-family="Arial" font-size="10.00">first_name </text>
-<text text-anchor="start" x="293" y="-727" font-family="Arial Italic" font-size="10.00" fill="#999999">string</text>
-<text text-anchor="start" x="244" y="-714" font-family="Arial" font-size="10.00">last_name </text>
-<text text-anchor="start" x="293" y="-714" font-family="Arial Italic" font-size="10.00" fill="#999999">string</text>
-<text text-anchor="start" x="244" y="-701" font-family="Arial" font-size="10.00">max_hours_owed </text>
-<text text-anchor="start" x="324" y="-701" font-family="Arial Italic" font-size="10.00" fill="#999999">float</text>
-<text text-anchor="start" x="244" y="-688" font-family="Arial" font-size="10.00">min_hours_owed </text>
-<text text-anchor="start" x="321" y="-688" font-family="Arial Italic" font-size="10.00" fill="#999999">float</text>
-<text text-anchor="start" x="244" y="-675" font-family="Arial" font-size="10.00">phone </text>
-<text text-anchor="start" x="274" y="-675" font-family="Arial Italic" font-size="10.00" fill="#999999">string</text>
-<text text-anchor="start" x="244" y="-662" font-family="Arial" font-size="10.00">previous_hours_fulfilled </text>
-<text text-anchor="start" x="350" y="-662" font-family="Arial Italic" font-size="10.00" fill="#999999">float</text>
-<text text-anchor="start" x="244" y="-649" font-family="Arial" font-size="10.00">student_number </text>
-<text text-anchor="start" x="317" y="-649" font-family="Arial Italic" font-size="10.00" fill="#999999">string</text>
-<text text-anchor="start" x="244" y="-636" font-family="Arial" font-size="10.00">utorid </text>
-<text text-anchor="start" x="272" y="-636" font-family="Arial Italic" font-size="10.00" fill="#999999">string ∗ U</text>
+<path fill="none" stroke="black" d="M249,-633.5C249,-633.5 369,-633.5 369,-633.5 375,-633.5 381,-639.5 381,-645.5 381,-645.5 381,-768.5 381,-768.5 381,-774.5 375,-780.5 369,-780.5 369,-780.5 249,-780.5 249,-780.5 243,-780.5 237,-774.5 237,-768.5 237,-768.5 237,-645.5 237,-645.5 237,-639.5 243,-633.5 249,-633.5"/>
+<text text-anchor="start" x="281.5" y="-767.7" font-family="Arial Bold" font-size="11.00">Applicant</text>
+<polyline fill="none" stroke="black" points="237,-760.5 381,-760.5 "/>
+<text text-anchor="start" x="244" y="-747" font-family="Arial" font-size="10.00">email </text>
+<text text-anchor="start" x="271" y="-747" font-family="Arial Italic" font-size="10.00" fill="#999999">string</text>
+<text text-anchor="start" x="244" y="-734" font-family="Arial" font-size="10.00">first_name </text>
+<text text-anchor="start" x="293" y="-734" font-family="Arial Italic" font-size="10.00" fill="#999999">string</text>
+<text text-anchor="start" x="244" y="-721" font-family="Arial" font-size="10.00">last_name </text>
+<text text-anchor="start" x="293" y="-721" font-family="Arial Italic" font-size="10.00" fill="#999999">string</text>
+<text text-anchor="start" x="244" y="-708" font-family="Arial" font-size="10.00">max_hours_owed </text>
+<text text-anchor="start" x="324" y="-708" font-family="Arial Italic" font-size="10.00" fill="#999999">float</text>
+<text text-anchor="start" x="244" y="-695" font-family="Arial" font-size="10.00">min_hours_owed </text>
+<text text-anchor="start" x="321" y="-695" font-family="Arial Italic" font-size="10.00" fill="#999999">float</text>
+<text text-anchor="start" x="244" y="-682" font-family="Arial" font-size="10.00">phone </text>
+<text text-anchor="start" x="274" y="-682" font-family="Arial Italic" font-size="10.00" fill="#999999">string</text>
+<text text-anchor="start" x="244" y="-669" font-family="Arial" font-size="10.00">previous_hours_fulfilled </text>
+<text text-anchor="start" x="350" y="-669" font-family="Arial Italic" font-size="10.00" fill="#999999">float</text>
+<text text-anchor="start" x="244" y="-656" font-family="Arial" font-size="10.00">student_number </text>
+<text text-anchor="start" x="317" y="-656" font-family="Arial Italic" font-size="10.00" fill="#999999">string</text>
+<text text-anchor="start" x="244" y="-643" font-family="Arial" font-size="10.00">utorid </text>
+<text text-anchor="start" x="272" y="-643" font-family="Arial Italic" font-size="10.00" fill="#999999">string ∗ U</text>
 </g>
 <!-- m_ApplicantMatchingDatum -->
 <g id="node7" class="node">
 <title>m_ApplicantMatchingDatum</title>
-<path fill="none" stroke="black" d="M430,-787.5C430,-787.5 581,-787.5 581,-787.5 587,-787.5 593,-793.5 593,-799.5 593,-799.5 593,-922.5 593,-922.5 593,-928.5 587,-934.5 581,-934.5 581,-934.5 430,-934.5 430,-934.5 424,-934.5 418,-928.5 418,-922.5 418,-922.5 418,-799.5 418,-799.5 418,-793.5 424,-787.5 430,-787.5"/>
-<text text-anchor="start" x="438.5" y="-921.7" font-family="Arial Bold" font-size="11.00">ApplicantMatchingDatum</text>
-<polyline fill="none" stroke="black" points="418,-914.5 593,-914.5 "/>
-<text text-anchor="start" x="425.5" y="-901" font-family="Arial" font-size="10.00">active_confirmation_id </text>
-<text text-anchor="start" x="526.5" y="-901" font-family="Arial Italic" font-size="10.00" fill="#999999">integer (8) FK</text>
-<text text-anchor="start" x="425.5" y="-888" font-family="Arial" font-size="10.00">applicant_id </text>
-<text text-anchor="start" x="480.5" y="-888" font-family="Arial Italic" font-size="10.00" fill="#999999">integer (8) ∗ FK</text>
-<text text-anchor="start" x="425.5" y="-875" font-family="Arial" font-size="10.00">hidden </text>
-<text text-anchor="start" x="457.5" y="-875" font-family="Arial Italic" font-size="10.00" fill="#999999">boolean</text>
-<text text-anchor="start" x="425.5" y="-862" font-family="Arial" font-size="10.00">letter_template_id </text>
-<text text-anchor="start" x="506.5" y="-862" font-family="Arial Italic" font-size="10.00" fill="#999999">integer (8) FK</text>
-<text text-anchor="start" x="425.5" y="-849" font-family="Arial" font-size="10.00">max_hours_owed </text>
-<text text-anchor="start" x="505.5" y="-849" font-family="Arial Italic" font-size="10.00" fill="#999999">float</text>
-<text text-anchor="start" x="425.5" y="-836" font-family="Arial" font-size="10.00">min_hours_owed </text>
-<text text-anchor="start" x="502.5" y="-836" font-family="Arial Italic" font-size="10.00" fill="#999999">float</text>
-<text text-anchor="start" x="425.5" y="-823" font-family="Arial" font-size="10.00">note </text>
-<text text-anchor="start" x="447.5" y="-823" font-family="Arial Italic" font-size="10.00" fill="#999999">text</text>
-<text text-anchor="start" x="425.5" y="-810" font-family="Arial" font-size="10.00">prev_hours_fulfilled </text>
-<text text-anchor="start" x="513.5" y="-810" font-family="Arial Italic" font-size="10.00" fill="#999999">float</text>
-<text text-anchor="start" x="425.5" y="-797" font-family="Arial" font-size="10.00">session_id </text>
-<text text-anchor="start" x="475.5" y="-797" font-family="Arial Italic" font-size="10.00" fill="#999999">integer (8) ∗ FK</text>
+<path fill="none" stroke="black" d="M430,-808.5C430,-808.5 581,-808.5 581,-808.5 587,-808.5 593,-814.5 593,-820.5 593,-820.5 593,-943.5 593,-943.5 593,-949.5 587,-955.5 581,-955.5 581,-955.5 430,-955.5 430,-955.5 424,-955.5 418,-949.5 418,-943.5 418,-943.5 418,-820.5 418,-820.5 418,-814.5 424,-808.5 430,-808.5"/>
+<text text-anchor="start" x="438.5" y="-942.7" font-family="Arial Bold" font-size="11.00">ApplicantMatchingDatum</text>
+<polyline fill="none" stroke="black" points="418,-935.5 593,-935.5 "/>
+<text text-anchor="start" x="425.5" y="-922" font-family="Arial" font-size="10.00">active_confirmation_id </text>
+<text text-anchor="start" x="526.5" y="-922" font-family="Arial Italic" font-size="10.00" fill="#999999">integer (8) FK</text>
+<text text-anchor="start" x="425.5" y="-909" font-family="Arial" font-size="10.00">applicant_id </text>
+<text text-anchor="start" x="480.5" y="-909" font-family="Arial Italic" font-size="10.00" fill="#999999">integer (8) ∗ FK</text>
+<text text-anchor="start" x="425.5" y="-896" font-family="Arial" font-size="10.00">hidden </text>
+<text text-anchor="start" x="457.5" y="-896" font-family="Arial Italic" font-size="10.00" fill="#999999">boolean</text>
+<text text-anchor="start" x="425.5" y="-883" font-family="Arial" font-size="10.00">letter_template_id </text>
+<text text-anchor="start" x="506.5" y="-883" font-family="Arial Italic" font-size="10.00" fill="#999999">integer (8) FK</text>
+<text text-anchor="start" x="425.5" y="-870" font-family="Arial" font-size="10.00">max_hours_owed </text>
+<text text-anchor="start" x="505.5" y="-870" font-family="Arial Italic" font-size="10.00" fill="#999999">float</text>
+<text text-anchor="start" x="425.5" y="-857" font-family="Arial" font-size="10.00">min_hours_owed </text>
+<text text-anchor="start" x="502.5" y="-857" font-family="Arial Italic" font-size="10.00" fill="#999999">float</text>
+<text text-anchor="start" x="425.5" y="-844" font-family="Arial" font-size="10.00">note </text>
+<text text-anchor="start" x="447.5" y="-844" font-family="Arial Italic" font-size="10.00" fill="#999999">text</text>
+<text text-anchor="start" x="425.5" y="-831" font-family="Arial" font-size="10.00">prev_hours_fulfilled </text>
+<text text-anchor="start" x="513.5" y="-831" font-family="Arial Italic" font-size="10.00" fill="#999999">float</text>
+<text text-anchor="start" x="425.5" y="-818" font-family="Arial" font-size="10.00">session_id </text>
+<text text-anchor="start" x="475.5" y="-818" font-family="Arial Italic" font-size="10.00" fill="#999999">integer (8) ∗ FK</text>
 </g>
 <!-- m_Applicant&#45;&gt;m_ApplicantMatchingDatum -->
 <g id="edge30" class="edge">
 <title>m_Applicant&#45;&gt;m_ApplicantMatchingDatum</title>
-<path fill="none" stroke="black" d="M381.04,-758.81C390.65,-766.76 400.62,-775.02 410.55,-783.23"/>
-<polygon fill="black" stroke="black" points="408.83,-785.89 417.77,-789.21 412.84,-781.04 408.83,-785.89"/>
+<path fill="none" stroke="black" d="M381.04,-770.92C392.38,-781.12 404.24,-791.79 415.92,-802.3"/>
+<polygon fill="black" stroke="black" points="413.98,-804.79 422.78,-808.47 418.19,-800.11 413.98,-804.79"/>
 </g>
 <!-- m_Application -->
 <g id="node8" class="node">
 <title>m_Application</title>
-<path fill="none" stroke="black" d="M441,-502C441,-502 570,-502 570,-502 576,-502 582,-508 582,-514 582,-514 582,-650 582,-650 582,-656 576,-662 570,-662 570,-662 441,-662 441,-662 435,-662 429,-656 429,-650 429,-650 429,-514 429,-514 429,-508 435,-502 441,-502"/>
-<text text-anchor="start" x="473" y="-649.2" font-family="Arial Bold" font-size="11.00">Application</text>
-<polyline fill="none" stroke="black" points="429,-642 582,-642 "/>
-<text text-anchor="start" x="436.5" y="-629" font-family="Arial" font-size="10.00">annotation </text>
-<text text-anchor="start" x="485.5" y="-629" font-family="Arial Italic" font-size="10.00" fill="#999999">string</text>
-<text text-anchor="start" x="436.5" y="-616" font-family="Arial" font-size="10.00">applicant_id </text>
-<text text-anchor="start" x="491.5" y="-616" font-family="Arial Italic" font-size="10.00" fill="#999999">integer (8) ∗ FK</text>
-<text text-anchor="start" x="436.5" y="-603" font-family="Arial" font-size="10.00">comments </text>
-<text text-anchor="start" x="485.5" y="-603" font-family="Arial Italic" font-size="10.00" fill="#999999">text</text>
-<text text-anchor="start" x="436.5" y="-590" font-family="Arial" font-size="10.00">custom_question_answers </text>
-<text text-anchor="start" x="556.5" y="-590" font-family="Arial Italic" font-size="10.00" fill="#999999">json</text>
-<text text-anchor="start" x="436.5" y="-577" font-family="Arial" font-size="10.00">department </text>
-<text text-anchor="start" x="488.5" y="-577" font-family="Arial Italic" font-size="10.00" fill="#999999">string</text>
-<text text-anchor="start" x="436.5" y="-564" font-family="Arial" font-size="10.00">gpa </text>
-<text text-anchor="start" x="455.5" y="-564" font-family="Arial Italic" font-size="10.00" fill="#999999">float</text>
-<text text-anchor="start" x="436.5" y="-551" font-family="Arial" font-size="10.00">posting_id </text>
-<text text-anchor="start" x="484.5" y="-551" font-family="Arial Italic" font-size="10.00" fill="#999999">integer (8) FK</text>
-<text text-anchor="start" x="436.5" y="-538" font-family="Arial" font-size="10.00">program </text>
-<text text-anchor="start" x="475.5" y="-538" font-family="Arial Italic" font-size="10.00" fill="#999999">string</text>
-<text text-anchor="start" x="436.5" y="-525" font-family="Arial" font-size="10.00">session_id </text>
-<text text-anchor="start" x="486.5" y="-525" font-family="Arial Italic" font-size="10.00" fill="#999999">integer (8) ∗ FK</text>
-<text text-anchor="start" x="436.5" y="-512" font-family="Arial" font-size="10.00">yip </text>
-<text text-anchor="start" x="452.5" y="-512" font-family="Arial Italic" font-size="10.00" fill="#999999">integer</text>
+<path fill="none" stroke="black" d="M441,-509C441,-509 570,-509 570,-509 576,-509 582,-515 582,-521 582,-521 582,-657 582,-657 582,-663 576,-669 570,-669 570,-669 441,-669 441,-669 435,-669 429,-663 429,-657 429,-657 429,-521 429,-521 429,-515 435,-509 441,-509"/>
+<text text-anchor="start" x="473" y="-656.2" font-family="Arial Bold" font-size="11.00">Application</text>
+<polyline fill="none" stroke="black" points="429,-649 582,-649 "/>
+<text text-anchor="start" x="436.5" y="-636" font-family="Arial" font-size="10.00">annotation </text>
+<text text-anchor="start" x="485.5" y="-636" font-family="Arial Italic" font-size="10.00" fill="#999999">string</text>
+<text text-anchor="start" x="436.5" y="-623" font-family="Arial" font-size="10.00">applicant_id </text>
+<text text-anchor="start" x="491.5" y="-623" font-family="Arial Italic" font-size="10.00" fill="#999999">integer (8) ∗ FK</text>
+<text text-anchor="start" x="436.5" y="-610" font-family="Arial" font-size="10.00">comments </text>
+<text text-anchor="start" x="485.5" y="-610" font-family="Arial Italic" font-size="10.00" fill="#999999">text</text>
+<text text-anchor="start" x="436.5" y="-597" font-family="Arial" font-size="10.00">custom_question_answers </text>
+<text text-anchor="start" x="556.5" y="-597" font-family="Arial Italic" font-size="10.00" fill="#999999">json</text>
+<text text-anchor="start" x="436.5" y="-584" font-family="Arial" font-size="10.00">department </text>
+<text text-anchor="start" x="488.5" y="-584" font-family="Arial Italic" font-size="10.00" fill="#999999">string</text>
+<text text-anchor="start" x="436.5" y="-571" font-family="Arial" font-size="10.00">gpa </text>
+<text text-anchor="start" x="455.5" y="-571" font-family="Arial Italic" font-size="10.00" fill="#999999">float</text>
+<text text-anchor="start" x="436.5" y="-558" font-family="Arial" font-size="10.00">posting_id </text>
+<text text-anchor="start" x="484.5" y="-558" font-family="Arial Italic" font-size="10.00" fill="#999999">integer (8) FK</text>
+<text text-anchor="start" x="436.5" y="-545" font-family="Arial" font-size="10.00">program </text>
+<text text-anchor="start" x="475.5" y="-545" font-family="Arial Italic" font-size="10.00" fill="#999999">string</text>
+<text text-anchor="start" x="436.5" y="-532" font-family="Arial" font-size="10.00">session_id </text>
+<text text-anchor="start" x="486.5" y="-532" font-family="Arial Italic" font-size="10.00" fill="#999999">integer (8) ∗ FK</text>
+<text text-anchor="start" x="436.5" y="-519" font-family="Arial" font-size="10.00">yip </text>
+<text text-anchor="start" x="452.5" y="-519" font-family="Arial Italic" font-size="10.00" fill="#999999">integer</text>
 </g>
 <!-- m_Applicant&#45;&gt;m_Application -->
 <g id="edge24" class="edge">
 <title>m_Applicant&#45;&gt;m_Application</title>
-<path fill="none" stroke="black" d="M381.04,-656.9C394.02,-649.03 407.66,-640.75 420.96,-632.68"/>
-<polygon fill="black" stroke="black" points="422.68,-635.33 428.74,-627.96 419.41,-629.94 422.68,-635.33"/>
+<path fill="none" stroke="black" d="M381.04,-663.9C394.02,-656.03 407.66,-647.75 420.96,-639.68"/>
+<polygon fill="black" stroke="black" points="422.68,-642.33 428.74,-634.96 419.41,-636.94 422.68,-642.33"/>
 </g>
 <!-- m_Assignment -->
 <g id="node9" class="node">
@@ -208,9 +208,9 @@
 <!-- m_Applicant&#45;&gt;m_Assignment -->
 <g id="edge18" class="edge">
 <title>m_Applicant&#45;&gt;m_Assignment</title>
-<path fill="none" stroke="black" d="M381.35,-715.24C418.03,-721.53 463.52,-726.96 504.5,-725"/>
-<path fill="none" stroke="black" d="M506.5,-725C538.58,-723.47 604.77,-685.14 658.02,-650.83"/>
-<polygon fill="black" stroke="black" points="659.94,-653.34 665.78,-645.8 656.51,-648.05 659.94,-653.34"/>
+<path fill="none" stroke="black" d="M381.13,-727.49C417.75,-735.98 463.26,-743.38 504.5,-741"/>
+<path fill="none" stroke="black" d="M506.5,-741C523.98,-739.99 598.65,-691.76 658.33,-651.4"/>
+<polygon fill="black" stroke="black" points="660.22,-653.92 665.9,-646.27 656.69,-648.71 660.22,-653.92"/>
 </g>
 <!-- m_Match -->
 <g id="node18" class="node">
@@ -236,8 +236,8 @@
 <!-- m_Applicant&#45;&gt;m_Match -->
 <g id="edge3" class="edge">
 <title>m_Applicant&#45;&gt;m_Match</title>
-<path fill="none" stroke="black" d="M506.5,-725C556.58,-722.61 612.54,-728 656.78,-734.16"/>
-<polygon fill="black" stroke="black" points="656.4,-737.29 665.76,-735.44 657.29,-731.05 656.4,-737.29"/>
+<path fill="none" stroke="black" d="M506.5,-741C556.42,-738.12 612.49,-739.72 656.84,-742.11"/>
+<polygon fill="black" stroke="black" points="656.67,-745.25 665.83,-742.61 657.02,-738.96 656.67,-745.25"/>
 </g>
 <!-- m_Confirmation -->
 <g id="node10" class="node">
@@ -285,20 +285,20 @@
 <!-- m_ApplicantMatchingDatum&#45;&gt;m_Confirmation -->
 <g id="edge28" class="edge">
 <title>m_ApplicantMatchingDatum&#45;&gt;m_Confirmation</title>
-<path fill="none" stroke="black" d="M593.31,-902.43C602.49,-906.81 611.93,-911.31 621.37,-915.82"/>
-<polygon fill="black" stroke="black" points="620.18,-918.74 629.66,-919.77 622.89,-913.06 620.18,-918.74"/>
+<path fill="none" stroke="black" d="M593.31,-915.52C602.4,-919.03 611.74,-922.63 621.08,-926.24"/>
+<polygon fill="black" stroke="black" points="620.13,-929.25 629.66,-929.55 622.4,-923.37 620.13,-929.25"/>
 </g>
 <!-- m_Application&#45;&gt;m_ActiveStorage::Attachment -->
 <g id="edge22" class="edge">
 <title>m_Application&#45;&gt;m_ActiveStorage::Attachment</title>
-<path fill="none" stroke="black" d="M573.36,-662.23C581.52,-675.23 588.8,-689.03 594,-703 626.29,-789.75 578.68,-1040.96 630,-1118 636.24,-1127.36 644.56,-1135.26 653.82,-1141.9"/>
-<polygon fill="black" stroke="black" points="652.19,-1144.59 661.43,-1146.95 655.67,-1139.35 652.19,-1144.59"/>
+<path fill="none" stroke="black" d="M569.4,-669.22C579.13,-684.99 587.95,-701.95 594,-719 623.79,-802.89 580.52,-1043.99 630,-1118 636.25,-1127.35 644.58,-1135.24 653.85,-1141.88"/>
+<polygon fill="black" stroke="black" points="652.22,-1144.58 661.46,-1146.93 655.7,-1139.33 652.22,-1144.58"/>
 </g>
 <!-- m_Application&#45;&gt;m_ActiveStorage::Blob -->
 <g id="edge23" class="edge">
 <title>m_Application&#45;&gt;m_ActiveStorage::Blob</title>
-<path fill="none" stroke="black" stroke-dasharray="1,5" d="M438.61,-662.19C430.25,-675.24 422.66,-689.07 417,-703 375.7,-804.54 408.34,-840.85 381,-947 370.43,-988.04 354.11,-1032.49 339.78,-1068.06"/>
-<polygon fill="black" stroke="black" points="336.84,-1066.92 336.37,-1076.44 342.68,-1069.29 336.84,-1066.92"/>
+<path fill="none" stroke="black" stroke-dasharray="1,5" d="M442.68,-669.18C432.78,-685.02 423.63,-702.02 417,-719 378.57,-817.43 408.27,-851.92 381,-954 370.7,-992.55 354.97,-1034.11 340.94,-1067.87"/>
+<polygon fill="black" stroke="black" points="337.98,-1066.76 337.41,-1076.28 343.79,-1069.2 337.98,-1066.76"/>
 </g>
 <!-- m_InstructorPreference -->
 <g id="node16" class="node">
@@ -318,7 +318,7 @@
 <!-- m_Application&#45;&gt;m_InstructorPreference -->
 <g id="edge16" class="edge">
 <title>m_Application&#45;&gt;m_InstructorPreference</title>
-<path fill="none" stroke="black" d="M574.01,-501.79C580.99,-492.59 587.79,-483.2 594,-474 612.47,-446.62 606.37,-432.07 630,-409 637.99,-401.2 647.29,-394.22 657,-388.06"/>
+<path fill="none" stroke="black" d="M569.91,-508.7C578.27,-497.24 586.53,-485.45 594,-474 612.05,-446.34 606.37,-432.07 630,-409 637.99,-401.2 647.29,-394.22 657,-388.06"/>
 <polygon fill="black" stroke="black" points="658.8,-390.65 664.86,-383.29 655.53,-385.26 658.8,-390.65"/>
 </g>
 <!-- m_PositionPreference -->
@@ -339,8 +339,8 @@
 <!-- m_Application&#45;&gt;m_PositionPreference -->
 <g id="edge19" class="edge">
 <title>m_Application&#45;&gt;m_PositionPreference</title>
-<path fill="none" stroke="black" d="M582.29,-543.53C604.95,-532.03 629.91,-519.36 653.06,-507.61"/>
-<polygon fill="black" stroke="black" points="654.56,-510.38 661.16,-503.5 651.71,-504.76 654.56,-510.38"/>
+<path fill="none" stroke="black" d="M582.21,-547.81C597.99,-539.25 614.53,-530.32 630,-522 637.42,-518.01 645.13,-513.88 652.87,-509.74"/>
+<polygon fill="black" stroke="black" points="654.81,-512.27 661.26,-505.25 651.84,-506.72 654.81,-512.27"/>
 </g>
 <!-- m_Ddah -->
 <g id="node12" class="node">
@@ -457,15 +457,15 @@
 <!-- m_ContractTemplate -->
 <g id="node11" class="node">
 <title>m_ContractTemplate</title>
-<path fill="none" stroke="black" d="M249,-305.5C249,-305.5 369,-305.5 369,-305.5 375,-305.5 381,-311.5 381,-317.5 381,-317.5 381,-362.5 381,-362.5 381,-368.5 375,-374.5 369,-374.5 369,-374.5 249,-374.5 249,-374.5 243,-374.5 237,-368.5 237,-362.5 237,-362.5 237,-317.5 237,-317.5 237,-311.5 243,-305.5 249,-305.5"/>
-<text text-anchor="start" x="260" y="-361.7" font-family="Arial Bold" font-size="11.00">ContractTemplate</text>
-<polyline fill="none" stroke="black" points="237,-354.5 381,-354.5 "/>
-<text text-anchor="start" x="244" y="-341" font-family="Arial" font-size="10.00">session_id </text>
-<text text-anchor="start" x="294" y="-341" font-family="Arial Italic" font-size="10.00" fill="#999999">integer (8) ∗ FK</text>
-<text text-anchor="start" x="244" y="-328" font-family="Arial" font-size="10.00">template_file </text>
-<text text-anchor="start" x="303" y="-328" font-family="Arial Italic" font-size="10.00" fill="#999999">string ∗</text>
-<text text-anchor="start" x="244" y="-315" font-family="Arial" font-size="10.00">template_name </text>
-<text text-anchor="start" x="314" y="-315" font-family="Arial Italic" font-size="10.00" fill="#999999">string ∗ U</text>
+<path fill="none" stroke="black" d="M249,-298.5C249,-298.5 369,-298.5 369,-298.5 375,-298.5 381,-304.5 381,-310.5 381,-310.5 381,-355.5 381,-355.5 381,-361.5 375,-367.5 369,-367.5 369,-367.5 249,-367.5 249,-367.5 243,-367.5 237,-361.5 237,-355.5 237,-355.5 237,-310.5 237,-310.5 237,-304.5 243,-298.5 249,-298.5"/>
+<text text-anchor="start" x="260" y="-354.7" font-family="Arial Bold" font-size="11.00">ContractTemplate</text>
+<polyline fill="none" stroke="black" points="237,-347.5 381,-347.5 "/>
+<text text-anchor="start" x="244" y="-334" font-family="Arial" font-size="10.00">session_id </text>
+<text text-anchor="start" x="294" y="-334" font-family="Arial Italic" font-size="10.00" fill="#999999">integer (8) ∗ FK</text>
+<text text-anchor="start" x="244" y="-321" font-family="Arial" font-size="10.00">template_file </text>
+<text text-anchor="start" x="303" y="-321" font-family="Arial Italic" font-size="10.00" fill="#999999">string ∗</text>
+<text text-anchor="start" x="244" y="-308" font-family="Arial" font-size="10.00">template_name </text>
+<text text-anchor="start" x="314" y="-308" font-family="Arial Italic" font-size="10.00" fill="#999999">string ∗ U</text>
 </g>
 <!-- m_Position -->
 <g id="node20" class="node">
@@ -505,8 +505,8 @@
 <!-- m_ContractTemplate&#45;&gt;m_Position -->
 <g id="edge14" class="edge">
 <title>m_ContractTemplate&#45;&gt;m_Position</title>
-<path fill="none" stroke="black" d="M381.04,-344.75C389.75,-345.33 398.76,-345.93 407.77,-346.53"/>
-<polygon fill="black" stroke="black" points="407.57,-349.68 416.76,-347.14 407.99,-343.39 407.57,-349.68"/>
+<path fill="none" stroke="black" d="M381.04,-340.31C389.75,-341.2 398.76,-342.13 407.77,-343.05"/>
+<polygon fill="black" stroke="black" points="407.49,-346.19 416.76,-343.98 408.13,-339.92 407.49,-346.19"/>
 </g>
 <!-- m_Duty -->
 <g id="node13" class="node">
@@ -534,17 +534,17 @@
 <!-- m_Instructor -->
 <g id="node14" class="node">
 <title>m_Instructor</title>
-<path fill="none" stroke="black" d="M249,-106C249,-106 369,-106 369,-106 375,-106 381,-112 381,-118 381,-118 381,-176 381,-176 381,-182 375,-188 369,-188 369,-188 249,-188 249,-188 243,-188 237,-182 237,-176 237,-176 237,-118 237,-118 237,-112 243,-106 249,-106"/>
-<text text-anchor="start" x="281" y="-175.2" font-family="Arial Bold" font-size="11.00">Instructor</text>
-<polyline fill="none" stroke="black" points="237,-168 381,-168 "/>
-<text text-anchor="start" x="244" y="-155" font-family="Arial" font-size="10.00">email </text>
-<text text-anchor="start" x="271" y="-155" font-family="Arial Italic" font-size="10.00" fill="#999999">string</text>
-<text text-anchor="start" x="244" y="-142" font-family="Arial" font-size="10.00">first_name </text>
-<text text-anchor="start" x="293" y="-142" font-family="Arial Italic" font-size="10.00" fill="#999999">string ∗</text>
-<text text-anchor="start" x="244" y="-129" font-family="Arial" font-size="10.00">last_name </text>
-<text text-anchor="start" x="293" y="-129" font-family="Arial Italic" font-size="10.00" fill="#999999">string ∗</text>
-<text text-anchor="start" x="244" y="-116" font-family="Arial" font-size="10.00">utorid </text>
-<text text-anchor="start" x="272" y="-116" font-family="Arial Italic" font-size="10.00" fill="#999999">string ∗ U</text>
+<path fill="none" stroke="black" d="M249,-102C249,-102 369,-102 369,-102 375,-102 381,-108 381,-114 381,-114 381,-172 381,-172 381,-178 375,-184 369,-184 369,-184 249,-184 249,-184 243,-184 237,-178 237,-172 237,-172 237,-114 237,-114 237,-108 243,-102 249,-102"/>
+<text text-anchor="start" x="281" y="-171.2" font-family="Arial Bold" font-size="11.00">Instructor</text>
+<polyline fill="none" stroke="black" points="237,-164 381,-164 "/>
+<text text-anchor="start" x="244" y="-151" font-family="Arial" font-size="10.00">email </text>
+<text text-anchor="start" x="271" y="-151" font-family="Arial Italic" font-size="10.00" fill="#999999">string</text>
+<text text-anchor="start" x="244" y="-138" font-family="Arial" font-size="10.00">first_name </text>
+<text text-anchor="start" x="293" y="-138" font-family="Arial Italic" font-size="10.00" fill="#999999">string ∗</text>
+<text text-anchor="start" x="244" y="-125" font-family="Arial" font-size="10.00">last_name </text>
+<text text-anchor="start" x="293" y="-125" font-family="Arial Italic" font-size="10.00" fill="#999999">string ∗</text>
+<text text-anchor="start" x="244" y="-112" font-family="Arial" font-size="10.00">utorid </text>
+<text text-anchor="start" x="272" y="-112" font-family="Arial Italic" font-size="10.00" fill="#999999">string ∗ U</text>
 </g>
 <!-- m_InstructorPosition -->
 <g id="node15" class="node">
@@ -562,43 +562,43 @@
 <!-- m_Instructor&#45;&gt;m_InstructorPosition -->
 <g id="edge29" class="edge">
 <title>m_Instructor&#45;&gt;m_InstructorPosition</title>
-<path fill="none" stroke="black" d="M381.47,-128.25C457.48,-108.32 577.45,-76.85 656.68,-56.07"/>
-<polygon fill="black" stroke="black" points="657.75,-59.04 665.65,-53.71 656.15,-52.95 657.75,-59.04"/>
+<path fill="none" stroke="black" d="M381.47,-124.92C457.48,-105.7 577.45,-75.35 656.68,-55.32"/>
+<polygon fill="black" stroke="black" points="657.7,-58.31 665.65,-53.05 656.16,-52.2 657.7,-58.31"/>
 </g>
 <!-- m_Instructor&#45;&gt;m_Position -->
 <g id="edge7" class="edge">
 <title>m_Instructor&#45;&gt;m_Position</title>
-<path fill="none" stroke="black" d="M355.23,-194.9C371.77,-212.42 391.16,-232.96 410.39,-253.32"/>
-<polygon fill="black" stroke="black" points="357.36,-192.57 348.89,-188.19 352.78,-196.9 357.36,-192.57"/>
-<polygon fill="black" stroke="black" points="408.15,-255.54 416.62,-259.93 412.73,-251.22 408.15,-255.54"/>
+<path fill="none" stroke="black" d="M354.35,-190.88C371.12,-208.99 390.91,-230.36 410.52,-251.53"/>
+<polygon fill="black" stroke="black" points="356.62,-188.7 348.19,-184.24 352,-192.98 356.62,-188.7"/>
+<polygon fill="black" stroke="black" points="408.45,-253.93 416.88,-258.39 413.07,-249.65 408.45,-253.93"/>
 </g>
 <!-- m_LetterTemplate -->
 <g id="node17" class="node">
 <title>m_LetterTemplate</title>
-<path fill="none" stroke="black" d="M249,-862.5C249,-862.5 369,-862.5 369,-862.5 375,-862.5 381,-868.5 381,-874.5 381,-874.5 381,-919.5 381,-919.5 381,-925.5 375,-931.5 369,-931.5 369,-931.5 249,-931.5 249,-931.5 243,-931.5 237,-925.5 237,-919.5 237,-919.5 237,-874.5 237,-874.5 237,-868.5 243,-862.5 249,-862.5"/>
-<text text-anchor="start" x="267.5" y="-918.7" font-family="Arial Bold" font-size="11.00">LetterTemplate</text>
-<polyline fill="none" stroke="black" points="237,-911.5 381,-911.5 "/>
-<text text-anchor="start" x="244" y="-898" font-family="Arial" font-size="10.00">session_id </text>
-<text text-anchor="start" x="294" y="-898" font-family="Arial Italic" font-size="10.00" fill="#999999">integer (8) ∗ FK</text>
-<text text-anchor="start" x="244" y="-885" font-family="Arial" font-size="10.00">template_file </text>
-<text text-anchor="start" x="303" y="-885" font-family="Arial Italic" font-size="10.00" fill="#999999">string ∗</text>
-<text text-anchor="start" x="244" y="-872" font-family="Arial" font-size="10.00">template_name </text>
-<text text-anchor="start" x="314" y="-872" font-family="Arial Italic" font-size="10.00" fill="#999999">string ∗ U</text>
+<path fill="none" stroke="black" d="M249,-869.5C249,-869.5 369,-869.5 369,-869.5 375,-869.5 381,-875.5 381,-881.5 381,-881.5 381,-926.5 381,-926.5 381,-932.5 375,-938.5 369,-938.5 369,-938.5 249,-938.5 249,-938.5 243,-938.5 237,-932.5 237,-926.5 237,-926.5 237,-881.5 237,-881.5 237,-875.5 243,-869.5 249,-869.5"/>
+<text text-anchor="start" x="267.5" y="-925.7" font-family="Arial Bold" font-size="11.00">LetterTemplate</text>
+<polyline fill="none" stroke="black" points="237,-918.5 381,-918.5 "/>
+<text text-anchor="start" x="244" y="-905" font-family="Arial" font-size="10.00">session_id </text>
+<text text-anchor="start" x="294" y="-905" font-family="Arial Italic" font-size="10.00" fill="#999999">integer (8) ∗ FK</text>
+<text text-anchor="start" x="244" y="-892" font-family="Arial" font-size="10.00">template_file </text>
+<text text-anchor="start" x="303" y="-892" font-family="Arial Italic" font-size="10.00" fill="#999999">string ∗</text>
+<text text-anchor="start" x="244" y="-879" font-family="Arial" font-size="10.00">template_name </text>
+<text text-anchor="start" x="314" y="-879" font-family="Arial Italic" font-size="10.00" fill="#999999">string ∗ U</text>
 </g>
 <!-- m_LetterTemplate&#45;&gt;m_ApplicantMatchingDatum -->
 <g id="edge32" class="edge">
 <title>m_LetterTemplate&#45;&gt;m_ApplicantMatchingDatum</title>
-<path fill="none" stroke="black" d="M381.04,-883.85C390.09,-882.18 399.46,-880.44 408.82,-878.71"/>
-<polygon fill="black" stroke="black" points="409.49,-881.79 417.77,-877.05 408.34,-875.59 409.49,-881.79"/>
+<path fill="none" stroke="black" d="M381.04,-895.96C390.09,-894.94 399.46,-893.88 408.82,-892.82"/>
+<polygon fill="black" stroke="black" points="409.18,-895.95 417.77,-891.81 408.47,-889.69 409.18,-895.95"/>
 </g>
 <!-- m_Position&#45;&gt;m_Assignment -->
-<g id="edge10" class="edge">
+<g id="edge9" class="edge">
 <title>m_Position&#45;&gt;m_Assignment</title>
 <path fill="none" stroke="black" d="M576.72,-459.4C593.03,-480.84 611.16,-502.47 630,-521 638.76,-529.62 648.57,-537.97 658.61,-545.8"/>
 <polygon fill="black" stroke="black" points="656.88,-548.44 665.95,-551.4 660.7,-543.43 656.88,-548.44"/>
 </g>
 <!-- m_Position&#45;&gt;m_InstructorPosition -->
-<g id="edge8" class="edge">
+<g id="edge12" class="edge">
 <title>m_Position&#45;&gt;m_InstructorPosition</title>
 <path fill="none" stroke="black" d="M536,-247C555.44,-193.03 585.65,-129.58 630,-85 638.12,-76.83 647.83,-69.84 658.05,-63.91"/>
 <polygon fill="black" stroke="black" points="659.56,-66.67 665.93,-59.57 656.53,-61.14 659.56,-66.67"/>
@@ -612,11 +612,11 @@
 <!-- m_Position&#45;&gt;m_Match -->
 <g id="edge4" class="edge">
 <title>m_Position&#45;&gt;m_Match</title>
-<path fill="none" stroke="black" d="M580.98,-459.26C585.82,-468.42 590.25,-477.73 594,-487 625.61,-565.04 584.19,-602.35 630,-673 637.54,-684.63 647.58,-694.98 658.5,-704.01"/>
-<polygon fill="black" stroke="black" points="656.76,-706.65 665.78,-709.74 660.66,-701.7 656.76,-706.65"/>
+<path fill="none" stroke="black" d="M577.74,-459.08C583.82,-470.58 589.39,-482.35 594,-494 623.87,-569.45 585.6,-605.08 630,-673 637.59,-684.6 647.65,-694.94 658.57,-703.96"/>
+<polygon fill="black" stroke="black" points="656.84,-706.6 665.86,-709.69 660.73,-701.65 656.84,-706.6"/>
 </g>
 <!-- m_Position&#45;&gt;m_PositionPreference -->
-<g id="edge11" class="edge">
+<g id="edge10" class="edge">
 <title>m_Position&#45;&gt;m_PositionPreference</title>
 <path fill="none" stroke="black" d="M594.3,-395.66C613.67,-405.07 634.14,-415.02 653.34,-424.35"/>
 <polygon fill="black" stroke="black" points="652.01,-427.21 661.48,-428.31 654.76,-421.54 652.01,-427.21"/>
@@ -656,7 +656,7 @@
 <text text-anchor="start" x="744" y="-222" font-family="Arial Italic" font-size="10.00" fill="#999999">integer (8) FK</text>
 </g>
 <!-- m_Position&#45;&gt;m_ReportingTag -->
-<g id="edge9" class="edge">
+<g id="edge8" class="edge">
 <title>m_Position&#45;&gt;m_ReportingTag</title>
 <path fill="none" stroke="black" d="M602.59,-308.81C620.59,-300.53 639.23,-291.96 656.7,-283.93"/>
 <polygon fill="black" stroke="black" points="601.16,-306 594.3,-312.62 603.79,-311.73 601.16,-306"/>
@@ -665,37 +665,39 @@
 <!-- m_Posting -->
 <g id="node22" class="node">
 <title>m_Posting</title>
-<path fill="none" stroke="black" d="M249,-404C249,-404 369,-404 369,-404 375,-404 381,-410 381,-416 381,-416 381,-526 381,-526 381,-532 375,-538 369,-538 369,-538 249,-538 249,-538 243,-538 237,-532 237,-526 237,-526 237,-416 237,-416 237,-410 243,-404 249,-404"/>
-<text text-anchor="start" x="286.5" y="-525.2" font-family="Arial Bold" font-size="11.00">Posting</text>
-<polyline fill="none" stroke="black" points="237,-518 381,-518 "/>
-<text text-anchor="start" x="244" y="-505" font-family="Arial" font-size="10.00">availability </text>
-<text text-anchor="start" x="293" y="-505" font-family="Arial Italic" font-size="10.00" fill="#999999">integer</text>
-<text text-anchor="start" x="244" y="-492" font-family="Arial" font-size="10.00">close_date </text>
-<text text-anchor="start" x="295" y="-492" font-family="Arial Italic" font-size="10.00" fill="#999999">datetime</text>
-<text text-anchor="start" x="244" y="-479" font-family="Arial" font-size="10.00">custom_questions </text>
-<text text-anchor="start" x="327" y="-479" font-family="Arial Italic" font-size="10.00" fill="#999999">json</text>
-<text text-anchor="start" x="244" y="-466" font-family="Arial" font-size="10.00">intro_text </text>
-<text text-anchor="start" x="288" y="-466" font-family="Arial Italic" font-size="10.00" fill="#999999">text</text>
-<text text-anchor="start" x="244" y="-453" font-family="Arial" font-size="10.00">name </text>
-<text text-anchor="start" x="272" y="-453" font-family="Arial Italic" font-size="10.00" fill="#999999">string ∗ U</text>
-<text text-anchor="start" x="244" y="-440" font-family="Arial" font-size="10.00">open_date </text>
-<text text-anchor="start" x="293" y="-440" font-family="Arial Italic" font-size="10.00" fill="#999999">datetime</text>
-<text text-anchor="start" x="244" y="-427" font-family="Arial" font-size="10.00">session_id </text>
-<text text-anchor="start" x="294" y="-427" font-family="Arial Italic" font-size="10.00" fill="#999999">integer (8) ∗ FK</text>
-<text text-anchor="start" x="244" y="-414" font-family="Arial" font-size="10.00">url_token </text>
-<text text-anchor="start" x="287" y="-414" font-family="Arial Italic" font-size="10.00" fill="#999999">string</text>
+<path fill="none" stroke="black" d="M249,-397.5C249,-397.5 369,-397.5 369,-397.5 375,-397.5 381,-403.5 381,-409.5 381,-409.5 381,-532.5 381,-532.5 381,-538.5 375,-544.5 369,-544.5 369,-544.5 249,-544.5 249,-544.5 243,-544.5 237,-538.5 237,-532.5 237,-532.5 237,-409.5 237,-409.5 237,-403.5 243,-397.5 249,-397.5"/>
+<text text-anchor="start" x="286.5" y="-531.7" font-family="Arial Bold" font-size="11.00">Posting</text>
+<polyline fill="none" stroke="black" points="237,-524.5 381,-524.5 "/>
+<text text-anchor="start" x="244" y="-511" font-family="Arial" font-size="10.00">availability </text>
+<text text-anchor="start" x="293" y="-511" font-family="Arial Italic" font-size="10.00" fill="#999999">integer</text>
+<text text-anchor="start" x="244" y="-498" font-family="Arial" font-size="10.00">close_date </text>
+<text text-anchor="start" x="295" y="-498" font-family="Arial Italic" font-size="10.00" fill="#999999">datetime</text>
+<text text-anchor="start" x="244" y="-485" font-family="Arial" font-size="10.00">custom_questions </text>
+<text text-anchor="start" x="327" y="-485" font-family="Arial Italic" font-size="10.00" fill="#999999">json</text>
+<text text-anchor="start" x="244" y="-472" font-family="Arial" font-size="10.00">intro_text </text>
+<text text-anchor="start" x="288" y="-472" font-family="Arial Italic" font-size="10.00" fill="#999999">text</text>
+<text text-anchor="start" x="244" y="-459" font-family="Arial" font-size="10.00">name </text>
+<text text-anchor="start" x="272" y="-459" font-family="Arial Italic" font-size="10.00" fill="#999999">string ∗ U</text>
+<text text-anchor="start" x="244" y="-446" font-family="Arial" font-size="10.00">open_date </text>
+<text text-anchor="start" x="293" y="-446" font-family="Arial Italic" font-size="10.00" fill="#999999">datetime</text>
+<text text-anchor="start" x="244" y="-433" font-family="Arial" font-size="10.00">public_close_date </text>
+<text text-anchor="start" x="326" y="-433" font-family="Arial Italic" font-size="10.00" fill="#999999">datetime</text>
+<text text-anchor="start" x="244" y="-420" font-family="Arial" font-size="10.00">session_id </text>
+<text text-anchor="start" x="294" y="-420" font-family="Arial Italic" font-size="10.00" fill="#999999">integer (8) ∗ FK</text>
+<text text-anchor="start" x="244" y="-407" font-family="Arial" font-size="10.00">url_token </text>
+<text text-anchor="start" x="287" y="-407" font-family="Arial Italic" font-size="10.00" fill="#999999">string</text>
 </g>
 <!-- m_Posting&#45;&gt;m_Application -->
 <g id="edge26" class="edge">
 <title>m_Posting&#45;&gt;m_Application</title>
-<path fill="none" stroke="black" d="M381.04,-511.54C393.9,-518.88 407.41,-526.59 420.58,-534.11"/>
-<polygon fill="black" stroke="black" points="419.36,-537.04 428.74,-538.76 422.48,-531.57 419.36,-537.04"/>
+<path fill="none" stroke="black" d="M381.04,-514.1C394.02,-521.97 407.66,-530.25 420.96,-538.32"/>
+<polygon fill="black" stroke="black" points="419.41,-541.06 428.74,-543.04 422.68,-535.67 419.41,-541.06"/>
 </g>
 <!-- m_Posting&#45;&gt;m_PostingPosition -->
 <g id="edge36" class="edge">
 <title>m_Posting&#45;&gt;m_PostingPosition</title>
-<path fill="none" stroke="black" d="M372.97,-403.79C375.91,-399.28 378.62,-394.66 381,-390 413.74,-325.85 367.44,-284.26 417,-232 478.93,-166.69 584.04,-147.17 656.81,-141.9"/>
-<polygon fill="black" stroke="black" points="657.19,-145.03 665.97,-141.3 656.78,-138.74 657.19,-145.03"/>
+<path fill="none" stroke="black" d="M373.03,-397.41C375.93,-392.67 378.62,-387.85 381,-383 411.41,-321.07 369.28,-281.82 417,-232 479.17,-167.1 583.98,-147.48 656.63,-142.06"/>
+<polygon fill="black" stroke="black" points="657,-145.2 665.77,-141.45 656.57,-138.91 657,-145.2"/>
 </g>
 <!-- m_ReportingTag&#45;&gt;m_WageChunk -->
 <g id="edge5" class="edge">
@@ -707,81 +709,81 @@
 <!-- m_Session -->
 <g id="node25" class="node">
 <title>m_Session</title>
-<path fill="none" stroke="black" d="M12,-515C12,-515 189,-515 189,-515 195,-515 201,-521 201,-527 201,-527 201,-637 201,-637 201,-643 195,-649 189,-649 189,-649 12,-649 12,-649 6,-649 0,-643 0,-637 0,-637 0,-527 0,-527 0,-521 6,-515 12,-515"/>
-<text text-anchor="start" x="77" y="-636.2" font-family="Arial Bold" font-size="11.00">Session</text>
-<polyline fill="none" stroke="black" points="0,-629 201,-629 "/>
-<text text-anchor="start" x="7.5" y="-616" font-family="Arial" font-size="10.00">applications_visible_to_instructors </text>
-<text text-anchor="start" x="160.5" y="-616" font-family="Arial Italic" font-size="10.00" fill="#999999">boolean</text>
-<text text-anchor="start" x="7.5" y="-603" font-family="Arial" font-size="10.00">ddah_outline </text>
-<text text-anchor="start" x="65.5" y="-603" font-family="Arial Italic" font-size="10.00" fill="#999999">jsonb</text>
-<text text-anchor="start" x="7.5" y="-590" font-family="Arial" font-size="10.00">end_date </text>
-<text text-anchor="start" x="50.5" y="-590" font-family="Arial Italic" font-size="10.00" fill="#999999">datetime</text>
-<text text-anchor="start" x="7.5" y="-577" font-family="Arial" font-size="10.00">hours_ref_session_id </text>
-<text text-anchor="start" x="103.5" y="-577" font-family="Arial Italic" font-size="10.00" fill="#999999">integer (8) FK</text>
-<text text-anchor="start" x="7.5" y="-564" font-family="Arial" font-size="10.00">name </text>
-<text text-anchor="start" x="35.5" y="-564" font-family="Arial Italic" font-size="10.00" fill="#999999">string ∗ U</text>
-<text text-anchor="start" x="7.5" y="-551" font-family="Arial" font-size="10.00">rate1 </text>
-<text text-anchor="start" x="32.5" y="-551" font-family="Arial Italic" font-size="10.00" fill="#999999">float</text>
-<text text-anchor="start" x="7.5" y="-538" font-family="Arial" font-size="10.00">rate2 </text>
-<text text-anchor="start" x="32.5" y="-538" font-family="Arial Italic" font-size="10.00" fill="#999999">float</text>
-<text text-anchor="start" x="7.5" y="-525" font-family="Arial" font-size="10.00">start_date </text>
-<text text-anchor="start" x="54.5" y="-525" font-family="Arial Italic" font-size="10.00" fill="#999999">datetime</text>
+<path fill="none" stroke="black" d="M12,-522C12,-522 189,-522 189,-522 195,-522 201,-528 201,-534 201,-534 201,-644 201,-644 201,-650 195,-656 189,-656 189,-656 12,-656 12,-656 6,-656 0,-650 0,-644 0,-644 0,-534 0,-534 0,-528 6,-522 12,-522"/>
+<text text-anchor="start" x="77" y="-643.2" font-family="Arial Bold" font-size="11.00">Session</text>
+<polyline fill="none" stroke="black" points="0,-636 201,-636 "/>
+<text text-anchor="start" x="7.5" y="-623" font-family="Arial" font-size="10.00">applications_visible_to_instructors </text>
+<text text-anchor="start" x="160.5" y="-623" font-family="Arial Italic" font-size="10.00" fill="#999999">boolean</text>
+<text text-anchor="start" x="7.5" y="-610" font-family="Arial" font-size="10.00">ddah_outline </text>
+<text text-anchor="start" x="65.5" y="-610" font-family="Arial Italic" font-size="10.00" fill="#999999">jsonb</text>
+<text text-anchor="start" x="7.5" y="-597" font-family="Arial" font-size="10.00">end_date </text>
+<text text-anchor="start" x="50.5" y="-597" font-family="Arial Italic" font-size="10.00" fill="#999999">datetime</text>
+<text text-anchor="start" x="7.5" y="-584" font-family="Arial" font-size="10.00">hours_ref_session_id </text>
+<text text-anchor="start" x="103.5" y="-584" font-family="Arial Italic" font-size="10.00" fill="#999999">integer (8) FK</text>
+<text text-anchor="start" x="7.5" y="-571" font-family="Arial" font-size="10.00">name </text>
+<text text-anchor="start" x="35.5" y="-571" font-family="Arial Italic" font-size="10.00" fill="#999999">string ∗ U</text>
+<text text-anchor="start" x="7.5" y="-558" font-family="Arial" font-size="10.00">rate1 </text>
+<text text-anchor="start" x="32.5" y="-558" font-family="Arial Italic" font-size="10.00" fill="#999999">float</text>
+<text text-anchor="start" x="7.5" y="-545" font-family="Arial" font-size="10.00">rate2 </text>
+<text text-anchor="start" x="32.5" y="-545" font-family="Arial Italic" font-size="10.00" fill="#999999">float</text>
+<text text-anchor="start" x="7.5" y="-532" font-family="Arial" font-size="10.00">start_date </text>
+<text text-anchor="start" x="54.5" y="-532" font-family="Arial Italic" font-size="10.00" fill="#999999">datetime</text>
 </g>
 <!-- m_Session&#45;&gt;m_ApplicantMatchingDatum -->
 <g id="edge31" class="edge">
 <title>m_Session&#45;&gt;m_ApplicantMatchingDatum</title>
-<path fill="none" stroke="black" d="M176.35,-649.23C185.44,-659.6 193.98,-670.65 201,-682 227.38,-724.68 200.44,-754.63 237,-789 262.02,-812.52 342.34,-832.2 408.5,-845.01"/>
-<polygon fill="black" stroke="black" points="408.3,-848.18 417.73,-846.77 409.48,-841.99 408.3,-848.18"/>
+<path fill="none" stroke="black" d="M176.35,-656.23C185.44,-666.6 193.98,-677.65 201,-689 227.38,-731.68 201.28,-760.76 237,-796 261.88,-820.55 342.74,-844.57 409.1,-860.95"/>
+<polygon fill="black" stroke="black" points="408.46,-864.04 417.95,-863.11 409.95,-857.92 408.46,-864.04"/>
 </g>
 <!-- m_Session&#45;&gt;m_Application -->
 <g id="edge25" class="edge">
 <title>m_Session&#45;&gt;m_Application</title>
-<path fill="none" stroke="black" d="M310,-582C345.16,-572.5 385.22,-571.01 419.81,-572.46"/>
-<polygon fill="black" stroke="black" points="419.8,-575.61 428.95,-572.92 420.11,-569.32 419.8,-575.61"/>
+<path fill="none" stroke="black" d="M310,-589C345.1,-579.27 385.15,-577.74 419.75,-579.23"/>
+<polygon fill="black" stroke="black" points="419.74,-582.38 428.88,-579.69 420.06,-576.09 419.74,-582.38"/>
 </g>
 <!-- m_Session&#45;&gt;m_ContractTemplate -->
 <g id="edge35" class="edge">
 <title>m_Session&#45;&gt;m_ContractTemplate</title>
-<path fill="none" stroke="black" d="M189.52,-514.8C193.67,-510.03 197.54,-505.09 201,-500 230.18,-457.12 206.02,-430.59 237,-389 239.04,-386.26 241.29,-383.61 243.68,-381.07"/>
-<polygon fill="black" stroke="black" points="246.08,-383.13 250.33,-374.59 241.68,-378.62 246.08,-383.13"/>
+<path fill="none" stroke="black" d="M189.71,-521.93C193.81,-517.13 197.62,-512.14 201,-507 232.55,-459.06 203.66,-429.71 237,-383 239.22,-379.89 241.69,-376.91 244.35,-374.06"/>
+<polygon fill="black" stroke="black" points="246.65,-376.22 250.84,-367.65 242.22,-371.73 246.65,-376.22"/>
 </g>
 <!-- m_Session&#45;&gt;m_LetterTemplate -->
 <g id="edge27" class="edge">
 <title>m_Session&#45;&gt;m_LetterTemplate</title>
-<path fill="none" stroke="black" d="M177.91,-649.18C186.65,-659.48 194.68,-670.52 201,-682 235.75,-745.09 198.79,-778.95 237,-840 240.52,-845.62 244.79,-850.93 249.47,-855.88"/>
-<polygon fill="black" stroke="black" points="247.46,-858.32 256.08,-862.39 251.88,-853.83 247.46,-858.32"/>
+<path fill="none" stroke="black" d="M177.91,-656.18C186.65,-666.48 194.68,-677.52 201,-689 235.75,-752.09 198.79,-785.95 237,-847 240.52,-852.62 244.79,-857.93 249.47,-862.88"/>
+<polygon fill="black" stroke="black" points="247.46,-865.32 256.08,-869.39 251.88,-860.83 247.46,-865.32"/>
 </g>
 <!-- m_Session&#45;&gt;m_Position -->
 <g id="edge13" class="edge">
 <title>m_Session&#45;&gt;m_Position</title>
-<path fill="none" stroke="black" d="M310,-582C342.91,-573.11 355.59,-575.72 381,-553 405.91,-530.73 399.85,-515.68 417,-487 420.89,-480.49 424.95,-473.84 429.1,-467.16"/>
-<polygon fill="black" stroke="black" points="431.91,-468.61 434,-459.31 426.56,-465.27 431.91,-468.61"/>
-<path fill="none" stroke="black" d="M201.1,-592.46C235.48,-593.33 273.91,-591.21 308,-582"/>
+<path fill="none" stroke="black" d="M310,-589C342.85,-579.9 355.59,-582.72 381,-560 405.91,-537.73 400.18,-522.87 417,-494 422.1,-485.24 427.46,-476.22 432.89,-467.19"/>
+<polygon fill="black" stroke="black" points="435.73,-468.58 437.69,-459.24 430.34,-465.32 435.73,-468.58"/>
+<path fill="none" stroke="black" d="M201.17,-599.71C235.56,-600.61 273.97,-598.43 308,-589"/>
 </g>
 <!-- m_Session&#45;&gt;m_Posting -->
 <g id="edge34" class="edge">
 <title>m_Session&#45;&gt;m_Posting</title>
-<path fill="none" stroke="black" d="M201.12,-528.45C210.36,-523.48 219.64,-518.5 228.66,-513.65"/>
-<polygon fill="black" stroke="black" points="230.42,-516.28 236.86,-509.24 227.44,-510.73 230.42,-516.28"/>
+<path fill="none" stroke="black" d="M201.12,-532.07C210.45,-526.74 219.83,-521.38 228.93,-516.18"/>
+<polygon fill="black" stroke="black" points="230.61,-518.85 236.86,-511.65 227.48,-513.38 230.61,-518.85"/>
 </g>
 <!-- m_Session&#45;&gt;m_Session -->
 <g id="edge33" class="edge">
 <title>m_Session&#45;&gt;m_Session</title>
-<path fill="none" stroke="black" d="M62.04,-649.2C64.73,-665.97 77.55,-678.5 100.5,-678.5 119.15,-678.5 131.11,-670.23 136.38,-658.13"/>
-<polygon fill="black" stroke="black" points="139.49,-658.72 138.96,-649.2 133.44,-656.97 139.49,-658.72"/>
+<path fill="none" stroke="black" d="M62.04,-656.2C64.73,-672.97 77.55,-685.5 100.5,-685.5 119.15,-685.5 131.11,-677.23 136.38,-665.13"/>
+<polygon fill="black" stroke="black" points="139.49,-665.72 138.96,-656.2 133.44,-663.97 139.49,-665.72"/>
 </g>
 <!-- m_User -->
 <g id="node26" class="node">
 <title>m_User</title>
-<path fill="none" stroke="black" d="M40.5,-696.5C40.5,-696.5 160.5,-696.5 160.5,-696.5 166.5,-696.5 172.5,-702.5 172.5,-708.5 172.5,-708.5 172.5,-753.5 172.5,-753.5 172.5,-759.5 166.5,-765.5 160.5,-765.5 160.5,-765.5 40.5,-765.5 40.5,-765.5 34.5,-765.5 28.5,-759.5 28.5,-753.5 28.5,-753.5 28.5,-708.5 28.5,-708.5 28.5,-702.5 34.5,-696.5 40.5,-696.5"/>
-<text text-anchor="start" x="86" y="-752.7" font-family="Arial Bold" font-size="11.00">User</text>
-<polyline fill="none" stroke="black" points="28.5,-745.5 172.5,-745.5 "/>
-<text text-anchor="start" x="35.5" y="-732" font-family="Arial" font-size="10.00">last_seen </text>
-<text text-anchor="start" x="81.5" y="-732" font-family="Arial Italic" font-size="10.00" fill="#999999">datetime</text>
-<text text-anchor="start" x="35.5" y="-719" font-family="Arial" font-size="10.00">roles_mask </text>
-<text text-anchor="start" x="89.5" y="-719" font-family="Arial Italic" font-size="10.00" fill="#999999">integer</text>
-<text text-anchor="start" x="35.5" y="-706" font-family="Arial" font-size="10.00">utorid </text>
-<text text-anchor="start" x="63.5" y="-706" font-family="Arial Italic" font-size="10.00" fill="#999999">string ∗ U</text>
+<path fill="none" stroke="black" d="M40.5,-703.5C40.5,-703.5 160.5,-703.5 160.5,-703.5 166.5,-703.5 172.5,-709.5 172.5,-715.5 172.5,-715.5 172.5,-760.5 172.5,-760.5 172.5,-766.5 166.5,-772.5 160.5,-772.5 160.5,-772.5 40.5,-772.5 40.5,-772.5 34.5,-772.5 28.5,-766.5 28.5,-760.5 28.5,-760.5 28.5,-715.5 28.5,-715.5 28.5,-709.5 34.5,-703.5 40.5,-703.5"/>
+<text text-anchor="start" x="86" y="-759.7" font-family="Arial Bold" font-size="11.00">User</text>
+<polyline fill="none" stroke="black" points="28.5,-752.5 172.5,-752.5 "/>
+<text text-anchor="start" x="35.5" y="-739" font-family="Arial" font-size="10.00">last_seen </text>
+<text text-anchor="start" x="81.5" y="-739" font-family="Arial Italic" font-size="10.00" fill="#999999">datetime</text>
+<text text-anchor="start" x="35.5" y="-726" font-family="Arial" font-size="10.00">roles_mask </text>
+<text text-anchor="start" x="89.5" y="-726" font-family="Arial Italic" font-size="10.00" fill="#999999">integer</text>
+<text text-anchor="start" x="35.5" y="-713" font-family="Arial" font-size="10.00">utorid </text>
+<text text-anchor="start" x="63.5" y="-713" font-family="Arial Italic" font-size="10.00" fill="#999999">string ∗ U</text>
 </g>
 </g>
 </svg>

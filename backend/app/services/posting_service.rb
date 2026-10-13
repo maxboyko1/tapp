@@ -314,12 +314,12 @@ class PostingService
     def availability_description
         if @posting.open_date.year == @posting.close_date.year
             "Available from #{@posting.open_date.strftime('%b %d')} to #{
-                @posting.close_date.strftime('%b %d, %Y')
+                @posting.public_close_date.strftime('%b %d, %Y')
             }"
         else
             "Available from #{
                 @posting.open_date.strftime('%b %d, %Y')
-            } to #{@posting.close_date.strftime('%b %d, %Y')}"
+            } to #{@posting.public_close_date.strftime('%b %d, %Y')}"
         end
     end
 

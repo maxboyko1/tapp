@@ -41,6 +41,7 @@ const BLANK_POSTING = {
     name: "",
     open_date: "",
     close_date: "",
+    public_close_date: "",
     intro_text: "",
     custom_questions: emptyCustomQuestions
 };

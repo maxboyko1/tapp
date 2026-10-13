@@ -61,6 +61,7 @@ export const postingSchema: NormalizationSchema<
         "name",
         "open_date",
         "close_date",
+        "public_close_date",
         "intro_text",
         "custom_questions",
         "position_code",
@@ -73,6 +74,7 @@ export const postingSchema: NormalizationSchema<
         "name",
         "open_date",
         "close_date",
+        "public_close_date",
         "intro_text",
         "custom_questions",
         "position_code",
@@ -84,6 +86,7 @@ export const postingSchema: NormalizationSchema<
         Name: "name",
         "Open Date": "open_date",
         "Close Date": "close_date",
+        "Public Close Date": "public_close_date",
         "Intro Text": "intro_text",
         "Custom Questions": "custom_questions",
         "Position Code": "position_code",
@@ -93,7 +96,7 @@ export const postingSchema: NormalizationSchema<
     },
     requiredKeys: [],
     primaryKey: "name",
-    dateColumns: ["open_date", "close_date"],
+    dateColumns: ["open_date", "close_date", "public_close_date"],
     baseName: "postings",
 };
 
