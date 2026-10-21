@@ -53,7 +53,7 @@ export default function InstructorAssignmentsView() {
                     session. TAs will only show up in this list if they have
                     been emailed an offer (status <i>pending</i>) or if they
                     have accepted an offer (status <i>accepted</i>). TAs who
-                    have rejected an offer or had their offer withdrawn will now
+                    have rejected an offer or had their offer withdrawn will not
                     show up.
                 </Typography>
                 <InstructorAssignmentsTable />
