@@ -227,6 +227,7 @@ export const prepareMinimal = {
     ): MinimalAssignment {
         const ret: MinimalAssignment = {
             utorid: assignment.applicant.utorid,
+            student_number: assignment.applicant.student_number,
             position_code: assignment.position.position_code,
         } as MinimalAssignment;
         // If there is an contract_override_pdf, we store it, otherwise

@@ -39,6 +39,7 @@ export interface MinimalPosition
 export interface MinimalAssignment
     extends Omit<NoId<Assignment>, "wage_chunks" | "position" | "applicant"> {
     utorid: Utorid;
+    student_number: string;
     position_code: string;
     wage_chunks?: MinimalWageChunk[];
 }
