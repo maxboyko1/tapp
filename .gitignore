@@ -9,3 +9,5 @@ pg_data/*
 backend_storage
 !backend/app/controllers/public
 log/*
+dev.env
+prod.env
