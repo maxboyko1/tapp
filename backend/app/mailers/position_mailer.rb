@@ -70,6 +70,7 @@ class PositionMailer < ActionMailer::Base
             position_code: @position_code,
             session_name: @session.name,
             ta_coordinator_email: @ta_coordinator_email,
+            ta_coordinator_names: Rails.application.config.ta_coordinator_names,
             num_offers: position.assignments.with_pending_or_accepted_offer.count,
             url: @url
         }

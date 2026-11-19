@@ -52,6 +52,9 @@ module Tapp
         config.ta_coordinator_name =
             ENV.fetch('TA_COORDINATOR_NAME', 'TA Coordinator').presence ||
                 'TA Coordinator'
+        config.ta_coordinator_names =
+            ENV.fetch('TA_COORDINATOR_NAMES', '').presence ||
+                'TA Coordinators'
         config.ta_coordinator_email =
             ENV.fetch('TA_COORDINATOR_EMAIL', 'tacoord@unknown.com').presence ||
                 'tacoord@unknown.com'
