@@ -113,8 +113,8 @@ class OfferMailer < ActionMailer::Base
         end
     end
 
-    def email_reject_notification(offer)
-        populate_vars offer
+    def email_reject_notification(offer, rejection_reason: nil)
+        populate_vars offer, rejection_reason: rejection_reason
 
         unless Rails.application.config.enable_emailing
             logger.warn "ENABLE_EMAILING is not true; skipping email to \"#{@ta_coordinator_email}\""
@@ -144,7 +144,7 @@ class OfferMailer < ActionMailer::Base
 
     private
 
-    def populate_vars(offer)
+    def populate_vars(offer, rejection_reason: nil)
         @offer_service = OfferService.new(offer: offer)
         @subs = @offer_service.subs
         @position_code = @subs[:position_code]
@@ -153,6 +153,19 @@ class OfferMailer < ActionMailer::Base
         @nag_count = @subs[:nag_count]
         @rejected_date = @subs[:rejected_date]
         @session_name = @subs[:session_name]
+        @rejection_reason = rejection_reason
+        @subs[:rejection_reason] = format_rejection_reason(rejection_reason)
+    end
+
+    def format_rejection_reason(reason_code)
+        case reason_code
+        when "not_interested"
+            "I am no longer interested in being a TA for the semester."
+        when "other_course"
+            "I am hoping to get an offer for a different course for which I have equal or higher preference."
+        else
+            nil
+        end
     end
 
     def email_html

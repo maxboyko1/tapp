@@ -15,5 +15,11 @@
             <strong>Course/Position Code:</strong> {{ position_code }}<br />
             <strong>Hours:</strong> {{ hours }}
         </p>
+        {% if rejection_reason %}
+        <br/>
+        <p>
+            <strong>Rejection Reason:</strong> {{ rejection_reason }}
+        </p>
+        {% endif %}
     </body>
 </html>
