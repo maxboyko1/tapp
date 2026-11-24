@@ -15,6 +15,17 @@ import { apiGET, apiPOST } from "../../../libs/api-utils";
 
 import "./view-offer.css";
 
+const REJECTION_REASONS = [
+    {
+        value: "not_interested",
+        label: "I am no longer interested in being a TA for the semester.",
+    },
+    {
+        value: "other_course",
+        label: "I am hoping to get an offer for a different course for which I have equal or higher preference.",
+    },
+];
+
 function capitalize(text: string) {
     return text
         .split(/\s+/)
@@ -30,6 +41,9 @@ export default function ContractView() {
         null
     );
     const [signature, setSignature] = React.useState("");
+    const [rejectionReason, setRejectionReason] = React.useState(
+        REJECTION_REASONS[0].value
+    );
     const [confirmationDialogVisible, setConfirmationDialogVisible] =
         React.useState(false);
     const [waiting, setWaiting] = React.useState(false);
@@ -59,7 +73,11 @@ export default function ContractView() {
         if (decision == null) {
             throw new Error("Cannot submit a `null` decision");
         }
-        const data = { decision, signature: signature || null };
+        const data = {
+            decision,
+            signature: signature || null,
+            rejection_reason: decision === "reject" ? rejectionReason : null,
+        };
         await apiPOST(`/external/contracts/${url_token}/${decision}`, data, true);
     }
     async function confirmClicked() {
@@ -132,6 +150,27 @@ export default function ContractView() {
                                 disabled={frozen}
                             />
                             <label htmlFor="radio-reject">Reject</label>
+                            {decision === "reject" && (
+                                <div className="rejection-reasons">
+                                    {REJECTION_REASONS.map((reason) => (
+                                        <div key={reason.value} className="reason-option">
+                                            <input
+                                                type="radio"
+                                                name="rejection_reason"
+                                                id={`reason-${reason.value}`}
+                                                value={reason.value}
+                                                checked={rejectionReason === reason.value}
+                                                onChange={(e) =>
+                                                    setRejectionReason(e.target.value)
+                                                }
+                                            />
+                                            <label htmlFor={`reason-${reason.value}`}>
+                                                {reason.label}
+                                            </label>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
                             <div className="signature">
                                 <div>
                                     <label htmlFor="signature_name">
