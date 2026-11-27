@@ -1,4 +1,6 @@
 AllCops:
+    # temporary TargetRubyVersion line, remove once RuboCop is upgraded later
+    TargetRubyVersion: 3.0
     Exclude:
         - "config/**/*"
         - "db/**/*"
