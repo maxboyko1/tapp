@@ -1,22 +1,25 @@
-FROM madnight/docker-alpine-wkhtmltopdf:latest AS wkhtmltopdf_image
-FROM ruby:2.6.6-alpine3.13
+# wkhtmltopdf 0.12.6 (with patched Qt) built for Alpine 3.24. This is a stopgap until PDF
+# generation moves to Gotenberg; keep its Alpine version in sync with the Ruby base image below.
+FROM surnet/alpine-wkhtmltopdf:3.24.3-0.12.6-full AS wkhtmltopdf_image
+FROM ruby:3.3.14-alpine3.24
 
 # Add `tzdata` because the Gemfile doesn't successfully add the dependency via geminstall.
-# Add `less` because the ruby console attempts to call `less` and errors when it doesn't exist
-RUN apk update && apk add build-base \
+# Add `less` because the ruby console attempts to call `less` and errors when it doesn't exist.
+# `libpq-dev` is needed to build the `pg` Gem. `postgresql18-client` provides `pg_dump`/`pg_restore`
+# for the snapshot Rake tasks
+RUN apk add --no-cache build-base \
   nodejs \
-  postgresql-dev \
+  libpq-dev \
   tzdata \
   graphviz \
-  postgresql-client \
+  postgresql18-client \
   less \
-  # `freedesktop.org.xml` is no longer distributed with the `mimemagic` Gem, so we need to copy it manually
   shared-mime-info
 
-RUN apk add --update --no-cache \
-  libgcc libstdc++ libx11 glib libxrender libxext libintl \
-  libcrypto1.1 libssl1.1 \
-  ttf-dejavu ttf-droid ttf-freefont ttf-liberation ttf-ubuntu-font-family
+# Runtime libraries and fonts needed by wkhtmltopdf
+RUN apk add --no-cache \
+  libgcc libstdc++ libx11 libxrender libxext libssl3 ca-certificates fontconfig freetype \
+  font-dejavu font-droid font-freefont font-liberation
 
 COPY --from=wkhtmltopdf_image /bin/wkhtmltopdf /bin/
 
