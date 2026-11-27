@@ -57,8 +57,8 @@ class External::ContractsController < ActionController::Base
             @offer.save!
         end
 
-        rejection_reason = params[:rejection_reason]
-        OfferMailer.email_reject_notification(@offer, rejection_reason: rejection_reason).deliver_now!
+        OfferMailer.with(rejection_reason: params[:rejection_reason])
+                   .email_reject_notification(@offer).deliver_now!
         render_success {}
     end
 

@@ -3,12 +3,12 @@
 class OfferMailer < ActionMailer::Base
     require 'html_to_plain_text'
 
-    def email_summary(
-        instructor_position,
-        lookback: 24.hours,
-        since_time: nil,
-        to_time: Time.zone.now
-    )
+    def email_summary(instructor_position)
+        summary_params = params || {}
+        lookback = summary_params.fetch(:lookback, 24.hours)
+        since_time = summary_params[:since_time]
+        to_time = summary_params.fetch(:to_time, Time.zone.now)
+
         instructor = instructor_position.instructor
         position = instructor_position.position
 
@@ -113,8 +113,8 @@ class OfferMailer < ActionMailer::Base
         end
     end
 
-    def email_reject_notification(offer, rejection_reason: nil)
-        populate_vars offer, rejection_reason: rejection_reason
+    def email_reject_notification(offer)
+        populate_vars offer, rejection_reason: (params || {})[:rejection_reason]
 
         unless Rails.application.config.enable_emailing
             logger.warn "ENABLE_EMAILING is not true; skipping email to \"#{@ta_coordinator_email}\""
@@ -159,12 +159,10 @@ class OfferMailer < ActionMailer::Base
 
     def format_rejection_reason(reason_code)
         case reason_code
-        when "not_interested"
-            "I am no longer interested in being a TA for the semester."
-        when "other_course"
-            "I am hoping to get an offer for a different course for which I have equal or higher preference."
-        else
-            nil
+        when 'not_interested'
+            'I am no longer interested in being a TA for the semester.'
+        when 'other_course'
+            'I am hoping to get an offer for a different course for which I have equal or higher preference.'
         end
     end
 
