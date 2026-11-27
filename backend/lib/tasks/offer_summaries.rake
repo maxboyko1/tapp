@@ -23,11 +23,8 @@ namespace :offers do
             next if instructor_position.instructor.email.blank?
 
             begin
-                OfferMailer.email_summary(
-                    instructor_position,
-                    since_time: since_time,
-                    to_time: to_time
-                ).deliver_now!
+                OfferMailer.with(since_time: since_time, to_time: to_time)
+                           .email_summary(instructor_position).deliver_now!
             rescue StandardError => e
                 failures << instructor_position.id
                 Rails.logger.error(
